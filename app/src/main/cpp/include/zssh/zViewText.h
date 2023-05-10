@@ -1,0 +1,254 @@
+//
+// Created by User on 27.04.2023.
+//
+
+#pragma once
+
+#include "zstandard/zHtml.h"
+#include "zSpanText.h"
+
+class zViewText : public zView {
+public:
+    enum { TEXT_COLOR_DEFAULT, TEXT_COLOR_HIGHLIGHT, TEXT_COLOR_SHADOW };
+    enum { TEXT_SHOW, TEXT_MEASURE, TEXT_DEFAULT };
+    // структура кэшированного текста, разбитого на подстроки
+    struct CACHE {
+        CACHE() { }
+        CACHE(u32 _width, u32 _size, cstr _text, u32 _length) : width(_width), size(_size), length(_length) {
+            text = zString(_text, _length);
+        }
+        zString text{};
+        // ширина в пикселях
+        i32 width{0};
+        // высота в пикселях
+        i32 size{0};
+        // длина текста
+        i32 length{0};
+    };
+    // структура спана
+    struct SPAN {
+        // конструкторы
+        SPAN() { }
+        SPAN(zTextSpan* _span, int _s, int _e, zTextPaint* _paint, int _f = 0) : s(_s), e(_e), f(_f), span(_span), paint(_paint) { }
+        // инфо
+        zString info() const { return ""; }
+        // сброс
+        void reset(zViewText* vt) { paint->reset(vt); }
+        // оператор сравнения
+        bool operator == (zTextSpan* _span) const { return span == _span; }
+        // начальная/конечная позиция/флаг
+        int s{0}, e{0}, f{0};
+        // реальный спан
+        zTextSpan* span{nullptr};
+        // объект хранящий параметры рисования
+        zTextPaint* paint{nullptr};
+    };
+    // конструктор
+    zViewText(zStyle *_styles, i32 _id, u32 _text);
+    virtual ~zViewText();
+    // сохранение/восстановление
+    virtual void stateView(STATE &state, bool save, int &index) override;
+    // событие загрузки стилей
+    virtual void onInit(bool theme) override;
+    // вернуть имя типа
+    virtual cstr typeName() const override { return "zViewText"; }
+    // установить текст по идентификатору из ресурсов
+    void setText(u32 _text);
+    // установить текст из строки
+    void setText(cstr _text, bool force);
+    // установка текста парсингом из html
+    bool setHtmlText(const zString& html, const std::function<bool(cstr tag, bool end, zHtml* html)>& parser);
+    // установка макс. линий
+    void setWrap(bool set);
+    // вернуть макс. линий
+    bool isWrap() const { return testFlags(ZS_NOWRAP); }
+    // установка размера шрифта
+    void setTextSize(int value);
+    // установка цветов
+    void setTextColorDefault(u32 _value) { colors[TEXT_COLOR_DEFAULT] = _value; }
+    void setTextColorForeground(u32 _value);
+    void setTextColorBackground(u32 _value);
+    void setTextColorHighlight(u32 _value) { colors[TEXT_COLOR_HIGHLIGHT] = _value; }
+    void setTextColorShadow(u32 _value);
+    // получение цветов
+    u32 getTextColorDefault() const { return colors[TEXT_COLOR_DEFAULT]; }
+    u32 getTextColorForeground() const { return defPaint->fkColor; }
+    u32 getTextColorBackground() const { return defPaint->bkColor; }
+    u32 getTextColorHighlight() const { return colors[TEXT_COLOR_HIGHLIGHT]; }
+    u32 getTextColorShadow() const { return colors[TEXT_COLOR_SHADOW]; }
+    // вернуть размер шрифта
+    int getTextSize() { return defPaint->size; }
+    // установить стиль текста
+    void setTextStyle(int _style);
+    // вернуть текст
+    const zString& getText() const { return realText; }
+    // вернуть стиль текста
+    u32 getTextStyle() const { return defPaint->getStyle(); }
+    // вернуть верхнее смещение шрифта
+    int getAscent() const { return drw[DRW_TXT]->texture->ascent; }
+    // вернуть базовую линию шрифта
+    int getDescent() const { return drw[DRW_TXT]->texture->descent; }
+    // вставка текста в некоторую позицию
+    void insertText(int pos, cstr _text);
+    // удаление некоторого количества символов
+    void removeText(int pos, int count);
+    // установка спана
+    void setSpan(zTextSpan* _span, int start, int end, int flags = 0);
+    // удаление спана
+    void delSpan(zTextSpan* _span);
+    // вернуть массив спанов
+    const zArray<SPAN*>& getSpans() const { return spans; }
+    // установка величины смещения тени текста
+    void setShadowOffset(int x, int y) { shadow.translate(x, y, 0); invalidate(); }
+protected:
+    // событие позиционирования
+    virtual void onLayout(crti &position, bool changed) override;
+    // событие определения габаритов
+    virtual void onMeasure(cszm& spec) override;
+    // событие отрисовки
+    virtual void onDraw() override;
+    // вернуть текст для отображения
+    virtual const zString& getDrawText(int type) { return realText; }
+    // отрисовка текста
+    void drawText();
+    // разбивка текста
+    szi textWrap(cstr _text, int widthRect);
+    // очистка кэшей
+    void clearCacheSpans(bool del_spans);
+    // получить строку из кэша строк
+    const CACHE* getStringFromCache(int index, rti* tbound, pti& pos);
+    // слить все спаны
+    void mergeSpans(const zString& text);
+    // добавление краски в кэш
+    zTextPaint* addCache(zTextPaint* _paint) { return cachePaints += new zTextPaint(_paint); }
+    // дистанция между текстом и фореграундом
+    int distance{0};
+    // кэш картинки
+    int fkW{0}, fkH{0};
+    szi icSize{};
+    // кэшированное значение ширины wrap текста
+    int widthRectCache{0};
+    // смещение тени
+    zMatrix shadow{};
+    // массив спанов
+    zArray<SPAN*> spans{};
+    // кэш спанов
+    zArray<SPAN*> cacheSpans{};
+    // кэш краски
+    zArray<zTextPaint*> cachePaints{};
+    // кэш разбитого на подстроки текста
+    zArray<CACHE*> textCache{};
+    // спан по умолчанию
+    zTextSpan* defSpan{nullptr};
+    // краска по умолчанию
+    zTextPaint* defPaint{nullptr};
+    // цвет текста/подсветки/тени
+    u32 colors[3]{};
+    // фон текста
+    zDrawable* dr{nullptr};
+    // реальный текст
+    zString realText{};
+    /*
+    // определение индекса в тексте из позиции на экране
+    int indexFromPosition(int inScreen, bool exact = false, int *outScreen = nullptr);
+    // определение позиции на экране по индексу в тексте
+    int positionFromIndex(int indexText);
+protected:
+    // начальный индекс текста
+    i32 indexText{0};
+    // гор. позиция текста
+    i32 xClient{0};
+};
+
+class zFilterEdit {
+public:
+    // обработать поступивший символ
+    virtual int convertChar(const zString& _text, int ch, int pos) { return ch; }
+    // вернуть текст
+    virtual const zString& convertText(const zString& _text) { return _text; }
+    // клава по умолчанию
+    virtual cstr getKeboardLayer() const { return nullptr; }
+};
+
+class zViewClear;
+class zViewEdit : public zViewText {
+public:
+    // конструктор
+    zViewEdit(zStyle* _stl, i32 _id, u32 _hint);
+    // деструктор
+    virtual ~zViewEdit();
+    // уведомление о нажатой кнопке
+//    virtual i32 onKeyEvent(int key, bool sysKey) override;
+    // изменение темы
+    virtual void changeTheme() override;
+    // сохранение/восстановление состояния
+    virtual void stateView(STATE &state, bool save, int &index) override;
+    // событие загрузки стилей
+    virtual void onInit(bool theme) override;
+    // раскладка клавы по умолчанию
+    virtual cstr getDefaultKeyboardLayer() const override { return filter ? filter->getKeboardLayer() : nullptr; }
+    // вернуть имя типа
+    virtual cstr typeName() const override { return "zViewEdit"; }
+    // установка фильтра
+    void setFilter(int inputType, zFilterEdit* _filter = nullptr);
+    // вернуть фильтр
+    zFilterEdit* getFilter() const { return filter; }
+    // очистка текста
+    void clearText();
+    // вернуть текст подсказки
+    cstr getHint() const { return hintText; }
+    // установить текст подсказки
+    void setHint(cstr _hint) { hintText = _hint; invalidate(); }
+    // максимальная ширина текста
+    int getWidthMax() const { return wmax; }
+    // установка события редактирования
+    void setOnChangeText(std::function<void(zView*, int)> _edit) { onChangeText = std::move(_edit); }
+    // установка события каретки
+    void setOnChangeCaretPosition(std::function<void(zView*, int)> _pos) { onChangeCaretPos = std::move(_pos); }
+    // вернуть цвет подсказки
+    u32 getTextHintColor() const { return colorHint; }
+    // установить цвет подсказки
+    void setTextHintColor(u32 _color) { colorHint = _color; setText(realText, true); }
+protected:
+    // отрисовка
+    virtual void onDraw() override;
+    // позиционирование
+    virtual void onLayout(crti &position, bool changed) override;
+    // размеры
+    virtual void onMeasure(cszm& spec) override;
+    // позиционирование текста
+    virtual szi resolvePositionBitmap(u32 _gravity, int wBmp) override;
+    // смена фокуса
+    virtual void onChangeFocus(bool set) override;
+    // касание
+    virtual i32 onTouchEvent(zTouch *touch) override;
+    // вернуть текст для отображения
+    virtual cstr getShowText(int type) override;
+    // определение габаритов картинки
+    virtual szi resolveBitmap(int _w, int _h) override;
+    // при удалении и вставке символа - начальная позиция текста/позиция каретки
+    int correct(int index);
+    // коррекция позиции каретки на экране
+    void correctCaretPosition(int index);
+    // установка каретки
+    void updateCaret();
+    // позиция каретки в тексте
+    int caretText{0};
+    // ширина рабочей области редактора
+    int wmax{0};
+    // позиция каретки на экране
+    pti caretScreen{};
+    // фейковый текст(hint)
+    zString hintText;
+    // цвет hint
+    u32 colorHint{};
+    // фильтр
+    zFilterEdit* filter{nullptr};
+    // кнопка отмены
+    zViewClear* butClear{nullptr};
+    // событие редактирования
+    std::function<void(zView*, int)> onChangeText;
+    // событие установки картеки
+    std::function<void(zView*, int)> onChangeCaretPos;
+     */
+};

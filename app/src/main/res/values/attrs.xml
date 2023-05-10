@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="z">
+        <attr name="styles" format="string" />
+        <attr name="radio_group" format="integer" />
+        <attr name="layout_cells" format="string" />
+        <attr name="layout_space" format="dimension" />
+        <attr name="hint" format="string" />
+        <attr name="range" format="string" />
+        <attr name="count" format="integer" />
+        <attr name="styleCaption" format="string" />
+        <attr name="styleFooter" format="string" />
+        <attr name="message" format="string" />
+        <attr name="file" format="string" />
+        <attr name="chartGravity" format="enum" >
+            <enum name="center_vertical" value="2" />
+            <enum name="center_horizontal" value="4" />
+            <enum name="start" value="8" />
+            <enum name="end" value="16" />
+            <enum name="top" value="32" />
+            <enum name="bottom" value="64" />
+        </attr>
+        <attr name="tabGravity" format="enum" >
+            <enum name="start" value="8" />
+            <enum name="end" value="16" />
+            <enum name="top" value="2" />
+            <enum name="bottom" value="4" />
+        </attr>
+        <attr name="gravity" format="flags" >
+            <flag name="none" value="0" />
+            <flag name="start" value="1" />
+            <flag name="end" value="2" />
+            <flag name="top" value="4" />
+            <flag name="bottom" value="8" />
+            <flag name="center" value="16" />
+            <flag name="center_vertical" value="32" />
+            <flag name="center_horizontal" value="64" />
+            <flag name="min" value="128" />
+            <flag name="max" value="256" />
+            <flag name="width" value="512" />
+            <flag name="height" value="1024" />
+        </attr>
+        <attr name="alpha" format="float" />
+        <attr name="scaleX" format="float" />
+        <attr name="scaleY" format="float" />
+        <attr name="rotate" format="float" />
+        <attr name="rotateX" format="float" />
+        <attr name="rotateY" format="float" />
+        <attr name="duration" format="integer" />
+        <attr name="minSizeW" format="dimension"/>
+        <attr name="minSizeH" format="dimension"/>
+        <attr name="maxSizeW" format="dimension"/>
+        <attr name="maxSizeH" format="dimension"/>
+        <attr name="pad" format="dimension" />
+        <attr name="padHorz" format="dimension" />
+        <attr name="padVert" format="dimension" />
+        <attr name="padStart" format="dimension" />
+        <attr name="padEnd" format="dimension" />
+        <attr name="padTop" format="dimension" />
+        <attr name="padBottom" format="dimension" />
+        <attr name="margin" format="dimension" />
+        <attr name="marginHorz" format="dimension" />
+        <attr name="marginVert" format="dimension" />
+        <attr name="marginStart" format="dimension" />
+        <attr name="marginEnd" format="dimension" />
+        <attr name="marginTop" format="dimension" />
+        <attr name="marginBottom" format="dimension" />
+        <attr name="background" format="reference|string|color" />
+        <attr name="bkColor" format="color|string" />
+        <attr name="bkTiles" format="integer|string" />
+        <attr name="bkPad" format="dimension" />
+        <attr name="bkPadHorz" format="dimension" />
+        <attr name="bkPadVert" format="dimension" />
+        <attr name="bkPadStart" format="dimension" />
+        <attr name="bkPadEnd" format="dimension" />
+        <attr name="bkPadTop" format="dimension" />
+        <attr name="bkPadBottom" format="dimension" />
+        <attr name="foreground" format="reference|string" />
+        <attr name="fkColor" format="color|string" />
+        <attr name="fkTiles" format="integer|string" />
+        <attr name="fkTile1" format="integer|string" />
+        <attr name="fkTile2" format="integer|string" />
+        <attr name="fkTile3" format="integer|string" />
+        <attr name="fkTile4" format="integer|string" />
+        <attr name="decorate" format="string" />
+        <attr name="display" format="string" />
+        <attr name="behavior" format="string" />
+        <attr name="radii" format="string" />
+        <attr name="tap" format="enum">
+            <enum name="inverted" value="1" />
+            <enum name="pressed" value="2" />
+            <enum name="hovered" value="3" />
+        </attr>
+        <attr name="shape" format="enum">
+            <enum name="rect" value="1" />
+            <enum name="round" value="2" />
+            <enum name="oval" value="3" />
+        </attr>
+        <!-- text -->
+        <attr name="bkText" format="reference|string|color" />
+        <attr name="bkTextColor" format="color|string" />
+        <attr name="font" format="reference|string" />
+        <attr name="textColor" format="color|string" />
+        <attr name="textSize" format="dimension|string" />
+        <attr name="textSingle" format="boolean" />
+        <attr name="fkScale" format="float" />
+        <attr name="fkGravity" format="flags">
+            <flag name="none" value="0" />
+            <flag name="start" value="1" />
+            <flag name="end" value="2" />
+            <flag name="top" value="4" />
+            <flag name="bottom" value="8" />
+            <flag name="center" value="16" />
+            <flag name="center_vertical" value="32" />
+            <flag name="center_horizontal" value="64" />
+            <flag name="min" value="128" />
+            <flag name="max" value="256" />
+            <flag name="width" value="512" />
+            <flag name="height" value="1024" />
+        </attr>
+        <attr name="iconGravity" format="flags">
+            <flag name="none" value="0" />
+            <flag name="start" value="1" />
+            <flag name="end" value="2" />
+            <flag name="top" value="4" />
+            <flag name="bottom" value="8" />
+            <flag name="center" value="16" />
+            <flag name="center_vertical" value="32" />
+            <flag name="center_horizontal" value="64" />
+            <flag name="min" value="128" />
+            <flag name="max" value="256" />
+            <flag name="width" value="512" />
+            <flag name="height" value="1024" />
+        </attr>
+        <attr name="textStyle" format="flags">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+            <flag name="bold_italic" value="3" />
+            <flag name="strike" value="8" />
+            <flag name="underline" value="16" />
+        </attr>
+        <attr name="shadowOffset" format="string" />
+        <attr name="shadowColor" format="string|color" />
+        <attr name="highlightColor" format="string|color" />
+        <attr name="textDistance" format="dimension" />
+        <!-- forms -->
+        <attr name="formMode" format="enum">
+            <enum name="none" value="0" />
+            <enum name="ok" value="1" />
+            <enum name="yes_no" value="2" />
+            <enum name="yes_no_def" value="3" />
+        </attr>
+        <!-- кнопка -->
+        <attr name="icon" format="string" />
+        <attr name="iconColor" format="color|string" />
+        <attr name="iconScale" format="float" />
+        <!-- чарт -->
+        <attr name="chartFlags" format="enum">
+            <enum name="stretch" value="1" />
+            <enum name="scroll" value="2" />
+        </attr>
+        <attr name="chartMode" format="enum|string">
+            <enum name="diagramm" value="1" />
+            <enum name="graph" value="2" />
+            <enum name="circular" value="4" />
+        </attr>
+        <!-- редактор -->
+        <attr name="inputMode" format="enum">
+            <enum name="text" value="0" />
+            <enum name="number" value="1" />
+            <enum name="phone" value="2" />
+            <enum name="mail" value="3" />
+            <enum name="password" value="4" />
+            <enum name="zx" value="5" />
+        </attr>
+        <!-- слайдер/прогресс -->
+        <attr name="speedTrack" format="float|string" />
+        <attr name="sliderMode" format="string|flags">
+            <flag name="none" value="0" />
+            <flag name="rotate" value="1" />
+            <flag name="scale" value="2" />
+        </attr>
+        <attr name="primaryColor" format="color|string" />
+        <attr name="secondaryColor" format="color|string" />
+        <!-- таблица -->
+        <attr name="spacingLine" format="dimension" />
+        <attr name="spacingCell" format="dimension" />
+        <attr name="cellSize" format="dimension" />
+        <attr name="lines" format="integer" />
+        <attr name="gridMode" format="enum" >
+            <enum name="cell" value="1" />
+            <enum name="spacing" value="2" />
+            <enum name="uniform" value="3" />
+        </attr>
+        <!-- списки -->
+        <attr name="selector" format="reference|string" />
+        <attr name="selColor" format="color|string" />
+        <attr name="selTiles" format="integer" />
+        <attr name="selPad" format="dimension" />
+        <attr name="selPadHorz" format="dimension" />
+        <attr name="selPadVert" format="dimension" />
+        <attr name="selPadStart" format="dimension" />
+        <attr name="selPadEnd" format="dimension" />
+        <attr name="selPadTop" format="dimension" />
+        <attr name="selPadBottom" format="dimension" />
+        <attr name="divider" format="reference|string|color" />
+        <attr name="divColor" format="color|string" />
+        <attr name="divTiles" format="integer" />
+        <attr name="divSize" format="integer|string" />
+        <attr name="pos" format="integer" />
+        <attr name="divType" format="flags">
+            <flag name="begin" value="1" />
+            <flag name="middle" value="2" />
+            <flag name="finish" value="4" />
+        </attr>
+        <attr name="divPad" format="dimension" />
+        <attr name="divPadHorz" format="dimension" />
+        <attr name="divPadStart" format="dimension" />
+        <attr name="divPadEnd" format="dimension" />
+        <attr name="fadeScrollBars" format="boolean" />
+        <attr name="sizeTouch" format="string" />
+        <attr name="sizeScrollBars" format="dimension" />
+        <attr name="tilesScrollBars" format="integer" />
+    </declare-styleable>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="textSpan">Завершение работы фоновых приложений после блокировки экрана помогает экономить заряд. С другой стороны, в этом случае вы не будете получать новые сообщения (электронные, текстовые, из соцсетей и т.д.).</string>
+    <string name="first_form">Первая форма!!!</string>
+    <string name="enter_family">Введите фамилию и отчество</string>
+    <string-array name="spinArray">
+        <item>Иван</item>
+        <item>Ирина</item>
+        <item>Сергей Викторович</item>
+        <item>Максим</item>
+        <item>Владислав</item>
+        <item>06.06.1979</item>
+        <item>Шаталов Сергей</item>
+        <item>Ольга</item>
+        <item>Виктор Алексеевич</item>
+        <item>Катя</item>
+        <item>Маша</item>
+        <item>Нина Шаталова</item>
+        <item>Алекс</item>
+        <item>Саша</item>
+    </string-array>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<keyboards default="en_little_abc" minHeight="35">
+	<layout name="en_little_abc" shift="en_large_abc"  spec="digit123" lang="ru_little_abc"/>
+	<layout name="en_large_abc"  shift="en_little_abc" spec="digit123" lang="ru_large_abc"  input="en_little_abc" />
+	<layout name="ru_little_abc" shift="ru_large_abc"  spec="digit123" lang="en_little_abc" />
+	<layout name="ru_large_abc"  shift="ru_little_abc" spec="digit123" lang="en_large_abc"  input="ru_little_abc" />
+	<layout name="digit123" spec="back" />
+</keyboards>
