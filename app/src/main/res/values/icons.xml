@@ -51,4 +51,6 @@
     <integer name="formLight">48</integer>
     <integer name="formDark">49</integer>
     <integer name="iconDef">50</integer>
+    <integer name="keybButSmall">51</integer>
+    <integer name="keybButBig">52</integer>
 </resources>

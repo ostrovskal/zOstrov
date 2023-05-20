@@ -59,8 +59,6 @@ public:
     void removeAllViews();
     // отсоеденить все дочерние представления
     void detachAllViews();
-    // отрисовка отладочной информации
-    virtual void drawDebug() override;
     // вернуть представление по типу
     template<typename T = zView> T* tpView(int* idx) const {
         T* v(nullptr); int i;
@@ -107,7 +105,7 @@ protected:
     // вычисление одного дочернего
     virtual void measureChild(zView* child, cszm& spec);
     // обновить глоу
-//    void updateGlow(int _delta, bool _vert);
+    void updateGlow(int _delta);
     // удалить/отсоединить
     void _remove(zView* v, bool _del);
     // разделитель

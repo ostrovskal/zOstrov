@@ -21,17 +21,17 @@ public:
     // конструктор
     zTheme();
     // установить новую тему(_styles - массив стилей темы, prefixes - префиксы языка ресурсов(например, ru-en), usr - массив массивов ресурсов, _usr_styles - доп.стили)
-    bool setTheme(zStyle* _styles, const zString& lang, zResource** _user_resources, zStyles* _user_styles);
+    bool setTheme(zStyle* _styles, const zStringUTF8& lang, zResource** _user_resources, zStyles* _user_styles);
     // найти атрибут в стилях
     const zStyle* findAttribute(u32 attr) const;
     // найти массив в ресурсах
-    zArray<zString> findArray(u32 _value) const { return zString(getResource(_value)).split(","); }
+    zArray<zStringUTF8> findArray(u32 _value) const { return zStringUTF8(getResource(_value)).split(","); }
     // найти строку в ресурсах
-    zString findString(u32 _value) const { return getResource(_value); }
+    zStringUTF8 findString(u32 _value) const { return getResource(_value); }
     // значение определенного типа
     static data value;
     // имя темы
-    zString themeName{};
+    zStringUTF8 themeName{};
     // цвет темы
     u32 themeColor{0xffffffff};
     // массив стилей
@@ -48,7 +48,7 @@ protected:
     // найти стили
     zStyle* getStyles(u32 value) const;
     // массив префиксов
-    zArray<zString> prefixes;
+    zArray<zStringUTF8> prefixes;
 };
 
 class zStyle {
@@ -174,7 +174,7 @@ enum ViewStyles {
     Z_SPACING_LINE				= (62 | ZTT_DMN),
     Z_CELL_SIZE					= (63 | ZTT_DMN),
     Z_CHART_FLAGS               = (64 | ZTT_INT),
-    Z_IPADDING                  = (65 | ZTT_INT),
+    Z_IPADDING                  = (65 | ZTT_VEC),
     Z_SHAPE                     = (66 | ZTT_INT)
 };
 

@@ -7,7 +7,7 @@
 #include "zssh/zViewWidgets.h"
 
 // идентификатор треда для анимации
-static pthread_t threadID(0);
+//static pthread_t threadID(0);
 
 static float filterMtxs[6][16] = {
         {   1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f },                   // normal
@@ -38,6 +38,7 @@ static cstr fragShader = "precision mediump float;\n"
 
 zViewManager* manager(nullptr);
 
+/*
 static void* threadFunc(void*) {
     static HANDLER_MESSAGE *msg(nullptr);
     while(manager && !manager->isQuit()) {
@@ -55,6 +56,7 @@ static void* threadFunc(void*) {
     }
     return nullptr;
 }
+*/
 
 zViewManager::zViewManager(AAssetManager* _assets, int size_cache) {
     memset(shaderVars, 0, sizeof(shaderVars));
@@ -101,13 +103,13 @@ i32 zViewManager::processInputEvens(AInputEvent *_event) {
     return 0;
 }
 
-void zViewManager::attachForm(zViewForm* form, crti& rect) {
-    // убрать другую форму
-    auto root(manager->getSystemView(true));
-    root->detach(form); root->attach(form, ZS_GRAVITY_CENTER, 0, rect.w, rect.h);
+zViewForm* zViewManager::attachForm(zViewForm* form, cszi& rect) {
+    root->detach(form);
+    root->attach(form, ZS_GRAVITY_CENTER, 0, rect.w, rect.h);
     // отобразить форму
     form->visibility(true);
     form->setGravity(ZS_GRAVITY_CENTER);
+    return form;
 }
 
 void zViewManager::showToast(cstr _text, zStyle* _styles) {
@@ -139,9 +141,11 @@ bool zViewManager::displayInit() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     // запускаем тред анимации
+/*
     pthread_attr_t lAttributes;
     if(pthread_attr_init(&lAttributes)) abort();
     if(pthread_create(&threadID, &lAttributes, threadFunc, this)) abort();
+*/
     return true;
 }
 
@@ -255,7 +259,7 @@ void zViewManager::appActivate(bool activate, ANativeWindow *_window) {
 }
 
 void zViewManager::drawViews() {
-//    static HANDLER_MESSAGE *msg(nullptr);
+    static HANDLER_MESSAGE *msg(nullptr);
 #ifndef NDEBUG
     static bool showTri(true);
     static int oldTri(0);
@@ -270,22 +274,22 @@ void zViewManager::drawViews() {
     common->layout(common->rview);
     // 3. состояния представлений
     if(bufViewStates) stateAllViews(Z_LOAD, nullptr, nullptr);
-    // 5. отрисовка всех представлений
-    zView::fbo = nullptr;
-    common->draw();
-    common->drawDebug();
-    zGL::instance()->swap();
-/*
-    while((msg = manager->event.obtain())) {
-        // отправить на обработку в представление
-        if(msg->what == MSG_ANIM) {
-            auto view(msg->view);
-            if(view->onAnimation(view, msg->arg)) {
-                manager->event.send(view, MSG_ANIM, view->duration, msg->arg);
+    // 4. анимация
+    if(status & Z_ANIM) {
+        while((msg = manager->event.obtain())) {
+            // отправить на обработку в представление
+            if(msg->what == MSG_ANIM) {
+                auto view(msg->view);
+                if(view->onAnimation(view, msg->arg)) {
+                    manager->event.send(view, MSG_ANIM, view->duration, msg->arg);
+                }
             }
         }
     }
-*/
+    // 5. отрисовка всех представлений
+    zView::fbo = nullptr;
+    common->draw();
+    zGL::instance()->swap();
 #ifndef NDEBUG
     if(debug && showTri) {
         if(oldTri != countVertices) {
@@ -428,7 +432,7 @@ void zViewManager::updateNativeWindow(AConfiguration* config, zStyle* _styles, z
             // добавить панель действий
 //        common->attach(actionBar = new zActionBar(styles_z_bar, styles_z_barbutton, styles_z_barpopup), VIEW_MATCH, VIEW_WRAP);
             // добавить клаву
-//        common->attach(keyboard = new zViewKeyboard("keyboardDefault.xml"), 0, hh, VIEW_MATCH, VIEW_WRAP);
+            common->attach(keyboard = new zViewKeyboard("keyboardDefault.xml"), 0, 0, VIEW_MATCH, VIEW_WRAP);
             setContent();
             status &= ~Z_CHANGE_THEME;
         }
@@ -440,7 +444,7 @@ void zViewManager::updateNativeWindow(AConfiguration* config, zStyle* _styles, z
 }
 
 void zViewManager::setTheme(zStyle* _styles, zResource** _user, zStyles* _user_styles) {
-    if(theme->setTheme(_styles, "-" + zString(languages, 2), _user, _user_styles)) {
+    if(theme->setTheme(_styles, "-" + zStringUTF8(languages, 2), _user, _user_styles)) {
         ILOG("Установка темы <%s>!", theme->themeName.str());
         status |= Z_CHANGE_THEME;
         if(common) {
@@ -454,7 +458,7 @@ void zViewManager::prepareRender(zVertex2D* vertices, crti& scissor, const zMatr
     glVertexAttribPointer(shaderVars[ZSH_APOS], 2, GL_FLOAT, GL_FALSE, sizeof(zVertex2D), &vertices->x);
     glVertexAttribPointer(shaderVars[ZSH_ATEX], 2, GL_FLOAT, GL_FALSE, sizeof(zVertex2D), &vertices->u);
     //glDisable(GL_SCISSOR_TEST);
-    glScissor(scissor.x, scissor.y, scissor.w, scissor.h);
+    glScissor(scissor.x, zView::fbo ? scissor.y : (screen.h - scissor.extent(true)), scissor.w, scissor.h);
     glUniformMatrix4fv(shaderVars[ZSH_WMTX], 1, false, wmtx);
 }
 
@@ -500,8 +504,8 @@ void zViewManager::showSoftKeyboard(u32 idOwner, bool _show) {
 }
 
 u8* zImageCache::load(cstr _name) {
-    u8* ptr; zString name(_name);
-    if(name.indexOf('/') == -1) {
+    u8* ptr; zStringUTF8 name(_name);
+    if(name.indexOf("/") == -1) {
         // загрузить изображение из активов и скопировать ее в текстуру
         ptr = manager->assetFile("textures/" + name + ".ttl", nullptr);
     } else {

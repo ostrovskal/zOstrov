@@ -73,7 +73,7 @@ void zViewForm::close(int code) {
 	auto ok(1);
 	if(onClose) ok = onClose(this, code);
 	if(ok) {
-		visibility(false);
+		updateStatus(ZS_VISIBLED, false);
 		if(mode & ZS_FORM_TERMINATE) {
 			manager->getSystemView(true)->remove(this);
 		}

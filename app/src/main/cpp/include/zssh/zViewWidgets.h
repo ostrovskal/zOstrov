@@ -109,7 +109,7 @@ protected:
     // обновление ползунка
     virtual void updateTrumb();
     // обновление макета
-    virtual void updateLayout(cpti &position, bool changed);
+    virtual void updateLayout(bool changed);
     // отображение подсказки
     virtual void showTips();
     // обработка событий
@@ -132,7 +132,7 @@ protected:
     // диапазон
     szi range{};
     // текст подсказки
-    zString tips{};
+    zStringUTF8 tips{};
     // матрица ползунка
     zMatrix mtxTrumb{};
 };
@@ -147,7 +147,7 @@ public:
     virtual cstr typeName() const override { return "zViewProgress"; }
 protected:
     // обновление макета
-    virtual void updateLayout(cpti &xy, bool changed) override;
+    virtual void updateLayout(bool changed) override;
     virtual void onDraw() override;
     virtual void updateTrumb() override;
     // обработка

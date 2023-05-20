@@ -80,14 +80,6 @@ void zViewGroup::disable(bool set) {
     zView::disable(set);
 }
 
-void zViewGroup::drawDebug() {
-#ifndef NDEBUG
-    zView::drawDebug();
-    // дочерние
-    for(auto v : children) v->drawDebug();
-#endif
-}
-
 void zViewGroup::draw() {
     if(isVisibled()) {
         // рисуем
@@ -101,15 +93,22 @@ void zViewGroup::draw() {
                 for(auto v : children) v->draw();
                 // рисуем декорации
                 // прокрутка
-                if(scrollBar) scrollBar->draw();
+                if(scrollBar && scrollBar->isVisibled()) scrollBar->draw();
                 // глоу
-                if(glow) glow->draw();
+                if(glow && glow->isVisibled()) glow->draw();
             });
             if(drw[DRW_FBO]->isValid()) {
                 updateStatus(ZS_DIRTY_LAYER, false);
             }
         }
         onDrawFBO();
+        drawDebug();
+    }
+}
+
+void zViewGroup::updateGlow(int _delta) {
+    if(glow) {
+        glow->start(_delta, testFlags(ZS_VORIENTATION), _delta < 0);
     }
 }
 
@@ -222,16 +221,16 @@ void zViewGroup::measureChild(zView* child, cszm& spec) {
 zMeasure zViewGroup::makeChildMeasureSpec(const zMeasure& spec, int padding, zMeasure childDimension) {
     int size(z_max(0, spec.size() - padding)); int resultSize, resultMode;
     switch(spec.mode()) {
-        // –одитель нав¤зал нам точный размер
+        // родитель навязал нам точный размер
         case MEASURE_EXACT:
             switch(childDimension) {
                 case VIEW_WRAP:
-                    // ƒочерний хочет определить свой собственный размер. ќн не может быть больше нас.
+                    // дочерний хочет определить свой собственный размер. он не может быть больше нас.
                     resultSize = size;
                     resultMode = MEASURE_MOST;
                     break;
                 case VIEW_MATCH:
-                    // ƒочерний хочет быть нашего размера. ѕусть будет так.
+                    // дочерний хочет быть нашего размера. пусть будет так.
                     childDimension = size;
                 default:
                     resultSize = childDimension;
@@ -239,36 +238,36 @@ zMeasure zViewGroup::makeChildMeasureSpec(const zMeasure& spec, int padding, zMe
                     break;
             }
             break;
-            // –одитель нав¤зал нам максимальный размер
+            // родитель навязал нам максимальный размер
         case MEASURE_MOST:
             switch (childDimension) {
                 case VIEW_WRAP:
-                    // ƒочерний хочет определить свой собственный размер. ќн не может быть больше нас.
+                    // дочерний хочет определить свой собственный размер. он не может быть больше нас.
                 case VIEW_MATCH:
-                    // ƒочерний хочет быть нашего размера... узнайте, какого размера он должен быть
+                    // дочерний хочет быть нашего размера... узнайте, какого размера он должен быть
                     resultSize = size;
                     resultMode = MEASURE_MOST;
                     break;
                 default:
-                    // ƒочерний хочет определенный размер... пусть будет так.
+                    // дочерний хочет определенный размер... пусть будет так.
                     resultSize = childDimension;
                     resultMode = MEASURE_EXACT;
                     break;
             }
             break;
-            // –одитель спросил, насколько большими мы хотим быть
+            // родитель спросил, насколько большими мы хотим быть
         default:
         case MEASURE_UNDEF:
             switch (childDimension) {
                 case VIEW_WRAP:
-                    // ƒочерний хочет определить свой собственный размер.... вы¤снить, какого размера он должен быть
+                    // дочерний хочет определить свой собственный размер.... выяснить, какого размера он должен быть
                 case VIEW_MATCH:
-                    // ƒочерний хочет быть нашего размера... узнайте, какого размера он должен быть
+                    // дочерний хочет быть нашего размера... узнайте, какого размера он должен быть
                     resultSize = 0;
                     resultMode = MEASURE_UNDEF;
                     break;
                 default:
-                    // ƒочерний хочет определенный размер... позвольте ему это.
+                    // дочерний хочет определенный размер... позвольте ему это.
                     resultSize = childDimension;
                     resultMode = MEASURE_EXACT;
                     break;

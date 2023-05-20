@@ -93,7 +93,7 @@ public:
     // блокировка/разблокировка
     virtual void disable(bool _disable) { updateStatus(ZS_DISABLED, _disable); }
     // запрос на полное обновление иерархии представлений
-    void requestLayout();
+    virtual void requestLayout();
     // запрос на обновление координат иерархии представлений
     virtual void invalidate();
     // подсчитать габариты
@@ -129,10 +129,12 @@ public:
     // установка смещения
     void setTranslation(float _x, float _y);
     // обновление статуса
-    void updateStatus(u32 msk, u32 val, bool set) { status &= ~msk; status |= (val & msk) * set; }
-    void updateStatus(u32 val, bool set) { status &= ~val; status |= val * set; }
+    u32 updateStatus(u32 msk, u32 val, bool set) { status &= ~msk; val = (val & msk) * set; status |= val; return val; }
+    u32 updateStatus(u32 val, bool set) { status &= ~val; val *= set; status |= val; return val; }
     // установка паддинга
     void setPadding(crti& r) { pad = r; requestLayout(); }
+    // удаление отображателя
+    void removeDrawable(int index) { if(drw[index] != &fake) delete drw[index]; drw[index] = &fake; }
     // установка маргина
     void setMargin(crti& r) { margin = r; requestLayout(); }
     // вернуть паддинг + маргин
@@ -178,7 +180,7 @@ public:
             if(!drw[index]->isValid()) drw[index] = new T(this, index);
             if(params) drw[index]->init(*params);
             if(var) *var = (T *) drw[index];
-            if(index == DRW_FBO) { updateStatus(ZS_HARDWARE_LAYER | ZS_DIRTY_LAYER, true); }
+            if(index == DRW_FBO) { updateStatus(ZS_DIRTY_LAYER, true); }
         }
     }
     // установка клика
@@ -229,7 +231,7 @@ public:
     // параметры макета
     zLayoutParams lps{};
     // отступ/внутренний отступ
-    rti pad{}, ipad{15, 15, 15, 15};
+    rti pad{}, ipad{ 5, 5, 5, 5 };
     // внешний отступ
     rti margin{};
     // ячейки сетки
@@ -281,8 +283,6 @@ protected:
     void eraseTouchHandler();
     // установка габаритов по умолчанию
     void defaultOnMeasure(cszm& spec, int width, int height);
-    // удаление отображателя
-    void removeDrawable(int index) { if(drw[index] != &fake) delete drw[index]; drw[index] = &fake; }
     // родитель
     zView* parent{nullptr};
     // буфер отрисовки при отладке
@@ -290,7 +290,7 @@ protected:
     // спецификаторы габаритов
     szm measureSpec{};
     // предыдущая позиция
-    rti oldPos{};
+    rti oldPos{INT_MAX, INT_MAX};
     // фейковый отображатель
     static zDrawableFake fake;
     // текущая FBO
@@ -308,6 +308,9 @@ public:
     virtual cstr typeName() const override { return "zViewGlow"; }
     // остановка
     void stop() { animator.clear(); updateStatus(ZS_VISIBLED, false); }
+protected:
+    // область обрезки
+    virtual rti drawableClip() const override { return parent->rclip; }
 };
 
 // прокрутка

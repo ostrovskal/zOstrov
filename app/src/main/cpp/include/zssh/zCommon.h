@@ -89,8 +89,7 @@ enum { TOUCH_CONTINUE, TOUCH_FINISH, TOUCH_ACTION, TOUCH_STOP };
 #define ZS_TIPS				        0x01000000U	// признак отображени¤ подсказки
 #define ZS_MODAL   			        0x00800000U	// модальный
 #define ZS_CHECKED			        0x00100000U // признак выбора
-#define ZS_HARDWARE_LAYER           0x00000800U // признак аппаратного слоя
-#define ZS_DISPLAY_MASK             (ZS_VISIBLED | ZS_DISABLED | ZS_READ_ONLY | ZS_TIPS | ZS_MODAL | ZS_CHECKED | ZS_HARDWARE_LAYER)
+#define ZS_DISPLAY_MASK             (ZS_VISIBLED | ZS_DISABLED | ZS_READ_ONLY | ZS_TIPS | ZS_MODAL | ZS_CHECKED)
 
 // поведение
 #define ZS_CLICKABLE		        0x08004000U	// признак возможности клика
@@ -108,7 +107,7 @@ enum { TOUCH_CONTINUE, TOUCH_FINISH, TOUCH_ACTION, TOUCH_STOP };
 #define ZS_DIVIDER                  8
 #define ZS_DECORATE_MASK            (ZS_GLOW | ZS_VSCROLLBAR | ZS_HSCROLLBAR | ZS_DIVIDER | ZS_SCROLLBAR)
 
-#define ZS_STATES                   (ZS_HARDWARE_LAYER | ZS_DIRTY_LAYER | ZS_VISIBLED | ZS_DISABLED | ZS_CHECKED | ZS_VORIENTATION)
+#define ZS_STATES                   (ZS_DIRTY_LAYER | ZS_VISIBLED | ZS_DISABLED | ZS_CHECKED | ZS_VORIENTATION)
 
 // режим для слайдера/прогресса/формы/чарта/таблицы/редактора
 // слайдер
@@ -175,4 +174,5 @@ enum { TOUCH_CONTINUE, TOUCH_FINISH, TOUCH_ACTION, TOUCH_STOP };
 #include "zView.h"
 #include "zViewManager.h"
 #include "zSystemStyles.h"
+#include "zstandard/zStringUTF8.h"
 

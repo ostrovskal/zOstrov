@@ -12,7 +12,7 @@ zTheme::zTheme() {
     theme = this;
 }
 
-static zResource* find_res(zResource** res, const zString& lng, u32 attr) {
+static zResource* find_res(zResource** res, const zStringUTF8& lng, u32 attr) {
     if(res) {
         zResource* r;
         while((r = (*res++)) != nullptr) {
@@ -115,7 +115,7 @@ void zTheme::fillValue(const zStyle* _style) {
     }
 }
 
-bool zTheme::setTheme(zStyle* _styles, const zString& lang, zResource** _user_resources, zStyles* _user_styles) {
+bool zTheme::setTheme(zStyle* _styles, const zStringUTF8& lang, zResource** _user_resources, zStyles* _user_styles) {
     auto ret(false);
     if(_styles) {
         prefixes = lang.split("-");

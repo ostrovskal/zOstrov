@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Wed May 10 02:57:45 2023
+// Sat May 20 10:10:02 2023
 
 #pragma once
 
@@ -12,8 +12,10 @@ struct _z {
 			enum { 
 				digit123	= 0x00100000, 	en_large_abc	= 0x00100001, 	en_little_abc	= 0x00100002, 
 				font1	= 0x00100003, 	font2	= 0x00100004, 	font3	= 0x00100005, 
-				font4	= 0x00100006, 	ru_large_abc	= 0x00100007, 	ru_little_abc	= 0x00100008, 
-				znull	= 0x00100009, 	zssh	= 0x0010000A, 			};
+				font4	= 0x00100006, 	keyboard_e	= 0x00100007, 	ru_large_abc	= 0x00100008, 
+				ru_little_abc	= 0x00100009, 	zdroid	= 0x0010000A, 	zform_dark	= 0x0010000B, 
+				zform_light	= 0x0010000C, 	znull	= 0x0010000D, 	zshared	= 0x0010000E, 
+				zssh	= 0x0010000F, 	ztheme_light	= 0x00100010, 			};
 		}; 
 		_drawable drawable;
 		struct _color {
@@ -52,8 +54,8 @@ struct _z {
 				headerMinWidth	= 50, 	headerMinHeight	= 20, 	controllerMinWidth	= 96, 
 				controllerMinHeight	= 96, 	switchMinWidth	= 50, 	switchMinHeight	= 20, 
 				progressMinWidth	= 70, 	progressMinHeight	= 10, 	progressMaxWidth	= 140, 
-				progressMaxHeight	= 20, 	sliderMinWidth	= 55, 	sliderMinHeight	= 20, 
-				sliderMaxWidth	= 70, 	sliderMaxHeight	= 30, 	selectMinWidth	= 60, 
+				progressMaxHeight	= 20, 	sliderMinWidth	= 55, 	sliderMinHeight	= 25, 
+				sliderMaxWidth	= 70, 	sliderMaxHeight	= 35, 	selectMinWidth	= 60, 
 				selectMinHeight	= 40, 	chartMinWidth	= 12, 	chartMinHeight	= 5, 
 				editMinWidth	= 110, 	editMinHeight	= 30, 	divider	= 2, 	menuText	= 18, 
 				hintText	= 14, 	textText	= 16, 	messageText	= 22, 	headerText	= 17, 
@@ -75,7 +77,7 @@ struct _z {
 				radioOff	= 40, 	radioOn	= 41, 	checkOff	= 42, 	checkOn	= 43, 
 				sliderTrumb1	= 44, 	sliderTrumb2	= 45, 	sliderTrack1	= 46, 
 				sliderTrack2	= 47, 	formLight	= 48, 	formDark	= 49, 	iconDef	= 50, 
-			};
+				keybButSmall	= 51, 	keybButBig	= 52, 			};
 		}; 
 		_integer integer;
 		struct _id {
@@ -93,15 +95,15 @@ struct _z {
 		_id id;
 		struct _string {
 			enum { 
-				acontrollerMap	= 0x0010000B, 	ccontrollerMap	= 0x0010000C, 
-				themeDark	= 0x0010000D, 	themeLight	= 0x0010000E, 	textSpan	= 0x0010000F, 
-				first_form	= 0x00100010, 	enter_family	= 0x00100011, 	Sergey	= 0x00100012, 
-				Perekljuchatelw	= 0x00100013, 			};
+				acontrollerMap	= 0x00100011, 	ccontrollerMap	= 0x00100012, 
+				themeDark	= 0x00100013, 	themeLight	= 0x00100014, 	textSpan	= 0x00100015, 
+				first_form	= 0x00100016, 	enter_family	= 0x00100017, 	Sergey	= 0x00100018, 
+				Perekljuchatelw	= 0x00100019, 			};
 		}; 
 		_string string;
 		struct _array {
 			enum { 
-				spinArray	= 0x00100014, 			};
+				spinArray	= 0x0010001A, 			};
 		}; 
 		_array array;
 		struct _style {
@@ -203,10 +205,16 @@ static zResource z_resources[] = {
 		{ _z::_R::_drawable::font2, "font2" },
 		{ _z::_R::_drawable::font3, "font3" },
 		{ _z::_R::_drawable::font4, "font4" },
+		{ _z::_R::_drawable::keyboard_e, "keyboard_e" },
 		{ _z::_R::_drawable::ru_large_abc, "ru_large_abc" },
 		{ _z::_R::_drawable::ru_little_abc, "ru_little_abc" },
+		{ _z::_R::_drawable::zdroid, "zdroid" },
+		{ _z::_R::_drawable::zform_dark, "zform_dark" },
+		{ _z::_R::_drawable::zform_light, "zform_light" },
 		{ _z::_R::_drawable::znull, "znull" },
+		{ _z::_R::_drawable::zshared, "zshared" },
 		{ _z::_R::_drawable::zssh, "zssh" },
+		{ _z::_R::_drawable::ztheme_light, "ztheme_light" },
 		/* string */
 		{ _z::_R::_string::acontrollerMap, "acontrollerMap.xml" },
 		{ _z::_R::_string::ccontrollerMap, "ccontrollerMap.xml" },

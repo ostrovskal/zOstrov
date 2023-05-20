@@ -33,8 +33,8 @@ void zViewButton::onLayout(crti &position, bool changed) {
     if(changed && drw[DRW_ICON]->isValid()) {
         auto bound(&drw[DRW_ICON]->bound);
         drw[DRW_ICON]->measure(icSize.w, icSize.h, 0, false);
-        *bound = applyGravity(rclient, icSize, icGravity);
-        *bound += rclient; bound->x += ipad.x;
+        *bound = applyGravity(rclient - szi(ipad.extent(false), ipad.extent(true)), icSize, icGravity);
+        *bound += rclient; *bound += ipad;
     }
 }
 
@@ -129,10 +129,12 @@ void zViewSwitch::checked(bool set) {
 
 void zViewSwitch::onLayout(crti &position, bool changed) {
     zViewText::onLayout(position, changed);
-    auto bound(&drw[DRW_FK]->bound);
-    trumb->measure(fkW, fkH, 0, false);
-    trumb->bound.x = bound->x + ((float)fkW / 16.0f) * (isChecked() * 8);
-    trumb->bound.y = bound->y;
+    if(changed) {
+        auto bound(&drw[DRW_FK]->bound);
+        trumb->measure(fkW, fkH, 0, false);
+        trumb->bound.x = bound->x + ((float) fkW / 16.0f) * (isChecked() * 8);
+        trumb->bound.y = bound->y;
+    }
 }
 
 void zViewSwitch::onDraw() {
@@ -160,6 +162,7 @@ void zViewSwitch::stateView(zView::STATE &state, bool save, int &index) {
 
 zViewSlider::zViewSlider(zStyle* _styles, i32 _id, u32 _text, cszi& _range, int _pos, bool vert) :
         zViewText(_styles, _id, _text), range(_range), pos(_pos) {
+    removeDrawable(DRW_FBO);
     trumb = new zDrawable(this, 0);
     updateStatus(ZS_VORIENTATION, vert);
     minMaxSize.set(z_dp(z.R.dimen.sliderMinWidth), z_dp(z.R.dimen.sliderMaxWidth),
@@ -199,6 +202,7 @@ void zViewSlider::onInit(bool _theme) {
     animator.clear();
     animator.init(0.0f, true);
     animator.add(1.0f, zInterpolator::LINEAR, 12);
+    if(speedTrack || mode) post(MSG_ANIM, duration, 0);
 }
 
 void zViewSlider::showTips() {
@@ -234,37 +238,30 @@ void zViewSlider::onMeasure(cszm& spec) {
 }
 
 void zViewSlider::onLayout(crti &position, bool changed) {
-    auto xy(drw[DRW_FK]->bound.xy());
     zViewText::onLayout(position, changed);
-    updateLayout(xy, changed);
+    updateLayout(changed);
 }
 
-void zViewSlider::updateLayout(cpti &xy, bool changed) {
-    // пересоздать трек
-    auto bound(&drw[DRW_FK]->bound);
-    auto sz(drw[DRW_FK]->resolveSize(rclient.h, rclient.h, 0));
-    auto vert(isVertical()); sz.w /= 2; sz.h /= 2;
-    drw[DRW_FK]->measure(sz.w, sz.h, 0, false);
-    *bound = rclient.xy(); posTrack = bound->buf[vert];
-    *bound += applyGravity(rclient, sz, ZS_GRAVITY_VCENTER);
-    // размер ползунка
-    sizeTrumb = rclient[3 - vert]; sizeTrumb2 = sizeTrumb / 2;
-    // длина трэка(в зависимости от ориентации)
-    auto lenTrack(rclient[vert + 2]);
-    // количество сегментов трека
-    segments = (int)roundf((float)lenTrack / (float)sz.w) + 2;
-    // дельта ползунка
-    delta = (float)(lenTrack - sizeTrumb) / (float)range.interval();
-    // cформировать ползунок
-    trumb->measure(sizeTrumb, sizeTrumb, 3, false);
-    updateTrumb();
-    if(speedTrack || mode) {
-        // запустить анимацию
-        animator.clear();
-        animator.init(0.0f, true);
-        animator.add(1.0f, zInterpolator::LINEAR, sz[vert] / 2);
-        post(MSG_ANIM, duration, 0);
+void zViewSlider::updateLayout(bool changed) {
+    if(changed) {
+        // пересоздать трек
+        auto sz(drw[DRW_FK]->resolveSize(rclient.h, rclient.h, 0));
+        sz.w /= 2; sz.h /= 2; drw[DRW_FK]->measure(sz.w, sz.h, 0, false);
+        auto vert(isVertical()); auto bound(&drw[DRW_FK]->bound);
+        *bound = rclient.xy(); *bound += applyGravity(rclient, sz, ZS_GRAVITY_VCENTER);
+        posTrack = bound->buf[vert];
+        // размер ползунка
+        sizeTrumb = rclient[3 - vert]; sizeTrumb2 = sizeTrumb / 2;
+        // длина трэка(в зависимости от ориентации)
+        auto lenTrack(rclient[vert + 2]);
+        // количество сегментов трека
+        segments = (int)roundf((float)lenTrack / (float)sz.w) + 2;
+        // дельта ползунка
+        delta = (float)(lenTrack - sizeTrumb) / (float)range.interval();
+        // cформировать ползунок
+        trumb->measure(sizeTrumb, sizeTrumb, 3, false);
     }
+    updateTrumb();
 }
 
 i32 zViewSlider::onTouchEvent(zTouch *touch) {
@@ -327,10 +324,12 @@ void zViewProgress::onInit(bool _theme) {
     if(mode == ZS_SLIDER_ROTATE) post(MSG_ANIM, duration, 0);
 }
 
-void zViewProgress::updateLayout(cpti &xy, bool changed) {
-    delta = (float)rclient[isVertical() + 2] / (float)range.interval();
-    sizeTrumb = z_min(rclient.w, rclient.h); sizeTrumb2 = sizeTrumb / 2;
-    updateTrumb();
+void zViewProgress::updateLayout(bool changed) {
+    if(changed) {
+        delta = (float)rclient[isVertical() + 2] / (float)range.interval();
+        sizeTrumb = z_min(rclient.w, rclient.h); sizeTrumb2 = sizeTrumb / 2;
+        updateTrumb();
+    }
 }
 
 void zViewProgress::updateTrumb() {
@@ -371,7 +370,7 @@ zViewController::zViewController(zStyle *_styles, i32 _id, i32 _base, u32 _fileM
             for(int i = 0; i < count; i++) {
                 auto s1(root->getTag(i * 2)->getVal()), s2(root->getTag(i * 2 + 1)->getVal());
                 if(!map) {
-                    cellDebug.set(s1.length() / 2, count);
+                    cellDebug.set(s1.count() / 2, count);
                     map = new u8[count * cellDebug.w];
                 }
                 for(int j = 0; j < cellDebug.w; j++) {

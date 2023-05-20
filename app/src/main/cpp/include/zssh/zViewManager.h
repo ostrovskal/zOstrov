@@ -8,6 +8,7 @@
 #include "zViewGroup.h"
 #include "zCommonLayout.h"
 #include "zViewForms.h"
+#include "zViewKeyboard.h"
 
 class zImageCache {
 public:
@@ -60,7 +61,7 @@ public:
     // инициализация попап меню
 //    virtual bool initializeMenuItem(POPUPMENU* menu) { return true; }
     // привязка формы
-    virtual void attachForm(zViewForm* form, crti& rect);
+    virtual zViewForm* attachForm(zViewForm* form, cszi& rect);
     // обработка события кнопок
 //    virtual int processEventKeys(int key);
     // обработка сенсоров
@@ -82,7 +83,7 @@ public:
     // вернуть панель действий
 //    zActionBar* getActionBar() const { return actionBar; }
     // вернуть клавиатуру
-//    zViewKeyboard* getKeyboard() const { return keyboard; }
+    zViewKeyboard* getKeyboard() const { return keyboard; }
     // вернуть менеджер активов
     AAssetManager* getAsset() const { return assets; }
     // изменение фокуса
@@ -200,7 +201,7 @@ private:
     // текстура для сетки
     zTexture* debugTexture{nullptr};
     // клавиатура
-//    zViewKeyboard* keyboard{nullptr};
+    zViewKeyboard* keyboard{nullptr};
     // блоки структур для сохранения
     zArray<zView::STATE> viewStates;
     // каретка

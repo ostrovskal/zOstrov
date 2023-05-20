@@ -107,7 +107,8 @@ void zDrawable::draw(rti *rect) {
     if(!vertices || !count || !visible) return;
     _bound = (rect ? *rect : bound);
     auto is(!view->isFBO() || index == DRW_FBO);
-    auto clip(is ? view->getParent()->rclip : view->drawableClip()); auto rv(&manager->screen);
+//    auto clip(is ? view->getParent()->rclip : view->drawableClip());
+    auto clip(view->drawableClip()); auto rv(&manager->screen);
     // определение видимости
     if(texture && clip.isNotEmpty()) {
         // цвет/матрица
@@ -152,6 +153,7 @@ void zDrawable::measure(int width, int height, int pivot, bool isSave) {
                 DLOG("error makeFBO %s(%i)", view->typeName(), view->id);
                 release(); return;
             }
+//            DLOG("fbo:%i %i %s", width, height, view->typeName());
         }
     }
     if(texture && (ptr = texture->getTile(tile))) {
@@ -204,7 +206,7 @@ void zDrawable::makeDebug(cszi &cell) {
     // определить размер массива линий
     count = 8;
     // rclient
-    auto rclip(view->rview - manager->screen);
+    auto rclip(view->rclient - manager->screen);
     float wc((float)rclip.w - 1.5f), hc((float)rclip.h - 1.5f), xc((float)rclip.x + 0.5f), yc((float)rclip.y + 0.5f);
     if(!cell.isEmpty()) count += (cell.h - 1) * 2 + (cell.w - 1) * 2;
     auto v(new zVertex2D[count]); vertices = v;
@@ -231,7 +233,7 @@ int zDrawable::makeText(cstr text, int len, cpti& pos, zTextPaint* paint) {
     auto offsetBold(224 * ((style & ZS_TEXT_BOLD) != 0)), offsetY(((texture->getSize().h / 2) * (offsetBold != 0)));
     auto factor(scaleFactor(ht, true)); rti _pos, tex;
     while(len-- > 0) {
-        auto ch((u8)*text++);
+        auto ch(z_decodeUTF8(z_charUTF8(text))); text += z_charLengthUTF8(text);
         if(ch < '!') ch = ' ';
         auto glyph(texture->paramGlyph(ch + offsetBold));
         if(!glyph) continue;

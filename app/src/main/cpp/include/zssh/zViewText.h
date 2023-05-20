@@ -14,16 +14,16 @@ public:
     // структура кэшированного текста, разбитого на подстроки
     struct CACHE {
         CACHE() { }
-        CACHE(u32 _width, u32 _size, cstr _text, u32 _length) : width(_width), size(_size), length(_length) {
-            text = zString(_text, _length);
+        CACHE(u32 _width, u32 _size, cstr _text, u32 _count) : width(_width), size(_size) {
+            text = zStringUTF8(_text, _count);
         }
-        zString text{};
+        zStringUTF8 text{};
         // ширина в пикселях
         i32 width{0};
         // высота в пикселях
         i32 size{0};
-        // длина текста
-        i32 length{0};
+        // количество знаков
+        //i32 count{0};
     };
     // структура спана
     struct SPAN {
@@ -31,7 +31,7 @@ public:
         SPAN() { }
         SPAN(zTextSpan* _span, int _s, int _e, zTextPaint* _paint, int _f = 0) : s(_s), e(_e), f(_f), span(_span), paint(_paint) { }
         // инфо
-        zString info() const { return ""; }
+        zStringUTF8 info() const { return ""; }
         // сброс
         void reset(zViewText* vt) { paint->reset(vt); }
         // оператор сравнения
@@ -57,7 +57,7 @@ public:
     // установить текст из строки
     void setText(cstr _text, bool force);
     // установка текста парсингом из html
-    bool setHtmlText(const zString& html, const std::function<bool(cstr tag, bool end, zHtml* html)>& parser);
+    bool setHtmlText(const zStringUTF8& html, const std::function<bool(cstr tag, bool end, zHtml* html)>& parser);
     // установка макс. линий
     void setWrap(bool set);
     // вернуть макс. линий
@@ -81,7 +81,7 @@ public:
     // установить стиль текста
     void setTextStyle(int _style);
     // вернуть текст
-    const zString& getText() const { return realText; }
+    const zStringUTF8& getText() const { return realText; }
     // вернуть стиль текста
     u32 getTextStyle() const { return defPaint->getStyle(); }
     // вернуть верхнее смещение шрифта
@@ -108,7 +108,7 @@ protected:
     // событие отрисовки
     virtual void onDraw() override;
     // вернуть текст для отображения
-    virtual const zString& getDrawText(int type) { return realText; }
+    virtual const zStringUTF8& getDrawText(int type) { return realText; }
     // отрисовка текста
     void drawText();
     // разбивка текста
@@ -118,7 +118,7 @@ protected:
     // получить строку из кэша строк
     const CACHE* getStringFromCache(int index, rti* tbound, pti& pos);
     // слить все спаны
-    void mergeSpans(const zString& text);
+    void mergeSpans(const zStringUTF8& text);
     // добавление краски в кэш
     zTextPaint* addCache(zTextPaint* _paint) { return cachePaints += new zTextPaint(_paint); }
     // дистанция между текстом и фореграундом
@@ -147,7 +147,7 @@ protected:
     // фон текста
     zDrawable* dr{nullptr};
     // реальный текст
-    zString realText{};
+    zStringUTF8 realText{};
     /*
     // определение индекса в тексте из позиции на экране
     int indexFromPosition(int inScreen, bool exact = false, int *outScreen = nullptr);
@@ -163,9 +163,9 @@ protected:
 class zFilterEdit {
 public:
     // обработать поступивший символ
-    virtual int convertChar(const zString& _text, int ch, int pos) { return ch; }
+    virtual int convertChar(const zStringUTF8& _text, int ch, int pos) { return ch; }
     // вернуть текст
-    virtual const zString& convertText(const zString& _text) { return _text; }
+    virtual const zStringUTF8& convertText(const zStringUTF8& _text) { return _text; }
     // клава по умолчанию
     virtual cstr getKeboardLayer() const { return nullptr; }
 };
@@ -239,7 +239,7 @@ protected:
     // позиция каретки на экране
     pti caretScreen{};
     // фейковый текст(hint)
-    zString hintText;
+    zStringUTF8 hintText;
     // цвет hint
     u32 colorHint{};
     // фильтр

@@ -36,7 +36,7 @@ void zView::changeTheme() {
 }
 
 void zView::onInit(bool _theme) {
-    oldPos.empty(); zParamDrawable fk, bk;
+    oldPos.set(INT_MAX, INT_MAX, 0, 0); zParamDrawable fk, bk;
     styles->enumerate([this, &bk, &fk, _theme](u32 attr) {
         auto v(&zTheme::value); auto val((int)v->u);
         attr |= _theme * ZTT_THM;
@@ -80,27 +80,26 @@ void zView::onInit(bool _theme) {
 
 void zView::drawDebug() {
 #ifndef NDEBUG
-    if(isVisibled()) {
-        // сетка элемента
-        if(manager->isDebug()) {
-            static zMatrix m;
-            // создать сетку, если ее нет
-            if(!drwDebug.vertices) {
-                drwDebug.texture = manager->cache->get("znull", drwDebug.texture);
-                drwDebug.makeDebug(cellDebug);
-            }
-            // установить текстуру
-            glBindTexture(GL_TEXTURE_2D, drwDebug.texture->id);
-            // параметры шейдера и обрезка
-            manager->prepareRender(drwDebug.vertices, parent->rview, m);
-            // фильтр
-            manager->setColorFilter(this, zColor::white);
-            // нарисовать линии
-            glLineWidth(2);
-            glDrawArrays(GL_LINES, 0, drwDebug.count);
-            // подсчет кол-во линий в кадре
-            manager->countLn += drwDebug.count;
+    // сетка элемента
+    if(manager->isDebug()) {
+        // создать сетку, если ее нет
+        if(!drwDebug.vertices) {
+            drwDebug.texture = manager->cache->get("znull", drwDebug.texture);
+            drwDebug.makeDebug(cellDebug);
         }
+        // установить текстуру
+        glBindTexture(GL_TEXTURE_2D, drwDebug.texture->id);
+        // параметры шейдера и обрезка
+        manager->prepareRender(drwDebug.vertices, manager->screen, zMatrix::_identity);
+        // фильтр
+        manager->setColorFilter(this, zColor::white);
+        glDisable(GL_SCISSOR_TEST);
+        // нарисовать линии
+        glLineWidth(2);
+        glDrawArrays(GL_LINES, 0, drwDebug.count);
+        // подсчет кол-во линий в кадре
+        manager->countLn += drwDebug.count;
+        glEnable(GL_SCISSOR_TEST);
     }
 #endif
 }
@@ -120,8 +119,8 @@ void zView::draw() {
                 updateStatus(ZS_DIRTY_LAYER, false);
             }
         }
-        // отрисовка FBO
-        drw[DRW_FBO]->draw(&rview);
+        onDrawFBO();
+        drawDebug();
     }
 }
 
@@ -255,22 +254,18 @@ void zView::defaultOnMeasure(cszm& spec, int width, int height) {
     } else {
         width += pad.extent(false);
         width = z_max(minMaxSize.x, width);
-/*
-        if(ws && wm == MEASURE_MOST) {
-            width = z_min(width, ws);
-        }
-*/
+        // коррекция по макс. ширине
+        if(minMaxSize.y) width = z_min(minMaxSize.y, width);
+        if(ws && wm == MEASURE_MOST) width = z_min(width, ws);
     }
     if(hs && hm == MEASURE_EXACT) {
         height = hs;
     } else {
         height += pad.extent(true);
         height = z_max(minMaxSize.w, height);
-/*
-        if(hs && hm == MEASURE_MOST) {
-            height = z_min(height, hs);
-        }
-*/
+        // коррекция по макс. высоте
+        if(minMaxSize.h) height = z_min(minMaxSize.h, height);
+        if(hs && hm == MEASURE_MOST) height = z_min(height, hs);
     }
     setMeasuredDimension(width, height);
 }
@@ -283,9 +278,11 @@ void zView::onLayout(crti &position, bool changed) {
     // вычислить позицию клиента
     rclient.x = rview.x + pad.x; rclient.y = rview.y + pad.y;
     rclip = z_clipRect(parent->rclip, rclient);
-    // позиционирование базовых отображателей
-    drw[DRW_BK]->measure(rview.w, rview.h, 3, false);
-    drw[DRW_FBO]->measure(rview.w, rview.h, 3, false);
+    if(changed) {
+        // позиционирование базовых отображателей
+        drw[DRW_BK]->measure(rview.w, rview.h, 3, false);
+        drw[DRW_FBO]->measure(rview.w, rview.h, 3, false);
+    }
 }
 
 void zView::setMeasuredDimension(int width, int height) {
@@ -376,6 +373,7 @@ void zView::_detach() {
 
 zViewGlow::zViewGlow(zView* group) : zView(styles_z_glow, 0) {
     parent = group; zView::onInit(false);
+    updateStatus(ZS_VISIBLED, false);
     setOnAnimation([this](zView*, int) {
         float v; bool cont;
         if((cont = animator.update(v))) {
@@ -385,33 +383,31 @@ zViewGlow::zViewGlow(zView* group) : zView(styles_z_glow, 0) {
             // посчитать размер
             mtxScale.scale(vert ? 1 : v, vert ? v : 1, 1);
             mtx = mtxScale * mtxRot;
-            parent->invalidate();
         } else {
             updateStatus(ZS_VISIBLED, false);
             animator.clear();
         }
-        parent->invalidate();
         return cont;
     });
 }
 
 void zViewGlow::start(float _delta, bool _vert, bool _flow) {
     // параметры отображения
-    if(!animator.isEmpty()) return;
+    if(isVisibled()) return;
     updateStatus(ZS_VISIBLED, true); updateStatus(ZS_VORIENTATION, _vert);
     alpha = 0.0f; mtxRot.rotate(0, 0, _flow * deg2rad(180.0f)); mtxScale.identity();
     // базовый тайл
     drw[DRW_BK]->tile = _vert ? z.R.integer.horzGlow : z.R.integer.vertGlow;
     drw[DRW_BK]->measure(_vert * parent->rclient.w, !_vert * parent->rclient.h, !_vert + 1, false);
     // габариты и позиция
-    rclip = parent->rclip;
     rview.w = drw[DRW_BK]->bound.w; rview.h = drw[DRW_BK]->bound.h;
     rview.buf[!_vert] = parent->rclient.buf[!_vert];
     rview.buf[_vert]  = parent->edges(_vert, _flow);
     mtx = mtxScale * mtxRot;
     // анимация
+    _delta = fabs(_delta);
     animator.init(0.0f, false);
-    animator.add(z_min(3.0f, _delta / 10.0f), zInterpolator::LINEAR, z_min<int>(10, _delta / 2));
+    animator.add(z_min(3.0f, _delta / 10.0f), zInterpolator::LINEAR, z_min<int>(8, _delta / 2));
     animator.add(0.0f, zInterpolator::EASEINCUBIC, 10);
     // запуск анимации
     post(MSG_ANIM, duration, 0);
@@ -427,21 +423,15 @@ zViewScrollBar::zViewScrollBar(zView* group, bool _vert) : zView(styles_z_scroll
     zView::onInit(false);
     size = styles->_int(Z_SCROLLBAR_SIZE, 4);
     fade = styles->_int(Z_SCROLLBAR_FADE, 0);
-    setOnAnimation([this](zView*, int) {
-        if(animator.isEmpty()) {
-            animator.init(1.0f, false);
-            animator.add(0.2f, zInterpolator::LINEAR, 10);
-        }
-        auto visible(animator.update(alpha));
-        if(visible) parent->invalidate(); else { animator.clear(); updateStatus(ZS_VISIBLED, false); }
-        return visible;
-    });
+    animator.init(3.0f, false);
+    animator.add(0.2f, zInterpolator::LINEAR, 20);
+    setOnAnimation([this](zView*, int) { return updateStatus(ZS_VISIBLED, animator.update(alpha)); });
 }
 
 void zViewScrollBar::awaken() {
-    rclip = parent->rview;
     updateStatus(ZS_VISIBLED, true);
-    drw[DRW_BK]->measure(rview.w, rview.h, 3, false);
+    drw[DRW_BK]->measure(rview.w, rview.h, 0, false);
+    animator.restart();
     // запустить фейдинг
     if(fade) post(MSG_ANIM, duration, 0);
 }

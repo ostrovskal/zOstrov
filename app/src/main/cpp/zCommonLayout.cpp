@@ -145,8 +145,6 @@ void zLinearLayout::onLayout(crti &position, bool changed) {
     for(auto& child : children) {
         if(child->isVisibled()) { child->layout(r); *pt += child->sizes(vert) + divSize; }
     }
-    awakenScroll();
-    if(glow) glow->start(30, true, true);
 }
 
 void zLinearLayout::onDraw() {
@@ -285,16 +283,11 @@ void zScrollLayout::onMeasure(cszm& spec) {
     childSize   = vert ? childHeight : childWidth;
 }
 
-
 void zScrollLayout::onLayout(crti &position, bool changed) {
     zView::onLayout(position, changed);
     auto child(atView(0));
-    if(child) {
-        rti r(rclient);
-        r.offset(-scroll.x, -scroll.y);
-        child->layout(r);
-    }
-    awakenScroll();
+    // если он сам сдвинут
+    if(child) child->layout(rclient - scroll);
 }
 
 zView *zScrollLayout::attach(zView *v, int width, int height, int where) {
@@ -314,7 +307,7 @@ i32 zScrollLayout::onTouchEvent(zTouch *touch) {
             // определяем время сдвига
             auto t((int)((touch->ctm - touch->btm) / 50000000));
             // если отпустили и время < 15(выбрано экспериментально)
-            if(event && t < 15) {
+            if(event && t < 1) {
                 // запускаем флинг
                 flyng->start((float)_delta / (float)sizes(vert));
             } else {
@@ -342,10 +335,11 @@ bool zScrollLayout::scrolling(int _delta) {
         auto upd(delta1 != delta);
         child->scroll.buf[vert] = delta;
         if(upd) {
-            child->invalidate();
+            child->requestLayout();
         } else if(glow) {
-            glow->start((float)_delta / (float)sizes(vert), vert, _delta > 0);
+            glow->start(_delta, testFlags(ZS_VORIENTATION), _delta < 0);
         }
+        awakenScroll();
         return !upd;
     }
     return true;

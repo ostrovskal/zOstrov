@@ -3,7 +3,6 @@
     <style name="default_layout">
         <item name="behavior">clickable</item>
         <item name="background">#ff404040</item>
-        <item name="decorate">scrollbar|glow</item>
         <item name="divider">#ffffffff</item>
         <item name="divSize">#02040400</item>
         <item name="divType">begin|middle|finish</item>

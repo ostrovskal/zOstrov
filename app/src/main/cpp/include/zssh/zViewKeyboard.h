@@ -1,0 +1,75 @@
+
+#pragma once
+
+#include "zViewGroup.h"
+#include "zViewWidgets.h"
+
+class zViewKeyboard : public zViewGroup {
+public:
+    enum { KEYBOARD_NAME, KEYBOARD_DIGIT, KEYBOARD_SPACE, KEYBOARD_ENTER, KEYBOARD_SHIFT, KEYBOARD_DELETE, KEYBOARD_LANG };
+    // конструктор
+    zViewKeyboard(cstr nameLayouts);
+    // деструктор
+    virtual ~zViewKeyboard();
+    // загрузка стилей(отключено)
+    virtual void onInit(bool theme) override;
+    // обработка системной кнопки
+    virtual i32 keyEvent(int key, bool sysKey) override;
+    // имя типа
+    virtual cstr typeName() const override { return "zViewKeyboard"; }
+    // отобразить/скрыть
+    virtual void show(u32 _id, bool set);
+    // установка текущего макета
+    void setLayout(const zStringUTF8& name);
+    // не обновлять
+    virtual void requestLayout() override { }
+    // вернуть идентификатор владельца
+    u32 getOwnerID() const { return owner ? owner->id : 0; }
+protected:
+    struct BUTTON {
+        rti rview{};
+        zStringUTF8 name{};
+        zStringUTF8 spec{};
+    };
+    struct LAYOUT {
+        LAYOUT() { }
+        ~LAYOUT() { }
+        bool operator == (cstr _name) const { return names[0] == _name; }
+        // размер макета
+        szi size{};
+        // имя макета/имя макета при нажатии на "shift"/"lang(ru/en)"/"spec(123#/abc)"/(для больших букв)
+        zStringUTF8 names[5];
+        // кнопки
+        zArray<BUTTON> buttons{};
+    };
+    // перерисовка
+    //virtual bool onRedraw() override;
+    // размеры
+    virtual void onMeasure(cszm& spec) override;
+    // позиция
+    virtual void onLayout(crti &position, bool changed) override;
+    // событие касания
+    virtual i32 onTouchEvent(zTouch *touch) override;
+    // отрисовка FBO
+    virtual void onDrawFBO() override;
+    virtual void onDraw() override;
+    //
+    virtual rti clipDrawable() const { return rview; }
+    // смещение по высоте/начальная координата родителя владельца
+    int offsetY{0}, parentY{0}, keybY{0};
+    // дельты
+    float deltaWidth{0}, deltaHeight{0};
+    // минимальная высота
+    int minHeight{0};
+    // предыдущая клава/по умолчанию
+    zStringUTF8 prevName, defName;
+    // все макеты
+    zArray<LAYOUT> layouts;
+    // текущий макет
+    LAYOUT* current{nullptr};
+    // владелец
+    zView* owner{nullptr};
+    bool isUpdate{false};
+    // текущая кнопка
+    int butIdx{-1};
+};
