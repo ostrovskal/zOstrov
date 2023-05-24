@@ -7,21 +7,21 @@
         <item name="font">@drawable/font1</item>
         <item name="textColor">#ffffffff</item>
         <item name="textStyle">bold</item>
-        <item name="textSize">15sp</item>
+        <item name="textSize">17sp</item>
         <item name="pad">1dp</item>
-        <item name="ipad">3dp</item>
+        <item name="ipad">2dp</item>
+        <item name="display">none</item>
         <item name="gravity">center</item>
     </style>
     <style name="keyboardAlt">
-        <item name="foreground">@drawable/zssh</item>
-        <item name="fkTiles">@integer/keybButSmall</item>
+        <item name="display">none</item>
         <item name="fkGravity">center</item>
         <item name="font">@drawable/font1</item>
         <item name="textColor">#ffafafaf</item>
         <item name="textStyle">bold</item>
-        <item name="textSize">12sp</item>
+        <item name="textSize">15sp</item>
         <item name="pad">1dp</item>
-        <item name="ipad">4dp</item>
+        <item name="ipad">3dp</item>
         <item name="gravity">end|bottom</item>
     </style>
     <style name="scrollbar">
@@ -378,7 +378,6 @@
         <item name="divPad">3dp</item>
         <item name="divider">%color/color_divider</item>
         <item name="divType">begin|middle|finish</item>
-        <item name="divSize">@dimen/divider</item>
         <item name="pad">5dp</item>
         <item name="gravity">center_horizontal</item>
     </style>

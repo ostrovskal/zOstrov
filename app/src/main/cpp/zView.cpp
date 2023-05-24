@@ -387,7 +387,6 @@ zViewGlow::zViewGlow(zView* group) : zView(styles_z_glow, 0) {
             mtx = mtxScale * mtxRot;
         } else {
             updateStatus(ZS_VISIBLED, false);
-            animator.clear();
         }
         return cont;
     });
@@ -457,7 +456,6 @@ zFlyng::zFlyng(zView* group) : zView(styles_default, 0) {
 
 void zFlyng::start(float delta) {
     updateStatus(ZS_VISIBLED, true);
-    animator.clear();
     animator.init(0, false);
     animator.add(delta * 2, zInterpolator::EASEINOUTCUBIC, delta);
     post(MSG_ANIM, duration, 0);

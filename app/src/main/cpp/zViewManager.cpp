@@ -441,11 +441,12 @@ void zViewManager::changeFocus(zView* view) {
     }
     focus = view;
     // вызвать/спрятать клавиатуру
+    DLOG("keyboard %i", isTouchable);
     showSoftKeyboard(view ? view->id : 0, isTouchable);
 }
 
 void zViewManager::showSoftKeyboard(u32 idOwner, bool _show) {
-
+    keyboard->show(idOwner, _show);
 }
 
 u8* zImageCache::load(cstr _name) {

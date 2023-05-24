@@ -102,6 +102,8 @@ public:
     bool isChangeTheme() const { return status & Z_CHANGE_THEME; }
     // обработка входящих событий ввода
     virtual i32 processInputEvens(AInputEvent *event);
+    // спрятать/отобразить клавиатуру
+    virtual void showSoftKeyboard(u32 idOwner, bool _show);
     // преобразовать в dip
     i32 dp(i32 v) const { return (i32)round((float)v * scaleScreen); }
     // прочитать файл из активов
@@ -159,8 +161,6 @@ protected:
     virtual void refreshConfig(AConfiguration* config);
     // восстановить/сохранить состояние всех представлений
     virtual void stateAllViews(u32 action, u8** ptr, u32* size);
-    // спрятать/отобразить клавиатуру
-   virtual void showSoftKeyboard(u32 idOwner, bool _show);
     // рекурсивное сохранение состояния представлений
     void saveStateView(zViewGroup* view, zView::STATE &state, int &index);
     // удаление связанных ресуров

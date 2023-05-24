@@ -22,7 +22,7 @@ public:
     // установка текущего макета
     void setLayout(const zStringUTF8& name);
     // не обновлять
-    virtual void requestLayout() override { }
+    virtual void requestLayout() override;
     // вернуть идентификатор владельца
     u32 getOwnerID() const { return owner ? owner->id : 0; }
 protected:
@@ -55,8 +55,8 @@ protected:
     virtual void onDraw() override;
     //
     virtual rti clipDrawable() const { return rview; }
-    // смещение по высоте/начальная координата родителя владельца
-    int offsetY{0}, parentY{0}, keybY{0};
+    // смещение по высоте
+    int offsetY{0};
     // дельты
     float deltaWidth{0}, deltaHeight{0};
     // минимальная высота

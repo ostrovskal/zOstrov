@@ -10,20 +10,22 @@ static zStyle styles_z_keyboardbase[] = {
 	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_TEXT_FOREGROUND_COLOR, 0xffffffff },
 	{ Z_TEXT_STYLE, ZS_TEXT_BOLD },
-	{ Z_TEXT_SIZE, 15 },
-	{ Z_PADDING, 0x03030303 },
+	{ Z_TEXT_SIZE, 17 },
+	{ Z_PADDING, 0x01010101 },
+	{ Z_IPADDING, 0x02020202 },
+	{ Z_DISPLAY, 0 },
 	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_CENTER }
 };
 
 static zStyle styles_z_keyboardalt[] = {
-	{ Z_FOREGROUND, z.R.drawable.zssh },
-	{ Z_FOREGROUND_TILES, z.R.integer.keybButSmall },
+	{ Z_DISPLAY, 0 },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_TEXT_FOREGROUND_COLOR, 0xffafafaf },
 	{ Z_TEXT_STYLE, ZS_TEXT_BOLD },
-	{ Z_TEXT_SIZE, 12 },
-	{ Z_PADDING, 0x04040404 },
+	{ Z_TEXT_SIZE, 15 },
+	{ Z_PADDING, 0x01010101 },
+	{ Z_IPADDING, 0x03030303 },
 	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_END | ZS_GRAVITY_BOTTOM }
 };
 
@@ -402,12 +404,11 @@ static zStyle styles_z_switchbutton[] = {
 };
 
 static zStyle styles_z_llinear[] = {
-	//{ Z_DIVIDER_PADDING, 0x0 },
+	{ Z_DIVIDER_PADDING, 0x03030303 },
 	{ Z_DIVIDER | ZT_THEME, Z_COLOR_DIVIDER },
 	{ Z_DIVIDER_TYPE, ZS_DIVIDER_BEGIN | ZS_DIVIDER_MIDDLE | ZS_DIVIDER_FINISH },
-	//{ Z_DIVIDER_SIZE, 0 },
 	{ Z_PADDING, 0x05050505 },
-	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_CENTER }
+	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_HCENTER }
 };
 
 static zStyle styles_z_tabwidget[] = {

@@ -3,34 +3,18 @@
 #include "zssh/zViewKeyboard.h"
 #include "zssh/zViewWidgets.h"
 
-// загрузить из активов XML - все макеты
-// <keyboards default="" minHeight="">
-//  <layout name="" shift="" spec="" lang="" input="" />
-//  ...
-// </keyboards>
-
 zViewKeyboard::zViewKeyboard(cstr nameLayouts) : zViewGroup(styles_default, z.R.id.keyboard) {
     updateStatus(ZS_SYSTEM, true); updateStatus(ZS_VISIBLED, false);
     setDrawable(nullptr, DRW_FBO); duration = 20;
     setOnAnimation([this] (zView*, int) {
-/*
-        // начальная координата
-        auto frame(drs[DR_IDX_FK]->frame);
-        // сдвигаем корневой
-        auto root(vmanager->getRootView());
-        auto rf(&root->lytParams);
-        rf->y = parentY + ((int)round((float)offsetY / 5.0f) * frame);
-        auto bound(rfull);
-        bound.y = keybY + ((int)round((float)rfull.h / 5.0f) * frame);
-        lytParams.y = bound.y;
-        frame += (!isChecked() * 2) - 1;
-        drs[DR_IDX_FK]->frame = frame;
-        invalidate();
-        // скрыть клаву
-        if(frame == 6) updateStatus(ZS_VISIBLED, false);
-        return(frame == -1 || frame == 6);
-*/
-       return 0;
+        // сдвигаем родительский
+        float v; auto visible(animator.update(v));
+        auto root(manager->getSystemView(true));
+        root->lps.y = -((int)round((float)offsetY / 7.0f) * v);
+        lps.y = zGL::instance()->getSizeScreen(true) - ((int)round((float)rview.h / 7.0f) * v);
+        updateStatus(ZS_MEASURE | ZS_LAYOUT, false);
+        root->requestLayout();
+        return visible;
     });
     i32 idx(0);
     auto ptr(manager->assetFile(nameLayouts, &idx));
@@ -77,7 +61,7 @@ zViewKeyboard::~zViewKeyboard() {
 
 void zViewKeyboard::onInit(bool _theme) {
     zViewGroup::onInit(_theme);
-    removeAllViews();
+    if(countChildren()) removeAllViews();
     // основной текст
     attach(new zViewText(styles_z_keyboardbase, 0, 0), 100, 100);
     // альтернативный текст
@@ -95,9 +79,7 @@ void zViewKeyboard::setLayout(const zStringUTF8 &_name) {
     if(idx != -1) {
         if(current) prevName = current->names[0];
         current = &layouts[idx];
-        updateStatus(ZS_MEASURE | ZS_LAYOUT, false);
-        parent->requestLayout();
-        invalidate();
+        requestLayout();
     } else {
         current = nullptr;
     }
@@ -155,24 +137,20 @@ void zViewKeyboard::onMeasure(cszm& spec) {
 void zViewKeyboard::onLayout(crti &position, bool changed) {
     zViewGroup::onLayout(position, changed);
     drw[DRW_FBO]->bound = rview;
-/*
     if(isUpdate) {
         isUpdate = false;
-        updateStatus(ZS_CHECKED, owner != nullptr);
+        auto checked(updateStatus(ZS_CHECKED, owner != nullptr) != 0);
         if(owner) {
             auto hScreen(zGL::instance()->getSizeScreen(true));
             auto delta(hScreen - owner->edges(true, true));
             // проверить если нижняя граница вида меньше высоты клавы, то:
             offsetY = (delta < rview.h ? rview.h - delta : 0);
-            keybY = hScreen - rview.h;
-            auto root(manager->getSystemView(true));
-            parentY = root->lps.y - offsetY;
             owner->requestFocus();
         }
-        //drs[DR_IDX_FK]->frame = owner ? 5 : 0;
+        animator.init(!checked * 7.0f, false);
+        animator.add(checked * 7.0f, zInterpolator::EASEOUTCUBIC, 7);
         post(MSG_ANIM, duration, 0);
     }
-*/
 }
 
 void zViewKeyboard::onDrawFBO() {
@@ -201,8 +179,8 @@ void zViewKeyboard::onDraw() {
         r.x = rview.x + r.x * deltaWidth; r.w *= deltaWidth;
         r.y = rview.y + r.y * deltaHeight; r.h *= deltaHeight;
         szm spec(zMeasure(MEASURE_EXACT, r.w), zMeasure(MEASURE_EXACT, r.h));
-        baseTxt->setText(n1, false); baseTxt->measure(spec); baseTxt->layout(r); baseTxt->draw();
-        if(n2.isNotEmpty() && n1 != n2) { altTxt->setText(n2, false); altTxt->measure(spec); altTxt->layout(r); altTxt->draw(); }
+        baseTxt->setText(n1, true); baseTxt->measure(spec); baseTxt->layout(r); baseTxt->draw();
+        if(n2.isNotEmpty() && n1 != n2) { altTxt->setText(n2, true); altTxt->measure(spec); altTxt->layout(r); altTxt->draw(); }
     }
     baseTxt->updateStatus(ZS_VISIBLED, false); altTxt->updateStatus(ZS_VISIBLED, false);
 }
@@ -218,21 +196,20 @@ i32 zViewKeyboard::keyEvent(int key, bool sysKey) {
 
 void zViewKeyboard::show(u32 _id, bool set) {
     if(current) {
+        auto root(manager->getSystemView(true));
         if(set) {
             owner = manager->idView(_id);
             cstr _defName(defName);
             if(owner) {
                 auto name(owner->getDefaultKeyboardLayer());
-                if(name) _defName = name;
+                if(layouts.indexOf(name) != -1) _defName = name;
             }
             setLayout(_defName);
             if(_id <= 0 || isChecked()) {
+                // берем нижнюю координату владельца
                 auto y(owner->edges(true, true));
                 y -= rview.y;
-                if(y > 0) {
-                    manager->getSystemView(true)->lps.y -= y;
-                    invalidate();
-                }
+                if(y > 0) root->lps.y -= y;
                 return;
             }
             updateStatus(ZS_VISIBLED, true);
@@ -241,6 +218,11 @@ void zViewKeyboard::show(u32 _id, bool set) {
             owner = nullptr;
         }
         isUpdate = true;
-        invalidate();
+        requestLayout();
     }
+}
+
+void zViewKeyboard::requestLayout() {
+    if(!atView(0)->isVisibled())
+        zViewGroup::requestLayout();
 }

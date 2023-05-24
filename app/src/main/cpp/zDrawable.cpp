@@ -129,11 +129,11 @@ void zDrawable::draw(rti *rect) {
 }
 
 void zDrawable::drawCommon(crti& clip, const zMatrix& m, bool fbo) const {
-    auto rv(&manager->screen); auto _clip(clip);
+    auto _clip(clip);
     // устанавливаем текстуру
     glBindTexture(GL_TEXTURE_2D, texture->id);
     // устанавливаем параметры шейдеров и обрезки
-    manager->prepareRender(vertices, _clip - *rv, m);
+    manager->prepareRender(vertices, _clip - manager->screen, m);
     // устанавливаем цветовой фильтр
     manager->setColorFilter(fbo ? view : nullptr, color);
     // запускаем отрисовку

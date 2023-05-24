@@ -83,7 +83,7 @@ static zStyle styles_z_scrolllayout[] = {
 };
 
 void sshApp::setContent() {
-    debug = true;
+    //debug = true;
   //  return;
     auto scl = new zScrollLayout(styles_z_scrolllayout, 0, true);
     auto ll = new zLinearLayout(styles_z_llinear, 0, true);
@@ -116,9 +116,14 @@ void sshApp::setContent() {
     ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.first_form, 10), vv, VIEW_WRAP )->
             setForegroundGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER);
     ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.first_form, 10), vv, VIEW_WRAP )->
-            setForegroundGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_HCENTER | ZS_GRAVITY_VCENTER);
+            setForegroundGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_HCENTER | ZS_GRAVITY_VCENTER)->setOnClick([this](zView* v, bool) {
+        //DLOG("on click1");
+        //manager->getKeyboard()->show(v->id, false);
+    });
     ll->attach(sl, ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP );
-    ll->attach(vw, VIEW_MATCH, VIEW_WRAP);//->setGravity(ZS_GRAVITY_CENTER);
+    ll->attach(vw, VIEW_MATCH, VIEW_WRAP)->setOnClick([this](zView* v, bool) {
+        manager->showSoftKeyboard(v->id, true);
+    });
     ll->attach(prg, ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP );
     /*
     //root->attach(img, ZS_GRAVITY_START, 0, VIEW_WRAP, VIEW_WRAP );
