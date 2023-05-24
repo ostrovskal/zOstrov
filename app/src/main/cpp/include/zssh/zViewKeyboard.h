@@ -6,7 +6,7 @@
 
 class zViewKeyboard : public zViewGroup {
 public:
-    enum { KEYBOARD_NAME, KEYBOARD_DIGIT, KEYBOARD_SPACE, KEYBOARD_ENTER, KEYBOARD_SHIFT, KEYBOARD_DELETE, KEYBOARD_LANG };
+    enum { KEYBOARD_NAME, KEYBOARD_SHIFT, KEYBOARD_DIGIT, KEYBOARD_LANG, KEYBOARD_INPUT, KEYBOARD_SPACE, KEYBOARD_ENTER, KEYBOARD_DELETE };
     // конструктор
     zViewKeyboard(cstr nameLayouts);
     // деструктор
@@ -37,13 +37,11 @@ protected:
         bool operator == (cstr _name) const { return names[0] == _name; }
         // размер макета
         szi size{};
-        // имя макета/имя макета при нажатии на "shift"/"lang(ru/en)"/"spec(123#/abc)"/(для больших букв)
+        // имена макетов
         zStringUTF8 names[5];
         // кнопки
         zArray<BUTTON> buttons{};
     };
-    // перерисовка
-    //virtual bool onRedraw() override;
     // размеры
     virtual void onMeasure(cszm& spec) override;
     // позиция
@@ -53,8 +51,6 @@ protected:
     // отрисовка FBO
     virtual void onDrawFBO() override;
     virtual void onDraw() override;
-    //
-    virtual rti clipDrawable() const { return rview; }
     // смещение по высоте
     int offsetY{0};
     // дельты
@@ -69,6 +65,7 @@ protected:
     LAYOUT* current{nullptr};
     // владелец
     zView* owner{nullptr};
+    // признак обновления макета
     bool isUpdate{false};
     // текущая кнопка
     int butIdx{-1};

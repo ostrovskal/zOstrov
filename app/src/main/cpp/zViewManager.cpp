@@ -441,7 +441,6 @@ void zViewManager::changeFocus(zView* view) {
     }
     focus = view;
     // вызвать/спрятать клавиатуру
-    DLOG("keyboard %i", isTouchable);
     showSoftKeyboard(view ? view->id : 0, isTouchable);
 }
 

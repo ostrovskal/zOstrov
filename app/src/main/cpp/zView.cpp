@@ -236,6 +236,7 @@ void zView::measure(cszm& spec) {
 void zView::layout(crti& position) {
     auto changed(position.x != oldPos.x || position.y != oldPos.y);
     if(!testFlags(ZS_LAYOUT) || changed) {
+        status |= (ZS_LAYOUT | ZS_MEASURE | ZS_DIRTY_LAYER);
         onLayout(position, changed);
         oldPos = position;
 #ifndef NDEBUG
@@ -244,7 +245,6 @@ void zView::layout(crti& position) {
             drwDebug.release();
         }
 #endif
-        status |= (ZS_LAYOUT | ZS_MEASURE | ZS_DIRTY_LAYER);
     }
 }
 

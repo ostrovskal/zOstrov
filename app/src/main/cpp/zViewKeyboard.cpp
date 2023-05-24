@@ -9,11 +9,12 @@ zViewKeyboard::zViewKeyboard(cstr nameLayouts) : zViewGroup(styles_default, z.R.
     setOnAnimation([this] (zView*, int) {
         // сдвигаем родительский
         float v; auto visible(animator.update(v));
+        auto heightScreen(zGL::instance()->getSizeScreen(true));
         auto root(manager->getSystemView(true));
-        root->lps.y = -((int)round((float)offsetY / 7.0f) * v);
-        lps.y = zGL::instance()->getSizeScreen(true) - ((int)round((float)rview.h / 7.0f) * v);
-        updateStatus(ZS_MEASURE | ZS_LAYOUT, false);
-        root->requestLayout();
+        root->lps.y = -((int)round((float)offsetY / 6.0f) * v);
+        lps.y = heightScreen - ((int)round((float)rview.h / 6.0f) * v);
+        requestLayout();
+        updateStatus(ZS_VISIBLED, lps.y < heightScreen);
         return visible;
     });
     i32 idx(0);
@@ -106,14 +107,14 @@ i32 zViewKeyboard::onTouchEvent(zTouch *touch) {
                 int keyCode{0};
                 if(but->spec == "DELETE") keyCode = '\b';
                 else if(but->spec == "ENTER") keyCode = '\n';
-                else if(but->spec == "SHIFT") _switch = &current->names[1];
-                else if(but->spec == "LANG") _switch = &current->names[3];
-                else if(but->spec == "SPEC") _switch = &current->names[2];
+                else if(but->spec == "SHIFT") _switch = &current->names[KEYBOARD_SHIFT];
+                else if(but->spec == "LANG") _switch = &current->names[KEYBOARD_LANG];
+                else if(but->spec == "SPEC") _switch = &current->names[KEYBOARD_DIGIT];
                 else keyCode = but->name[touch->isLongClick()];
                 if(!_switch) {
                     if(owner) owner->keyEvent(keyCode, false);
-                    if(current->names[4].isNotEmpty()) {
-                        _switch = &current->names[4];
+                    if(current->names[KEYBOARD_INPUT].isNotEmpty()) {
+                        _switch = &current->names[KEYBOARD_INPUT];
                     }
                 }
                 if(_switch && _switch->isNotEmpty()) {
@@ -136,7 +137,8 @@ void zViewKeyboard::onMeasure(cszm& spec) {
 
 void zViewKeyboard::onLayout(crti &position, bool changed) {
     zViewGroup::onLayout(position, changed);
-    drw[DRW_FBO]->bound = rview;
+    drw[DRW_FBO]->bound = rview; rclip = rview;
+    updateStatus(ZS_DIRTY_LAYER, !changed | isUpdate);
     if(isUpdate) {
         isUpdate = false;
         auto checked(updateStatus(ZS_CHECKED, owner != nullptr) != 0);
@@ -147,8 +149,8 @@ void zViewKeyboard::onLayout(crti &position, bool changed) {
             offsetY = (delta < rview.h ? rview.h - delta : 0);
             owner->requestFocus();
         }
-        animator.init(!checked * 7.0f, false);
-        animator.add(checked * 7.0f, zInterpolator::EASEOUTCUBIC, 7);
+        animator.init(!checked * 6.0f - !checked, false);
+        animator.add(checked * 6.0f, zInterpolator::EASEOUTCUBIC, 6 - !checked);
         post(MSG_ANIM, duration, 0);
     }
 }
