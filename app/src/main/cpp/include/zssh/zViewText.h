@@ -99,7 +99,7 @@ public:
     // вернуть массив спанов
     const zArray<SPAN*>& getSpans() const { return spans; }
     // установка величины смещения тени текста
-    void setShadowOffset(int x, int y) { shadow.translate(x, y, 0); invalidate(); }
+    void setShadowOffset(int x, int y) { shadow.set(x, y); invalidate(); }
 protected:
     // событие позиционирования
     virtual void onLayout(crti &position, bool changed) override;
@@ -129,7 +129,7 @@ protected:
     // кэшированное значение ширины wrap текста
     int widthRectCache{0};
     // смещение тени
-    zMatrix shadow{};
+    pti shadow{};
     // массив спанов
     zArray<SPAN*> spans{};
     // кэш спанов

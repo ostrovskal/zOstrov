@@ -228,8 +228,8 @@ void zDrawable::makeDebug(cszi &cell) {
     }
 }
 
-int zDrawable::makeText(cstr text, int len, cpti& pos, zTextPaint* paint) {
-    auto ht(paint->size), idx(0), stx(pos.x), sty(pos.y), style((int)paint->getStyle());
+int zDrawable::makeText(cstr text, int len, zTextPaint* paint) {
+    auto ht(paint->size), idx(0), stx(0), sty(0), style((int)paint->getStyle());
     auto offsetBold(224 * ((style & ZS_TEXT_BOLD) != 0)), offsetY(((texture->getSize().h / 2) * (offsetBold != 0)));
     auto factor(scaleFactor(ht, true)); rti _pos, tex;
     while(len-- > 0) {
@@ -248,16 +248,16 @@ int zDrawable::makeText(cstr text, int len, cpti& pos, zTextPaint* paint) {
     auto glyph(texture->paramGlyph('_' + offsetBold));
     tex.set(glyph);
     tex = tex.padding(4, 0); tex.w += tex.x; tex.h += tex.y;
-    stx = (stx - pos.x) + paint->preWidth + paint->italic * factor;
+    stx += paint->preWidth + paint->italic * factor;
     // strike
     if(style & ZS_TEXT_STRIKE) {
-        _pos.set(pos.x, pos.y + 1 + ht / 2, stx - 2, (int)(2.0f * factor));
+        _pos.set(0, 1 + ht / 2, stx - 2, (int)(2.0f * factor));
         idx += makeTriangle(_pos, tex, &vertices[idx], 0);
     }
     // underline
     if(style & ZS_TEXT_UNDERLINE) {
         auto bs((int)trunc((float)texture->descent * factor + 0.5f));
-        _pos.set(pos.x, pos.y + ht - bs, stx - 2, (int)(2.0f * factor));
+        _pos.set(0, ht - bs, stx - 2, (int)(2.0f * factor));
         idx += makeTriangle(_pos, tex, &vertices[idx], 0);
     }
     count = idx;

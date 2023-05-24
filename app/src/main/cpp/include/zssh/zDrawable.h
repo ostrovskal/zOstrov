@@ -62,7 +62,7 @@ public:
     // реализация
     void release();
     // сформировать текст
-    int makeText(cstr text, int len, cpti& pos, zTextPaint* paint);
+    int makeText(cstr text, int len, zTextPaint* paint);
     // вернуть длину текста в пикселях
     int sizeText(cstr text, u32 heightText, int lengthText) const;
     // вернуть ближайщую позицию в тексте(limitPix - предел/posPix - начальная коор. текста)

@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Sat May 20 10:10:02 2023
+// Wed May 24 23:34:05 2023
 
 #pragma once
 
@@ -10,12 +10,9 @@ struct _z {
 	struct _R {
 		struct _drawable {
 			enum { 
-				digit123	= 0x00100000, 	en_large_abc	= 0x00100001, 	en_little_abc	= 0x00100002, 
-				font1	= 0x00100003, 	font2	= 0x00100004, 	font3	= 0x00100005, 
-				font4	= 0x00100006, 	keyboard_e	= 0x00100007, 	ru_large_abc	= 0x00100008, 
-				ru_little_abc	= 0x00100009, 	zdroid	= 0x0010000A, 	zform_dark	= 0x0010000B, 
-				zform_light	= 0x0010000C, 	znull	= 0x0010000D, 	zshared	= 0x0010000E, 
-				zssh	= 0x0010000F, 	ztheme_light	= 0x00100010, 			};
+				font1	= 0x00100000, 	font2	= 0x00100001, 	font3	= 0x00100002, 
+				font4	= 0x00100003, 	znull	= 0x00100004, 	zssh	= 0x00100005, 
+			};
 		}; 
 		_drawable drawable;
 		struct _color {
@@ -95,23 +92,23 @@ struct _z {
 		_id id;
 		struct _string {
 			enum { 
-				acontrollerMap	= 0x00100011, 	ccontrollerMap	= 0x00100012, 
-				themeDark	= 0x00100013, 	themeLight	= 0x00100014, 	textSpan	= 0x00100015, 
-				first_form	= 0x00100016, 	enter_family	= 0x00100017, 	Sergey	= 0x00100018, 
-				Perekljuchatelw	= 0x00100019, 			};
+				acontrollerMap	= 0x00100006, 	ccontrollerMap	= 0x00100007, 
+				themeDark	= 0x00100008, 	themeLight	= 0x00100009, 	textSpan	= 0x0010000A, 
+				first_form	= 0x0010000B, 	enter_family	= 0x0010000C, 	Sergey	= 0x0010000D, 
+				Perekljuchatelw	= 0x0010000E, 			};
 		}; 
 		_string string;
 		struct _array {
 			enum { 
-				spinArray	= 0x0010001A, 			};
+				spinArray	= 0x0010000F, 			};
 		}; 
 		_array array;
 		struct _style {
 			enum {
-				default_layout	= 0x00100000, 	scrollbar	= 0x00100001, 	glow	= 0x00100002, 
-				caret	= 0x00100003, 	editButClear	= 0x00100004, 	tabs	= 0x00100005, 
-				tabContent	= 0x00100006, 	formFooterLyt	= 0x00100007, 	formContentLyt	= 0x00100008, 
-				toast	= 0x00100009, 	keybButtons	= 0x0010000A, 	bar	= 0x0010000B, 
+				keyboardBase	= 0x00100000, 	keyboardAlt	= 0x00100001, 	scrollbar	= 0x00100002, 
+				glow	= 0x00100003, 	caret	= 0x00100004, 	editButClear	= 0x00100005, 
+				tabs	= 0x00100006, 	tabContent	= 0x00100007, 	formFooterLyt	= 0x00100008, 
+				formContentLyt	= 0x00100009, 	toast	= 0x0010000A, 	bar	= 0x0010000B, 
 				barButton	= 0x0010000C, 	barOverflow	= 0x0010000D, 	menuImage	= 0x0010000E, 
 				barPopup	= 0x0010000F, 	formCaption	= 0x00100010, 	formFooter	= 0x00100011, 
 				spin_item	= 0x00100012, 	list_item	= 0x00100013, 	menu_item	= 0x00100014, 
@@ -139,7 +136,8 @@ static _z z;
 
 /* styles resources */
 static zStyles z_styles[] = {
-		{ _z::_R::_style::default_layout, styles_z_default_layout },
+		{ _z::_R::_style::keyboardBase, styles_z_keyboardbase },
+		{ _z::_R::_style::keyboardAlt, styles_z_keyboardalt },
 		{ _z::_R::_style::scrollbar, styles_z_scrollbar },
 		{ _z::_R::_style::glow, styles_z_glow },
 		{ _z::_R::_style::caret, styles_z_caret },
@@ -149,7 +147,6 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::formFooterLyt, styles_z_formfooterlyt },
 		{ _z::_R::_style::formContentLyt, styles_z_formcontentlyt },
 		{ _z::_R::_style::toast, styles_z_toast },
-		{ _z::_R::_style::keybButtons, styles_z_keybbuttons },
 		{ _z::_R::_style::bar, styles_z_bar },
 		{ _z::_R::_style::barButton, styles_z_barbutton },
 		{ _z::_R::_style::barOverflow, styles_z_baroverflow },
@@ -198,23 +195,12 @@ static zStyles z_styles[] = {
 static zResource z_resources[] = {
 		{ 0, "" },
 		/* drawable */
-		{ _z::_R::_drawable::digit123, "digit123" },
-		{ _z::_R::_drawable::en_large_abc, "en_large_abc" },
-		{ _z::_R::_drawable::en_little_abc, "en_little_abc" },
 		{ _z::_R::_drawable::font1, "font1" },
 		{ _z::_R::_drawable::font2, "font2" },
 		{ _z::_R::_drawable::font3, "font3" },
 		{ _z::_R::_drawable::font4, "font4" },
-		{ _z::_R::_drawable::keyboard_e, "keyboard_e" },
-		{ _z::_R::_drawable::ru_large_abc, "ru_large_abc" },
-		{ _z::_R::_drawable::ru_little_abc, "ru_little_abc" },
-		{ _z::_R::_drawable::zdroid, "zdroid" },
-		{ _z::_R::_drawable::zform_dark, "zform_dark" },
-		{ _z::_R::_drawable::zform_light, "zform_light" },
 		{ _z::_R::_drawable::znull, "znull" },
-		{ _z::_R::_drawable::zshared, "zshared" },
 		{ _z::_R::_drawable::zssh, "zssh" },
-		{ _z::_R::_drawable::ztheme_light, "ztheme_light" },
 		/* string */
 		{ _z::_R::_string::acontrollerMap, "acontrollerMap.xml" },
 		{ _z::_R::_string::ccontrollerMap, "ccontrollerMap.xml" },

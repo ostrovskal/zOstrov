@@ -10,7 +10,7 @@ zViewText::zViewText(zStyle *_styles, i32 _id, u32 _text) : zView(_styles, _id) 
     defPaint        = new zTextPaint(this);
     minMaxSize.x    = z_dp(z.R.dimen.textMinWidth);
     minMaxSize.w    = z_dp(z.R.dimen.textMinHeight);
-    setDrawable(nullptr, DRW_FBO);
+//    setDrawable(nullptr, DRW_FBO);
     setText(_text);
     // значения по умолчанию
     setShadowOffset(2, 2);
@@ -32,12 +32,14 @@ void zViewText::setText(cstr _text, bool force) {
     if(force || realText != _text) {
         realText = _text;
         clearCacheSpans(false);
+        requestLayout();
+/*
         if(rclient.isNotEmpty()) {
             if(abs(textWrap(_text, measureSpec.w.size()).w - drw[DRW_TXT]->bound.w) > drw[DRW_TXT]->bound.w / 2)
-                requestLayout();
             else
                 invalidate();
         }
+*/
     }
 }
 
@@ -125,9 +127,8 @@ void zViewText::onMeasure(cszm& spec) {
 void zViewText::onLayout(crti &position, bool changed) {
     zView::onLayout(position, changed);
     if(changed) {
-        rti* bound;
         // позиция картинки
-        bound = &drw[DRW_FK]->bound; auto r(rclient - szi(ipad.extent(false), ipad.extent(true)));
+        auto bound(&drw[DRW_FK]->bound);
         // габариты картинки
         auto _grav(0), _width(0);
         if((fkGravity & ZS_GRAVITY_HORZ) == ZS_GRAVITY_HCENTER) {
@@ -138,19 +139,20 @@ void zViewText::onLayout(crti &position, bool changed) {
         } else {
             _width = fkW + distance; _grav = fkGravity;
         }
-        drw[DRW_FK]->measure(fkW, fkH, 0, false);
+        drw[DRW_FK]->measure(fkW, fkH, 3, false);
         *bound = applyGravity(rclient, *bound, fkGravity); *bound += rclient;
         // позиция текста
         if(textCache.isNotEmpty()) {
+            auto r(rclient - szi(ipad.extent(false), ipad.extent(true)));
             if((drw[DRW_TXT]->bound.w + _width) > rclient.w) {
                 _width *= ((_grav & ZS_GRAVITY_HORZ) == ZS_GRAVITY_START) * 2 - 1;
             } else {
                 r.w -= _width;
                 _width *= ((_grav & ZS_GRAVITY_HORZ) == ZS_GRAVITY_START);
             }
-            bound = &drw[DRW_TXT]->bound; drw[DRW_TXT]->measure(0, 0, 0, true);
-            bound->y = applyGravity(r, *bound, gravity).y + (r.y - rview.y) + ipad.y;
-            bound->x = (r.x - rview.x) + ipad.x + _width; bound->w = r.w;
+            bound = &drw[DRW_TXT]->bound; bound->w = r.w;
+            *bound = applyGravity(r, *bound, gravity); *bound += r;
+            bound->x += ipad.x + _width; bound->y += ipad.y;
         }
     }
 }
@@ -168,9 +170,10 @@ const zViewText::CACHE* zViewText::getStringFromCache(int i, rti* tbound, pti& p
 }
 
 void zViewText::drawText() {
-    static zMatrix m, mbk;
+    static zMatrix m;
     if(textCache.isNotEmpty()) {
         auto tbound(&drw[DRW_TXT]->bound);
+        auto screenX(manager->screen.x), screenY(manager->screen.y);
         // длина текста в символах
         int countChars(0); for(auto &t: textCache) countChars += t->text.count();
         // создать буферы вершин
@@ -180,7 +183,6 @@ void zViewText::drawText() {
         // отрисовка
         pti coord(tbound->x, tbound->y);
         int indexCache(0), indexText(0), wpix, subH;
-        //rti clip(z_clipRect(rclip, rclient));
         // взять текущий текст из кэша
         auto cacheStr(getStringFromCache(indexCache++, tbound, coord));
         for(auto &sp: cacheSpans) {
@@ -206,19 +208,21 @@ void zViewText::drawText() {
                 // следующая позиция
                 indexText += lenText; posSpan += lenText;
                 // сформировать фрагмент
-                wpix = drw[DRW_TXT]->makeText(txt, lenText, coord, paint);
+                wpix = drw[DRW_TXT]->makeText(txt, lenText, paint);
                 // отрисовка фона текста(если есть)
                 if(dr) {
                     dr->measure(wpix, cacheStr->size, 0, false);
-                    mbk.translate(coord.x, coord.y - subH, 0);
                     dr->color.set(paint->bkColor);
-                    dr->drawCommon(rclip, mbk, true);
+                    m.translate(coord.x - screenX, coord.y - screenY - subH, 0);
+                    dr->drawCommon(rclip, m, true);
                 }
                 // отрисовка теневого текста
                 drw[DRW_TXT]->color.set(colors[TEXT_COLOR_SHADOW]);
-                drw[DRW_TXT]->drawCommon(rclip, shadow, true);
+                m.translate(coord.x - screenX + shadow.x, coord.y - screenY + shadow.y, 0);
+                drw[DRW_TXT]->drawCommon(rclip, m, true);
                 // отрисовка текста
                 drw[DRW_TXT]->color.set(paint->fkColor);
+                m.translate(coord.x - screenX, coord.y - screenY, 0);
                 drw[DRW_TXT]->drawCommon(rclip, m, true);
                 // корректировать позицию для следующего спана
                 coord.x += wpix; coord.y -= subH;
@@ -288,7 +292,6 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
             if(width) textCache += new CACHE(width, height, _stext, _count);
             maxWidth = z_max(width, maxWidth); maxHeight += height;
             // пропустить начальные пробелы
-            //do { _text += z_charLengthUTF8(_text); } while(z_isspace(z_charUTF8(_text)));
             while(z_isspace(z_charUTF8(_text))) {_text += z_charLengthUTF8(_text); }
             _stext = _text; width = paint->italic * factor;
         }
@@ -481,13 +484,6 @@ void zViewText::mergeSpans(const zStringUTF8& _text) {
     // последний спан
     auto len(_text.count());
     if(len && pos < len) cacheSpans += new SPAN(defSpan, pos, len, defPaint);
-/*
-    if(cacheSpans.size() > 1) {
-        for(auto &s : cacheSpans) {
-            DLOG("span: %s", s->info().str());
-        }
-    }
-*/
 }
 
 void zViewText::setSpan(zTextSpan* _span, int start, int end, int flags) {

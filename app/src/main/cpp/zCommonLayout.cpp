@@ -74,7 +74,6 @@ void zAbsoluteLayout::onLayout(crti &position, bool changed) {
 
 zLinearLayout::zLinearLayout(zStyle* _styles, i32 _id, bool vert) : zViewGroup(_styles, _id) {
     updateStatus(ZS_VORIENTATION, ZS_VORIENTATION, vert);
-    setDrawable(nullptr, DRW_FBO);
 }
 
 void zLinearLayout::onMeasure(cszm& spec) {

@@ -176,68 +176,12 @@ void zViewManager::redrawNativeWindow() {
     DLOG("APP_CMD_WINDOW_REDRAW_NEEDED");
 }
 
-void mtxPerspective(zMatrix& _m, float w, float h, float n, float f, float fov) {
-    const float ar = w / h;
-    const float zRange = n - f;
-    const float tanHalfFOV = tanf(deg2rad(fov / 2.0f));
-    auto m(_m.mtx);
-    m[0] = 1.0f / (tanHalfFOV * ar); m[4] = 0.0f;                m[8] = 0.0f;                           m[12] = 0.0;
-    m[1] = 0.0f;                     m[5] = 1.0f / tanHalfFOV;   m[9] = 0.0f;                           m[13] = 0.0;
-    m[2] = 0.0f;                     m[6] = 0.0f;                m[10] = (-n - f) / zRange;             m[14] = 2.0f * f * n / zRange;
-    m[3] = 0.0f;                     m[7] = 0.0f;                m[11] = 1.0f;                          m[15] = 0.0;
-}
-
-void PostTranslate(zMatrix& m, float tx, float ty, float tz) {
-    m.mtx[12] += (tx * m.mtx[0]) + (ty * m.mtx[4]) + (tz * m.mtx[8]);
-    m.mtx[13] += (tx * m.mtx[1]) + (ty * m.mtx[5]) + (tz * m.mtx[9]);
-    m.mtx[14] += (tx * m.mtx[2]) + (ty * m.mtx[6]) + (tz * m.mtx[10]);
-    m.mtx[15] += (tx * m.mtx[3]) + (ty * m.mtx[7]) + (tz * m.mtx[11]);
-}
-
-zMatrix LookAt(const zVec3& vec_eye, const zVec3& vec_at, const zVec3& vec_up) {
-    zVec3 vec_forward, vec_up_norm, vec_side;
-    zMatrix result;
-
-    vec_forward.x = vec_eye.x - vec_at.x;
-    vec_forward.y = vec_eye.y - vec_at.y;
-    vec_forward.z = vec_eye.z - vec_at.z;
-
-    vec_forward.normalize();
-    vec_up_norm = vec_up;
-    vec_up_norm.normalize();
-    vec_side = vec_up_norm.cross(vec_forward);
-    vec_up_norm = vec_forward.cross(vec_side);
-
-    result.mtx[0] = vec_side.x;
-    result.mtx[4] = vec_side.y;
-    result.mtx[8] = vec_side.z;
-    result.mtx[12] = 0;
-    result.mtx[1] = vec_up_norm.x;
-    result.mtx[5] = vec_up_norm.y;
-    result.mtx[9] = vec_up_norm.z;
-    result.mtx[13] = 0;
-    result.mtx[2] = vec_forward.x;
-    result.mtx[6] = vec_forward.y;
-    result.mtx[10] = vec_forward.z;
-    result.mtx[14] = 0;
-    result.mtx[3] = 0;
-    result.mtx[7] = 0;
-    result.mtx[11] = 0;
-    result.mtx[15] = 1.0;
-
-    //PostTranslate(result, -vec_eye.x, -vec_eye.y, -vec_eye.z);
-    return result;
-}
-
 void zViewManager::setMainMatrix(int ww, int hh, bool invert) {
     static zMatrix mtx;
-    //auto _mtx = LookAt(zVec3(0, 0, 0), zVec3(0, 0, 1), zVec3(0, 1, 0));
     if(invert) {
         mtx.ortho(0, ww, hh, 0);
-//        mtx.perspective(ww, -hh, 1, 10);
     } else {
         mtx.ortho(0, ww, 0, hh);
-//        mtx.perspective(ww, hh, 1, 10);
     }
     glUniformMatrix4fv(shaderVars[ZSH_PMTX], 1, false, mtx);
     glViewport(0, 0, ww, hh);
@@ -267,6 +211,7 @@ void zViewManager::drawViews() {
     static int oldObjs(0);
     countVertices = 0; countLn = 0; countObjs = 0;
 #endif
+    glScissor(0, 0, common->rview.w, common->rview.h);
     glClear(GL_COLOR_BUFFER_BIT);
     // 1. выполнить подсчет габаритов всех представлений
     common->measure(measureCommon);
@@ -432,7 +377,7 @@ void zViewManager::updateNativeWindow(AConfiguration* config, zStyle* _styles, z
             // добавить панель действий
 //        common->attach(actionBar = new zActionBar(styles_z_bar, styles_z_barbutton, styles_z_barpopup), VIEW_MATCH, VIEW_WRAP);
             // добавить клаву
-            common->attach(keyboard = new zViewKeyboard("keyboardDefault.xml"), 0, 0, VIEW_MATCH, VIEW_WRAP);
+            common->attach(keyboard = new zViewKeyboard("keyboardDefault.xml"), 0, sz.h, VIEW_MATCH, VIEW_WRAP);
             setContent();
             status &= ~Z_CHANGE_THEME;
         }
@@ -605,22 +550,4 @@ void zImageCache::update() {
 
 zImageCache::~zImageCache() {
     clear();
-}
-
-rti z_clipRect2(crti& p, crti& r) {
-    static rti out;
-    out.empty();
-    auto _x(r.x - p.x), t(_x + r.w), _w(t - p.w);
-    if(t > 0 && _w < r.w) {
-        auto _y(r.y - p.y); t = (_y + r.h); auto _h(t - p.h);
-        if(t > 0 && _h < r.h) {
-            _x = (_x > 0 ? 0 : -_x); _y = (_y > 0 ? 0 : -_y);
-            if(_w < 0) _w = 0; if(_h < 0) _h = 0;
-            // скорректировать
-            out.offset(r.x + _x, r.y + _y);
-            out.w = r.w - (_x + _w);
-            out.h = r.h - (_y + _h);
-        }
-    }
-    return out;
 }

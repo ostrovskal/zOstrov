@@ -50,6 +50,7 @@ void zView::onInit(bool _theme) {
             case Z_TRANSLATE_X:   		trans.x     = v->f; break;
             case Z_TRANSLATE_Y:   		trans.y     = v->f; break;
             case Z_ALPHA:				alpha 	    = v->f; break;
+            case Z_FBO:                 setDrawable(nullptr, DRW_FBO); break;
             case Z_BEHAVIOR:            updateStatus(ZS_BEHAVIOR_MASK, val, true); break;
             case Z_DISPLAY:             updateStatus(ZS_DISPLAY_MASK, val, true); break;
             case Z_TAP:			        updateStatus(ZS_TAP_MASK, val, true); break;
@@ -73,7 +74,6 @@ void zView::onInit(bool _theme) {
     // базовые отображатели
     setDrawable(&bk, DRW_BK);
     setDrawable(&fk, DRW_FK);
-    //if(testFlags(ZS_HARDWARE_LAYER)) setDrawable(nullptr, DRW_FBO);
     // ротация/масштаб
     setRotation(rot.x, rot.y, rot.z); setScale(scale.w, scale.h);
 }
@@ -204,23 +204,25 @@ i32 zView::onTouchEvent(zTouch *touch) {
 }
 
 void zView::requestLayout() {
-    if(testFlags(ZS_MEASURE) && isVisibled()) {
+    if(isVisibled()) {
         status &= ~ZS_MEASURE;
-        if(parent) parent->requestLayout();
+        if(parent && parent->testFlags(ZS_MEASURE))
+            parent->requestLayout();
     }
 }
 
 void zView::invalidate() {
-    if(!testFlags(ZS_DIRTY_LAYER) && isVisibled()) {
+    if(isVisibled()) {
         status |= ZS_DIRTY_LAYER;
-        if(parent) parent->invalidate();
+        if(parent && !parent->testFlags(ZS_DIRTY_LAYER))
+            parent->invalidate();
     }
 }
 
 void zView::measure(cszm& spec) {
     auto isSpecChanged(measureSpec.w != spec.w || measureSpec.h != spec.h);
     if(!testFlags(ZS_MEASURE) || isSpecChanged) {
-        status &=~ZS_MEASURE_SET;
+        status &= ~ZS_MEASURE_SET;
         onMeasure(spec);
         if(!testFlags(ZS_MEASURE_SET)) {
             DLOG("setMeasureDimension not called! Error!");

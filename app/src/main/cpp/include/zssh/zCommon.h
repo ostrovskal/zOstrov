@@ -61,7 +61,7 @@ enum { TOUCH_CONTINUE, TOUCH_FINISH, TOUCH_ACTION, TOUCH_STOP };
 #define ZS_NOWRAP                   0x00080000U // признак однострочного текста
 #define ZS_LAYOUT                   0x00040000U // признак вызова layout
 #define ZS_SYSTEM                   0x00010000U // способен принимать сис. события
-#define ZS_TEXT_LAYOUT              0x00002000U // признак позиционирования текста
+#define ZS_FBO                      0x00002000U // отрисовка в FBO
 #define ZS_EDIT_LAYOUT              0x00001000U // признак позиционирования поля ввода
 #define ZS_DIRTY_LAYER              0x00000400U // признак перерисовки слоя
 // тип тапа

@@ -24,7 +24,6 @@ void sshApp::processEvents(i32 event) {
             break;
         case APP_CMD_RESUME:
             DLOG("APP_CMD_RESUME");
-            //android->activity->vm->AttachCurrentThread(&env, nullptr);
             stateAllViews(Z_RESUME, (u8**)&android->savedState, (u32*)&android->savedStateSize);
             zJniHelper::instance()->hideNavigationPanel();
             break;
@@ -46,7 +45,6 @@ static i32 callback_inputEvent(android_app*, AInputEvent *event) {
 }
 
 void android_main(android_app* android) {
-//    zXml xml("data/data/ru.ostrov.zssh/files/1.xml");
     ANativeActivity_setWindowFlags(android->activity, AWINDOW_FLAG_FULLSCREEN | AWINDOW_FLAG_KEEP_SCREEN_ON, 0x00800000);
     sshApp app(android);
     theApp->run();
@@ -76,53 +74,35 @@ void sshApp::run() {
     }
 }
 
-#include "zssh/zViewText.h"
-
-static zStyle styles_z_text[] = {
-        { Z_PADDING, 0x05050505 },
-        { Z_GRAVITY, ZS_GRAVITY_START | ZS_GRAVITY_VCENTER },
-        { Z_BACKGROUND, 0xffff0000 },
-        { Z_FOREGROUND, z.R.drawable.zssh },
-        { Z_FOREGROUND_TILES, z.R.integer.rect },
-        { Z_FOREGROUND_GRAVITY, ZS_GRAVITY_END | ZS_GRAVITY_VCENTER },
-        { Z_FOREGROUND_SCALE, 32767 },
-        { Z_TEXT_FONT, z.R.drawable.font1 },
-        { Z_TEXT_FOREGROUND_COLOR, 0xff0000ff },
-        { Z_TEXT_SIZE, 22 },
-        { Z_TEXT_NOWRAP, 0 },
-        { Z_TEXT_STYLE, ZS_TEXT_BOLD_ITALIC | ZS_TEXT_UNDERLINE | ZS_TEXT_STRIKE },
-        { Z_TEXT_BACKGROUND, 0xffffff00 },
-        { Z_TEXT_BACKGROUND_TILES, z.R.integer.rect },
-        { Z_TEXT_DISTANCE | ZT_END, 15 }
-};
-
 static zStyle styles_z_scrolllayout[] = {
         { Z_BEHAVIOR, ZS_CLICKABLE },
-        { Z_BACKGROUND, 0xff000040 },
+        //{ Z_BACKGROUND, 0xff000040 },
         { Z_DECORATE, ZS_SCROLLBAR | ZS_GLOW },
         { Z_GRAVITY, ZS_GRAVITY_START },
         { Z_PADDING | ZT_END, 0x08080808 }
 };
 
 void sshApp::setContent() {
-    //debug = true;
+    debug = true;
   //  return;
-    auto vw = new zViewButton(styles_z_button, 22, z.R.string.textSpan, z.R.integer.iconCancel);
     auto scl = new zScrollLayout(styles_z_scrolllayout, 0, true);
-    auto scl1 = new zScrollLayout(styles_z_scrolllayout, 0, false);
-    auto ll1 = new zLinearLayout(styles_z_default_layout, 0, false);
-    auto ll = new zLinearLayout(styles_z_default_layout, 0, true);
+    auto ll = new zLinearLayout(styles_z_llinear, 0, true);
+    auto chk = new zViewCheck(styles_z_checkbox, 1, z.R.string.enter_family);
+    auto vw = new zViewButton(styles_z_button, 22, z.R.string.textSpan, z.R.integer.iconCancel);
     auto sl = new zViewSlider(styles_z_slider, 1, z.R.string.Sergey, szi(10, 32), 16, false);
     auto prg = new zViewProgress(styles_z_linearprogress, 1, 0, szi(0, 48), 16, false);
-    auto chk = new zViewCheck(styles_z_checkbox, 1, z.R.string.enter_family);
+/*
+    auto scl1 = new zScrollLayout(styles_z_scrolllayout, 0, false);
+    auto ll1 = new zLinearLayout(styles_z_default_layout, 0, false);
     auto img = new zViewImage(styles_z_text, 0, z.R.integer.button3);
+*/
     root->attach(scl, VIEW_MATCH, VIEW_MATCH);
     //scl1->attach(scl, VIEW_MATCH, VIEW_MATCH);
     //scl1->attach(ll1, VIEW_MATCH, VIEW_MATCH);
     scl->attach(ll, VIEW_WRAP, VIEW_WRAP);
     //ll1->attach(ll, VIEW_MATCH, VIEW_MATCH);
     ll->attach(chk, VIEW_WRAP, VIEW_WRAP );
-    ll->attach(new zViewSwitch(styles_z_switchbutton, 2, z.R.string.enter_family), VIEW_MATCH, VIEW_WRAP );
+    //ll->attach(new zViewSwitch(styles_z_switchbutton, 2, z.R.string.enter_family), VIEW_MATCH, VIEW_WRAP );
     int vv = VIEW_MATCH;
     ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.textSpan, 10), vv, VIEW_WRAP )->
                 setForegroundGravity(ZS_GRAVITY_START | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_START | ZS_GRAVITY_VCENTER);
@@ -140,11 +120,12 @@ void sshApp::setContent() {
     ll->attach(sl, ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP );
     ll->attach(vw, VIEW_MATCH, VIEW_WRAP);//->setGravity(ZS_GRAVITY_CENTER);
     ll->attach(prg, ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP );
+    /*
     //root->attach(img, ZS_GRAVITY_START, 0, VIEW_WRAP, VIEW_WRAP );
     //root->attach(new zViewController(styles_z_acontroller, 0, z.R.integer.acontrol, z.R.string.acontrollerMap), ZS_GRAVITY_END | ZS_GRAVITY_BOTTOM, 0, 150_dp, 150_dp);
     //root->attach(new zViewController(styles_z_ccontroller, 0, z.R.integer.ccontrol, z.R.string.ccontrollerMap), ZS_GRAVITY_START | ZS_GRAVITY_BOTTOM, 0, 150_dp, 150_dp);
     //img->setRotation(0, 0, 20);
-    manager->attachForm(new zViewForm(styles_z_form, z.R.id.form, styles_z_formcaption, styles_z_formfooter, z.R.string.first_form, true), rti(0, 0, 500, 500))->setRotation(0, 0, 30.0f);
+    manager->attachForm(new zViewForm(styles_z_form, z.R.id.form, styles_z_formcaption, styles_z_formfooter, z.R.string.first_form, true), rti(0, 0, 500, 500))->setRotation(0, 0, 10.0f);
     return;
     vw->setOnClick([this, chk](zView* v, bool l) {
         DLOG("click view %i", l);
@@ -182,4 +163,5 @@ void sshApp::setContent() {
         DLOG("click root %i", l);
     });
 //    vw->post(MSG_ANIM, 50, 0);
+     */
 }

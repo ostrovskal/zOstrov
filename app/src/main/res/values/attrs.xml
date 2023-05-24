@@ -218,6 +218,13 @@
         <attr name="divPadHorz" format="dimension" />
         <attr name="divPadStart" format="dimension" />
         <attr name="divPadEnd" format="dimension" />
+        <attr name="ipad" format="dimension" />
+        <attr name="ipadHorz" format="dimension" />
+        <attr name="ipadStart" format="dimension" />
+        <attr name="ipadEnd" format="dimension" />
+        <attr name="ipadTop" format="dimension" />
+        <attr name="ipadBottom" format="dimension" />
+        <attr name="fbo" format="integer|boolean" />
         <attr name="fadeScrollBars" format="boolean" />
         <attr name="sizeTouch" format="string" />
         <attr name="sizeScrollBars" format="dimension" />

@@ -43,8 +43,6 @@ protected:
     zArray<CACHE> tex{};
 };
 
-rti z_clipRect2(crti& p, crti& r);
-
 class zViewManager {
 public:
     enum { Z_NONE, Z_ACTIVE, Z_QUIT, Z_SAVE, Z_LOAD, Z_RESUME, Z_ANIM = 16, Z_CHANGE_THEME = 32 };

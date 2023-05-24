@@ -9,32 +9,8 @@
 //  ...
 // </keyboards>
 
-static zStyle styles_z_keyboardBase[] = {
-        { Z_FOREGROUND, z.R.drawable.zssh },
-        { Z_FOREGROUND_TILES, z.R.integer.keybButSmall },
-        { Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
-        { Z_TEXT_FONT, z.R.drawable.font1 },
-        { Z_TEXT_FOREGROUND_COLOR, 0xffffffff },
-        { Z_TEXT_STYLE, ZS_TEXT_BOLD },
-        { Z_TEXT_SIZE, 15 },
-        { Z_GRAVITY, ZS_GRAVITY_CENTER },
-        { Z_IPADDING, 0x03030303 },
-        { Z_PADDING | ZT_END, 0x01010101 }
-};
-
-static zStyle styles_z_keyboardAlt[] = {
-        { Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
-        { Z_TEXT_FONT, z.R.drawable.font1 },
-        { Z_TEXT_FOREGROUND_COLOR, 0xffafafaf },
-        { Z_TEXT_STYLE, ZS_TEXT_BOLD },
-        { Z_TEXT_SIZE, 12 },
-        { Z_GRAVITY, ZS_GRAVITY_END | ZS_GRAVITY_BOTTOM },
-        { Z_IPADDING, 0x04040404 },
-        { Z_PADDING | ZT_END, 0x01010101 }
-};
-
 zViewKeyboard::zViewKeyboard(cstr nameLayouts) : zViewGroup(styles_default, z.R.id.keyboard) {
-    //updateStatus(ZS_SYSTEM, true); updateStatus(ZS_VISIBLED, false);
+    updateStatus(ZS_SYSTEM, true); updateStatus(ZS_VISIBLED, false);
     setDrawable(nullptr, DRW_FBO); duration = 20;
     setOnAnimation([this] (zView*, int) {
 /*
@@ -103,10 +79,9 @@ void zViewKeyboard::onInit(bool _theme) {
     zViewGroup::onInit(_theme);
     removeAllViews();
     // основной текст
-    attach(new zViewText(styles_z_keyboardBase, 0, 0), 100, 100);
+    attach(new zViewText(styles_z_keyboardbase, 0, 0), 100, 100);
     // альтернативный текст
-    attach(new zViewText(styles_z_keyboardAlt, 0, 0), 100, 100);
-    //atView(0)->removeDrawable(DRW_FBO); atView(1)->removeDrawable(DRW_FBO);
+    attach(new zViewText(styles_z_keyboardalt, 0, 0), 100, 100);
     // для нажатия кнопки
     drw[DRW_FK] = new zDrawable(this, DRW_FK);
     drw[DRW_FK]->init(0x90000000, 0, -1, 0, 1.0f);
@@ -128,20 +103,12 @@ void zViewKeyboard::setLayout(const zStringUTF8 &_name) {
     }
 }
 
-void zViewKeyboard::onMeasure(cszm& spec) {
-    auto widthSize(spec.w.size()), heightSize(z_percent(zGL::instance()->getSizeScreen(true), minHeight));
-    auto sz(current ? current->size : szi(1, 1));
-    deltaWidth = ((float)widthSize / (float)sz.w);
-    deltaHeight = ((float)heightSize / (float)sz.h);
-    setMeasuredDimension(widthSize, heightSize);
-}
-
 i32 zViewKeyboard::onTouchEvent(zTouch *touch) {
     auto& buts(current->buttons);
     for(int i = 0 ; i < buts.size(); i++) {
         auto but(&buts[i]); auto r(but->rview);
-        r.x *= deltaWidth; r.w *= deltaWidth;
-        r.y *= deltaHeight; r.h *= deltaHeight;
+        r.x = rview.x + r.x * deltaWidth; r.w *= deltaWidth;
+        r.y = rview.y + r.y * deltaHeight; r.h *= deltaHeight;
         if(r.contains(touch->cpt.x, touch->cpt.y)) {
             if(touch->isCaptured()) {
                 if(butIdx == -1) {
@@ -175,6 +142,14 @@ i32 zViewKeyboard::onTouchEvent(zTouch *touch) {
     }
     butIdx = -1;
     return TOUCH_STOP;
+}
+
+void zViewKeyboard::onMeasure(cszm& spec) {
+    auto widthSize(spec.w.size()), heightSize(z_percent(zGL::instance()->getSizeScreen(true), minHeight));
+    auto sz(current ? current->size : szi(1, 1));
+    deltaWidth = ((float)widthSize / (float)sz.w);
+    deltaHeight = ((float)heightSize / (float)sz.h);
+    setMeasuredDimension(widthSize, heightSize);
 }
 
 void zViewKeyboard::onLayout(crti &position, bool changed) {
@@ -223,11 +198,11 @@ void zViewKeyboard::onDraw() {
             baseTxt->drw[DRW_FK]->color = theme->themeColor;
         }
         auto r(b.rview);
-        r.x *= deltaWidth; r.w *= deltaWidth;
-        r.y *= deltaHeight; r.h *= deltaHeight;
+        r.x = rview.x + r.x * deltaWidth; r.w *= deltaWidth;
+        r.y = rview.y + r.y * deltaHeight; r.h *= deltaHeight;
         szm spec(zMeasure(MEASURE_EXACT, r.w), zMeasure(MEASURE_EXACT, r.h));
-        baseTxt->setText(n1, true); baseTxt->measure(spec); baseTxt->layout(r); baseTxt->draw();
-        if(n2.isNotEmpty() && n1 != n2) { altTxt->setText(n2, true); altTxt->measure(spec); altTxt->layout(r); altTxt->draw(); }
+        baseTxt->setText(n1, false); baseTxt->measure(spec); baseTxt->layout(r); baseTxt->draw();
+        if(n2.isNotEmpty() && n1 != n2) { altTxt->setText(n2, false); altTxt->measure(spec); altTxt->layout(r); altTxt->draw(); }
     }
     baseTxt->updateStatus(ZS_VISIBLED, false); altTxt->updateStatus(ZS_VISIBLED, false);
 }

@@ -162,7 +162,7 @@ void zViewSwitch::stateView(zView::STATE &state, bool save, int &index) {
 
 zViewSlider::zViewSlider(zStyle* _styles, i32 _id, u32 _text, cszi& _range, int _pos, bool vert) :
         zViewText(_styles, _id, _text), range(_range), pos(_pos) {
-    removeDrawable(DRW_FBO);
+    //removeDrawable(DRW_FBO);
     trumb = new zDrawable(this, 0);
     updateStatus(ZS_VORIENTATION, vert);
     minMaxSize.set(z_dp(z.R.dimen.sliderMinWidth), z_dp(z.R.dimen.sliderMaxWidth),
@@ -358,7 +358,6 @@ void zViewProgress::showTips() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 zViewController::zViewController(zStyle *_styles, i32 _id, i32 _base, u32 _fileMap) : zView(_styles, _id), base(_base) {
-    setDrawable(nullptr, DRW_FBO);
     minMaxSize.set(z_dp(z.R.dimen.controllerMinWidth), 0, z_dp(z.R.dimen.controllerMinHeight), 0);
     int size(0); auto ptr(manager->assetFile(theme->findString(_fileMap), &size));
     if(!ptr) return;

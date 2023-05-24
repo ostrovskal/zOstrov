@@ -7,8 +7,6 @@
 #include "zHandler.h"
 #include "zDrawable.h"
 
-rti z_clipRect2(crti& p, crti& r);
-
 class zMeasure {
 public:
     zMeasure() { }

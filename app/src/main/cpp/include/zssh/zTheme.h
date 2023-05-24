@@ -175,7 +175,7 @@ enum ViewStyles {
     Z_CELL_SIZE					= (63 | ZTT_DMN),
     Z_CHART_FLAGS               = (64 | ZTT_INT),
     Z_IPADDING                  = (65 | ZTT_VEC),
-    Z_SHAPE                     = (66 | ZTT_INT)
+    Z_FBO                       = (66 | ZTT_INT)
 };
 
 // значения для темы
