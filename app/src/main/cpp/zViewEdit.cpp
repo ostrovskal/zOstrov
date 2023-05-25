@@ -96,11 +96,13 @@ void zViewEdit::setFilter(int inputType, zFilterEdit* _filter) {
 }
 
 int zViewEdit::indexFromPosition(int inScreen, bool exact, int *outScreen) {
-    return drw[DRW_TXT]->indexOf(getDrawText(true), getTextSize(), inScreen, drw[DRW_TXT]->bound.x, exact, outScreen);
+    pti pos;
+    getStringFromCache(0, &drw[DRW_TXT]->bound, pos);
+    return drw[DRW_TXT]->indexOf(getDrawText(true), getTextSize(), inScreen, pos.x, exact, outScreen);
 }
 
 int zViewEdit::positionFromIndex(int _indexText) {
-    return drw[DRW_TXT]->bound.x + drw[DRW_TXT]->sizeText(getDrawText(true), getTextSize(), _indexText);
+    return drw[DRW_TXT]->sizeText(getDrawText(true), getTextSize(), _indexText);
 }
 
 void zViewEdit::onInit(bool _theme) {
@@ -108,11 +110,8 @@ void zViewEdit::onInit(bool _theme) {
     status          |= ZS_NOWRAP | ZS_FOCUSABLE_IN_TOUCHABLE;
     colorHint       = styles->_int(Z_COLOR_HINT_TEXT, 0xff505050);
     setFilter((int)styles->_int(Z_MODE, ZS_EDIT_TEXT));
-/*
-    drw[DRW_ICON] = new zDrawable(this, DRW_ICON);
-    drw[DRW_ICON]->init(z.R.drawable.zssh, 0xffffffff, z.R.integer.iconEdit, 0, 1.0f);
-    setIconGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER);
-*/
+    zParamDrawable ip(z.R.drawable.zssh, 0xffffffff, z.R.integer.iconEdit, 0, 1.0f);
+    setDrawable(&ip, DRW_ICON); setIconGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER);
     but->onInit(false);
 }
 
@@ -188,7 +187,24 @@ i32 zViewEdit::onTouchEvent(zTouch *touch) {
 }
 
 void zViewEdit::correctCaretPosition(int _index) {
-    caretScreen.x = positionFromIndex(_index);
+    if(realText.isNotEmpty()) {
+        pti pos;
+        auto bound(&drw[DRW_TXT]->bound);
+        getStringFromCache(0, bound, pos);
+        caretScreen.x = pos.x + positionFromIndex(_index);
+    } else {
+        switch(gravity & ZS_GRAVITY_HORZ) {
+            case ZS_GRAVITY_HCENTER:
+                caretScreen.x = rclient.x + wmax / 2;
+                break;
+            case ZS_GRAVITY_END:
+                caretScreen.x = rclient.x + wmax;
+                break;
+            default:
+                caretScreen.x = rclient.x + ipad.x;
+                break;
+        }
+    }
 }
 
 void zViewEdit::stateView(STATE &state, bool save, int &index) {

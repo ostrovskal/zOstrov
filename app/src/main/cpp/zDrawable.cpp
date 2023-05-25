@@ -305,7 +305,7 @@ int zDrawable::indexReverseOf(cstr _text, u32 heightText, int limitPix, int leng
     auto factor(scaleFactor(heightText, true));
     while(z_isUTF8(_text) && lengthText-- > 0) {
         // определить ширину символа
-        auto wGlyph(texture->widthGlyph(z_charUTF8(z_ptrUTF8(_text, lengthText)), factor));
+        auto wGlyph(texture->widthGlyph(z_decodeUTF8(z_charUTF8(z_ptrUTF8(_text, lengthText))), factor));
         // проверить на лимит
         if((posPix + wGlyph) >= limitPix) break;
         posPix += wGlyph; _count++;

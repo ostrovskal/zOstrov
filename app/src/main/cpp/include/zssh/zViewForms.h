@@ -34,7 +34,11 @@ protected:
     zFrameLayout* content{nullptr};
     // событие закрытия
     std::function<int(zView*, int)> onClose;
+    // режим
     u32 mode{0};
+    // сохраненные значения
+    zStyle* _styles_button_footer{nullptr};
+    zStyle* _styles_header{nullptr};
 };
 
 class zViewFormMessage : public zViewForm {

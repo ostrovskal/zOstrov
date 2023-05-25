@@ -44,6 +44,7 @@ protected:
 };
 
 class zViewManager {
+    friend class zViewForm;
 public:
     enum { Z_NONE, Z_ACTIVE, Z_QUIT, Z_SAVE, Z_LOAD, Z_RESUME, Z_ANIM = 16, Z_CHANGE_THEME = 32 };
     // тип переменных шейдера
@@ -210,6 +211,8 @@ private:
     zShader* program{nullptr};
     // переменные в шейдере
     i32 shaderVars[7]{};
+    // форма для удаления
+    zViewForm* _form{nullptr};
 };
 
 // менеджер представлений

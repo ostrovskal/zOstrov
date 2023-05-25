@@ -80,7 +80,7 @@ static zStyle styles_z_scrolllayout[] = {
 };
 
 void sshApp::setContent() {
-//    debug = true;
+    //debug = true;
   //  return;
     auto scl = new zScrollLayout(styles_z_scrolllayout, 0, true);
     auto ll = new zLinearLayout(styles_z_llinear, 0, true);
@@ -90,6 +90,7 @@ void sshApp::setContent() {
     auto prg = new zViewProgress(styles_z_linearprogress, 1, 0, szi(0, 48), 16, false);
     auto edt1 = new zViewEdit(styles_z_edittext, 112, z.R.string.Sergey);
     auto edt2 = new zViewEdit(styles_z_edittext, 111, z.R.string.Sergey);
+    auto edt3 = new zViewEdit(styles_z_edittext, 110, z.R.string.Sergey);
 /*
     auto scl1 = new zScrollLayout(styles_z_scrolllayout, 0, false);
     auto ll1 = new zLinearLayout(styles_z_default_layout, 0, false);
@@ -116,11 +117,12 @@ void sshApp::setContent() {
         //manager->getKeyboard()->show(v->id, false);
     });
     ll->attach(sl, ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP );
+    ll->attach(edt3, 350, VIEW_WRAP);
     ll->attach(vw, VIEW_MATCH, VIEW_WRAP)->setOnClick([this](zView* v, bool) {
     });
-    ll->attach(edt1, ZS_GRAVITY_END, 0, 300, VIEW_WRAP);//->setGravity(ZS_GRAVITY_END);
+    ll->attach(edt1, ZS_GRAVITY_END, 0, 300, VIEW_WRAP)->setGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER);
     ll->attach(prg, ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP );
-    ll->attach(edt2, 400, VIEW_WRAP);
+    ll->attach(edt2, 400, VIEW_WRAP)->setGravity(ZS_GRAVITY_HCENTER | ZS_GRAVITY_VCENTER);
     /*
     //root->attach(img, ZS_GRAVITY_START, 0, VIEW_WRAP, VIEW_WRAP );
     //root->attach(new zViewController(styles_z_acontroller, 0, z.R.integer.acontrol, z.R.string.acontrollerMap), ZS_GRAVITY_END | ZS_GRAVITY_BOTTOM, 0, 150_dp, 150_dp);

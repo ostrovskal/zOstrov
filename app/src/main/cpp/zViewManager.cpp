@@ -211,12 +211,13 @@ void zViewManager::drawViews() {
     static int oldObjs(0);
     countVertices = 0; countLn = 0; countObjs = 0;
 #endif
-    glScissor(0, 0, common->rview.w, common->rview.h);
+    rti rcommon(zGL::instance()->getSizeScreen());
+    glScissor(rcommon.x, rcommon.y, rcommon.w, rcommon.h);
     glClear(GL_COLOR_BUFFER_BIT);
     // 1. выполнить подсчет габаритов всех представлений
     common->measure(measureCommon);
     // 2. выполнить позиционирование всех представлений
-    common->layout(common->rview);
+    common->layout(rcommon);
     // 3. состояния представлений
     if(bufViewStates) stateAllViews(Z_LOAD, nullptr, nullptr);
     // 4. анимация
@@ -235,6 +236,11 @@ void zViewManager::drawViews() {
     zView::fbo = nullptr;
     common->draw();
     zGL::instance()->swap();
+    // удалить форму
+    if(_form) {
+         root->remove(_form);
+         _form = nullptr;
+    }
 #ifndef NDEBUG
     if(debug && showTri) {
         if(oldTri != countVertices) {

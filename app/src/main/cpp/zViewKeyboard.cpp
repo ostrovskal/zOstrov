@@ -11,9 +11,9 @@ zViewKeyboard::zViewKeyboard(cstr nameLayouts) : zViewGroup(styles_default, z.R.
         float v; auto visible(animator.update(v));
         auto heightScreen(zGL::instance()->getSizeScreen(true));
         auto root(manager->getSystemView(true));
-        root->lps.y = -((int)round((float)offsetY / 6.0f) * v);
+        root->scroll.y = ((int)round((float)offsetY / 6.0f) * v);
         lps.y = heightScreen - ((int)round((float)rview.h / 6.0f) * v);
-        requestLayout();
+        root->requestLayout();
         updateStatus(ZS_VISIBLED, lps.y < heightScreen);
         return visible;
     });
@@ -68,8 +68,8 @@ void zViewKeyboard::onInit(bool _theme) {
     // альтернативный текст
     attach(new zViewText(styles_z_keyboardalt, 0, 0), 100, 100);
     // для нажатия кнопки
-    drw[DRW_FK] = new zDrawable(this, DRW_FK);
-    drw[DRW_FK]->init(0x90000000, 0, -1, 0, 1.0f);
+    zParamDrawable kp(0x90000000, 0, -1, 0, 1.0f);
+    setDrawable(&kp, DRW_FK);
     // установить раскладку по умолчанию
     if(!current) setLayout(defName);
 }

@@ -11,10 +11,28 @@
 //                                                               ФОРМА                                                                    //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-zViewForm::zViewForm(zStyle* _styles, i32 _id, zStyle* _styles_header, zStyle* _styles_button_footer, u32 _caption, bool _modal) :
+zViewForm::zViewForm(zStyle* _styles, i32 _id, zStyle* styles_header, zStyle* styles_button_footer, u32 _caption, bool _modal) :
 					zLinearLayout(_styles, _id, true), caption(_caption) {
 	updateStatus(ZS_SYSTEM, true); updateStatus(ZS_MODAL, _modal);
-	if(_styles_header && _caption) {
+	_styles_button_footer = styles_button_footer; _styles_header = styles_header;
+}
+
+void zViewForm::onDrawFBO() {
+	// отрисовка затенения
+	if(testFlags(ZS_MODAL)) drw[DRW_FK]->draw(nullptr);
+	// отрисовка FBO
+	drw[DRW_FBO]->draw(&rview);
+}
+
+void zViewForm::onInit(bool _theme) {
+	zLinearLayout::onInit(_theme);
+	// затенение
+	zParamDrawable fp(0x90000000, 0, -1, 0, 1.0f);
+	setDrawable(testFlags(ZS_MODAL) ? &fp : nullptr, DRW_FK);
+	auto screen(zGL::instance()->getSizeScreen());
+	drw[DRW_FK]->measure(screen.w, screen.h, 0, false);
+	// инициализация
+	if(_styles_header && caption) {
 		// заголовок
 		attach(new zViewText(_styles_header, 0, caption), 0, 1, VIEW_MATCH, VIEW_WRAP);
 	}
@@ -30,12 +48,12 @@ zViewForm::zViewForm(zStyle* _styles, i32 _id, zStyle* _styles_header, zStyle* _
 		// в футер поместить кнопки(OK|CANCEL|DEFAULT)
 		static i32 idxParams[] = { 0, 2, 4, 8 };
 		static i32 butParams[] = { 0, 0,
-								  z.R.id.ok, z.R.integer.iconOk,
-								  z.R.id.yes, z.R.integer.iconYes,
-								  z.R.id.no, z.R.integer.iconNo,
-								  z.R.id.yes, z.R.integer.iconYes,
-								  z.R.id.def, z.R.integer.iconDef,
-								  z.R.id.no, z.R.integer.iconNo };
+								   z.R.id.ok, z.R.integer.iconOk,
+								   z.R.id.yes, z.R.integer.iconYes,
+								   z.R.id.no, z.R.integer.iconNo,
+								   z.R.id.yes, z.R.integer.iconYes,
+								   z.R.id.def, z.R.integer.iconDef,
+								   z.R.id.no, z.R.integer.iconNo };
 		auto idx(idxParams[countButtons]);
 		for(int i = 0; i < countButtons; i++) {
 			auto but(new zViewButton(_styles_button_footer, butParams[idx], 0, butParams[idx + 1]));
@@ -43,24 +61,6 @@ zViewForm::zViewForm(zStyle* _styles, i32 _id, zStyle* _styles_header, zStyle* _
 			footer->attach(but, 0, 1, VIEW_WRAP, VIEW_WRAP);
 			idx += 2;
 		}
-	}
-}
-
-void zViewForm::onDrawFBO() {
-	// отрисовка затенения
-	if(testFlags(ZS_MODAL)) drw[DRW_FK]->draw(nullptr);
-	// отрисовка FBO
-	drw[DRW_FBO]->draw(&rview);
-}
-
-void zViewForm::onInit(bool _theme) {
-	zLinearLayout::onInit(_theme);
-	// затенение
-	if(testFlags(ZS_MODAL)) {
-		drw[DRW_FK] = new zDrawable(this, DRW_FK);
-		drw[DRW_FK]->init(0x90000000, 0, -1, 0, 1.0f);
-		auto screen(zGL::instance()->getSizeScreen());
-		drw[DRW_FK]->measure(screen.w, screen.h, 0, false);
 	}
 }
 
@@ -74,9 +74,7 @@ void zViewForm::close(int code) {
 	if(onClose) ok = onClose(this, code);
 	if(ok) {
 		updateStatus(ZS_VISIBLED, false);
-		if(mode & ZS_FORM_TERMINATE) {
-			manager->getSystemView(true)->remove(this);
-		}
+		if(mode & ZS_FORM_TERMINATE) manager->_form = this;
 	}
 }
 

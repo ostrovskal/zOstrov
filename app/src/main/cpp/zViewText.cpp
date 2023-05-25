@@ -134,7 +134,7 @@ void zViewText::onLayout(crti &position, bool changed) {
         // позиция текста
         if(textCache.isNotEmpty()) {
             auto r(rclient - szi(ipad.extent(false), ipad.extent(true)));
-            if((drw[DRW_TXT]->bound.w + _width) > rclient.w) {
+            if((drw[DRW_TXT]->bound.w + _width) > r.w) {
                 _width *= ((_grav & ZS_GRAVITY_HORZ) == ZS_GRAVITY_START) * 2 - 1;
             } else {
                 r.w -= _width;
@@ -173,6 +173,7 @@ void zViewText::drawText() {
         // отрисовка
         pti coord(tbound->x, tbound->y);
         int indexCache(0), indexText(0), wpix, subH;
+        rti clip(z_clipRect(rclip, rti(rclient.x + ipad.x, rclient.y + ipad.y, rclient.w - ipad.extent(false), rclient.h - ipad.extent(true))));
         // взять текущий текст из кэша
         auto cacheStr(getStringFromCache(indexCache++, tbound, coord));
         for(auto &sp: cacheSpans) {
@@ -204,16 +205,16 @@ void zViewText::drawText() {
                     dr->measure(wpix, cacheStr->size, 0, false);
                     dr->color.set(paint->bkColor);
                     m.translate(coord.x - screenX, coord.y - screenY - subH, 0);
-                    dr->drawCommon(rclip, m, true);
+                    dr->drawCommon(clip, m, true);
                 }
                 // отрисовка теневого текста
                 drw[DRW_TXT]->color.set(colors[TEXT_COLOR_SHADOW]);
                 m.translate(coord.x - screenX + shadow.x, coord.y - screenY + shadow.y, 0);
-                drw[DRW_TXT]->drawCommon(rclip, m, true);
+                drw[DRW_TXT]->drawCommon(clip, m, true);
                 // отрисовка текста
                 drw[DRW_TXT]->color.set(getDrawColorText(paint));
                 m.translate(coord.x - screenX, coord.y - screenY, 0);
-                drw[DRW_TXT]->drawCommon(rclip, m, true);
+                drw[DRW_TXT]->drawCommon(clip, m, true);
                 // корректировать позицию для следующего спана
                 coord.x += wpix; coord.y -= subH;
                 // проверка на конец строки из кэша

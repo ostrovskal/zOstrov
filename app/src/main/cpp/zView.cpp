@@ -221,8 +221,8 @@ void zView::invalidate() {
 }
 
 void zView::measure(cszm& spec) {
-    auto isSpecChanged(measureSpec.w != spec.w || measureSpec.h != spec.h);
-    if(!testFlags(ZS_MEASURE) || isSpecChanged) {
+    auto changed(measureSpec.w != spec.w || measureSpec.h != spec.h);
+    if(!testFlags(ZS_MEASURE) || changed) {
         status &= ~ZS_MEASURE_SET;
         onMeasure(spec);
         if(!testFlags(ZS_MEASURE_SET)) {
