@@ -210,27 +210,24 @@ void zViewEdit::updateCaret() {
 }
 
 int zViewEdit::correct(int _index) {
-    // максимальная видимая позиция на экране
-    int idx(0);
-    // общая длина текста в пикселях
-    auto txt(getDrawText(true));
-    auto widthText(drw[DRW_TXT]->sizeText(txt, getTextSize(), INT_MAX));
+    int idx(0), size(getTextSize());
+    // длина видимого текста в пикселях
+    auto widthText(drw[DRW_TXT]->sizeText(getDrawText(true), size, INT_MAX));
     if(widthText >= wmax) {
-        // индекс в тексте до конца видимой области
-        auto lastIdx(indexFromPosition(wmax, false, nullptr));
-        // индекс в тексте от конца видимой области до конца текста
-        idx = drw[DRW_TXT]->indexOf(txt - visibleIndex + lastIdx, getTextSize(), widthText, wmax);
+        // сдвинуть текст вперед на величину, которая больше макс. ширины текста
+        idx = drw[DRW_TXT]->indexOf(getDrawText(true), size, widthText, wmax);
     } else if(visibleIndex > 0) {
-        // индекс в тексте с начала видимого текста на разницу конца видимой и концом текста
-        // (сколько знаков вытащить с начала текста)
-        idx = -drw[DRW_TXT]->indexReverseOf(txt - 1, getTextSize(), wmax - widthText, visibleIndex);
+        // сдвинуть текст назад на величину разницы, макс. ширины текста и реальной ширины
+        idx = -drw[DRW_TXT]->indexReverseOf(filter->getText(realText), size, wmax - widthText, visibleIndex);
     }
-    // корректировать начальный индекс текста/позицию каретки
-    visibleIndex += idx; _index -= idx;
-    // установить новый текст(при возможности без обновления макета)
-    setText(realText, idx != 0);
-    // получить новую позицию каретки на экране
-    correctCaretPosition(_index);
+    if(idx) {
+        // корректировать начальный индекс текста/позицию каретки
+        visibleIndex += idx; _index -= idx;
+        // установить новый текст(при возможности без обновления макета)
+        setText(realText, true);
+        // получить новую позицию каретки на экране
+        correctCaretPosition(_index);
+    }
     return _index;
 }
 
@@ -244,7 +241,7 @@ void zViewEdit::changeTheme() {
 
 void zViewEdit::onLayout(crti &position, bool changed) {
     zViewText::onLayout(position, changed);
-    but->layout(rti(rclient.x + wmax, rclient.y + (rclient.h - but->rview.h) / 2, but->rview.w, but->rview.h));
+    but->layout(rti(rclient.x + wmax + ipad.x, rclient.y + (rclient.h - but->rview.h) / 2, but->rview.w, but->rview.h));
     if(isFocus()) {
         correctCaretPosition(caretIndex);
         updateCaret();
@@ -253,9 +250,9 @@ void zViewEdit::onLayout(crti &position, bool changed) {
 
 void zViewEdit::onMeasure(cszm& spec) {
     zViewText::onMeasure(spec);
-    auto rh(rclient.h - ipad.w);
+    auto rh(rclient.h - ipad.extent(true));
     but->measure(szm(zMeasure(MEASURE_EXACT, rh), zMeasure(MEASURE_EXACT, rh)));
-    wmax = rclient.w - rclient.h;
+    wmax = rclient.w - rh - ipad.extent(false);
 }
 
 void zViewEdit::clearText() {

@@ -66,7 +66,7 @@ public:
     // вернуть длину текста в пикселях
     int sizeText(cstr text, u32 heightText, int lengthText) const;
     // вернуть ближайщую позицию в тексте(limitPix - предел/posPix - начальная коор. текста)
-    int indexOf(cstr text, u32 heightText, int limitPix, int posPix, bool exact = false, int *posScreen = nullptr) const;
+    int indexOf(cstr text, u32 heightText, int screenLimit, int screenX, bool exact = false, int *posScreen = nullptr) const;
     int indexReverseOf(cstr _text, u32 heightText, int limitPix, int lengthText) const;
     ptf offsetBound() const;
     // вычислить размер, с учетом масштабирования
