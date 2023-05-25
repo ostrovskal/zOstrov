@@ -22,6 +22,7 @@ add_library(zssh SHARED
 		zViewWidgets.cpp
 		zViewForms.cpp
 		zViewKeyboard.cpp
+		zViewEdit.cpp
 )
 
 find_package(zstandard REQUIRED CONFIG)

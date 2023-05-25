@@ -10,7 +10,6 @@ zViewText::zViewText(zStyle *_styles, i32 _id, u32 _text) : zView(_styles, _id) 
     defPaint        = new zTextPaint(this);
     minMaxSize.x    = z_dp(z.R.dimen.textMinWidth);
     minMaxSize.w    = z_dp(z.R.dimen.textMinHeight);
-//    setDrawable(nullptr, DRW_FBO);
     setText(_text);
     // значения по умолчанию
     setShadowOffset(2, 2);
@@ -28,7 +27,7 @@ void zViewText::setText(u32 _text) {
     setText(theme->findString(_text), false);
 }
 
-void zViewText::setText(cstr _text, bool force) {
+void zViewText::setText(const zStringUTF8& _text, bool force) {
     if(force || realText != _text) {
         realText = _text;
         clearCacheSpans(false);
@@ -56,15 +55,6 @@ void zViewText::clearCacheSpans(bool del_spans) {
     }
 }
 
-void zViewText::stateView(STATE &state, bool save, int &index) {
-/*
-    zView::stateView(state, save, index);
-    if(save) {
-    } else {
-    }
-*/
-}
-
 void zViewText::onMeasure(cszm& spec) {
     auto widthSize(spec.w.size()), heightSize(spec.h.size());
     auto widthMode(spec.w.mode()), heightMode(spec.h.mode());
@@ -80,7 +70,7 @@ void zViewText::onMeasure(cszm& spec) {
     auto icW(icSize.w + wpad), icH(icSize.h + hpad);
     // разбить текст и определить габариты текста в пикселях
     auto offsW(distance + (fkg * fkSize.w) + (icg * icSize.w));
-    auto wh(textWrap(getDrawText(TEXT_MEASURE), widthSize - (ipad.extent(false) + offsW)));
+    auto wh(textWrap(getDrawText(false), widthSize - (ipad.extent(false) + offsW)));
     // установить высоту текста
     drw[DRW_TXT]->bound.h = wh.h;
     // корректировать ширину текста
@@ -221,7 +211,7 @@ void zViewText::drawText() {
                 m.translate(coord.x - screenX + shadow.x, coord.y - screenY + shadow.y, 0);
                 drw[DRW_TXT]->drawCommon(rclip, m, true);
                 // отрисовка текста
-                drw[DRW_TXT]->color.set(paint->fkColor);
+                drw[DRW_TXT]->color.set(getDrawColorText(paint));
                 m.translate(coord.x - screenX, coord.y - screenY, 0);
                 drw[DRW_TXT]->drawCommon(rclip, m, true);
                 // корректировать позицию для следующего спана
@@ -387,14 +377,6 @@ void zViewText::setTextColorShadow(u32 _value) {
         colors[TEXT_COLOR_SHADOW] = _value;
         invalidate();
     }
-}
-
-void zViewText::insertText(int pos, cstr _text) {
-    setText(realText.insert(pos, _text), true);
-}
-
-void zViewText::removeText(int pos, int count) {
-    setText(realText.remove(pos, count), true);
 }
 
 void zViewText::mergeSpans(const zStringUTF8& _text) {

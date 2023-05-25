@@ -111,9 +111,6 @@ void zView::draw() {
             drw[DRW_FBO]->drawFBO(fbo, [this] {
                 drw[DRW_BK]->draw(&rview);
                 onDraw();
-                // каретка
-                auto caret(manager->getCaret());
-                if(caret && caret->parent == this) caret->draw();
             });
             if(drw[DRW_FBO]->isValid()) {
                 updateStatus(ZS_DIRTY_LAYER, false);
@@ -121,6 +118,10 @@ void zView::draw() {
         }
         onDrawFBO();
         drawDebug();
+        // каретка
+        auto caret(manager->getCaret());
+        if(caret && caret->parent == this)
+            caret->draw();
     }
 }
 
@@ -470,20 +471,22 @@ void zFlyng::stop() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 zViewCaret::zViewCaret() : zView(styles_z_caret, 0) {
-    zView::onInit(false); drw[DRW_BK]->measure(3, 10, 0, false);
+    zView::onInit(false);
+    drw[DRW_BK]->view = this;
+    drw[DRW_BK]->measure(3, 10, 0, false);
     setOnAnimation([this](zView*, int) {
-        auto own(drw[DRW_BK]->view);
-        if(own) updateStatus(ZS_VISIBLED, (blink++ & 1));
-        return own == nullptr;
+        updateStatus(ZS_VISIBLED, (blink++ & 1));
+        return drw[DRW_BK]->view != nullptr;
     });
 }
 
 void zViewCaret::update(zView* own, int x, int y, int h) {
-    parent = own; drw[DRW_BK]->view = own; blink = 0;
+    parent = own; blink = 0;
     updateStatus(ZS_VISIBLED, own != nullptr);
     if(own) {
         rview.set(x + own->rclient.x, y + own->rclient.y, 3, h);
-        mtxScale.scale(1.0f, (float) rview.h / 10.0f, 0.0f);
+        drw[DRW_BK]->bound = rview;
+        setScale(1.0f, (float) h / 10.0f);
         post(MSG_ANIM, duration, 0);
     }
 }

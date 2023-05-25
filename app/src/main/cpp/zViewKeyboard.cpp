@@ -190,7 +190,7 @@ void zViewKeyboard::onDraw() {
 i32 zViewKeyboard::keyEvent(int key, bool sysKey) {
     if(sysKey && key == AKEYCODE_BACK) {
         if(owner && isChecked()) {
-            if(owner) owner->keyEvent('\n', false);
+            if(owner) return owner->keyEvent('\n', false);
         }
     }
     return 0;

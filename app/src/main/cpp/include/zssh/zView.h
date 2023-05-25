@@ -63,9 +63,9 @@ public:
         // тип представления
         u32 type{0};
         // связанные данные
-        zArray<u32> data;
+        zArray<u32> data{};
         // строка текста
-        zString string;
+        zStringUTF8 string{};
     };
     // конструкторы
     zView() { }
@@ -103,7 +103,7 @@ public:
     // сохранение/загрузка
     virtual void stateView(STATE &state, bool save, int &index);
     // клавиатура по умолчанию
-    virtual cstr getDefaultKeyboardLayer() const { return ""; }
+    virtual cstr getDefaultKeyboardLayer() const { return nullptr; }
     // событие инициализации
     virtual void onInit(bool theme);
     // отправка сообщения

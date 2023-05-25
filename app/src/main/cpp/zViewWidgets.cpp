@@ -162,7 +162,6 @@ void zViewSwitch::stateView(zView::STATE &state, bool save, int &index) {
 
 zViewSlider::zViewSlider(zStyle* _styles, i32 _id, u32 _text, cszi& _range, int _pos, bool vert) :
         zViewText(_styles, _id, _text), range(_range), pos(_pos) {
-    //removeDrawable(DRW_FBO);
     trumb = new zDrawable(this, 0);
     updateStatus(ZS_VORIENTATION, vert);
     minMaxSize.set(z_dp(z.R.dimen.sliderMinWidth), z_dp(z.R.dimen.sliderMaxWidth),
@@ -206,7 +205,7 @@ void zViewSlider::onInit(bool _theme) {
 }
 
 void zViewSlider::showTips() {
-    if(isTips()) setText(z_fmt("%s%i", tips.str(), pos), false);
+    if(isTips()) setText(zStringUTF8(z_fmt("%s%i", tips.str(), pos).str()), false);
 }
 
 void zViewSlider::onDraw() {
@@ -349,7 +348,7 @@ void zViewProgress::updateTrumb() {
 void zViewProgress::showTips() {
     if(isTips()) {
         auto _pos((int)round((float)pos / (float)range.interval() * 100.0f));
-        setText(z_fmt("%s%i%%", tips.str(), _pos), false);
+        setText(zStringUTF8(z_fmt("%s%i%%", tips.str(), _pos).str()), false);
     }
 }
 

@@ -65,10 +65,7 @@ void sshApp::run() {
         android_poll_source* source;
         while((sens = ALooper_pollAll((int)isActive() - 1, nullptr, &events, (void**)&source)) >= 0) {
             if(source) source->process(android, source);
-            if(android->destroyRequested) {
-                DLOG("destroyRequested %i", sens);
-                return;
-            }
+            if(android->destroyRequested) return;
         }
         if(isActive()) drawViews();
     }
@@ -83,7 +80,7 @@ static zStyle styles_z_scrolllayout[] = {
 };
 
 void sshApp::setContent() {
-    //debug = true;
+//    debug = true;
   //  return;
     auto scl = new zScrollLayout(styles_z_scrolllayout, 0, true);
     auto ll = new zLinearLayout(styles_z_llinear, 0, true);
@@ -91,6 +88,8 @@ void sshApp::setContent() {
     auto vw = new zViewButton(styles_z_button, 22, z.R.string.textSpan, z.R.integer.iconCancel);
     auto sl = new zViewSlider(styles_z_slider, 1, z.R.string.Sergey, szi(10, 32), 16, false);
     auto prg = new zViewProgress(styles_z_linearprogress, 1, 0, szi(0, 48), 16, false);
+    auto edt1 = new zViewEdit(styles_z_edittext, 112, z.R.string.Sergey);
+    auto edt2 = new zViewEdit(styles_z_edittext, 111, z.R.string.Sergey);
 /*
     auto scl1 = new zScrollLayout(styles_z_scrolllayout, 0, false);
     auto ll1 = new zLinearLayout(styles_z_default_layout, 0, false);
@@ -110,11 +109,7 @@ void sshApp::setContent() {
     ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.first_form, 10), vv, VIEW_WRAP )->
             setForegroundGravity(ZS_GRAVITY_START | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER);
     ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.first_form, 10), vv, VIEW_WRAP )->
-            setForegroundGravity(ZS_GRAVITY_START | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_HCENTER | ZS_GRAVITY_BOTTOM);
-    ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.first_form, 10), vv, VIEW_WRAP )->
             setForegroundGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_START | ZS_GRAVITY_VCENTER);
-    ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.first_form, 10), vv, VIEW_WRAP )->
-            setForegroundGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER);
     ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.first_form, 10), vv, VIEW_WRAP )->
             setForegroundGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_HCENTER | ZS_GRAVITY_VCENTER)->setOnClick([this](zView* v, bool) {
         //DLOG("on click1");
@@ -122,9 +117,10 @@ void sshApp::setContent() {
     });
     ll->attach(sl, ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP );
     ll->attach(vw, VIEW_MATCH, VIEW_WRAP)->setOnClick([this](zView* v, bool) {
-        manager->showSoftKeyboard(v->id, true);
     });
+    ll->attach(edt1, ZS_GRAVITY_END, 0, 300, VIEW_WRAP);//->setGravity(ZS_GRAVITY_END);
     ll->attach(prg, ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP );
+    ll->attach(edt2, 400, VIEW_WRAP);
     /*
     //root->attach(img, ZS_GRAVITY_START, 0, VIEW_WRAP, VIEW_WRAP );
     //root->attach(new zViewController(styles_z_acontroller, 0, z.R.integer.acontrol, z.R.string.acontrollerMap), ZS_GRAVITY_END | ZS_GRAVITY_BOTTOM, 0, 150_dp, 150_dp);

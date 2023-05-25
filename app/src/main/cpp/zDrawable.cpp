@@ -103,16 +103,15 @@ int zDrawable::makePatch9(crti& pos, crti& tex, crti& p9) const {
 }
 
 void zDrawable::draw(rti *rect) {
-    static zMatrix t, m; static rti _bound; static float _a;
+    static zMatrix t, m; static rti _bound;
     if(!vertices || !count || !visible) return;
     _bound = (rect ? *rect : bound);
     auto is(!view->isFBO() || index == DRW_FBO);
-//    auto clip(is ? view->getParent()->rclip : view->drawableClip());
     auto clip(view->drawableClip()); auto rv(&manager->screen);
     // определение видимости
     if(texture && clip.isNotEmpty()) {
         // цвет/матрица
-        _a = color.a;
+        auto _a(color.a);
         // установка смещения
         _bound -= *rv;
         ptf offs((float)_bound.x - vertices->x, (float)_bound.y - vertices->y);
@@ -270,30 +269,30 @@ ptf zDrawable::offsetBound() const {
 }
 
 int zDrawable::sizeText(cstr _text, u32 heightText, int lengthText) const {
-    int width(0); auto factor(scaleFactor(heightText, true));
-    while (lengthText-- > 0 && *_text) {
+    int len, width(0); auto factor(scaleFactor(heightText, true));
+    while (lengthText-- > 0 && z_isUTF8(_text)) {
         // определить ширину символа
-        width += texture->widthGlyph(*_text++, factor);
+        width += texture->widthGlyph(z_decodeUTF8(z_charUTF8(_text, &len)), factor);
+        _text += len;
     }
     return width;
 }
 
 int zDrawable::indexOf(cstr _text, u32 heightText, int limitPix, int posPix, bool exact, int *posScreen) const {
-    int wGlyph(0);
-    auto factor(scaleFactor(heightText, true)); auto text(_text - 1);
-    while(*++text) {
+    int wGlyph(0), _count(0), len; auto factor(scaleFactor(heightText, true));
+    while(z_isUTF8(_text)) {
         // определить ширину символа
-        wGlyph = texture->widthGlyph(*text, factor);
+        wGlyph = texture->widthGlyph(z_decodeUTF8(z_charUTF8(_text, &len)), factor);
         // проверить на лимит
         if((posPix + wGlyph) >= limitPix) break;
-        posPix += wGlyph;
+        posPix += wGlyph; _text += len; _count++;
     }
     // определить по ширине символа куда мы ближе
     int delta(0);
-    if(*text) delta = (exact ? ((posPix + (wGlyph / 2)) < limitPix) : 1);
+    if(z_isUTF8(_text)) delta = (exact ? ((posPix + (wGlyph / 2)) < limitPix) : 1);
     posPix += wGlyph * delta;
     if(posScreen) *posScreen = posPix;
-    return (int)(text - _text) + delta;
+    return _count + delta;
 }
 
 float zDrawable::scaleFactor(u32 value, bool text) const {
@@ -302,17 +301,16 @@ float zDrawable::scaleFactor(u32 value, bool text) const {
 }
 
 int zDrawable::indexReverseOf(cstr _text, u32 heightText, int limitPix, int lengthText) const {
-    int posPix(0);
+    int posPix(0), _count(lengthText);
     auto factor(scaleFactor(heightText, true));
-    auto text(_text);
-    while(*text && lengthText-- > 0) {
+    while(z_isUTF8(_text) && lengthText-- > 0) {
         // определить ширину символа
-        auto wGlyph(texture->widthGlyph(*text, factor));
+        auto wGlyph(texture->widthGlyph(z_charUTF8(z_ptrUTF8(_text, lengthText)), factor));
         // проверить на лимит
         if((posPix + wGlyph) >= limitPix) break;
-        posPix += wGlyph; --text;
+        posPix += wGlyph;
     }
-    return (int)(_text - text);
+    return _count - lengthText;
 }
 
 void zDrawable::info() const {

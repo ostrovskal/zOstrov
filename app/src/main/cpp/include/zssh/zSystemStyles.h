@@ -48,6 +48,7 @@ static zStyle styles_z_caret[] = {
 static zStyle styles_z_editbutclear[] = {
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
+	{ Z_FOREGROUND_TILES, z.R.integer.iconEdit },
 	{ Z_TAP, ZS_HOVERED },
 	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_CENTER }
 };
@@ -271,11 +272,13 @@ static zStyle styles_z_edittext[] = {
 	{ Z_TEXT_DISTANCE, 0 },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_PADDING, 0x05050505 },
+	{ Z_IPADDING, 0x05050505 },
 	{ Z_MODE, ZS_EDIT_TEXT },
 	{ Z_TEXT_NOWRAP, true },
 	{ Z_GRAVITY, ZS_GRAVITY_START | ZS_GRAVITY_VCENTER },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_TEXT_TEXT },
-	{ Z_TEXT_SIZE | ZT_END, z.R.dimen.textText }
+	{ Z_TEXT_SIZE, z.R.dimen.textText },
+	{ Z_TEXT_FONT | ZT_END, z.R.drawable.font1 }
 };
 
 static zStyle styles_z_ribbon[] = {

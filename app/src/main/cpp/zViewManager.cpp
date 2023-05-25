@@ -289,7 +289,7 @@ void zViewManager::stateAllViews(u32 action, u8** _ptr, u32* _size) {
         u32 _sizeStates(8);
         for(auto& vs : viewStates) {
             // id, type, countData, string + 1
-            _sizeStates += 8 + vs.string.length() + 1 + 4;
+            _sizeStates += 8 + vs.string.size() + 1 + 4;
             // dataData
             _sizeStates += vs.data.size() * 4;
         }
@@ -301,8 +301,8 @@ void zViewManager::stateAllViews(u32 action, u8** _ptr, u32* _size) {
         dwordLE(&_bufStates, viewStates.size());
         for(auto& vs : viewStates) {
             dwordLE(&_bufStates, vs.id); dwordLE(&_bufStates, vs.type);
-            wordLE(&_bufStates, vs.data.size() * 4); wordLE(&_bufStates, vs.string.length() + 1);
-            z_memcpy(&_bufStates, vs.string, vs.string.length() + 1);
+            wordLE(&_bufStates, vs.data.size() * 4); wordLE(&_bufStates, vs.string.size() + 1);
+            z_memcpy(&_bufStates, vs.string, vs.string.size() + 1);
             z_memcpy(&_bufStates, vs.data.get_data(), vs.data.size() * 4);
         }
         viewStates.free();
