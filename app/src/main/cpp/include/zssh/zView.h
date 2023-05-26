@@ -110,8 +110,6 @@ public:
     virtual void post(int what, u64 millis, int arg);
     // требование фокуса
     virtual void requestFocus();
-    // уведомление адаптера
-//    virtual void notifyAdapter(zAdapter* adapter) { }
     // уведомление владельца
     virtual void notifyOwner(int what, zView *view, int arg) { }
     // фоновая обработка
@@ -143,6 +141,8 @@ public:
     bool isEnabled() const { return !(status & ZS_DISABLED); }
     // вернуть признак видимости
     bool isVisibled() const { return (status & ZS_VISIBLED); }
+    // вернуть признак видимости
+    bool isDestroy() const { return (status & ZS_DESTROY); }
     // вернуть признак выделения
     bool isChecked() const { return (status & ZS_CHECKED); }
     // вернуть признак FBO

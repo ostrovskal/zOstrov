@@ -13,7 +13,7 @@ public:
     // уведомление адаптера
     virtual void notifyAdapter(zAdapter* adapter) override;
     // сохранение/восстановление
-    virtual void stateView(VIEW_STATE &state, bool save, int &index) override;
+    virtual void stateView(STATE &state, bool save, int &index) override;
     // прокрутить список
     virtual bool scrolling(int _delta) override;
     // сброс

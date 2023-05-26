@@ -14,18 +14,8 @@ zViewButton::zViewButton(zStyle *_styles, i32 _id, u32 _text, i32 _icon) : zView
 
 void zViewButton::onInit(bool _theme) {
     zViewText::onInit(_theme);
-    zParamDrawable ic; ic.tiles = icon;
-    styles->enumerate([this, &ic, _theme](u32 attr) {
-        auto v(&zTheme::value); attr |= _theme * ZTT_THM;
-        switch(attr) {
-            case Z_ICON:         ic.texture  = v->u; break;
-            case Z_ICON_COLOR:   ic.color    = v->u; break;
-            case Z_ICON_SCALE:   ic.scale    = v->f; break;
-            case Z_ICON_GRAVITY: setIconGravity(v->u); icGravity &= ~ZS_SCALE_MASK; icGravity |= (v->u & ZS_SCALE_MASK); break;
-        }
-    });
+    drw[DRW_ICON]->tile = icon;
     fkGravity = (fkGravity & ZS_SCALE_MASK) | ZS_GRAVITY_CENTER;
-    setDrawable(&ic, DRW_ICON);
 }
 
 void zViewButton::onLayout(crti &position, bool changed) {

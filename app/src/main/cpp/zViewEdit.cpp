@@ -73,7 +73,6 @@ zViewEdit::zViewEdit(zStyle *_stl, i32 _id, u32 _hint) : zViewText(_stl, _id, 0)
     if(_hint) hintText = theme->findString(_hint);
     minMaxSize.x    = z_dp(z.R.dimen.editMinWidth);
     minMaxSize.w    = z_dp(z.R.dimen.editMinHeight);
-    but             = new zViewClear(this);
 }
 
 zViewEdit::~zViewEdit() {
@@ -112,12 +111,16 @@ void zViewEdit::onInit(bool _theme) {
     setFilter((int)styles->_int(Z_MODE, ZS_EDIT_TEXT));
     zParamDrawable ip(z.R.drawable.zssh, 0xffffffff, z.R.integer.iconEdit, 0, 1.0f);
     setDrawable(&ip, DRW_ICON); setIconGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER);
-    but->onInit(false);
+    // создать кнопку, если есть иконка
+    if(drw[DRW_ICON]->isValid()) {
+        but = new zViewClear(this);
+        but->onInit(false);
+    }
 }
 
 void zViewEdit::onDraw() {
     zViewText::onDraw();
-    but->draw();
+    if(but) but->draw();
 }
 
 void zViewEdit::insertText(int pos, cstr _text) {
@@ -159,7 +162,7 @@ i32 zViewEdit::keyEvent(int key, bool sysKey) {
 
 i32 zViewEdit::onTouchEvent(zTouch *touch) {
     i32 result(touch->isCaptured());
-    auto isButton(but->rview.contains((int)touch->cpt.x, (int)touch->cpt.y));
+    auto isButton(but && but->rview.contains((int) touch->cpt.x, (int) touch->cpt.y));
     if(isButton) {
         // вызываем событие касания дочернего
         result = but->onEvent(touch);
@@ -179,7 +182,7 @@ i32 zViewEdit::onTouchEvent(zTouch *touch) {
         // обновить каретку
         updateCaret();
     } else isButton = true;
-    if(isButton) {
+    if(isButton && but) {
         but->updateStatus(ZS_TAP, result == TOUCH_FINISH);
         invalidate();
     }
@@ -193,17 +196,12 @@ void zViewEdit::correctCaretPosition(int _index) {
         getStringFromCache(0, bound, pos);
         caretScreen.x = pos.x + positionFromIndex(_index);
     } else {
+        caretScreen.x = rclient.x; auto x(ipad.x);
         switch(gravity & ZS_GRAVITY_HORZ) {
-            case ZS_GRAVITY_HCENTER:
-                caretScreen.x = rclient.x + wmax / 2;
-                break;
-            case ZS_GRAVITY_END:
-                caretScreen.x = rclient.x + wmax;
-                break;
-            default:
-                caretScreen.x = rclient.x + ipad.x;
-                break;
+            case ZS_GRAVITY_HCENTER: x = wmax / 2; break;
+            case ZS_GRAVITY_END:     x = wmax; break;
         }
+        caretScreen.x += x;
     }
 }
 
@@ -257,7 +255,7 @@ void zViewEdit::changeTheme() {
 
 void zViewEdit::onLayout(crti &position, bool changed) {
     zViewText::onLayout(position, changed);
-    but->layout(rti(rclient.x + wmax + ipad.x, rclient.y + (rclient.h - but->rview.h) / 2, but->rview.w, but->rview.h));
+    if(but) but->layout(rti(rclient.x + wmax + ipad.x, rclient.y + (rclient.h - but->rview.h) / 2, but->rview.w, but->rview.h));
     if(isFocus()) {
         correctCaretPosition(caretIndex);
         updateCaret();
@@ -267,7 +265,7 @@ void zViewEdit::onLayout(crti &position, bool changed) {
 void zViewEdit::onMeasure(cszm& spec) {
     zViewText::onMeasure(spec);
     auto rh(rclient.h - ipad.extent(true));
-    but->measure(szm(zMeasure(MEASURE_EXACT, rh), zMeasure(MEASURE_EXACT, rh)));
+    if(but) but->measure(szm(zMeasure(MEASURE_EXACT, rh), zMeasure(MEASURE_EXACT, rh))); else rh = 0;
     wmax = rclient.w - rh - ipad.extent(false);
 }
 

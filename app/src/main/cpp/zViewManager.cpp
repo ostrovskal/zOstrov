@@ -124,6 +124,7 @@ int zViewManager::keyEvent(int key) {
 bool zViewManager::displayInit() {
     if(!zGL::instance()->init(window))
         return false;
+    //eglSwapInterval(0);
     // шейдеры
     program  = new zShader(new zShader(vertShader, GL_VERTEX_SHADER), new zShader(fragShader, GL_FRAGMENT_SHADER));
     // параметры шейдеров
@@ -236,11 +237,6 @@ void zViewManager::drawViews() {
     zView::fbo = nullptr;
     common->draw();
     zGL::instance()->swap();
-    // удалить форму
-    if(_form) {
-         root->remove(_form);
-         _form = nullptr;
-    }
 #ifndef NDEBUG
     if(debug && showTri) {
         if(oldTri != countVertices) {

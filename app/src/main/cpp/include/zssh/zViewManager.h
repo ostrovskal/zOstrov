@@ -211,8 +211,6 @@ private:
     zShader* program{nullptr};
     // переменные в шейдере
     i32 shaderVars[7]{};
-    // форма для удаления
-    zViewForm* _form{nullptr};
 };
 
 // менеджер представлений

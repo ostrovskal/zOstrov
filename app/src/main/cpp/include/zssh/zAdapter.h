@@ -27,6 +27,7 @@ public:
 	virtual zView* make(zViewGroup* parent) override;
 };
 
+// Фабрика для создания элемента меню
 class zAdapterFabricMenuItem : public zAdapterFabric {
 public:
 	zAdapterFabricMenuItem(zStyle* _styles) : zAdapterFabric(_styles) { }
@@ -41,7 +42,7 @@ public:
 	virtual ~zAdapter() { owners.free(); }
 	// зарегистрировать владельца
 	virtual void registerOwner(zView* view);
-	// отменить регистрирацию владельца
+	// отменить регистрацию владельца
 	virtual void unregisterOwner(zView* view);
 	// вернуть количество элеметов
 	virtual int getCount() const { return 0; }
@@ -89,7 +90,7 @@ public:
 	// добавить элемент
 	virtual void add(const T& t) { objects += t; notifyOwners(); }
 	// установка всех элементов сразу
-	virtual void addAll(const zArray<T>& objs){ objects = objs; notifyOwners(); }
+	virtual void addAll(const zArray<T>& objs) { objects = objs; notifyOwners(); }
 	// фабрика создания представления
 	zAdapterFabric* fabric{nullptr};
 protected:

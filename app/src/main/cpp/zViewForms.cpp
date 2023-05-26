@@ -74,7 +74,7 @@ void zViewForm::close(int code) {
 	if(onClose) ok = onClose(this, code);
 	if(ok) {
 		updateStatus(ZS_VISIBLED, false);
-		if(mode & ZS_FORM_TERMINATE) manager->_form = this;
+		updateStatus(ZS_DESTROY, (mode & ZS_FORM_TERMINATE) != 0);
 	}
 }
 

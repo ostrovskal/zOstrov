@@ -32,13 +32,6 @@ void zViewText::setText(const zStringUTF8& _text, bool force) {
         realText = _text;
         clearCacheSpans(false);
         requestLayout();
-/*
-        if(rclient.isNotEmpty()) {
-            if(abs(textWrap(_text, measureSpec.w.size()).w - drw[DRW_TXT]->bound.w) > drw[DRW_TXT]->bound.w / 2)
-            else
-                invalidate();
-        }
-*/
     }
 }
 
@@ -299,8 +292,8 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
 
 void zViewText::onInit(bool _theme) {
     zView::onInit(_theme);
-    zParamDrawable txt, tbk;
-    styles->enumerate([this, &txt, &tbk, _theme](u32 attr) {
+    zParamDrawable txt, tbk, ic;
+    styles->enumerate([this, &ic, &txt, &tbk, _theme](u32 attr) {
         auto v(&zTheme::value); auto val(v->u);
         attr |= _theme * ZTT_THM;
         switch(attr) {
@@ -316,6 +309,10 @@ void zViewText::onInit(bool _theme) {
             case Z_TEXT_BACKGROUND:         tbk.texture = val; break;
             case Z_TEXT_BACKGROUND_COLOR:   tbk.color   = val; break;
             case Z_TEXT_BACKGROUND_TILES:   tbk.tiles   = val; break;
+            case Z_ICON:                    ic.texture  = v->u; break;
+            case Z_ICON_COLOR:              ic.color    = v->u; break;
+            case Z_ICON_SCALE:              ic.scale    = v->f; break;
+            case Z_ICON_GRAVITY:            setIconGravity(v->u); icGravity &= ~ZS_SCALE_MASK; icGravity |= (v->u & ZS_SCALE_MASK); break;
         }
     });
     // сброс краски
@@ -331,6 +328,8 @@ void zViewText::onInit(bool _theme) {
         dr->init(tbk);
         defPaint->bkColor = dr->color.toARGB();
     }
+    // иконка
+    setDrawable(&ic, DRW_ICON);
 }
 
 void zViewText::setWrap(bool set) {

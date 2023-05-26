@@ -105,6 +105,7 @@ void zView::drawDebug() {
 }
 
 void zView::draw() {
+    if(isDestroy()) { getParent()->remove(this); return; }
     if(isVisibled()) {
         // рисуем
         if(testFlags(ZS_DIRTY_LAYER)) {

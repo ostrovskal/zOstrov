@@ -5,6 +5,7 @@
 #pragma once
 
 #include "zView.h"
+#include "zAdapter.h"
 
 // группа представлений
 class zViewGroup : public zView {
@@ -37,14 +38,16 @@ public:
     virtual void changeTheme() override;
     // прокрутка содержимого
     virtual bool scrolling(int _delta) { return false; }
-    // сдвинуть дочерние
-    void offsetChildren(int delta, bool vert);
     // проверка на пересечение с дочерними
     virtual bool intersectChildren(int x, int y) const;
     // установка ориентации
     virtual void setOrientation(bool _vert) { updateStatus(ZS_VORIENTATION, ZS_VORIENTATION, _vert); requestLayout(); }
+    // уведомление адаптера
+    virtual void notifyAdapter(zAdapter* adapter) { }
     // отрисовка
     virtual void draw() override;
+    // сдвинуть дочерние
+    void offsetChildren(int delta, bool vert);
     // вернуть системное представление
     zView* sysView() const;
     // привязка дочернего
