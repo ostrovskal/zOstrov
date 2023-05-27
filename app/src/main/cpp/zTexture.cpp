@@ -22,6 +22,14 @@ void zTexture::enableFilter(bool set) const {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST + set);
 }
 
+bool zTexture::load(const zStringUTF8& path) {
+    return false;
+}
+
+bool zTexture::save(const zStringUTF8& path) {
+    return false;
+}
+
 void zTexture::makeTexture(u8* ptr) {
     if(!ptr) { release(); return; }
     int type(GL_RGBA), ww, hh;

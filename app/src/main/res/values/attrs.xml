@@ -155,6 +155,7 @@
         <attr name="icon" format="string" />
         <attr name="iconColor" format="color|string" />
         <attr name="iconScale" format="float" />
+        <attr name="iconTiles" format="integer|string" />
         <!-- чарт -->
         <attr name="chartFlags" format="enum">
             <enum name="stretch" value="1" />

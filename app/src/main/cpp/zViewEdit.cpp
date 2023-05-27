@@ -105,15 +105,13 @@ void zViewEdit::onInit(bool _theme) {
     status          |= ZS_NOWRAP | ZS_FOCUSABLE_IN_TOUCHABLE;
     colorHint       = styles->_int(Z_COLOR_HINT_TEXT, 0xff505050);
     setFilter(styles->_int(Z_MODE, ZS_EDIT_TEXT));
-/*
-    zParamDrawable ip(z.R.drawable.zssh, 0xffffffff, z.R.integer.iconEdit, 0, 1.0f);
-    setDrawable(&ip, DRW_ICON);
-    setIconGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER);
-*/
     // создать кнопку, если есть иконка
     if(drw[DRW_ICON]->isValid()) {
-        but = new zViewClear(this);
-        but->onInit(false);
+        if(!but) {
+            but = new zViewClear(this);
+            but->onInit(false);
+            but->drw[DRW_FK]->tile = drw[DRW_ICON]->tile;
+        }
     }
 }
 
@@ -184,7 +182,7 @@ void zViewEdit::correctCaretPosition(int _index) {
         getStringFromCache(0, bound, pos);
         caretScreen.x = pos.x + positionFromIndex(_index);
     } else {
-        caretScreen.x = rclient.x; auto x(ipad.x);
+        caretScreen.x = rclient.x + ipad.x; auto x(0);
         switch(gravity & ZS_GRAVITY_HORZ) {
             case ZS_GRAVITY_HCENTER: x = wmax / 2; break;
             case ZS_GRAVITY_END:     x = wmax; break;
@@ -243,7 +241,7 @@ void zViewEdit::changeTheme() {
 
 void zViewEdit::onLayout(crti &position, bool changed) {
     zViewText::onLayout(position, changed);
-    if(but) but->layout(rti(rclient.x + wmax + ipad.x, rclient.y + (rclient.h - but->rview.h) / 2, but->rview.w, but->rview.h));
+    if(but) but->layout(rti(rclient.x + wmax + distance + ipad.x, rclient.y + (rclient.h - but->rview.h) / 2, but->rview.w, but->rview.h));
     if(isFocus()) {
         correctCaretPosition(caretIndex);
         updateCaret();
@@ -252,9 +250,9 @@ void zViewEdit::onLayout(crti &position, bool changed) {
 
 void zViewEdit::onMeasure(cszm& spec) {
     zViewText::onMeasure(spec);
-    auto rh(rclient.h - ipad.extent(true));
-    if(but) but->measure(szm(zMeasure(MEASURE_EXACT, rh), zMeasure(MEASURE_EXACT, rh))); else rh = 0;
-    wmax = rclient.w - rh - ipad.extent(false);
+    auto butW(icSize.w);
+    if(but) but->measure(szm(zMeasure(MEASURE_EXACT, butW), zMeasure(MEASURE_EXACT, icSize.h))); else butW = 0;
+    wmax = rclient.w - distance - butW - ipad.extent(false);
 }
 
 void zViewEdit::clearText() {

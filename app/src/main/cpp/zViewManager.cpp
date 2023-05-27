@@ -177,6 +177,14 @@ void zViewManager::redrawNativeWindow() {
     DLOG("APP_CMD_WINDOW_REDRAW_NEEDED");
 }
 
+void zViewManager::prepareRender(zVertex2D* vertices, crti& scissor, const zMatrix& wmtx) {
+    glVertexAttribPointer(shaderVars[ZSH_APOS], 2, GL_FLOAT, GL_FALSE, sizeof(zVertex2D), &vertices->x);
+    glVertexAttribPointer(shaderVars[ZSH_ATEX], 2, GL_FLOAT, GL_FALSE, sizeof(zVertex2D), &vertices->u);
+    //glDisable(GL_SCISSOR_TEST);
+    glScissor(scissor.x, zView::fbo ? scissor.y : (screen.h - scissor.extent(true)), scissor.w, scissor.h);
+    glUniformMatrix4fv(shaderVars[ZSH_WMTX], 1, false, wmtx);
+}
+
 void zViewManager::setMainMatrix(int ww, int hh, bool invert) {
     static zMatrix mtx;
     if(invert) {
@@ -404,14 +412,6 @@ void zViewManager::setTheme(zStyle* _styles, zResource** _user, zStyles* _user_s
             status &= ~Z_CHANGE_THEME;
         }
     }
-}
-
-void zViewManager::prepareRender(zVertex2D* vertices, crti& scissor, const zMatrix& wmtx) {
-    glVertexAttribPointer(shaderVars[ZSH_APOS], 2, GL_FLOAT, GL_FALSE, sizeof(zVertex2D), &vertices->x);
-    glVertexAttribPointer(shaderVars[ZSH_ATEX], 2, GL_FLOAT, GL_FALSE, sizeof(zVertex2D), &vertices->u);
-    //glDisable(GL_SCISSOR_TEST);
-    glScissor(scissor.x, zView::fbo ? scissor.y : (screen.h - scissor.extent(true)), scissor.w, scissor.h);
-    glUniformMatrix4fv(shaderVars[ZSH_WMTX], 1, false, wmtx);
 }
 
 void zViewManager::setColorFilter(zView* view, const zColor& _color) {

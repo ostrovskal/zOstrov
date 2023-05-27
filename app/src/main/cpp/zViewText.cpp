@@ -60,7 +60,8 @@ void zViewText::onMeasure(cszm& spec) {
     auto fkSize(drw[DRW_FK]->resolveSize(widthSize, heightSize, fkGravity));
     if(drw[DRW_ICON]->isValid()) icSize = drw[DRW_ICON]->resolveSize(fkSize.w, fkSize.h, icGravity);
     fkW = fkSize.w + wpad; fkH = fkSize.h + hpad;
-    auto icW(icSize.w + wpad), icH(icSize.h + hpad);
+    auto icW(icSize.w + ipad.extent(false)), icH(icSize.h + ipad.extent(true));
+//    auto icW(icSize.w), icH(icSize.h);
     // разбить текст и определить габариты текста в пикселях
     auto offsW(distance + (fkg * fkSize.w) + (icg * icSize.w));
     auto wh(textWrap(getDrawText(false), widthSize - (ipad.extent(false) + offsW)));
@@ -127,7 +128,7 @@ void zViewText::onLayout(crti &position, bool changed) {
         // позиция текста
         if(textCache.isNotEmpty()) {
             auto r(rclient - szi(ipad.extent(false), ipad.extent(true)));
-            if((drw[DRW_TXT]->bound.w + _width) > r.w) {
+            if((drw[DRW_TXT]->bound.w + _width) > rclient.w) {
                 _width *= ((_grav & ZS_GRAVITY_HORZ) == ZS_GRAVITY_START) * 2 - 1;
             } else {
                 r.w -= _width;
@@ -309,8 +310,9 @@ void zViewText::onInit(bool _theme) {
             case Z_TEXT_BACKGROUND:         tbk.texture = val; break;
             case Z_TEXT_BACKGROUND_COLOR:   tbk.color   = val; break;
             case Z_TEXT_BACKGROUND_TILES:   tbk.tiles   = val; break;
-            case Z_ICON:                    ic.texture  = v->u; break;
-            case Z_ICON_COLOR:              ic.color    = v->u; break;
+            case Z_ICON:                    ic.texture  = val; break;
+            case Z_ICON_COLOR:              ic.color    = val; break;
+            case Z_ICON_TILES:              ic.tiles    = val; break;
             case Z_ICON_SCALE:              ic.scale    = v->f; break;
             case Z_ICON_GRAVITY:            setIconGravity(v->u); icGravity &= ~ZS_SCALE_MASK; icGravity |= (v->u & ZS_SCALE_MASK); break;
         }

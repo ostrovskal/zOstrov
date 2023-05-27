@@ -28,6 +28,10 @@ public:
     ~zTexture() { SAFE_DELETE(tiles); count = 0; release(); }
     // создать текстуру
     void makeTexture(u8* ptr);
+    // загрузить(tga, png, jpg);
+    bool load(const zStringUTF8& path);
+    // сохранить(tga)
+    bool save(const zStringUTF8& path);
     // вернуть количество тайлов
     int getCountTiles() const { return count; }
     // установить/сбросить целевую текстуру

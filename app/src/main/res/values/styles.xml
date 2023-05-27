@@ -248,7 +248,11 @@
         <item name="foreground">@drawable/zssh</item>
         <item name="fkTiles">@integer/edit</item>
         <item name="fkScale">0.75</item>
-        <item name="textDistance">0dp</item>
+        <item name="iconGravity">end|center_vertical</item>
+        <item name="icon">@drawable/zssh</item>
+        <item name="iconTiles">@integer/iconEdit</item>
+        <item name="iconScale">0.75</item>
+        <item name="textDistance">2dp</item>
         <item name="fkGravity">center</item>
         <item name="pad">5dp</item>
         <item name="ipad">5dp</item>
