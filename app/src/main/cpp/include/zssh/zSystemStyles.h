@@ -278,7 +278,7 @@ static zStyle styles_z_edittext[] = {
 	{ Z_PADDING, 0x05050505 },
 	{ Z_IPADDING, 0x05050505 },
 	{ Z_MODE, ZS_EDIT_TEXT },
-	{ Z_TEXT_NOWRAP, true },
+	{ Z_TEXT_NOWRAP, false },
 	{ Z_GRAVITY, ZS_GRAVITY_START | ZS_GRAVITY_VCENTER },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_TEXT_TEXT },
 	{ Z_TEXT_SIZE, z.R.dimen.textText },

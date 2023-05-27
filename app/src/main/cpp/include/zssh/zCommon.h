@@ -16,7 +16,8 @@
 
 constexpr int MSG_ALL              = 0;
 constexpr int MSG_ANIM             = 1;
-//constexpr int MSG_
+constexpr int MSG_EDIT             = 2;
+constexpr int MSG_EDIT_FINISH      = 3;
 
 constexpr int VIEW_MATCH		   = -1;
 constexpr int VIEW_WRAP			   = -2;

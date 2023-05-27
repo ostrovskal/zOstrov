@@ -94,15 +94,39 @@ void zViewEdit::setFilter(u32 inputMode, zFilterEdit* _filter) {
     filter = _filter;
 }
 
-int zViewEdit::indexFromPosition(int inScreen, bool exact, int *outScreen) {
-    pti pos;
-    getStringFromCache(0, &drw[DRW_TXT]->bound, pos);
-    return drw[DRW_TXT]->indexOf(getDrawText(true), getTextSize(), inScreen, pos.x, exact, outScreen);
+pti zViewEdit::positionFromIndex(int _indexText) {
+    auto bound(&drw[DRW_TXT]->bound); pti pos;
+    auto x(bound->x), y(bound->y), i(0); _indexText -= visibleIndex;
+    // определить вертикальную позицию
+    for(auto& c : textCache) {
+        auto idx(_indexText - c->text.count());
+        if(idx <= 0) {
+            getStringFromCache(i, bound, pos);
+            x = pos.x + drw[DRW_TXT]->sizeText(z_ptrUTF8(filter->getText(c->text), visibleIndex), c->size, _indexText);
+            break;
+        }
+        _indexText = idx; y += c->size; i++;
+    }
+    return {x, y};
+}
+
+int zViewEdit::indexFromPosition(cpti& screen, bool exact) {
+    auto bound(&drw[DRW_TXT]->bound); pti pos(0, bound->y);
+    auto idx(0), i(0);
+    for(auto& c : textCache) {
+        if(screen.y < (pos.y + c->size)) {
+            getStringFromCache(i, bound, pos);
+            idx += drw[DRW_TXT]->indexOf(c->text, c->size, screen.x, pos.x, exact, &pos.x);
+            break;
+        }
+        pos.y += c->size; idx += c->text.count(); i++;
+    }
+    return idx;
 }
 
 void zViewEdit::onInit(bool _theme) {
     zViewText::onInit(_theme);
-    status          |= ZS_NOWRAP | ZS_FOCUSABLE_IN_TOUCHABLE;
+    status          |= ZS_FOCUSABLE_IN_TOUCHABLE;
     colorHint       = styles->_int(Z_COLOR_HINT_TEXT, 0xff505050);
     setFilter(styles->_int(Z_MODE, ZS_EDIT_TEXT));
     // создать кнопку, если есть иконка
@@ -129,7 +153,7 @@ i32 zViewEdit::keyEvent(int key, bool sysKey) {
     }
     if(key == '\n') {
         // enter
-        updateText(0);
+        updateText(MSG_EDIT_FINISH);
         manager->changeFocus(nullptr);
     } else {
         auto caretPos(caretIndex);
@@ -141,7 +165,7 @@ i32 zViewEdit::keyEvent(int key, bool sysKey) {
             insertText(visibleIndex + caretPos++, (char *) &key);
         }
         if(caretPos != caretIndex) {
-            updateText(caretIndex);
+            updateText(MSG_EDIT);
             caretIndex = correct(caretPos);
             updateCaret();
         }
@@ -159,7 +183,7 @@ i32 zViewEdit::onTouchEvent(zTouch *touch) {
     }
     if(result == TOUCH_FINISH) {
         // определить позицию каретки в тексте и на экране
-        auto pos(indexFromPosition((int)round(touch->cpt.x), true, &caretScreen.x));
+        auto pos(indexFromPosition(pti(touch->cpt.x, touch->cpt.y), true));
         if(pos != caretIndex) {
             if(onChangeCaretPos) onChangeCaretPos(this, pos);
             caretIndex = pos;
@@ -176,12 +200,8 @@ i32 zViewEdit::onTouchEvent(zTouch *touch) {
 }
 
 void zViewEdit::correctCaretPosition(int _index) {
-    if(realText.isNotEmpty()) {
-        pti pos;
-        auto bound(&drw[DRW_TXT]->bound);
-        getStringFromCache(0, bound, pos);
-        caretScreen.x = pos.x + positionFromIndex(_index);
-    } else {
+    caretScreen = positionFromIndex(_index);
+    if(realText.isEmpty()) {
         caretScreen.x = rclient.x + ipad.x; auto x(0);
         switch(gravity & ZS_GRAVITY_HORZ) {
             case ZS_GRAVITY_HCENTER: x = wmax / 2; break;
@@ -199,31 +219,38 @@ void zViewEdit::stateView(STATE &state, bool save, int &index) {
     } else {
         caretIndex = (int)state.data[index++];
         setText(state.string, true);
-        updateText(0);
-//        post(MSG_EDIT, nullptr, 10);
+        updateText(MSG_EDIT);
     }
 }
 
 void zViewEdit::updateCaret() {
     auto caret(manager->getCaret());
-    caret->update(this, caretScreen.x - rclient.x, ipad.y, rclient.h - ipad.extent(true));
+    caret->update(this, caretScreen.x - rclient.x, caretScreen.y - rclient.y, getTextSize());
 }
 
 int zViewEdit::correct(int _index) {
-    int idx(0), size(getTextSize());
-    // длина видимого текста в пикселях
-    auto widthText(drw[DRW_TXT]->sizeText(getDrawText(true), size, INT_MAX));
-    if(widthText >= wmax) {
-        // сдвинуть текст вперед на величину, которая больше макс. ширины текста
-        idx = drw[DRW_TXT]->indexOf(getDrawText(true), size, widthText, wmax);
-    } else if(visibleIndex > 0) {
-        // сдвинуть текст назад на величину разницы макс. ширины текста и реальной ширины
-        idx = -drw[DRW_TXT]->indexReverseOf(filter->getText(realText), size, wmax - widthText, visibleIndex);
+    bool update(!isWrap());
+    if(!update) {
+        int idx(0), size(getTextSize());
+        // длина видимого текста в пикселях
+        auto widthText(drw[DRW_TXT]->sizeText(getDrawText(true), size, INT_MAX));
+        if(widthText >= wmax) {
+            // сдвинуть текст вперед на величину, которая больше макс. ширины текста
+            idx = drw[DRW_TXT]->indexOf(getDrawText(true), size, widthText, wmax);
+        } else if(visibleIndex > 0) {
+            // сдвинуть текст назад на величину разницы макс. ширины текста и реальной ширины
+            idx = -drw[DRW_TXT]->indexReverseOf(filter->getText(realText), size, wmax - widthText, visibleIndex);
+        }
+        if(idx) {
+            // корректировать начальный индекс текста/позицию каретки
+            visibleIndex += idx; _index -= idx;
+            update = true;
+        }
+    } else {
+        oldPos.empty();
     }
-    if(idx) {
-        // корректировать начальный индекс текста/позицию каретки
-        visibleIndex += idx; _index -= idx;
-        // установить новый текст(при возможности без обновления макета)
+    if(update) {
+        // установить новый текст
         setText(realText, true);
         // получить новую позицию каретки на экране
         correctCaretPosition(_index);
@@ -260,7 +287,7 @@ void zViewEdit::clearText() {
         setText("", true);
         caretIndex = correct(0);
         visibleIndex = 0; updateCaret();
-//        post(MSG_EDIT, nullptr, 100);
+        updateText(MSG_EDIT);
     }
 }
 

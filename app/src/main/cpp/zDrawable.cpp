@@ -27,23 +27,22 @@ void zDrawable::make(i32 _count) {
     count = _count;
 }
 
-int zDrawable::makeQuad(crti& pos, crti& tex, zVertex2D* v, int _offs) const {
-    auto _tex(texture->getReverseSize());
-    auto offs((float)_offs);
-    auto px1((float)pos.x), py1((float)pos.y), px2((float)px1 + (float)pos.w), py2((float)py1 + (float)pos.h);
+int zDrawable::makeQuad(crti& pos, crti& tex, zVertex2D* v, int _italic, bool _strip) const {
+    auto _tex(texture->getReverseSize()); auto offs((float)_italic);
+    auto px1((float)pos.x), py1((float)pos.y), px2(px1 + (float)pos.w), py2(py1 + (float)pos.h);
     auto tx1((float)tex.x * _tex.w), ty1((float)tex.y * _tex.h), tx2((float)tex.w * _tex.w), ty2((float)tex.h * _tex.h);
     v->x = px1 + offs;  v->y = py1; v->u = tx1; v->v = ty1; v++;
     v->x = px1;         v->y = py2; v->u = tx1; v->v = ty2; v++;
     v->x = px2 + offs;  v->y = py1; v->u = tx2; v->v = ty1; v++;
     v->x = px2;         v->y = py2; v->u = tx2; v->v = ty2;
-    return 4;
+    if(_strip) { v++; v->x = px2;  v->y = py2; }
+    return 4 + _strip;
 }
 
 int zDrawable::makeTriangle(crti& pos, crti& tex, zVertex2D* v, int _italic) const {
     auto _tex(texture->getReverseSize()); auto offs((float)_italic);
-    auto tw(_tex.w), th(_tex.h);
     auto px1((float)pos.x), py1((float)pos.y), px2((float)px1 + (float)pos.w), py2((float)py1 + (float)pos.h);
-    auto tx1((float)tex.x * tw), ty1((float)tex.y * th), tx2((float)tex.w * tw), ty2((float)tex.h * th);
+    auto tx1((float)tex.x * _tex.w), ty1((float)tex.y * _tex.h), tx2((float)tex.w * _tex.w), ty2((float)tex.h * _tex.h);
     v->x = px1 + offs;  v->y = py1; v->u = tx1; v->v = ty1; v++;
     v->x = px1;         v->y = py2; v->u = tx1; v->v = ty2; v++;
     v->x = px2 + offs;  v->y = py1; v->u = tx2; v->v = ty1; v++;
@@ -104,26 +103,26 @@ int zDrawable::makePatch9(crti& pos, crti& tex, crti& p9) const {
 
 void zDrawable::draw(rti *rect) {
     static zMatrix t, m; static rti _bound;
-    if(!vertices || !count || !visible) return;
-    _bound = (rect ? *rect : bound);
-    auto is(!view->isFBO() || index == DRW_FBO);
-    auto clip(view->drawableClip()); auto rv(&manager->screen);
-    // определение видимости
-    if(texture && clip.isNotEmpty()) {
-        // цвет/матрица
-        auto _a(color.a);
-        // установка смещения
-        _bound -= *rv;
-        ptf offs((float)_bound.x - vertices->x, (float)_bound.y - vertices->y);
-        if(is) {
-            offs.x += view->trans.x; offs.y += view->trans.y;
-            m = view->mtx; color.a *= view->alpha;
-        } else {
-            m.identity();
+    if(vertices && visible) {
+        auto clip(view->drawableClip());
+        // определение видимости
+        if(texture && clip.isNotEmpty()) {
+            // цвет
+            auto _a(color.a);
+            // установка смещения
+            _bound = (rect ? *rect : bound) - manager->screen;
+            ptf offs((float)_bound.x - vertices->x, (float)_bound.y - vertices->y);
+            auto fbo(!view->isFBO() || index == DRW_FBO);
+            if(fbo) {
+                offs.x += view->trans.x; offs.y += view->trans.y;
+                m = view->mtx; color.a *= view->alpha;
+            } else {
+                m.identity();
+            }
+            m *= t.translate(offs.x, offs.y, 1);
+            drawCommon(clip, m, fbo);
+            color.a = _a;
         }
-        m *= t.translate(offs.x, offs.y, 1);
-        drawCommon(clip, m, is);
-        color.a = _a;
     }
 }
 
@@ -241,7 +240,8 @@ int zDrawable::makeText(cstr text, int len, zTextPaint* paint) {
         if(ch == ' ') cw = 10.0f;
         _pos.set(stx, sty + (int)round((float)(glyph[1] - offsetY) * factor), cw, (int)round((float)glyph[3] * factor));
         // нарисовать
-        idx += makeTriangle(_pos, tex, &vertices[idx], paint->italic);
+//        idx += makeTriangle(_pos, tex, &vertices[idx], paint->italic);
+        idx += makeQuad(_pos, tex, &vertices[idx], paint->italic, true);
         stx += cw;
     }
     auto glyph(texture->paramGlyph('_' + offsetBold));
@@ -251,13 +251,15 @@ int zDrawable::makeText(cstr text, int len, zTextPaint* paint) {
     // strike
     if(style & ZS_TEXT_STRIKE) {
         _pos.set(0, 1 + ht / 2, stx - 2, (int)(2.0f * factor));
-        idx += makeTriangle(_pos, tex, &vertices[idx], 0);
+        //idx += makeTriangle(_pos, tex, &vertices[idx], 0);
+        idx += makeQuad(_pos, tex, &vertices[idx], 0, true);
     }
     // underline
     if(style & ZS_TEXT_UNDERLINE) {
         auto bs((int)trunc((float)texture->descent * factor + 0.5f));
         _pos.set(0, ht - bs, stx - 2, (int)(2.0f * factor));
-        idx += makeTriangle(_pos, tex, &vertices[idx], 0);
+//        idx += makeTriangle(_pos, tex, &vertices[idx], 0);
+        idx += makeQuad(_pos, tex, &vertices[idx], 0, true);
     }
     count = idx;
     return stx;

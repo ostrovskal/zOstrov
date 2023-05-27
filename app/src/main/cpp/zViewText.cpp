@@ -23,10 +23,6 @@ zViewText::~zViewText() {
     SAFE_DELETE(dr);
 }
 
-void zViewText::setText(u32 _text) {
-    setText(theme->findString(_text), false);
-}
-
 void zViewText::setText(const zStringUTF8& _text, bool force) {
     if(force || realText != _text) {
         realText = _text;
@@ -60,10 +56,9 @@ void zViewText::onMeasure(cszm& spec) {
     auto fkSize(drw[DRW_FK]->resolveSize(widthSize, heightSize, fkGravity));
     if(drw[DRW_ICON]->isValid()) icSize = drw[DRW_ICON]->resolveSize(fkSize.w, fkSize.h, icGravity);
     fkW = fkSize.w + wpad; fkH = fkSize.h + hpad;
-    auto icW(icSize.w + ipad.extent(false)), icH(icSize.h + ipad.extent(true));
-//    auto icW(icSize.w), icH(icSize.h);
+    auto icW(icSize.w + wpad), icH(icSize.h + hpad);
     // разбить текст и определить габариты текста в пикселях
-    auto offsW(distance + (fkg * fkSize.w) + (icg * icSize.w));
+    auto offsW(distance + (fkg * fkW) + (icg * icW));
     auto wh(textWrap(getDrawText(false), widthSize - (ipad.extent(false) + offsW)));
     // установить высоту текста
     drw[DRW_TXT]->bound.h = wh.h;
@@ -113,7 +108,6 @@ void zViewText::onLayout(crti &position, bool changed) {
     if(changed) {
         // позиция картинки
         auto bound(&drw[DRW_FK]->bound);
-        // габариты картинки
         auto _grav(0), _width(0);
         if((fkGravity & ZS_GRAVITY_HORZ) == ZS_GRAVITY_HCENTER) {
             // габариты иконки
@@ -121,6 +115,7 @@ void zViewText::onLayout(crti &position, bool changed) {
                 _width = icSize.w + distance; _grav = icGravity;
             }
         } else {
+            // габариты картинки
             _width = fkW + distance; _grav = fkGravity;
         }
         drw[DRW_FK]->measure(fkW, fkH, 3, false);
@@ -128,7 +123,7 @@ void zViewText::onLayout(crti &position, bool changed) {
         // позиция текста
         if(textCache.isNotEmpty()) {
             auto r(rclient - szi(ipad.extent(false), ipad.extent(true)));
-            if((drw[DRW_TXT]->bound.w + _width) > rclient.w) {
+            if((drw[DRW_TXT]->bound.w + _width) > r.w) {
                 _width *= ((_grav & ZS_GRAVITY_HORZ) == ZS_GRAVITY_START) * 2 - 1;
             } else {
                 r.w -= _width;
@@ -161,7 +156,7 @@ void zViewText::drawText() {
         // длина текста в символах
         int countChars(0); for(auto &t: textCache) countChars += t->text.count();
         // создать буферы вершин
-        drw[DRW_TXT]->make(countChars * 6);
+        drw[DRW_TXT]->make(countChars * 5);
         // высота текстуры
         auto htex(drw[DRW_TXT]->texture->getSize().h / 2);
         // отрисовка
@@ -206,7 +201,7 @@ void zViewText::drawText() {
                 m.translate(coord.x - screenX + shadow.x, coord.y - screenY + shadow.y, 0);
                 drw[DRW_TXT]->drawCommon(clip, m, true);
                 // отрисовка текста
-                drw[DRW_TXT]->color.set(getDrawColorText(paint));
+                drw[DRW_TXT]->color.set(getDrawColorText(paint->fkColor));
                 m.translate(coord.x - screenX, coord.y - screenY, 0);
                 drw[DRW_TXT]->drawCommon(clip, m, true);
                 // корректировать позицию для следующего спана
@@ -224,14 +219,9 @@ void zViewText::drawText() {
     }
 }
 
-void zViewText::onDraw() {
-    drw[DRW_FK]->draw(nullptr);
-    drawText();
-}
-
 szi zViewText::textWrap(cstr _text, int widthRect) {
     static CACHE tcache;
-    int width(0), maxHeight(0), maxWidth(0), sepPos(0), sepWidth(0), height(0);
+    int width(0), maxHeight(0), maxWidth(0), sepPos(0), sepWidth(0), height(0), _count;
     // проверить на кэшированные значения
     if(widthRect <= 0 || isWrap()) widthRect = INT_MAX;
     if(textCache.isNotEmpty() && widthRect >= widthRectCache) {
@@ -240,6 +230,7 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
         return { widthRectCache, maxHeight };
     }
     textCache.clear();
+    auto isEdit(dynamic_cast<zViewEdit*>(this));
     // разбить текст по спец. символам по ширине ректа
     auto tex(drw[DRW_TXT]->texture);
     // адрес последнего разделителя/начало подстроки/текущий символ
@@ -256,11 +247,11 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
         width += paint->preWidth + paint->italic * factor;
         // корректировать длину в пикселях, если длина нулевая
         _end += (_pos == _end);
-        while(_pos++ < _end) {
+        while(_pos < _end) {
             if(!(ch = z_charUTF8(_text))) break;
             // если это не начало подстроки и есть разделитель - запоминаем его
             if(_stext != _text && z_delimiter(ch)) separator = _text, sepWidth = width, sepPos = _pos;
-            _text += z_charLengthUTF8(_text);
+            _text += z_charLengthUTF8(_text); _pos++;
             if(ch != '\n') {
                 // определить новую ширину строки
                 auto ln(tex->widthGlyph(z_decodeUTF8(ch) + offsetBold, factor) + width);
@@ -272,12 +263,12 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
             // добавить подстроку в массив
             if(separator) _text = separator, width = sepWidth, _pos = sepPos, separator = nullptr;
             // убрать конечные пробелы
-            zStringUTF8 u8(_stext, z_sizeCountUTF8(_stext, _text)); auto _count(u8.count());
-            while(z_isspace(u8[_count - 1])) _count--, width -= 10;
-            if(width) textCache += new CACHE(width, height, _stext, _count);
+            _count = z_sizeCountUTF8(_stext, _text);
+            if(!isEdit) { zStringUTF8 u8(_stext, _count); while(z_isspace(u8[_count - 1])) _count--, width -= 10; }
+            if(width) textCache += new CACHE(width, height, _stext, z_sizeCountUTF8(_stext, _text));//_count);
             maxWidth = z_max(width, maxWidth); maxHeight += height;
             // пропустить начальные пробелы
-            while(z_isspace(z_charUTF8(_text))) {_text += z_charLengthUTF8(_text); }
+            if(!isEdit) { while(z_isspace(z_charUTF8(_text))) _text += z_charLengthUTF8(_text); }
             _stext = _text; width = paint->italic * factor;
         }
     }
@@ -290,10 +281,9 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
     return { maxWidth, maxHeight };
 }
 
-
 void zViewText::onInit(bool _theme) {
     zView::onInit(_theme);
-    zParamDrawable txt, tbk, ic;
+    zParamDrawable txt, tbk, ic; tbk.texture = 0x01000000;
     styles->enumerate([this, &ic, &txt, &tbk, _theme](u32 attr) {
         auto v(&zTheme::value); auto val(v->u);
         attr |= _theme * ZTT_THM;
@@ -323,73 +313,20 @@ void zViewText::onInit(bool _theme) {
     clearCacheSpans(false);
     // шрифт
     setDrawable(&txt, DRW_TXT);
-    drw[DRW_TXT]->typeTri  = GL_TRIANGLES;
     // фон шрифта
-    if(tbk.texture) {
-        if(!dr) dr = new zDrawable(this, DRW_BK);
-        dr->init(tbk);
-        defPaint->bkColor = dr->color.toARGB();
-    }
+    if(!dr) dr = new zDrawable(this, DRW_BK);
+    dr->init(tbk); defPaint->bkColor = dr->color.toARGB();
     // иконка
     setDrawable(&ic, DRW_ICON);
 }
 
-void zViewText::setWrap(bool set) {
-    if(testFlags(ZS_NOWRAP) != set) {
-        updateStatus(ZS_NOWRAP, set);
-        requestLayout();
-    }
-}
-
-void zViewText::setTextStyle(int _style) {
-    if(defPaint->getStyle() != _style) {
-        defPaint->setStyle(_style);
-        requestLayout();
-    }
-}
-
-void zViewText::setTextSize(int _size) {
-    if(defPaint->size != _size) {
-        defPaint->size = _size;
-        requestLayout();
-    }
-}
-
-void zViewText::setTextColorForeground(u32 _value) {
-    if(defPaint->fkColor != _value) {
-        defPaint->fkColor = _value;
-        invalidate();
-    }
-}
-
-void zViewText::setTextColorBackground(u32 _value) {
-    if(defPaint->bkColor != _value) {
-        defPaint->bkColor = _value;
-        if(!dr) {
-            dr = new zDrawable(this, DRW_FK);
-            dr->init(_value, 0, -1, 0, 1.0f);
-        }
-        dr->color = _value;
-        invalidate();
-    }
-}
-
-void zViewText::setTextColorShadow(u32 _value) {
-    if(colors[TEXT_COLOR_SHADOW] != _value) {
-        colors[TEXT_COLOR_SHADOW] = _value;
-        invalidate();
-    }
-}
-
 void zViewText::mergeSpans(const zStringUTF8& _text) {
-    // если кжш уже есть - выйти
+    // если кэш уже есть - выйти
     if(cacheSpans.isNotEmpty()) return;
     int pos(0);
     if(spans.isNotEmpty()) {
         // переписать все спаны в кэш
-        for(auto& s : spans) {
-            cacheSpans += new SPAN(s->span, s->s, s->e, addCache(s->paint));
-        }
+        for(auto& s : spans) cacheSpans += new SPAN(s->span, s->s, s->e, addCache(s->paint));
         // слить диапазоны, со слиянием характеристик
         for(int i = 0 ; i < cacheSpans.size(); i++) {
             auto tsp1(cacheSpans[i]); auto s1(tsp1->s), e1(tsp1->e);

@@ -79,7 +79,7 @@ zView *zViewBaseRibbon::getViewCache(int pos) {
 
 zView* zViewBaseRibbon::obtainView(int position, bool* needToMeasure) {
     auto view(getViewCache(position));
-    auto child(adapter ? adapter->getView(position, view, this) : nullptr);
+    auto child(adapter->getView(position, view, this));
     if(needToMeasure) *needToMeasure = (view != child);
     return child;
 }
@@ -224,10 +224,6 @@ void zViewBaseRibbon::setItemSelected(int item) {
 
 void zViewBaseRibbon::onLayout(crti &position, bool changed) {
     zView::onLayout(position, changed);
-    if(!adapter) {
-        ILOG("Не установлен адаптер в ленте!!!");
-        return;
-    }
     int posEnd(0); edge.set(rclient[vert], rclient.extent(vert));
     // скорректировать первый видимый
     auto pos(firstItem), _count(countChildren());

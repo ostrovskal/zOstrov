@@ -13,16 +13,13 @@ public:
     // структура кэшированного текста, разбитого на подстроки
     struct CACHE {
         CACHE() { }
-        CACHE(u32 _width, u32 _size, cstr _text, u32 _count) : width(_width), size(_size) {
-            text = zStringUTF8(_text, _count);
-        }
+        CACHE(u32 _width, u32 _size, cstr _text, u32 _count) : width(_width), size(_size) { text = zStringUTF8(_text, _count); }
+        // текст
         zStringUTF8 text{};
         // ширина в пикселях
         i32 width{0};
         // высота в пикселях
         i32 size{0};
-        // количество знаков
-        //i32 count{0};
     };
     // структура спана
     struct SPAN {
@@ -50,23 +47,23 @@ public:
     // вернуть имя типа
     virtual cstr typeName() const override { return "zViewText"; }
     // установить текст по идентификатору из ресурсов
-    void setText(u32 _text);
+    void setText(u32 _text) { setText(theme->findString(_text), false); }
     // установить текст из строки
     void setText(const zStringUTF8& _text, bool force);
     // установка текста парсингом из html
     bool setHtmlText(const zStringUTF8& html, const std::function<bool(cstr tag, bool end, zHtml* html)>& parser);
     // установка макс. линий
-    void setWrap(bool set);
+    void setWrap(bool set) { if(testFlags(ZS_NOWRAP) != set) { updateStatus(ZS_NOWRAP, set); requestLayout(); } }
     // вернуть макс. линий
     bool isWrap() const { return testFlags(ZS_NOWRAP); }
     // установка размера шрифта
-    void setTextSize(int value);
+    void setTextSize(int _size) { if(defPaint->size != _size) { defPaint->size = _size; requestLayout(); } }
     // установка цветов
     void setTextColorDefault(u32 _value) { colors[TEXT_COLOR_DEFAULT] = _value; }
-    void setTextColorForeground(u32 _value);
-    void setTextColorBackground(u32 _value);
+    void setTextColorForeground(u32 _value) { if(defPaint->fkColor != _value) { defPaint->fkColor = _value; invalidate(); } }
+    void setTextColorBackground(u32 _value) { if(defPaint->bkColor != _value) { defPaint->bkColor = _value; invalidate(); } }
     void setTextColorHighlight(u32 _value) { colors[TEXT_COLOR_HIGHLIGHT] = _value; }
-    void setTextColorShadow(u32 _value);
+    void setTextColorShadow(u32 _value) { if(colors[TEXT_COLOR_SHADOW] != _value) { colors[TEXT_COLOR_SHADOW] = _value; invalidate(); } }
     // получение цветов
     u32 getTextColorDefault() const { return colors[TEXT_COLOR_DEFAULT]; }
     u32 getTextColorForeground() const { return defPaint->fkColor; }
@@ -76,7 +73,7 @@ public:
     // вернуть размер шрифта
     int getTextSize() { return defPaint->size; }
     // установить стиль текста
-    void setTextStyle(int _style);
+    void setTextStyle(int _style) { if(defPaint->getStyle() != _style) { defPaint->setStyle(_style); requestLayout(); } }
     // вернуть текст
     const zStringUTF8& getText() const { return realText; }
     // вернуть стиль текста
@@ -99,11 +96,11 @@ protected:
     // событие определения габаритов
     virtual void onMeasure(cszm& spec) override;
     // событие отрисовки
-    virtual void onDraw() override;
+    virtual void onDraw() override { drw[DRW_FK]->draw(nullptr); drawText(); }
     // вернуть текст для отображения
     virtual cstr getDrawText(bool _real) { return realText; }
     // вернуть цвет текста для отображения
-    virtual u32 getDrawColorText(zTextPaint* paint) { return paint->fkColor; }
+    virtual u32 getDrawColorText(u32 color) { return color; }
     // отрисовка текста
     void drawText();
     // разбивка текста
@@ -120,6 +117,7 @@ protected:
     int distance{0};
     // кэш картинки
     int fkW{0}, fkH{0};
+    // кэш иконки
     szi icSize{};
     // кэшированное значение ширины wrap текста
     int widthRectCache{0};
@@ -194,7 +192,8 @@ public:
     u32 getTextHintColor() const { return colorHint; }
     // установить цвет подсказки
     void setTextHintColor(u32 _color) { colorHint = _color; setText(realText, true); }
-    void updateText(int) { }
+    // обновление текста
+    void updateText(int _what) { if(onChangeText) onChangeText(this, _what); notifyOwner(_what, this, caretIndex); }
 protected:
     // отрисовка
     virtual void onDraw() override;
@@ -209,7 +208,7 @@ protected:
     // вернуть текст для отображения
     virtual cstr getDrawText(bool _real) override { return (_real || realText.isNotEmpty()) ? z_ptrUTF8(filter->getText(realText), visibleIndex) : hintText.str(); }
     // вернуть цвет текста для отображения
-    virtual u32 getDrawColorText(zTextPaint* paint) override { return (realText.isNotEmpty() ? paint->fkColor : colorHint); }
+    virtual u32 getDrawColorText(u32 color) override { return (realText.isNotEmpty() ? color : colorHint); }
     // вставка текста в некоторую позицию
     void insertText(int pos, cstr _text) { setText(realText.insert(pos, _text), true); }
     // удаление некоторого количества символов
@@ -219,9 +218,9 @@ protected:
     // коррекция позиции каретки на экране
     void correctCaretPosition(int index);
     // индес в тексте из позиции
-    int indexFromPosition(int inScreen, bool exact, int *outScreen);
+    int indexFromPosition(cpti& screen, bool exact);
     // позиция из индекса
-    int positionFromIndex(int _indexText) { return drw[DRW_TXT]->sizeText(getDrawText(true), getTextSize(), _indexText); }
+    pti positionFromIndex(int _indexText);
     // установка каретки
     void updateCaret();
     // позиция каретки в тексте
@@ -235,7 +234,7 @@ protected:
     // фейковый текст(hint)
     zStringUTF8 hintText;
     // цвет hint
-    u32 colorHint{};
+    u32 colorHint{0};
     // фильтр
     zFilterEdit* filter{nullptr};
     // кнопка отмены

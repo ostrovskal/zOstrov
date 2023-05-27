@@ -27,6 +27,25 @@ bool zTexture::load(const zStringUTF8& path) {
 }
 
 bool zTexture::save(const zStringUTF8& path) {
+    //glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+/*
+    Bind();
+    int data_size = mWidth * mHeight * 4;
+    GLubyte* pixels = new GLubyte[mWidth * mHeight * 4];
+
+    GLuint textureObj = ...; // the texture object - glGenTextures
+
+    GLuint fbo;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureObj, 0);
+
+    glReadPixels(0, 0, mWidth, mHeight, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDeleteFramebuffers(1, &fbo);
+*/
+    //glReadPixels();
     return false;
 }
 
@@ -163,6 +182,7 @@ void zTexture::setFBO(bool set, bool clear) {
         sz.set(tiles + 2);
         // производим очистку буфера цвета
         if(clear) {
+//            glInvalidateFramebuffer();
             glDisable(GL_SCISSOR_TEST);
 //            glClearColor(1,1,1,1);
             glClear(GL_COLOR_BUFFER_BIT);
@@ -170,6 +190,10 @@ void zTexture::setFBO(bool set, bool clear) {
             glEnable(GL_SCISSOR_TEST);
         }
     } else {
+//        glInvalidateFramebuffer(GL_FRAMEBUFFER, 2, depth_and_stencil);
+    //    const GLenum attachments[] = {GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT};
+  //      glInvalidateFramebuffer(GL_FRAMEBUFFER, 2, attachments);
+//        glDiscardFramebufferEXT (GL_FRAMEBUFFER, 2, attachments);
         // делаем активным дефолтный FBO
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         sz = zGL::instance()->getSizeScreen();

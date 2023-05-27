@@ -257,7 +257,7 @@
         <item name="pad">5dp</item>
         <item name="ipad">5dp</item>
         <item name="inputMode">text</item>
-        <item name="textSingle">true</item>
+        <item name="textSingle">false</item>
         <item name="gravity">start|center_vertical</item>
         <item name="textColor">%color/color_text_text</item>
         <item name="textSize">@dimen/textText</item>

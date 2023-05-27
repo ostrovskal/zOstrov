@@ -117,12 +117,12 @@ void sshApp::setContent() {
         //manager->getKeyboard()->show(v->id, false);
     });
     ll->attach(sl, ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP );
-    ll->attach(edt3, 350, VIEW_WRAP);
+    ll->attach(edt3, 350, 300);
     ll->attach(vw, VIEW_MATCH, VIEW_WRAP)->setOnClick([this](zView* v, bool) {
     });
-    ll->attach(edt1, ZS_GRAVITY_END, 0, 300, VIEW_WRAP)->setGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER);
+    ll->attach(edt1, ZS_GRAVITY_END, 0, 300, 400)->setGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER);
     ll->attach(prg, ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP );
-    ll->attach(edt2, 400, VIEW_WRAP)->setGravity(ZS_GRAVITY_HCENTER | ZS_GRAVITY_VCENTER);
+    ll->attach(edt2, 400, 450)->setGravity(ZS_GRAVITY_HCENTER | ZS_GRAVITY_VCENTER);
     /*
     //root->attach(img, ZS_GRAVITY_START, 0, VIEW_WRAP, VIEW_WRAP );
     //root->attach(new zViewController(styles_z_acontroller, 0, z.R.integer.acontrol, z.R.string.acontrollerMap), ZS_GRAVITY_END | ZS_GRAVITY_BOTTOM, 0, 150_dp, 150_dp);

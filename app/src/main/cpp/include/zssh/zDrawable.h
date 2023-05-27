@@ -55,9 +55,9 @@ public:
     // сформировать координаты для патч9
     int makePatch9(crti& pos, crti& tex, crti& patch9) const;
     // сформировать два треугольника
-    int makeTriangle(crti& pos, crti& tex, zVertex2D* v, int italic = 0) const;
+    int makeTriangle(crti& pos, crti& tex, zVertex2D* v, int _italic = 0) const;
     // сформировать квад
-    int makeQuad(crti& pos, crti& tex, zVertex2D* v, int offs = 0) const;
+    int makeQuad(crti& pos, crti& tex, zVertex2D* v, int _italic = 0, bool _strip = false) const;
     // сформировать отладочную сетку
     void makeDebug(cszi& cell);
     // реализация
