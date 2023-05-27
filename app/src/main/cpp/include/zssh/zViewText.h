@@ -175,7 +175,7 @@ public:
     // вернуть имя типа
     virtual cstr typeName() const override { return "zViewEdit"; }
     // установка фильтра
-    void setFilter(int inputType, zFilterEdit* _filter = nullptr);
+    void setFilter(u32 inputMode, zFilterEdit* _filter = nullptr);
     // вернуть фильтр
     zFilterEdit* getFilter() const { return filter; }
     // очистка текста
@@ -207,13 +207,13 @@ protected:
     // касание
     virtual i32 onTouchEvent(zTouch *touch) override;
     // вернуть текст для отображения
-    virtual cstr getDrawText(bool _real) override;
+    virtual cstr getDrawText(bool _real) override { return (_real || realText.isNotEmpty()) ? z_ptrUTF8(filter->getText(realText), visibleIndex) : hintText.str(); }
     // вернуть цвет текста для отображения
-    virtual u32 getDrawColorText(zTextPaint* paint) override;
+    virtual u32 getDrawColorText(zTextPaint* paint) override { return (realText.isNotEmpty() ? paint->fkColor : colorHint); }
     // вставка текста в некоторую позицию
-    void insertText(int pos, cstr _text);
+    void insertText(int pos, cstr _text) { setText(realText.insert(pos, _text), true); }
     // удаление некоторого количества символов
-    void removeText(int pos, int count);
+    void removeText(int pos, int count) { setText(realText.remove(pos, count), true); }
     // при удалении и вставке символа - начальная позиция текста/позиция каретки
     int correct(int index);
     // коррекция позиции каретки на экране
@@ -221,7 +221,7 @@ protected:
     // индес в тексте из позиции
     int indexFromPosition(int inScreen, bool exact, int *outScreen);
     // позиция из индекса
-    int positionFromIndex(int _indexText);
+    int positionFromIndex(int _indexText) { return drw[DRW_TXT]->sizeText(getDrawText(true), getTextSize(), _indexText); }
     // установка каретки
     void updateCaret();
     // позиция каретки в тексте

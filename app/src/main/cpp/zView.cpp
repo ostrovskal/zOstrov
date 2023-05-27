@@ -108,21 +108,17 @@ void zView::draw() {
     if(isDestroy()) { getParent()->remove(this); return; }
     if(isVisibled()) {
         // рисуем
-        if(testFlags(ZS_DIRTY_LAYER)) {
+        if(isDirty()) {
             drw[DRW_FBO]->drawFBO(fbo, [this] {
                 drw[DRW_BK]->draw(&rview);
                 onDraw();
             });
-            if(drw[DRW_FBO]->isValid()) {
-                updateStatus(ZS_DIRTY_LAYER, false);
-            }
+            updateStatus(ZS_DIRTY_LAYER, !isFBO());
         }
         onDrawFBO();
         drawDebug();
         // каретка
-        auto caret(manager->getCaret());
-        if(caret && caret->parent == this)
-            caret->draw();
+        manager->drawCaret(this);
     }
 }
 
@@ -397,7 +393,7 @@ zViewGlow::zViewGlow(zView* group) : zView(styles_z_glow, 0) {
 void zViewGlow::start(float _delta, bool _vert, bool _flow) {
     // параметры отображения
     if(isVisibled()) return;
-    updateStatus(ZS_VISIBLED, true); updateStatus(ZS_VORIENTATION, _vert);
+    updateStatus(ZS_VISIBLED, true); vert = _vert;
     alpha = 0.0f; mtxRot.rotate(0, 0, _flow * deg2rad(180.0f)); mtxScale.identity();
     // базовый тайл
     drw[DRW_BK]->tile = _vert ? z.R.integer.horzGlow : z.R.integer.vertGlow;
@@ -422,7 +418,7 @@ void zViewGlow::start(float _delta, bool _vert, bool _flow) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 zViewScrollBar::zViewScrollBar(zView* group, bool _vert) : zView(styles_z_scrollbar, 0) {
-    parent = group; updateStatus(ZS_VORIENTATION, _vert);
+    parent = group; vert = _vert;
     zView::onInit(false);
     size = styles->_int(Z_SCROLLBAR_SIZE, 4);
     fade = styles->_int(Z_SCROLLBAR_FADE, 0);

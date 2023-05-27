@@ -6,6 +6,7 @@
 
 #include "zHandler.h"
 #include "zDrawable.h"
+#include "zCommonAdapters.h"
 
 class zMeasure {
 public:
@@ -28,6 +29,7 @@ public:
     zLayoutParams(int _x, int _y, int _w, int _h) : x(_x), y(_y), w(_w), h(_h) { }
     zLayoutParams(int* p) : x(p[0]), y(p[1]), w(p[2]), h(p[3]) { }
     zLayoutParams(const zLayoutParams& lp) : x(lp.x), y(lp.y), size(lp.size) { }
+    const zLayoutParams& set(int _x, int _y, int _w, int _h) { x = _x; y = _y; w = _w; h = _h; return *this; }
     zMeasure operator [](int index) const { return buf[index]; }
     union {
         struct {
@@ -90,6 +92,8 @@ public:
     virtual void visibility(bool _visible) { if(isVisibled() != _visible) { updateStatus(ZS_VISIBLED, _visible); requestLayout(); } }
     // блокировка/разблокировка
     virtual void disable(bool _disable) { updateStatus(ZS_DISABLED, _disable); }
+    // установка ориентации
+    virtual void setOrientation(bool _vert) { if(_vert != vert) { vert = _vert; requestLayout(); } }
     // запрос на полное обновление иерархии представлений
     virtual void requestLayout();
     // запрос на обновление координат иерархии представлений
@@ -114,6 +118,8 @@ public:
     virtual void notifyOwner(int what, zView *view, int arg) { }
     // фоновая обработка
     virtual bool backgroundProcess() { return false; }
+    // уведомление об изменении параметров адаптера
+    virtual void notifyAdapter(zBaseAdapter* _adapter) { }
     // вернуть имя типа
     virtual cstr typeName() const { return "zView"; }
     // установка альфы
@@ -130,20 +136,20 @@ public:
     // установка паддинга
     void setPadding(crti& r) { pad = r; requestLayout(); }
     // удаление отображателя
-    void removeDrawable(int index) { if(drw[index] != &fake) delete drw[index]; drw[index] = &fake; }
+    void removeDrawable(int index) { if(drw[index]->isValid()) delete drw[index]; drw[index] = &fake; }
     // установка маргина
     void setMargin(crti& r) { margin = r; requestLayout(); }
     // вернуть паддинг + маргин
-    int padMargin(bool vert) const { return pad.extent(vert) + margin.extent(vert); }
-    // вернуть признак ориентации
-    bool isVertical() const { return (status & ZS_VORIENTATION); }
+    int padMargin(bool _vert) const { return pad.extent(_vert) + margin.extent(_vert); }
     // вернуть признак доступности
     bool isEnabled() const { return !(status & ZS_DISABLED); }
     // вернуть признак видимости
     bool isVisibled() const { return (status & ZS_VISIBLED); }
-    // вернуть признак видимости
+    // вернуть ориентацию
+    bool isVertical() const { return vert; }
+    // вернуть признак уничтожения
     bool isDestroy() const { return (status & ZS_DESTROY); }
-    // вернуть признак выделения
+    // вернуть признак выбора
     bool isChecked() const { return (status & ZS_CHECKED); }
     // вернуть признак FBO
     bool isFBO() const { return drw[DRW_FBO]->isValid(); }
@@ -162,14 +168,14 @@ public:
     // признак наличия фокуса
     bool isFocus() const;
     // вернуть грань
-    int edges(bool vert, bool end) const { return rview[vert] + end * rview[vert + 2]; }
+    int edges(bool _vert, bool end) const { return rview[_vert] + end * rview[_vert + 2]; }
     // вернуть размер
-    int sizes(bool vert) const { return rview[vert + 2] + margin.extent(vert); }
+    int sizes(bool _vert) const { return rview[_vert + 2] + margin.extent(_vert); }
     // проверка статуса на флаг
     bool testFlags(int flags) const { return (status & flags) != 0; }
     // установить тэг
     void setTag(const TAG& _tag) { tag = _tag; }
-    // установить отображателя
+    // установить отображатель
     template<typename T = zDrawable> void setDrawable(zParamDrawable* params, int index, T** var = nullptr) {
         if(var) *var = nullptr;
         if(params && !params->texture) {
@@ -281,6 +287,8 @@ protected:
     void eraseTouchHandler();
     // установка габаритов по умолчанию
     void defaultOnMeasure(cszm& spec, int width, int height);
+    // ориентация
+    bool vert{false};
     // родитель
     zView* parent{nullptr};
     // буфер отрисовки при отладке

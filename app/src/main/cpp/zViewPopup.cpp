@@ -17,22 +17,22 @@ void zViewPopup::setContent(zView* _content) {
     content = _content;
 }
 
-void zViewPopup::show(int xOffs, int yOffs) {
-    offs.set(xOffs, yOffs);
-    vmanager->getCommonView()->attach(this, VIEW_WRAP, VIEW_WRAP);
+void zViewPopup::show(cpti& _offs) {
+    offs = _offs;
+    manager->getSystemView(false)->attach(this, VIEW_WRAP, VIEW_WRAP);
     updateStatus(ZS_VISIBLED, true);
     content->requestLayout();
 }
 
 void zViewPopup::dismiss() {
-    if(owner) owner->notifyOwner(MSG_POPUP_DISMISS, this, 0);
-    vmanager->getCommonView()->detach(this);
+    //if(owner) owner->notifyOwner(MSG_POPUP_DISMISS, this, 0);
+    manager->getSystemView(false)->detach(this);
 }
 
 i32 zViewPopup::touchEvent(AInputEvent *event) {
     auto action(zTouch::getEventAction(event));
     if(action == AMOTION_EVENT_ACTION_POINTER_DOWN || action == AMOTION_EVENT_ACTION_DOWN) {
-        if(!zTouch::intersect(event, rfull)) {
+        if(!zTouch::intersect(event, rview)) {
             dismiss();
             return TOUCH_STOP;
         }
@@ -41,54 +41,51 @@ i32 zViewPopup::touchEvent(AInputEvent *event) {
 }
 
 void zViewPopup::onLayout(crti &position, bool changed) {
-    rfull.x = owner->rfull.x + offs.x - pad.x;
-    rfull.y = owner->edges(true, true) + offs.y;
+    rview.x = owner->rview.x + offs.x - pad.x;
+    rview.y = owner->edges(true, true) + offs.y;
     // проверка по гор.
-    auto wScreen(vmanager->getScreen(false));
-    if(rfull.extent(false) > wScreen) rfull.x = wScreen - rfull.w;
+    auto wScreen(zGL::instance()->getSizeScreen(false));
+    if(rview.extent(false) > wScreen) rview.x = wScreen - rview.w;
     // проверка по верт.
-    auto hScreen(vmanager->getScreen(true));
-    if(rfull.extent(true) > hScreen) {
-        auto sub(rfull.extent(true) - hScreen);
+    auto hScreen(zGL::instance()->getSizeScreen(true));
+    if(rview.extent(true) > hScreen) {
+        auto sub(rview.extent(true) - hScreen);
         // вниз - за пределы экрана
         // проверить вверх
-        auto ry(owner->edges(true, false) - offs.y - rfull.h);
+        auto ry(owner->edges(true, false) - offs.y - rview.h);
         if(ry < 0) {
             ry = -ry;
-            if(sub > ry) sub = ry, rfull.y = 0;
-        } else rfull.y = ry, sub = 0;
-        content->rfull.h -= sub; content->rclient.h -= sub;
-        rfull.h -= sub; rclient.h -= sub;
+            if(sub > ry) sub = ry, rview.y = 0;
+        } else rview.y = ry, sub = 0;
+        content->rview.h -= sub; content->rclient.h -= sub;
+        rview.h -= sub; rclient.h -= sub;
     }
-    zView::onLayout(rfull, changed);
-    rti r(rclient.x, rclient.y, content->rfull.w, content->rfull.h);
+    zView::onLayout(rview, changed);
+    rti r(rclient.x, rclient.y, content->rview.w, content->rview.h);
     content->layout(r);
 }
 
-void zViewPopup::onMeasure(int widthSpec, int heightSpec) {
-    setMeasuredDimension(content->rfull.w + pad.extent(false), content->rfull.h + pad.extent(true));
+void zViewPopup::onMeasure(cszm& spec) {
+    setMeasuredDimension(content->rview.w + pad.extent(false), content->rview.h + pad.extent(true));
 }
 
-i32 zViewPopup::onKey(int key, bool sysKey) {
-    if(sysKey && key == AKEYCODE_BACK) {
-        dismiss();
-        return 1;
-    }
+i32 zViewPopup::keyEvent(int key, bool sysKey) {
+    if(sysKey && key == AKEYCODE_BACK) { dismiss(); return 1; }
     return 0;
 }
 
-szi zViewDropdown::measureChildrenSize(int widthSpec, int heightSpec) {
-    auto wSize(0), hSize(resolveDivider(countItem));
+szi zViewDropdown::measureChildrenSize(cszm& spec) {
+    int wSize(0), hSize(div && div->resolve(countItem));
     for(int i = 0 ; i < countItem; i++) {
         auto child(obtainView(i));
         if(!child) continue;
         // расчитать размер
-        measureChild(child, widthSpec, heightSpec);
+        measureChild(child, spec);
         // добавить в кэш
         addViewCache(child);
         // определить макс. габариты
-        wSize = z_max(wSize, child->rfull.w);
-        hSize += child->rfull.h;
+        wSize = z_max(wSize, child->rview.w);
+        hSize += child->rview.h;
     }
     return {wSize, hSize};
 }

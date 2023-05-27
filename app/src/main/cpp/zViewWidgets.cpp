@@ -150,10 +150,9 @@ void zViewSwitch::stateView(zView::STATE &state, bool save, int &index) {
 //                                                             СЛАЙДЕР                                                                    //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-zViewSlider::zViewSlider(zStyle* _styles, i32 _id, u32 _text, cszi& _range, int _pos, bool vert) :
+zViewSlider::zViewSlider(zStyle* _styles, i32 _id, u32 _text, cszi& _range, int _pos, bool _vert) :
         zViewText(_styles, _id, _text), range(_range), pos(_pos) {
-    trumb = new zDrawable(this, 0);
-    updateStatus(ZS_VORIENTATION, vert);
+    trumb = new zDrawable(this, 0); vert = _vert;
     minMaxSize.set(z_dp(z.R.dimen.sliderMinWidth), z_dp(z.R.dimen.sliderMaxWidth),
                    z_dp(z.R.dimen.sliderMinHeight), z_dp(z.R.dimen.sliderMaxHeight));
     if(_text > 0) tips = theme->findString(_text) + " ";
@@ -218,10 +217,10 @@ void zViewSlider::onMeasure(cszm& spec) {
     zViewText::onMeasure(spec);
     // проверка на макс. размер в зависимости от ориентации(с проверкой на прогресс)
     if(spec.w.isNotExact()) {
-        if(testFlags(ZS_VORIENTATION)) rview.w = z_min(rview.w, minMaxSize.y);
+        if(vert) rview.w = z_min(rview.w, minMaxSize.y);
     }
     if(spec.h.isNotExact()) {
-        if(!testFlags(ZS_VORIENTATION)) rview.h = z_min(rview.h, minMaxSize.h);
+        if(!vert) rview.h = z_min(rview.h, minMaxSize.h);
     }
     setMeasuredDimension(rview.w, rview.h);
 }

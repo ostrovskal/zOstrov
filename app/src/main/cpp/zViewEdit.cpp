@@ -80,9 +80,9 @@ zViewEdit::~zViewEdit() {
     SAFE_DELETE(but);
 }
 
-void zViewEdit::setFilter(int inputType, zFilterEdit* _filter) {
+void zViewEdit::setFilter(u32 inputMode, zFilterEdit* _filter) {
     if(!_filter) {
-        switch(inputType & ZS_MODE_EDIT_MASK) {
+        switch(inputMode & ZS_MODE_EDIT_MASK) {
             case ZS_EDIT_PASSWORD:_filter = new zFilterPassword(); break;
             case ZS_EDIT_NUMERIC: _filter = new zFilterNumber(); break;
             case ZS_EDIT_ZX_DATA: _filter = new zFilterZx(); break;
@@ -100,17 +100,16 @@ int zViewEdit::indexFromPosition(int inScreen, bool exact, int *outScreen) {
     return drw[DRW_TXT]->indexOf(getDrawText(true), getTextSize(), inScreen, pos.x, exact, outScreen);
 }
 
-int zViewEdit::positionFromIndex(int _indexText) {
-    return drw[DRW_TXT]->sizeText(getDrawText(true), getTextSize(), _indexText);
-}
-
 void zViewEdit::onInit(bool _theme) {
     zViewText::onInit(_theme);
     status          |= ZS_NOWRAP | ZS_FOCUSABLE_IN_TOUCHABLE;
     colorHint       = styles->_int(Z_COLOR_HINT_TEXT, 0xff505050);
-    setFilter((int)styles->_int(Z_MODE, ZS_EDIT_TEXT));
+    setFilter(styles->_int(Z_MODE, ZS_EDIT_TEXT));
+/*
     zParamDrawable ip(z.R.drawable.zssh, 0xffffffff, z.R.integer.iconEdit, 0, 1.0f);
-    setDrawable(&ip, DRW_ICON); setIconGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER);
+    setDrawable(&ip, DRW_ICON);
+    setIconGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER);
+*/
     // создать кнопку, если есть иконка
     if(drw[DRW_ICON]->isValid()) {
         but = new zViewClear(this);
@@ -121,14 +120,6 @@ void zViewEdit::onInit(bool _theme) {
 void zViewEdit::onDraw() {
     zViewText::onDraw();
     if(but) but->draw();
-}
-
-void zViewEdit::insertText(int pos, cstr _text) {
-    setText(realText.insert(pos, _text), true);
-}
-
-void zViewEdit::removeText(int pos, int count) {
-    setText(realText.remove(pos, count), true);
 }
 
 i32 zViewEdit::keyEvent(int key, bool sysKey) {
@@ -166,10 +157,7 @@ i32 zViewEdit::onTouchEvent(zTouch *touch) {
     if(isButton) {
         // вызываем событие касания дочернего
         result = but->onEvent(touch);
-        if(result == TOUCH_ACTION) {
-            clearText();
-            result = TOUCH_CONTINUE;
-        }
+        if(result == TOUCH_ACTION) { clearText(); result = TOUCH_CONTINUE; }
     }
     if(result == TOUCH_FINISH) {
         // определить позицию каретки в тексте и на экране
@@ -231,7 +219,7 @@ int zViewEdit::correct(int _index) {
         // сдвинуть текст вперед на величину, которая больше макс. ширины текста
         idx = drw[DRW_TXT]->indexOf(getDrawText(true), size, widthText, wmax);
     } else if(visibleIndex > 0) {
-        // сдвинуть текст назад на величину разницы, макс. ширины текста и реальной ширины
+        // сдвинуть текст назад на величину разницы макс. ширины текста и реальной ширины
         idx = -drw[DRW_TXT]->indexReverseOf(filter->getText(realText), size, wmax - widthText, visibleIndex);
     }
     if(idx) {
@@ -284,13 +272,4 @@ void zViewEdit::onChangeFocus(bool set) {
         updateCaret();
     }
     invalidate();
-}
-
-cstr zViewEdit::getDrawText(bool _real) {
-    if(_real) return z_ptrUTF8(filter->getText(realText), visibleIndex);
-    return (realText.isNotEmpty() ? z_ptrUTF8(filter->getText(realText), visibleIndex) : hintText.str());
-}
-
-u32 zViewEdit::getDrawColorText(zTextPaint* paint) {
-    return (realText.isNotEmpty() ? paint->fkColor : colorHint);
 }

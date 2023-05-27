@@ -24,7 +24,7 @@ protected:
 
 class zLinearLayout : public zViewGroup {
 public:
-    zLinearLayout(zStyle* _styles, i32 _id, bool vert);
+    zLinearLayout(zStyle* _styles, i32 _id, bool _vert) : zViewGroup(_styles, _id) { vert = _vert; }
     virtual cstr typeName() const override { return "zLinearLayout"; }
 protected:
     virtual void onMeasure(cszm& spec) override;
@@ -50,7 +50,7 @@ protected:
 
 class zScrollLayout : public zViewGroup {
 public:
-    zScrollLayout(zStyle* _styles, i32 _id, bool _vert);
+    zScrollLayout(zStyle* _styles, i32 _id, bool _vert) : zViewGroup(_styles, _id) { flyng = new zFlyng(this); vert = _vert; }
     // прив¤зка элемента
     virtual zView *attach(zView *v, int width, int height, int where = -1) override;
     // прокрутка на дельту

@@ -56,7 +56,7 @@ enum { TOUCH_CONTINUE, TOUCH_FINISH, TOUCH_ACTION, TOUCH_STOP };
 // стили
 #define ZS_MEASURE	      	        0x20000000U	// полное обновление
 #define ZS_MEASURE_SET              0x10000000U // признак того, что габариты были установлены
-#define ZS_VORIENTATION		        0x04000000U	// верт. направление
+//#define ZS_VORIENTATION		        0x04000000U	// верт. направление
 #define ZS_TAP	        	        0x00400000U	// прикоснулись
 #define ZS_NOWRAP                   0x00080000U // признак однострочного текста
 #define ZS_LAYOUT                   0x00040000U // признак вызова layout
@@ -107,7 +107,7 @@ enum { TOUCH_CONTINUE, TOUCH_FINISH, TOUCH_ACTION, TOUCH_STOP };
 #define ZS_DIVIDER                  8
 #define ZS_DECORATE_MASK            (ZS_GLOW | ZS_VSCROLLBAR | ZS_HSCROLLBAR | ZS_DIVIDER | ZS_SCROLLBAR)
 
-#define ZS_STATES                   (ZS_DIRTY_LAYER | ZS_VISIBLED | ZS_DISABLED | ZS_CHECKED | ZS_VORIENTATION)
+#define ZS_STATES                   (ZS_DIRTY_LAYER | ZS_VISIBLED | ZS_DISABLED | ZS_CHECKED)
 
 // режим для слайдера/прогресса/формы/чарта/таблицы/редактора
 // слайдер

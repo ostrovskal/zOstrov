@@ -10,50 +10,20 @@
 //                                                       БАЗОВАЯ ЛЕНТА                                                                    //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-zViewBaseRibbon::zViewBaseRibbon(zStyle* _styles, i32 _id, bool _vert) : zViewGroup(_styles, _id), vert(_vert) {
-    updateStatus(ZS_VORIENTATION, _vert);
-    flyng = new zDrawableFlyng(this);
-}
-
 zViewBaseRibbon::~zViewBaseRibbon() {
     cacheViews.clear();
     if(adapter) {
-        adapter->unregisterOwner(this);
+        adapter->unregistration(this);
         adapter = nullptr;
     }
 }
 
-void zViewBaseRibbon::onInflate(bool _theme) {
-    zViewGroup::onInflate(_theme);
-    // теперь специфичные
-    zParamDrawable sl;
-    styles->enumerate([&sl, _theme](u32 attr) {
-        auto v(zTheme::value.value); attr |= _theme * ZTT_THM;
-        switch(attr) {
-            case ZTV_SELECTOR:          sl.texture  = v; break;
-            case ZTV_SELECTOR_COLOR:    sl.color    = v; break;
-            case ZTV_SELECTOR_TILE:     sl.tile     = (i32)v; break;
-            case ZTV_SELECTOR_PADDING:  sl.padding  = v; break;
-            default:                    break;
-        }
-    });
-    // выделение
-    if(sl.texture) setSelector(sl);
-}
-
-void zViewBaseRibbon::setSelector(const zParamDrawable& params) {
-    if(!drs[DR_IDX_SEL]) drs[DR_IDX_SEL] = new zDrawable(this);
-    drs[DR_IDX_SEL]->set(params); selectItem = -1;
-    // создать селектор
-    sizeSelector = drs[DR_IDX_SEL]->invalidate(10, 10, false);
-}
-
-void zViewBaseRibbon::setAdapter(zAdapter* _adapter) {
+void zViewBaseRibbon::setAdapter(zBaseAdapter* _adapter) {
     reset();
-    if(adapter) adapter->unregisterOwner(this);
+    if(adapter) adapter->unregistration(this);
     adapter = _adapter;
     if(_adapter) {
-        _adapter->registerOwner(this);
+        _adapter->registration(this);
         countItem = _adapter->getCount();
     }
     requestLayout();
@@ -70,11 +40,9 @@ void zViewBaseRibbon::reset() {
 void zViewBaseRibbon::correctBegin(int used) {
     auto v(atView(0));
     if(v) {
-        auto _delta(v->edges(vert, false) - edgeStart);
+        auto _delta(v->edges(vert, false) - edge.w);
         if(firstItem) _delta -= used;
-        if(_delta > 0) {
-            offsetChildren(-_delta, vert);
-        }
+        if(_delta > 0) offsetChildren(-_delta, vert);
     }
 }
 
@@ -82,27 +50,18 @@ void zViewBaseRibbon::correctFinish(int used) {
     auto count(children.size() - 1);
     if(count >= 0 && (firstItem + count) == (countItem - 1)) {
         auto pos(atView(count)->edges(vert, true));
-        auto offset(edgeEnd - pos);
+        auto offset(edge.h - pos);
         auto first(atView(0)); auto start(first->edges(vert, false));
-        if(offset > 0 && (firstItem > 0 || start < edgeStart)) {
-            if(firstItem == 0) {
-                offset = z_min(offset, (edgeStart - start));
-            }
+        if(offset > 0 && (firstItem > 0 || start < edge.w)) {
+            if(firstItem == 0) offset = z_min(offset, (edge.w - start));
             offsetChildren(offset, vert);
-            if(firstItem > 0) {
-                fillReverse(firstItem - lines, first->edges(vert, false) - used);
-            }
+            if(firstItem > 0) fillReverse(firstItem - linesGrid, first->edges(vert, false) - used);
         }
     }
 }
 
 void zViewBaseRibbon::addViewCache(zView* view) {
-    for(auto & cacheView : cacheViews) {
-        if(!cacheView) {
-            cacheView = view;
-            return;
-        }
-    }
+    for(auto& v : cacheViews) if(!v) { v = view; return; }
     cacheViews += view;
 }
 
@@ -110,10 +69,9 @@ zView *zViewBaseRibbon::getViewCache(int pos) {
     // брать представление по его позиции(чтобы минимизировать обновление)
     zView* view(nullptr); int ii(-1);
     for(int i = 0 ; i < cacheViews.size(); i++) {
-        view = cacheViews[i];
-        if(!view) continue;
-        ii = i;
-        if(view->id == pos) break;
+        if((view = cacheViews[i])) {
+            ii = i; if(view->id == pos) break;
+        }
     }
     if(ii >= 0) view = cacheViews[ii], cacheViews[ii] = nullptr;
     return view;
@@ -132,26 +90,23 @@ zView* zViewBaseRibbon::addView(int x, int y, int pos, bool flow, int where) {
     bool needToMeasure(true);
     auto child(obtainView(pos, &needToMeasure));
     // привязать к родителю
-    auto lyt(&child->lytParams);
-    attachInLayout(child, lyt->w, lyt->h, where);
-    if(needToMeasure || !child->testFlags(ZS_MEASURE)) {
-        // вычислить размеры дочернего
-        childMeasure(child, lyt);
-    }
+    auto lps(&child->lps);
+    attachInLayout(child, lps->w, lps->h, where);
+    // вычислить размеры дочернего
+    if(needToMeasure || !child->testFlags(ZS_MEASURE)) childMeasure(child, lps);
     // сдвинуть представление, в зависимости от требований списка
-    auto childWidth(child->rfull.w), childHeight(child->rfull.h);
+    auto childWidth(child->rview.w), childHeight(child->rview.h);
     auto childTop((vert ? (flow ? y : y - childHeight) : y));
     auto childLeft((vert ? x : (flow ? x : x - childWidth)));
     // определить позицию
-    rti r(childLeft, childTop, childWidth, childHeight);
-    child->layout(r);
+    child->layout({ childLeft, childTop, childWidth, childHeight });
     return child;
 }
 
 int zViewBaseRibbon::itemFromPoint(cptf& p) const {
     auto x((int)p.x), y((int)p.y);
     for(int i = children.size() - 1; i >= 0; i--) {
-        if(children[i]->rfull.contains(x, y))
+        if(children[i]->rview.contains(x, y))
             return i + firstItem;
     }
     return -1;
@@ -164,10 +119,10 @@ bool zViewBaseRibbon::scrolling(int _delta) {
             auto isPosStart(firstItem == 0), isPosEnd((firstItem + count) == countItem);
             // первый элемент ниже верхней грани?
             auto pos(atView(0)->edges(vert, false));
-            auto isEdgeStart(pos >= edgeStart);
+            auto isEdgeStart(pos >= edge.w);
             // последний выше нижней грани?
             pos = atView(count - 1)->edges(vert, true);
-            auto isEdgeEnd(pos <= edgeEnd);
+            auto isEdgeEnd(pos <= edge.h);
             auto isScrollToStart(!(isPosStart && isEdgeStart));
             auto isScrollToEnd(!(isPosEnd && isEdgeEnd));
             // проверить на возможность скролла, в зависимости от направления
@@ -177,9 +132,9 @@ bool zViewBaseRibbon::scrolling(int _delta) {
                     auto child(atView(posView));
                     // проверка на выход за пределы списка
                     // верхняя ниже нижней
-                    auto isStart((child->edges(vert, false) + _delta) >= edgeEnd);
+                    auto isStart((child->edges(vert, false) + _delta) >= edge.h);
                     // нижняя выше верхней
-                    auto isEnd((child->edges(vert, true) + _delta) <= edgeStart);
+                    auto isEnd((child->edges(vert, true) + _delta) <= edge.w);
                     if(isStart || isEnd) {
                         if(isEnd) firstItem++;
                         detach(child);
@@ -191,12 +146,12 @@ bool zViewBaseRibbon::scrolling(int _delta) {
                 offsetChildren(_delta, vert);
                 fill(0);
                 auto view(atView(0));
-                deltaItem = (view ? view->edges(vert, false) - edgeStart : 0);
+                deltaItem = (view ? view->edges(vert, false) - edge.w : 0);
                 invalidate();
                 return false;
             }
             // Предел прокрутки. Запуск эффекта
-            updateGlow(_delta, vert);
+            updateGlow(_delta);
         }
     }
     return true;
@@ -205,36 +160,36 @@ bool zViewBaseRibbon::scrolling(int _delta) {
 int zViewBaseRibbon::computeScrollOffset(bool _vert) const {
     if(children.isNotEmpty()) {
         auto view(atView(0));
-        auto s((view->edges(_vert, false) - edgeStart) * 100);
-        return z_max(0, firstItem / lines * 100 - s / view->sizes(_vert));
+        auto s((view->edges(_vert, false) - edge.w) * 100);
+        return z_max(0, firstItem / linesGrid * 100 - s / view->sizes(_vert));
     }
     return 0;
 }
 
 int zViewBaseRibbon::computeScrollRange(bool _vert) const {
-    return ((countItem + lines - 1) / lines) * 100;
+    return ((countItem + linesGrid - 1) / linesGrid) * 100;
 }
 
 int zViewBaseRibbon::computeScrollExtent(bool _vert) const {
     auto count(children.size());
     if(count > 0) {
-        auto extent(((count + lines - 1) / lines) * 100);
+        auto extent(((count + linesGrid - 1) / linesGrid) * 100);
         auto view(atView(0));
-        auto s((view->edges(_vert, false) - edgeStart) * 100);
+        auto s((view->edges(_vert, false) - edge.w) * 100);
         extent += s / view->sizes(_vert);
-        view = atView(count - 1); s = view->edges(_vert, true) - edgeStart;
-        extent -= (s - (edgeEnd - edgeStart)) * 100 / view->sizes(_vert);
+        view = atView(count - 1); s = view->edges(_vert, true) - edge.w;
+        extent -= (s - (edge.h - edge.w)) * 100 / view->sizes(_vert);
         return extent;
     }
     return 0;
 }
 
-void zViewBaseRibbon::notifyAdapter(zAdapter* _adapter) {
+void zViewBaseRibbon::notifyAdapter(zBaseAdapter* _adapter) {
     countItem = _adapter->getCount();
     requestLayout();
 }
 
-void zViewBaseRibbon::stateView(VIEW_STATE &state, bool save, int &index) {
+void zViewBaseRibbon::stateView(STATE &state, bool save, int &index) {
     zView::stateView(state, save, index);
     if(save) {
         state.data += firstItem;
@@ -246,23 +201,18 @@ void zViewBaseRibbon::stateView(VIEW_STATE &state, bool save, int &index) {
 }
 
 void zViewBaseRibbon::showSelector(bool show) {
-    if(drs[DR_IDX_SEL]) {
-        // проверяем на видимость селектор
-        drs[DR_IDX_SEL]->setVisible(show);
+    if(drw[DRW_SEL]->isValid()) {
+        drw[DRW_SEL]->visible = show;
         if(show) {
+            // обновляем параметры селектора
             auto view(atView(selectItem - firstItem));
-            if(view) {
-                // обновляем параметры селектора
-                auto r(view->rfull);
-                drs[DR_IDX_SEL]->mtxScale.scale((float)r.w / sizeSelector.w, (float)r.h / sizeSelector.h, 0);
-                drs[DR_IDX_SEL]->layout(&r);
-            }
+            if(view) drw[DRW_SEL]->measure(view->rview.w, view->rview.h, 0, false);
         }
     }
 }
 
 void zViewBaseRibbon::setItemSelected(int item) {
-    flyng->finish();
+    flyng->stop();
     auto _count(countChildren() - 1);
     if(item >= countItem) item = countItem - 1;
     if(item < 0) item = 0;
@@ -274,9 +224,11 @@ void zViewBaseRibbon::setItemSelected(int item) {
 
 void zViewBaseRibbon::onLayout(crti &position, bool changed) {
     zView::onLayout(position, changed);
-    int posEnd(0);
-    edgeStart       = vert ? rclient.y : rclient.x;
-    edgeEnd         = rclient.extent(vert);
+    if(!adapter) {
+        ILOG("Не установлен адаптер в ленте!!!");
+        return;
+    }
+    int posEnd(0); edge.set(rclient[vert], rclient.extent(vert));
     // скорректировать первый видимый
     auto pos(firstItem), _count(countChildren());
     if(_count == 0) _count = countItem;
@@ -284,10 +236,9 @@ void zViewBaseRibbon::onLayout(crti &position, bool changed) {
     if(pos < 0) pos = 0;
     if(firstItem != pos) deltaItem = 0, firstItem = pos;
     if(isOffsetEnd && _count) {
-        int ofsBegin(0);
-        if((divType & ZS_DIVIDER_BEGIN) && firstItem == 0) ofsBegin = divSize + divPadEnd;
-        auto posBegin(z_min(0, atView(0)->edges(vert, false) - ofsBegin - edgeStart));
-        posEnd = (z_min(0, edgeEnd - atView(_count - 1)->edges(vert, true)));
+        int ofsBegin((div && (div->type & ZS_DIVIDER_BEGIN) && firstItem == 0) ? div->size + div->padEnd : 0);
+        auto posBegin(z_min(0, atView(0)->edges(vert, false) - ofsBegin - edge.w));
+        posEnd = (z_min(0, edge.h - atView(_count - 1)->edges(vert, true)));
         posEnd += posBegin;
     }
     // переместить в кэш
@@ -295,60 +246,59 @@ void zViewBaseRibbon::onLayout(crti &position, bool changed) {
     // убрать все дочерние
     detachAllViews();
     // заполнить
-    if(countItem > 0) {
-        fill(deltaItem + posEnd);
-    }
-    // "будим" скролбар
-    awakenScroll();
+    if(countItem > 0) fill(deltaItem + posEnd);
     isOffsetEnd = false;
     showSelector(selectItem != -1);
+    // "будим" прокрутку
+    awakenScroll();
 }
 
-szi zViewBaseRibbon::measureChildrenSize(int widthSpec, int heightSpec) {
-    int limit(SIZE_MEASURE_SPEC((vert ? heightSpec : widthSpec)));
-    int hmax(0), wmax(0), i;
-    auto hSize(vert ? &hmax : &wmax);
-    auto wSize(vert ? &wmax : &hmax);
+szi zViewBaseRibbon::measureChildrenSize(cszm& spec) {
+    int limit(spec[vert].mode()), hmax(0), wmax(0), i;
+    auto hSize(vert ? &hmax : &wmax), wSize(vert ? &wmax : &hmax);
     for(i = 0 ; i < countItem; i++) {
         auto child(obtainView(i));
         if(!child) continue;
         // расчитать размер
-        measureChild(child, widthSpec, heightSpec);
+        measureChild(child, spec);
         // добавить в кэш
         addViewCache(child);
         // определить макс. габариты
-        auto wc(child->rfull.w), hc(child->rfull.h);
+        auto rv(&child->rview);
+        //auto wc(child->rview.w), hc(child->rview.h);
         if(wmax == 0 && hmax == 0) {
-            if(MODE_MEASURE_SPEC((vert ? heightSpec : widthSpec)) != MEASURE_EXACT) {
-                // предел делаем на макс. 4
-                auto _limit((vert ? hc : wc) * 5);
+            if(spec[vert].isNotExact()) {
+                // предел делаем на макс. 5
+                auto _limit(rv->buf[vert + 2] * 5);//(vert ? hc : wc) * 5);
                 if(_limit > limit) limit = _limit;
             }
         }
-        *wSize = z_max(*wSize, (vert ? wc : hc));
-        auto _size(*hSize + (vert ? hc : wc));
+        *wSize = z_max(*wSize, rv->buf[3 - vert]);//(vert ? wc : hc));
+        auto _size(*hSize + rv->buf[vert + 2]);//(vert ? hc : wc));
         if(_size >= limit) break;
         *hSize = _size;
     }
-    auto _size(resolveDivider(i));
+    auto _size(div && div->resolve(i));
     if(vert) hmax += _size; else wmax += _size;
     return {wmax, hmax};
 }
 
-void zViewBaseRibbon::onMeasure(int widthSpec, int heightSpec) {
-    // расчитать габариты всех дочерних
-    auto size(measureChildrenSize(widthSpec, heightSpec));
-    cacheViews.clear();
-    defaultOnMeasure(widthSpec, heightSpec, size.w, size.h);
-    // дивидер
-    if(drs[DR_IDX_DIV]) {
-        drs[DR_IDX_DIV]->invalidate(0, 0, false);
+void zViewBaseRibbon::onMeasure(cszm& spec) {
+    if(!adapter) {
+        ILOG("Не установлен адаптер в ленте!!!");
+        return;
     }
+    // расчитать габариты всех дочерних
+    auto size(measureChildrenSize(spec));
+    cacheViews.clear();
+    defaultOnMeasure(spec, size.w, size.h);
+    // дивидер
+    if(div) div->measure(0, 0, 0, false);
 }
 
-i32 zViewBaseRibbon::onTouch(zTouch *touch) {
+i32 zViewBaseRibbon::onTouchEvent(zTouch *touch) {
     bool drag(false);
-    touch->drag(dragging, [this, &drag, &touch](cszi& offs, bool event) {
+    touch->drag(sizeTouch, [this, &drag, &touch](cszi& offs, bool event) {
         // если сдвинули - определяем дельту в зависимости от ориентации
         auto _delta(vert ? offs.h : offs.w);
         if(_delta) {
@@ -357,10 +307,10 @@ i32 zViewBaseRibbon::onTouch(zTouch *touch) {
             // если отпустили и время < 10(выбрано экспериментально)
             if(event && t < 15) {
                 // запускаем флинг
-                flyng->pull((float)_delta / (float)sizes(vert), _delta > 0, vert);
-                flyng->setVisible(true);
+                //flyng->pull((float)_delta / (float)sizes(vert), _delta > 0, vert);
+                //flyng->visible = true;
                 // отправляем событие флинга
-                post(MSG_FLYNG, nullptr);
+                //post(MSG_FLYNG, nullptr);
                 // сбрасываем клик и выделение
                 clickItem = selectItem = -1;
             } else {
@@ -379,7 +329,7 @@ i32 zViewBaseRibbon::onTouch(zTouch *touch) {
         // если тап
         if(touch->isCaptured()) {
             // останавливаем флинг
-            flyng->finish();
+            flyng->stop();
             if(clickItem == -1) {
                 // определяем индекс куда тапнули
                 clickItem = itemFromPoint(touch->cpt);
@@ -393,7 +343,7 @@ i32 zViewBaseRibbon::onTouch(zTouch *touch) {
         } else {
             if(touch->isReleased() && selectItem != -1) {
                 // отправляем клик
-                post(MSG_CLICK, nullptr, 50, selectItem);
+                //post(MSG_CLICK, nullptr, 50, selectItem);
             }
             // если тапа нет - сбрасываем
             selectItem = clickItem = -1;
@@ -406,51 +356,47 @@ i32 zViewBaseRibbon::onTouch(zTouch *touch) {
 
 void zViewBaseRibbon::onDraw() {
     zViewGroup::onDraw();
-    auto div((zDrawableDivider*)drs[DR_IDX_DIV]);
-    if(div) div->draw(countItem, firstItem);
+    if(div) div->make(0, countItem, firstItem);
 }
 
 void zViewBaseRibbon::setOrientation(bool _vert) {
     zViewGroup::setOrientation(_vert);
-    vert = _vert; reset();
-    if(adapter) countItem = adapter->getCount();
+    reset(); countItem = adapter->getCount();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                              ЛЕНТА                                                                     //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-zViewRibbon::zViewRibbon(zStyle* _styles, i32 _id, bool _vert) : zViewBaseRibbon(_styles, _id, _vert) { }
-
-void zViewRibbon::fill(int edge) {
+void zViewRibbon::fill(int _edge) {
     auto view(atView(0));
     if(view) fillReverse(firstItem - 1, view->edges(vert, false));
     int count(children.size());
     view = atView( count - 1);
     count += firstItem;
-    if(firstItem == 0 && (divType & ZS_DIVIDER_BEGIN)) edge += divSize + divPadEnd;
-    fillForward(count, (view ? view->edges(vert, true) : edgeStart) + edge);
+    if(firstItem == 0 && div && div->type & ZS_DIVIDER_BEGIN) _edge += div->size + div->padEnd;
+    fillForward(count, (view ? view->edges(vert, true) : edge.w) + _edge);
 }
 
 // заполнять с конца к началу
 void zViewRibbon::fillReverse(int pos, int next) {
-    auto div((divType & ZS_DIVIDER_MIDDLE) ? divSize + divPadBegin + divPadEnd : 0);
-    while(next > edgeStart && pos >= 0) {
+    auto _div(div && (div->type & ZS_DIVIDER_MIDDLE) ? div->size + div->padBegin + div->padEnd : 0);
+    while(next > edge.w && pos >= 0) {
         next = addView(next, pos, false, false)->edges(vert, false);
-        next -= div; pos--;
+        next -= _div; pos--;
     }
     firstItem = pos + 1;
-    correctBegin(div);
+    correctBegin(_div);
 }
 
 // заполнять с начала до конца
 void zViewRibbon::fillForward(int pos, int next) {
-    auto div((divType & ZS_DIVIDER_MIDDLE) ? divSize + divPadBegin + divPadEnd : 0);
-    while(next < edgeEnd && pos < countItem && pos >= 0) {
+    auto _div(div && (div->type & ZS_DIVIDER_MIDDLE) ? div->size + div->padBegin + div->padEnd : 0);
+    while(next < edge.h && pos < countItem && pos >= 0) {
         next = addView(next, pos, true, true)->edges(vert, true);
-        next += div; pos++;
+        next += _div; pos++;
     }
-    correctFinish(div);
+    correctFinish(_div);
 }
 
 zView* zViewRibbon::addView(int coord, int pos, bool flow, bool end) {
@@ -459,11 +405,9 @@ zView* zViewRibbon::addView(int coord, int pos, bool flow, bool end) {
     return zViewBaseRibbon::addView(x, y, pos, flow, end ? -1 : 0);
 }
 
-void zViewRibbon::childMeasure(zView* child, rti* lyt) {
-    auto wSpec(makeChildMeasureSpec((vert ? MAKE_MEASURE_SPEC(MEASURE_EXACT, rfull.w) : measureSpec.w),
-                                    padMargin(false), lyt->w));
-    auto hSpec(makeChildMeasureSpec((vert ? measureSpec.h : MAKE_MEASURE_SPEC(MEASURE_EXACT, rfull.h)),
-                                    padMargin(true), lyt->h));
-    child->measure(wSpec, hSpec);
+void zViewRibbon::childMeasure(zView* child, zLayoutParams* lps) {
+    auto wSpec(makeChildMeasureSpec((vert ? zMeasure(MEASURE_EXACT, rview.w) : measureSpec.w), padMargin(false), lps->w));
+    auto hSpec(makeChildMeasureSpec((vert ? measureSpec.h : zMeasure(MEASURE_EXACT, rview.h)), padMargin(true), lps->h));
+    child->measure({ wSpec, hSpec });
 }
 

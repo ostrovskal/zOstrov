@@ -4,48 +4,48 @@
 class zViewGroup;
 class zAdapterList;
 
-class zAdapterFabric {
+class zBaseFabric {
 public:
-	zAdapterFabric(zStyle* _styles) : styles(_styles) { }
-	virtual ~zAdapterFabric() { }
+	zBaseFabric(zStyle* _styles) : styles(_styles) { }
+	virtual ~zBaseFabric() { }
 	virtual zView* make(zViewGroup* parent) = 0;
 protected:
 	zStyle* styles{nullptr};
 };
 
 // Фабрика для создания элемента списка
-class zAdapterFabricListItem : public zAdapterFabric {
+class zFabricListItem : public zBaseFabric {
 public:
-	zAdapterFabricListItem(zStyle* _styles) : zAdapterFabric(_styles) { }
+	zFabricListItem(zStyle* _styles) : zBaseFabric(_styles) { }
 	virtual zView* make(zViewGroup* parent) override;
 };
 
 // Фабрика для создания элемента селекта
-class zAdapterFabricSpinItem : public zAdapterFabric {
+class zFabricSelectItem : public zBaseFabric {
 public:
-	zAdapterFabricSpinItem(zStyle* _styles) : zAdapterFabric(_styles) { }
+	zFabricSelectItem(zStyle* _styles) : zBaseFabric(_styles) { }
 	virtual zView* make(zViewGroup* parent) override;
 };
 
 // Фабрика для создания элемента меню
-class zAdapterFabricMenuItem : public zAdapterFabric {
+class zFabricMenuItem : public zBaseFabric {
 public:
-	zAdapterFabricMenuItem(zStyle* _styles) : zAdapterFabric(_styles) { }
+	zFabricMenuItem(zStyle* _styles) : zBaseFabric(_styles) { }
 	virtual zView* make(zViewGroup* parent) override;
 };
 
-class zAdapter {
+class zBaseAdapter {
 public:
 	// конструктор по умолчанию
-	zAdapter() { }
+	zBaseAdapter() { }
 	// деструктор
-	virtual ~zAdapter() { owners.free(); }
+	virtual ~zBaseAdapter() { owners.free(); }
 	// зарегистрировать владельца
-	virtual void registerOwner(zView* view);
+	virtual void registration(zView* view);
 	// отменить регистрацию владельца
-	virtual void unregisterOwner(zView* view);
+	virtual void unregistration(zView* view);
 	// вернуть количество элеметов
-	virtual int getCount() const { return 0; }
+	virtual int getCount() const = 0;
 	// вернуть идентификатор элемента
 	virtual int getItemId(int position) const { return -1; }
 	// вернуть тип элемента
@@ -55,7 +55,9 @@ public:
 	// вернуть признак пустого адаптера
 	virtual bool isEmpty() const { return getCount() == 0; }
 	// удалить все
-	virtual void clear(bool _delete) {  }
+	virtual void clear(bool _delete) = 0;
+    // удалить элемент
+    virtual void erase(int position, bool _delete) = 0;
 	// получить представление
 	virtual zView* getView(int position, zView* convert, zViewGroup* parent) { return nullptr; }
 	// получить представление для выпадающего списка
@@ -63,56 +65,55 @@ public:
 		return getView(position, convert, parent);
 	}
 protected:
-	// уведомление владельцев
-	void notifyOwners();
+	// уведомление владельцев об изменении адаптера
+	void notify();
 	// владельцы
 	zArray<zView*> owners{};
 };
 
-template<typename T = zString> class zAdapterArray : public zAdapter {
+template<typename T = zStringUTF8> class zAdapterArray : public zBaseAdapter {
 public:
 	// конструктор по умолчанию
 	zAdapterArray() { }
 	// конструктор по значениям
-	zAdapterArray(const zArray<T>& _objects, zAdapterFabric* _fabric) : zAdapter(), fabric(_fabric), objects(_objects) { }
+	zAdapterArray(const zArray<T>& _objects, zBaseFabric* _fabric) : zBaseAdapter(), fabricBase(_fabric), objects(_objects) { }
 	// деструктор
-	virtual ~zAdapterArray() { SAFE_DELETE(fabric); }
+	virtual ~zAdapterArray() { SAFE_DELETE(fabricBase); }
 	// вернуть количество элеметов
 	virtual int getCount() const override { return objects.size(); }
 	// удалить все
-	virtual void clear(bool _delete) override { if(_delete) objects.clear(); else objects.free(); notifyOwners(); }
+	virtual void clear(bool _delete) override { if(_delete) objects.clear(); else objects.free(); notify(); }
 	// удалить элемент
-	virtual void erase(int position, bool _delete) { objects.erase(position, _delete); notifyOwners(); }
+	virtual void erase(int position, bool _delete) override { objects.erase(position, _delete); notify(); }
 	// вернуть элемент
 	virtual const T& getItem(int position) const { return objects[position]; }
 	// вставить элемент(ы)
-	virtual void insert(int position, const T& t) { objects.insert(position, t); notifyOwners(); }
+	virtual void insert(int position, const T& t) { objects.insert(position, t); notify(); }
 	// добавить элемент
-	virtual void add(const T& t) { objects += t; notifyOwners(); }
+	virtual void add(const T& t) { objects += t; notify(); }
 	// установка всех элементов сразу
-	virtual void addAll(const zArray<T>& objs) { objects = objs; notifyOwners(); }
+	virtual void addAll(const zArray<T>& objs) { objects = objs; notify(); }
 	// фабрика создания представления
-	zAdapterFabric* fabric{nullptr};
+	zBaseFabric* fabricBase{nullptr};
 protected:
 	// массив элементов
 	zArray<T> objects{};
 };
 
-class zAdapterList : public zAdapterArray<zString> {
+class zAdapterList : public zAdapterArray<zStringUTF8> {
 public:
 	// конструктор
-	zAdapterList() : zAdapterArray<zString>({}, nullptr) { }
-	zAdapterList(const zArray<zString>& array, zAdapterFabric* _caption, zAdapterFabric* _dropdown = nullptr) :
-				zAdapterArray<zString>(array, _caption), dropdown(_dropdown) { }
+	zAdapterList() : zAdapterArray<zStringUTF8>({}, nullptr) { }
+	zAdapterList(const zArray<zStringUTF8>& array, zBaseFabric* _caption, zBaseFabric* _dropdown = nullptr) :
+				zAdapterArray<zStringUTF8>(array, _caption), fabricDropdown(_dropdown) { }
 	// деструктор
-	virtual ~zAdapterList() { SAFE_DELETE(dropdown); }
+	virtual ~zAdapterList() { SAFE_DELETE(fabricDropdown); }
 	// получить представление
 	virtual zView* getView(int position, zView* convert, zViewGroup* parent) override;
 	virtual zView* getDropDownView(int position, zView* convert, zViewGroup* parent) override;
 	// фабрика для выпадающего списка
-	zAdapterFabric* dropdown{nullptr};
+	zBaseFabric* fabricDropdown{nullptr};
 protected:
 	// создать представление
-	virtual zView* createView(int position, zView* convert, zViewGroup* parent, zAdapterFabric* _fabric, bool color);
+	virtual zView* createView(int position, zView* convert, zViewGroup* parent, zBaseFabric* _fabric, bool color);
 };
-

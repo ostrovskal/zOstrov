@@ -106,12 +106,6 @@ void zViewGroup::draw() {
     }
 }
 
-void zViewGroup::updateGlow(int _delta) {
-    if(glow) {
-        glow->start(_delta, testFlags(ZS_VORIENTATION), _delta < 0);
-    }
-}
-
 bool zViewGroup::intersectChildren(int x, int y) const {
     for(auto& c : children) {
         if(c->isVisibled()) {
@@ -187,7 +181,7 @@ void zViewGroup::onInit(bool _theme) {
     // прокрутка
     SAFE_DELETE(scrollBar);
     if(decor & ZS_SCROLLBAR) {
-        if((decor & ZS_SCROLLBAR) == ZS_SCROLLBAR) decor = (testFlags(ZS_VORIENTATION) * ZS_VSCROLLBAR);
+        if((decor & ZS_SCROLLBAR) == ZS_SCROLLBAR) decor = vert * ZS_VSCROLLBAR;
         scrollBar = new zViewScrollBar(this, (decor & ZS_SCROLLBAR) == ZS_VSCROLLBAR);
     }
     // селектор

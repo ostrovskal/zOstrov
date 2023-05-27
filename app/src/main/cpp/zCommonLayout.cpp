@@ -72,10 +72,6 @@ void zAbsoluteLayout::onLayout(crti &position, bool changed) {
 //                                                        LINEAR LAYOUT                                                                   //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-zLinearLayout::zLinearLayout(zStyle* _styles, i32 _id, bool vert) : zViewGroup(_styles, _id) {
-    updateStatus(ZS_VORIENTATION, ZS_VORIENTATION, vert);
-}
-
 void zLinearLayout::onMeasure(cszm& spec) {
     int width, height, allWeight(0); szm childSpec;
     int wmax(0), hmax(0), marginsChild(0); int* side; bool isWeights(false);
@@ -246,13 +242,8 @@ void zCellLayout::onLayout(crti &position, bool changed) {
 //                                                        SCROLL LAYOUT                                                                   //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-zScrollLayout::zScrollLayout(zStyle *_styles, i32 _id, bool _vert) : zViewGroup(_styles, _id) {
-    updateStatus(ZS_VORIENTATION, ZS_VORIENTATION, _vert);
-    flyng = new zFlyng(this);
-}
-
 void zScrollLayout::onMeasure(cszm& spec) {
-    int childWidth(0), childHeight(0); auto vert(isVertical());
+    int childWidth(0), childHeight(0);
     if(countChildren()) {
         auto child(atView(0));
         auto sw(spec.w.size()), sh(spec.h.size());
@@ -336,7 +327,7 @@ bool zScrollLayout::scrolling(int _delta) {
         if(upd) {
             child->requestLayout();
         } else if(glow) {
-            glow->start(_delta, testFlags(ZS_VORIENTATION), _delta < 0);
+            updateGlow(_delta);
         }
         awakenScroll();
         return !upd;

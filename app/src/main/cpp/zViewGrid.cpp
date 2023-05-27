@@ -5,10 +5,8 @@
 #include "zssh/zCommon.h"
 #include "zssh/zViewRibbons.h"
 
-zViewTable::zViewTable(zStyle* _styles, i32 _id, bool _vert) : zViewBaseRibbon(_styles, _id, _vert) {
-}
-
-void zViewTable::setParameters(const i32* _params) {
+/*
+void zViewGrid::setParameters(const i32* _params) {
     if(!_params) return;
     memcpy(params, _params, sizeof(params));
     lines       = params[TABLE_LINES];
@@ -18,41 +16,41 @@ void zViewTable::setParameters(const i32* _params) {
     requestLayout();
 }
 
-void zViewTable::getParameters(i32* _params) const {
+void zViewGrid::getParameters(i32* _params) const {
     if(_params) {
         memcpy(_params, params, sizeof(params));
     }
 }
 
-void zViewTable::fill(int edge) {
-    firstItem -= firstItem % lines;
+void zViewGrid::fill(int _edge) {
+    firstItem -= firstItem % linesGrid;
     auto view(atView(0));
-    if(view) fillReverse(firstItem - lines, view->edges(vert, false));
+    if(view) fillReverse(firstItem - linesGrid, view->edges(vert, false));
     auto count(children.size());
     view = atView(count - 1);
-    if(firstItem == 0 && (divType & ZS_DIVIDER_BEGIN)) edge += divSize + divPadEnd;
-    fillForward(firstItem + count, (view ? view->edges(vert, true) + lineSpacing : edgeStart) + edge);
+    if(firstItem == 0 && (divType & ZS_DIVIDER_BEGIN)) _edge += divSize + divPadEnd;
+    fillForward(firstItem + count, (view ? view->edges(vert, true) + lineSpacing : edge.w) + _edge);
 }
 
-void zViewTable::fillReverse(int pos, int next) {
+void zViewGrid::fillReverse(int pos, int next) {
     auto div((divType & ZS_DIVIDER_MIDDLE) ? divSize + divPadBegin + divPadEnd : 0);
     while(next > edgeStart && pos >= 0) {
         next = makeLine(pos, next, false)->edges(vert, false) - lineSpacing;
-        firstItem = pos; pos -= lines; next -= div;
+        firstItem = pos; pos -= linesGrid; next -= div;
     }
     correctBegin(lineSpacing + div);
 }
 
-void zViewTable::fillForward(int pos, int next) {
-    auto div((divType & ZS_DIVIDER_MIDDLE) ? divSize + divPadBegin + divPadEnd : 0);
-    while(next < edgeEnd && pos < countItem) {
+void zViewGrid::fillForward(int pos, int next) {
+    auto _div((divType & ZS_DIVIDER_MIDDLE) ? divSize + divPadBegin + divPadEnd : 0);
+    while(next < edge.h&& pos < countItem) {
         next = makeLine(pos, next, true)->edges(vert, true) + lineSpacing;
-        next += div; pos += lines;
+        next += _div; pos += linesGrid;
     }
-    correctFinish(lineSpacing + div);
+    correctFinish(lineSpacing + _div);
 }
 
-zView* zViewTable::makeLine(int position, int coord1, bool flow) {
+zView* zViewGrid::makeLine(int position, int coord1, bool flow) {
     auto coord2((vert ? rclient.x : rclient.y) + (params[TABLE_MODE] == ZS_TABLE_STRETCH_UNIFORM) * cellSpacing);
     auto last(z_min(countItem, position + lines));
     zView* child(nullptr);
@@ -64,7 +62,7 @@ zView* zViewTable::makeLine(int position, int coord1, bool flow) {
     return child;
 }
 
-void zViewTable::onInflate(bool _theme) {
+void zViewGrid::onInflate(bool _theme) {
     zViewBaseRibbon::onInflate(_theme);
     styles->enumerate([this, _theme](u32 attr) {
         int v((int)zTheme::value.value); attr |= _theme * ZTT_THM;
@@ -80,7 +78,7 @@ void zViewTable::onInflate(bool _theme) {
     setParameters(params);
 }
 
-void zViewTable::onMeasure(int widthSpec, int heightSpec) {
+void zViewGrid::onMeasure(int widthSpec, int heightSpec) {
     zViewBaseRibbon::onMeasure(widthSpec, heightSpec);
     // Вычисление параметров ячеек
     auto cell(params[TABLE_CELL_SIZE]), space(params[TABLE_CELLS_SPACE]);
@@ -103,13 +101,13 @@ void zViewTable::onMeasure(int widthSpec, int heightSpec) {
 //    DLOG("cell:%i space:%i cellSize:%i cellSpacing:%i", cell, space, cellSize, cellSpacing);
 }
 
-szi zViewTable::measureChildrenSize(int widthSpec, int heightSpec) {
+szi zViewGrid::measureChildrenSize(int widthSpec, int heightSpec) {
     int hmax(0), wmax(0), i;
     int limitCells(SIZE_MEASURE_SPEC(widthSpec));
     int limitLines(SIZE_MEASURE_SPEC(heightSpec));
     auto limC(vert ? &limitCells : &limitLines);
     auto limL(vert ? &limitLines : &limitCells);
-    if(!lines) lines = (*limC - pad.extent(vert)) / (params[TABLE_CELL_SIZE] + params[TABLE_CELLS_SPACE] * 2);
+    if(!linesGrid) linesGrid = (*limC - pad.extent(vert)) / (params[TABLE_CELL_SIZE] + params[TABLE_CELLS_SPACE] * 2);
     for(i = 0 ; i < countItem; i++) {
         auto child(obtainView(i));
         if(!child) continue;
@@ -145,20 +143,21 @@ szi zViewTable::measureChildrenSize(int widthSpec, int heightSpec) {
             wmax = _wmax;
         }
     }
-    auto _size(resolveDivider(i / lines));
+    auto _size(div && div->resolve(i / linesGrid));
     if(vert) hmax += _size; else wmax += _size;
     return {wmax, hmax};
 }
 
-void zViewTable::childMeasure(zView *child, rti *lyt) {
-    auto spec1(MAKE_MEASURE_SPEC(MEASURE_UNDEF, 0));
-    auto spec2(MAKE_MEASURE_SPEC(MEASURE_EXACT, cellSize));
-    auto wspec(makeChildMeasureSpec(vert ? spec2 : spec1, padMargin(false), lyt->w));
-    auto hspec(makeChildMeasureSpec(vert ? spec1 : spec2, padMargin(true), lyt->h));
-    child->measure(wspec, hspec);
+void zViewGrid::childMeasure(zView *child, zLayoutParams *lps) {
+    auto spec1(zMeasure(MEASURE_UNDEF, 0));
+    auto spec2(zMeasure(MEASURE_EXACT, cellSize));
+    auto wspec(makeChildMeasureSpec(vert ? spec2 : spec1, padMargin(false), lps->w));
+    auto hspec(makeChildMeasureSpec(vert ? spec1 : spec2, padMargin(true), lps->h));
+    child->measure( { wspec, hspec } );
 }
 
-void zViewTable::setOrientation(bool vert) {
-    zViewBaseRibbon::setOrientation(vert);
-    lines = params[TABLE_LINES];
+void zViewGrid::setOrientation(bool _vert) {
+    zViewBaseRibbon::setOrientation(_vert);
+    linesGrid = params[TABLE_LINES];
 }
+*/

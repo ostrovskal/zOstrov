@@ -1,6 +1,6 @@
 
 #include "zssh/zCommon.h"
-#include "zssh/zAdapter.h"
+#include "zssh/zCommonAdapters.h"
 #include "zssh/zViewText.h"
 #include "zssh/zViewWidgets.h"
 #include "zssh/zViewRibbons.h"
@@ -9,33 +9,35 @@
 //                                             ОСНОВНЫЕ ФАБРИКИ                                                       //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-zView* zAdapterFabricMenuItem::make(zViewGroup* parent) {
+zView* zFabricMenuItem::make(zViewGroup* parent) {
     auto v(new zLinearLayout(styles_default, 0, false));
     v->attach(new zViewImage(styles_z_menuimage, 0, 1), VIEW_WRAP, VIEW_MATCH);
     v->attach(new zViewCheck(styles, 0, 0), VIEW_MATCH, VIEW_MATCH);
-    v->lytParams.set(0, 0, VIEW_MATCH, VIEW_WRAP);
-    v->onInflate(false);
+    v->lps.set(0, 0, VIEW_MATCH, VIEW_WRAP);
+    v->onInit(false);
     return v;
 }
 
-zView* zAdapterFabricSpinItem::make(zViewGroup* parent) {
+zView* zFabricSelectItem::make(zViewGroup* parent) {
     auto v(new zViewText(styles, 0, 0));
-    v->lytParams.set(0, 0, VIEW_MATCH, VIEW_WRAP);
-    v->onInflate(false);
+    v->lps.set(0, 0, VIEW_MATCH, VIEW_WRAP);
+    v->onInit(false);
     return v;
 }
 
-zView* zAdapterFabricListItem::make(zViewGroup* parent) {
-    auto v(new zViewText(styles, 0, 0));
-    auto tbl(dynamic_cast<zViewTable*>(parent));
+zView* zFabricListItem::make(zViewGroup* parent) {
     int cell(100_dp);
+    auto v(new zViewText(styles, 0, 0));
+/*
+    auto tbl(dynamic_cast<zViewGrid*>(parent));
     if(tbl) {
         i32 params[5]; tbl->getParameters(params);
-        auto tmp(params[zViewTable::TABLE_CELL_SIZE]);
+        auto tmp(params[zViewGrid::TABLE_CELL_SIZE]);
         if(tmp) cell = tmp;
     }
-    v->lytParams.set(0, 0, cell, cell);
-    v->onInflate(false);
+*/
+    v->lps.set(0, 0, cell, cell);
+    v->onInit(false);
     return v;
 }
 
@@ -43,49 +45,42 @@ zView* zAdapterFabricListItem::make(zViewGroup* parent) {
 //                                              БАЗОВЫЙ АДАПТЕР                                                       //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void zAdapter::registerOwner(zView* view) {
-    if(owners.indexOf(view) == -1) {
-        owners += view;
-    }
+void zBaseAdapter::registration(zView* view) {
+    if(owners.indexOf(view) == -1) owners += view;
 }
 
-void zAdapter::unregisterOwner(zView* view) {
-    auto idx(owners.indexOf(view));
-    if(idx != -1) {
-        owners.erase(idx, 1, false);
-    }
+void zBaseAdapter::unregistration(zView* view) {
+    owners.erase(owners.indexOf(view), 1, false);
 }
 
-void zAdapter::notifyOwners() {
-    for(auto v : owners) {
-        v->notifyAdapter(this);
-    }
+void zBaseAdapter::notify() {
+    for(auto v : owners) v->notifyAdapter(this);
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                         ПРОСТОЙ АДАПТЕР СПИСКА                                                     //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 zView *zAdapterList::getView(int position, zView *convert, zViewGroup *parent) {
-    return createView(position, convert, parent, fabric, false);
+    return createView(position, convert, parent, fabricBase, false);
 }
 
 zView *zAdapterList::getDropDownView(int position, zView *convert, zViewGroup *parent) {
-    return createView(position, convert, parent, dropdown, true);
+    return createView(position, convert, parent, fabricDropdown, true);
 }
 
-zView *zAdapterList::createView(int position, zView *convert, zViewGroup *parent, zAdapterFabric *_fabric, bool color) {
+zView *zAdapterList::createView(int position, zView *convert, zViewGroup *parent, zBaseFabric *_fabric, bool color) {
     auto nv(convert);
     if(!nv) nv = _fabric->make(parent);
     nv->id = position;
+/*
     auto tv(dynamic_cast<zViewText*>(nv));
     if(tv) {
         tv->setText(getItem(position), false);
         auto sv(dynamic_cast<zViewSelect*>(parent));
-        if(sv && color) {
-            tv->setTextForegroundColor(sv->getSelectedItem() == position ?
-                                             tv->getTextHighlightColor() : tv->getTextDefaultColor());
-        }
+        if(sv && color) tv->setTextColorForeground(sv->getSelectedItem() == position ? tv->getTextColorHighlight() : tv->getTextColorDefault());
     }
+*/
     return nv;
 }

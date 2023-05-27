@@ -5,6 +5,7 @@
 #include "zssh/zCommon.h"
 #include "zssh/zViewRibbons.h"
 
+/*
 zViewSelect::zViewSelect(zStyle* _styles, i32 _id) : zViewGroup(_styles, _id) {
     SAFE_DELETE(drs[DR_IDX_FK]);
     dropdown = new zViewDropdown(this, _styles);
@@ -122,3 +123,4 @@ void zViewSelect::notifyOwner(int what, zView *view, int arg) {
         setItemSelected(arg);
     }
 }
+*/

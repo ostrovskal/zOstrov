@@ -257,6 +257,11 @@ void zViewManager::drawViews() {
     status |= Z_ANIM;
 }
 
+void zViewManager::drawCaret(zView* _view) {
+    if(caret && caret->parent == _view)
+        caret->draw();
+}
+
 void zViewManager::saveStateView(zViewGroup *view, zView::STATE &state, int &index) {
     int count(view->countChildren());
     for(int i = 0 ; i < count; i++) {

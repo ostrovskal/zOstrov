@@ -77,6 +77,8 @@ public:
     virtual void setMainMatrix(int ww, int hh, bool invert);
     // вернуть базовое окно
     ANativeWindow* getNativeWindow() const { return window; }
+    // отрисовка каретки
+    void drawCaret(zView* _view);
     // вернуть каретку
     zViewCaret* getCaret() const { return caret; }
     // вернуть панель действий

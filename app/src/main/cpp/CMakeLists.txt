@@ -24,10 +24,10 @@ add_library(zssh SHARED
 		zViewKeyboard.cpp
 		zViewEdit.cpp
 		zViewRibbons.cpp
-		zViewTable.cpp
+        zViewGrid.cpp
 		zViewSelect.cpp
 		zViewPopup.cpp
-		zAdapter.cpp
+        zCommonAdapters.cpp
 )
 
 find_package(zstandard REQUIRED CONFIG)
