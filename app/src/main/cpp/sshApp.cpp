@@ -50,7 +50,7 @@ void android_main(android_app* android) {
     theApp->run();
 }
 
-sshApp::sshApp(android_app* _android) : zViewManager(_android->activity->assetManager, 8) {
+sshApp::sshApp(android_app* _android) : zViewManager(_android->activity, 8) {
     theApp                = this;
     android               = _android;
     android->userData     = this;
@@ -112,10 +112,7 @@ void sshApp::setContent() {
     ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.first_form, 10), vv, VIEW_WRAP )->
             setForegroundGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_START | ZS_GRAVITY_VCENTER);
     ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.first_form, 10), vv, VIEW_WRAP )->
-            setForegroundGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_HCENTER | ZS_GRAVITY_VCENTER)->setOnClick([this](zView* v, bool) {
-        //DLOG("on click1");
-        //manager->getKeyboard()->show(v->id, false);
-    });
+            setForegroundGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_HCENTER | ZS_GRAVITY_VCENTER);
     ll->attach(sl, ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP );
     ll->attach(edt3, 350, VIEW_WRAP)->updateStatus(ZS_NOWRAP, true);
     ll->attach(vw, VIEW_MATCH, VIEW_WRAP)->setOnClick([this](zView* v, bool) {

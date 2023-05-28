@@ -81,3 +81,45 @@ protected:
     int frame{0};
     bool textEmpty{false};
 };
+
+class zTabLayout : public zLinearLayout {
+public:
+    zTabLayout(zStyle* _styles, i32 _id, zStyle* _styles_capt, int _gravityCaption);
+    // добавить страницу
+    virtual void addPage(u32 tabText, i32 tabIcon, zViewGroup* page);
+    // сохранение/восстановление
+    virtual void stateView(STATE &state, bool save, int &index) override;
+    // установить активную страницу
+    virtual void setActivePage(int _page);
+    // загрузка стилей
+    virtual void onInit(bool theme) override;
+    // вернуть имя типа
+    virtual cstr typeName() const override { return "zTabLayout"; }
+    // установить селектор
+    void setSelector(const zParamDrawable& params);
+    // вернуть активную страницу
+    int getActivePage() const { return page; }
+    // вернуть содержимое активной страницы
+    const zViewGroup* getContentPage(int page) const;
+    // установка события смены вкладки
+    void setOnTabChange(std::function<void(zView*, int)> _change) { onTabChange = _change; }
+protected:
+    // спрятать страницу
+    virtual void hidePage(int _page);
+    // показать страницу
+    virtual void showPage(int _page);
+    // позиционирование
+    virtual void onLayout(crti &position, bool changed) override;
+    // показать селектор
+    void showSelector();
+    // макет для заголовков
+    zLinearLayout* caption{nullptr};
+    // макет содержимого
+    zFrameLayout* content{nullptr};
+    // активная вкладка
+    int page{-1};
+    // стили заголовков
+    zStyle* styles_caption{nullptr};
+    // событие смены вкладики
+    std::function<void(zView*, int)> onTabChange;
+};

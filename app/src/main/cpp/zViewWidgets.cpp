@@ -211,6 +211,7 @@ void zViewSlider::onDraw() {
     // нарисовать ползунок
     offs = trumb->offsetBound();
     trumb->drawCommon(clip, mtxTrumb * m.translate(offs.x, offs.y, 0.0f), true);
+    drw[DRW_FBO]->texture->save(manager->getBasePath(1) + "slider.tga");
 }
 
 void zViewSlider::onMeasure(cszm& spec) {

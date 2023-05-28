@@ -58,12 +58,15 @@ static void* threadFunc(void*) {
 }
 */
 
-zViewManager::zViewManager(AAssetManager* _assets, int size_cache) {
+zViewManager::zViewManager(ANativeActivity* _activity, int size_cache) {
     memset(shaderVars, 0, sizeof(shaderVars));
     if(!theme) theme = new zTheme();
     if(!cache) cache = new zImageCache(size_cache);
-    manager   = this;
-    assets    = _assets;
+    manager      = this;
+    assets       = _activity->assetManager;
+    basePaths[0] = _activity->externalDataPath; basePaths[0].slash();
+    basePaths[1] = _activity->internalDataPath; basePaths[1].slash();
+    basePaths[2] = _activity->obbPath; basePaths[2].slash();
 }
 
 zViewManager::~zViewManager() {

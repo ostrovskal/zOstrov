@@ -58,8 +58,8 @@ void zViewText::onMeasure(cszm& spec) {
     fkW = fkSize.w + wpad; fkH = fkSize.h + hpad;
     auto icW(icSize.w + wpad), icH(icSize.h + hpad);
     // разбить текст и определить габариты текста в пикселях
-    auto offsW(distance + (fkg * fkW) + (icg * icW));
-    auto wh(textWrap(getDrawText(false), widthSize - (ipad.extent(false) + offsW)));
+    auto offsW(distance + (fkg * fkSize.w) + (icg * icSize.w));
+    auto wh(textWrap(getDrawText(false), widthSize - (wpad + ipad.extent(false) + offsW)));
     // установить высоту текста
     drw[DRW_TXT]->bound.h = wh.h;
     // корректировать ширину текста
@@ -225,7 +225,7 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
     // проверить на кэшированные значения
     if(widthRect <= 0 || isWrap()) widthRect = INT_MAX;
     if(textCache.isNotEmpty() && widthRect >= widthRectCache) {
-        //DLOG("from cache %s !!!", textCache[0]->text.str());
+//        DLOG("from cache %s", textCache[0]->text.str());
         for(auto& cache : textCache) maxHeight += cache->size;
         return { widthRectCache, maxHeight };
     }
@@ -248,15 +248,17 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
         // корректировать длину в пикселях, если длина нулевая
         _end += (_pos == _end);
         while(_pos < _end) {
-            if(!(ch = z_charUTF8(_text))) break;
+            if(!(ch = z_decodeUTF8(z_charUTF8(_text)))) break;
             // если это не начало подстроки и есть разделитель - запоминаем его
             if(_stext != _text && z_delimiter(ch)) separator = _text, sepWidth = width, sepPos = _pos;
-            _text += z_charLengthUTF8(_text); _pos++;
             if(ch != '\n') {
                 // определить новую ширину строки
-                auto ln(tex->widthGlyph(z_decodeUTF8(ch) + offsetBold, factor) + width);
+                auto ln(tex->widthGlyph(ch + offsetBold, factor) + width);
                 // если длина подстроки меньше ширины ректа и символ не "новая строка" = дальше
-                if(_stext == _text || ln <= widthRect) { width = ln; continue; }
+                if(_stext == _text || ln < widthRect) {
+                    width = ln; _text += z_charLengthUTF8(_text); _pos++;
+                    continue;
+                }
             } else {
                 separator = nullptr;
             }
@@ -265,7 +267,7 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
             // убрать конечные пробелы
             _count = z_sizeCountUTF8(_stext, _text);
             if(!isEdit) { zStringUTF8 u8(_stext, _count); while(z_isspace(u8[_count - 1])) _count--, width -= 10; }
-            if(width) textCache += new CACHE(width, height, _stext, z_sizeCountUTF8(_stext, _text));//_count);
+            if(width) textCache += new CACHE(width, height, _stext, _count);
             maxWidth = z_max(width, maxWidth); maxHeight += height;
             // пропустить начальные пробелы
             if(!isEdit) { while(z_isspace(z_charUTF8(_text))) _text += z_charLengthUTF8(_text); }

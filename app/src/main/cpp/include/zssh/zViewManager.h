@@ -52,7 +52,7 @@ public:
     // тип цветовых фильтров
     enum { ZCF_NORMAL = 0, ZCF_FOCUSED = 4, ZCF_DISABLED = 5 };
     // конструктор
-    zViewManager(AAssetManager* assets, int size_cache);
+    zViewManager(ANativeActivity* activity, int size_cache);
     // деструктор
     virtual ~zViewManager();
     // цикл сообщений
@@ -121,6 +121,8 @@ public:
     template<typename T = zView> T* idView(u32 _id) const { return common->idView<T>(_id); }
     // вернуть представление по типу
     template<typename T = zView> T* tpView(int* idx) const { return common->tpView<T>(idx); }
+    // базовые пути приложения
+    const zStringUTF8& getBasePath(int idx) const { return basePaths[idx]; }
     // хэндлер касаний
     zTouchHandler touch;
     // хэндлер событий
@@ -213,6 +215,8 @@ private:
     zShader* program{nullptr};
     // переменные в шейдере
     i32 shaderVars[7]{};
+    // основные пути приложения
+    zStringUTF8 basePaths[3];
 };
 
 // менеджер представлений

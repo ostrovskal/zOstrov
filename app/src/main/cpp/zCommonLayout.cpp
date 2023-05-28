@@ -334,3 +334,190 @@ bool zScrollLayout::scrolling(int _delta) {
     }
     return true;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                          EDIT LAYOUT                                                                   //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class zLayoutEdit : public zViewEdit {
+public:
+    zLayoutEdit(zEditLayout* _lyt, zViewEdit* _edit) : zViewEdit(_edit->styles, _edit->id, 0), lyt(_lyt) {
+        setHint(_edit->getHint());
+    }
+protected:
+/*
+    void messageReceive(HANDLER_MESSAGE *msg) override {
+        if(msg->what == MSG_EDIT) {
+            lyt->childUpdateText(z_isempty(getText()));
+        }
+        zViewEdit::messageReceive(msg);
+    }
+*/
+    zEditLayout* lyt{nullptr};
+};
+
+zView *zEditLayout::attach(zView *v, int width, int height, int where) {
+    auto edit(dynamic_cast<zViewEdit*>(v));
+    if(countChildren() == 0 && edit) {
+        auto _edit(new zLayoutEdit(this, edit));
+        zViewGroup::attach(_edit, width, height, where);
+        auto _gravity(_edit->gravity);
+        auto hintString(edit->getHint());
+        auto hintColor(edit->getTextHintColor());
+        auto hint(new zViewText(styles_default, 0, 0));
+        zViewGroup::attach(hint, width, height, where);
+        hint->setTextSize(_edit->getTextSize());
+        hint->setTextStyle(_edit->getTextStyle());
+        hint->setWrap(true);
+        hint->setText(hintString, true);
+        hint->setTextColorForeground(hintColor);
+        hint->setGravity(_gravity);
+        hint->updateStatus(ZS_TOUCHABLE | ZS_FOCUSABLE, false);
+        //_edit->setGravity(_gravity, true);
+        duration = 20;
+        delete edit;
+        return _edit;
+    }
+    return nullptr;
+}
+
+void zEditLayout::onMeasure(cszm& spec) {
+/*
+    int childWidth(0), childHeight(0);
+    auto child(atView<zViewEdit>(0));
+    if(child) {
+        measureChild(child, widthSpec, heightSpec);
+        childWidth = child->rview.w; childHeight = child->rview.h;
+        child->setHint("");
+        auto hint(atView<zViewText>(1));
+        measureChild(hint, widthSpec, heightSpec);
+        // добавить высоту подсказки
+        childHeight += hint->rview.h;
+    }
+    defaultOnMeasure(widthSpec, heightSpec, childWidth, childHeight);
+*/
+}
+
+void zEditLayout::onLayout(crti &position, bool changed) {
+    zView::onLayout(position, changed);
+    updateChildPosition();
+}
+
+void zEditLayout::updateChildPosition() {
+    auto child(atView<zViewEdit>(0));
+    if(child) {
+        auto hint(atView<zViewText>(1));
+        auto esub((rview.h - child->sizes(true)) / 2);
+        auto hsub((rview.h - hint->sizes(true)) / 2);
+        esub += (frame * esub / 6);
+        hsub -= (frame * hsub / 6);
+        auto wmax(child->getWidthMax());
+        child->layout(rti(rclient.x, rclient.y + esub, child->rview.w, child->rview.h));
+        // позиционировать текст по горизонтали
+        int x(child->rclient.x + child->ipad.x);
+        switch(hint->gravity & ZS_GRAVITY_HORZ) {
+            case ZS_GRAVITY_START: break;
+            case ZS_GRAVITY_END: x += (wmax - hint->rview.w - child->ipad.extent(false)); break;
+            default: x += (wmax - hint->rview.w) / 2; break;
+        }
+        hint->layout(rti(x, rclient.y + hsub, hint->rview.w, hint->rview.h));
+        auto rc(&child->rclip);
+//        hint->drw[DRW_TXT]->rclip.set(rc->x, rclip.y, rc->w, rclip.h);
+    }
+}
+
+/*
+bool zEditLayout::onRedraw() {
+    frame += !textEmpty * 2 - 1;
+    invalidate();
+    return (frame <= 0 || frame >= 6);
+}
+
+*/
+void zEditLayout::childUpdateText(bool _empty) {
+    textEmpty = _empty;
+//    if((_empty && frame != 0) || (!_empty && frame != 6))
+  //      post(MSG_REDRAW);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                        TABBED LAYOUT                                                                   //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+zTabLayout::zTabLayout(zStyle* _styles, i32 _id, zStyle* _styles_capt, int _gravityCaption) :
+        zLinearLayout(styles_z_tabs, _id, (_gravityCaption & ZS_GRAVITY_VERT) != 0), styles_caption(_styles_capt) {
+    // макет заголовков
+    caption = new zLinearLayout(_styles, 0, (_gravityCaption & ZS_GRAVITY_VERT) == 0);
+//    caption->drs[DR_IDX_SEL] = new zDrawable(this);
+    // макет контента
+    content = new zFrameLayout(styles_z_tabcontent, 0);
+    auto vert(isVertical());
+    attach(content,vert * VIEW_MATCH, !vert * VIEW_MATCH);
+    attach(caption, vert ? VIEW_MATCH : VIEW_WRAP, vert ? VIEW_WRAP : VIEW_MATCH, (_gravityCaption & (ZS_GRAVITY_START | ZS_GRAVITY_TOP)) ? 0 : -1);
+}
+
+void zTabLayout::showPage(int _page) {
+    if(_page >= 0 && _page < caption->countChildren()) {
+        // страница - видима
+        content->atView(_page)->updateStatus(ZS_VISIBLED,true);
+        page = _page;
+        // заголовок - показать селектор
+        showSelector();
+        requestLayout();
+    }
+}
+
+void zTabLayout::showSelector() {
+    auto r(&caption->atView(page)->rclient);
+    caption->drw[DRW_SEL]->measure(r->w, r->h, 0, false);
+}
+
+void zTabLayout::hidePage(int _page) {
+    if(_page >= 0 && _page < caption->countChildren()) {
+        // страница - невидима
+        content->atView(_page)->updateStatus(ZS_VISIBLED, false);
+    }
+}
+
+void zTabLayout::addPage(u32 tabText, i32 tabIcon, zViewGroup* group) {
+    auto countPages(caption->countChildren());
+    auto v(new zViewButton(styles_caption, countPages, tabText, tabIcon));
+    v->setOnClick([this](zView* v, int) { setActivePage(v->id); });
+    caption->attach(v, VIEW_WRAP, VIEW_WRAP);
+    content->attach(group, VIEW_MATCH, VIEW_MATCH);
+    if(countPages) hidePage(countPages);
+}
+
+void zTabLayout::setActivePage(int _page) {
+    if(_page != getActivePage()) {
+        // скрыть предыдущую страницу
+        hidePage(page);
+        // показать новую
+        showPage(_page);
+        // вызвать событие
+        if(onTabChange) onTabChange(this, _page);
+    }
+}
+
+const zViewGroup* zTabLayout::getContentPage(int _page) const {
+    return (_page >= 0 && _page < caption->countChildren()) ? content->atView<zViewGroup>(_page) : nullptr;
+}
+
+void zTabLayout::stateView(STATE &state, bool save, int &index) {
+    zView::stateView(state, save, index);
+    if(save) {
+        state.data += page;
+    } else {
+        page = (int)state.data[index++];
+    }
+}
+
+void zTabLayout::onInit(bool _theme) {
+    zViewGroup::onInit(_theme);
+}
+
+void zTabLayout::onLayout(crti &position, bool changed) {
+    zLinearLayout::onLayout(position, changed);
+    if(page == -1) setActivePage(0);
+    showSelector();
+}
