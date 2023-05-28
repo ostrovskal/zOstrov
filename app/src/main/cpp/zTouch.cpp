@@ -68,8 +68,8 @@ bool zTouch::event(AInputEvent* event, crti& r) {
     }
     if(flags & TOUCH_INIT_DOUBLE_PRESSED) {
         if(flags & TOUCH_CAPTURE) {
-            if((ctm - tm) < 300)
-                flags |= TOUCH_DOUBLE_CLICKED;
+            tm = ((ctm - tm) / 1000000);
+            flags |= (tm < 300) * TOUCH_DOUBLE_CLICKED;
         }
     }
     if(action == AMOTION_EVENT_ACTION_MOVE) {
@@ -89,10 +89,9 @@ bool zTouch::event(AInputEvent* event, crti& r) {
 }
 
 void zTouch::reset() {
-    btm = ctm = 0UL;
+    btm = ctm = 0UL; id = -1;
     bpt.empty(); cpt.empty();
-    flags = 0; act = AMOTION_EVENT_ACTION_CANCEL;
-    tm = -1L; id = -1;
+    flags &= TOUCH_INIT_DOUBLE_PRESSED; act = AMOTION_EVENT_ACTION_CANCEL;
 }
 
 // клик в области [rc]

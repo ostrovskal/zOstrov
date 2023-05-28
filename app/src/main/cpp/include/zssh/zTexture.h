@@ -23,15 +23,13 @@ public:
 #pragma pack(pop)
     zTexture() { tiles = new u16[6]; count = 1; memset(tiles, 0, 12); }
     // конструктор
-    zTexture(cstr _name, u8* ptr) : name(_name) { glGenTextures(1, &id); makeTexture(ptr); }
+    zTexture(cstr _name, u8* ptr, u32 size) : name(_name) { glGenTextures(1, &id); makeTexture(ptr, size); }
     // деструктор
     ~zTexture() { SAFE_DELETE(tiles); count = 0; release(); }
     // создать текстуру
-    void makeTexture(u8* ptr);
-    // загрузить(tga, png, jpg);
-    bool load(const zStringUTF8& path);
+    void makeTexture(u8* ptr, u32 size);
     // сохранить(tga)
-    bool save(const zStringUTF8& path);
+    bool save(const zStringUTF8& path) const;
     // вернуть количество тайлов
     int getCountTiles() const { return count; }
     // установить/сбросить целевую текстуру

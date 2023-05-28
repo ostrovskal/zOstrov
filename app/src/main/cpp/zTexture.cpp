@@ -4,6 +4,8 @@
 
 #include "zssh/zCommon.h"
 #include "zstandard/zJpg.h"
+#include "zstandard/zPng.h"
+#include "zstandard/zTga.h"
 
 void zTexture::release() {
     if(idFBO) {
@@ -22,36 +24,24 @@ void zTexture::enableFilter(bool set) const {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST + set);
 }
 
-bool zTexture::load(const zStringUTF8& path) {
-    return false;
+bool zTexture::save(const zStringUTF8& path) const {
+    if(idFBO) {
+        auto width(_size.w), height(_size.h);
+        std::unique_ptr<u8> ptr(new u8[width * height * 4]);
+        // установить fbo
+        glBindFramebuffer(GL_FRAMEBUFFER, idFBO);
+        glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr.get());
+        z_tgaSaveFile(path, ptr.get(), width, height, 4);
+        // освободить fbo
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+    return idFBO != 0;
 }
 
-bool zTexture::save(const zStringUTF8& path) {
-    //glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-/*
-    Bind();
-    int data_size = mWidth * mHeight * 4;
-    GLubyte* pixels = new GLubyte[mWidth * mHeight * 4];
-
-    GLuint textureObj = ...; // the texture object - glGenTextures
-
-    GLuint fbo;
-    glGenFramebuffers(1, &fbo);
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureObj, 0);
-
-    glReadPixels(0, 0, mWidth, mHeight, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glDeleteFramebuffers(1, &fbo);
-*/
-    //glReadPixels();
-    return false;
-}
-
-void zTexture::makeTexture(u8* ptr) {
+void zTexture::makeTexture(u8* ptr, u32 size) {
+    static u8 png_sig[8] = { 137,80,78,71,13,10,26,10 };
     if(!ptr) { release(); return; }
-    int type(GL_RGBA), ww, hh;
+    int type(GL_RGBA), ww(0), hh(0), comp(0);
     u8* alpha; u8* image;
     // 1. параметры GL текстуры
     glBindTexture(GL_TEXTURE_2D, id);
@@ -60,18 +50,22 @@ void zTexture::makeTexture(u8* ptr) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 2. определение формата текстуры
-    bool file(*(u16*)ptr == 0);
-    if(file) {
-        //DLOG("texture from file: %s", name.str());
-        // из файла
-        auto head((HEADER_TGA*)ptr); ptr += sizeof(HEADER_TGA);
-        ww = head->wWidth; hh = head->wHeight; image = ptr;
-        delete[] tiles; tiles = new u16[6]; memset(tiles, 0, 12);
-        tiles[2] = ww; tiles[3] = hh; ascent = descent = 0; count = 1;
-        for(int i = 0; i < ww * hh; i++) {
-            auto t(ptr[0]); ptr[0] = ptr[2]; ptr[2] = t;
-            ptr += 4;
+    zJpg* _jpg{nullptr}; zPng* _png(nullptr); zTga* _tga(nullptr);
+    if(ptr[0] == 0xFF && ptr[1] == 0xD8) {
+        _jpg = new zJpg(ptr, size);
+        if(_jpg->isValid()) {
+            ww = _jpg->getWidth(); hh = _jpg->getHeight(); image = _jpg->getImage();
+            type = _jpg->getComponent() == 3 ? GL_RGB : GL_RGBA;
+        } else {
+            DLOG("jpg is wrong!");
         }
+    } else if(memcmp(ptr, png_sig, 8) == 0) {
+        _png = new zPng(ptr, size, &ww, &hh, &comp, 4);
+        type = comp == 3 ? GL_RGB : GL_RGBA;
+    } else if(*(u16*)ptr == 0) {
+        _tga = new zTga(ptr, size);
+        ww = _tga->getWidth(); hh = _tga->getHeight();  image = _tga->getImage();
+        type = _tga->getComponent() == 3 ? GL_RGB : GL_RGBA;
     } else {
         // из активов
         auto head((HEAD_TTL*)ptr); ptr += sizeof(HEAD_TTL);
@@ -111,7 +105,9 @@ void zTexture::makeTexture(u8* ptr) {
         }
     }
     glTexImage2D(GL_TEXTURE_2D, 0, type, ww, hh, 0, type, GL_UNSIGNED_BYTE, image);
-    if(!file) { delete[] image; delete[] alpha; }
+    if(_jpg || _png || _tga) {
+        delete _jpg; delete _png; delete _tga;
+    } else { delete[] image; delete[] alpha; }
     glBindTexture(GL_TEXTURE_2D, 0);
     _size.set(ww, hh); _rsize.set(1.0f / (float)ww, 1.0f / (float)hh);
 }
@@ -119,7 +115,7 @@ void zTexture::makeTexture(u8* ptr) {
 int zTexture::widthGlyph(int ch, float factor) const {
     if(ch == 32 || ch == 256) return 10;
     auto ptr(paramGlyph(ch));
-    return ptr ? (int)trunc((float)ptr[2] * factor) : 0;
+    return ptr ? (int)round((float)ptr[2] * factor) : 0;
 }
 
 u32 zTexture::makeEmpty(int internalFormat, int format, int width, int height) {
@@ -141,7 +137,7 @@ u32 zTexture::makeFBO(int width, int height) {
     release();
     if(width > 1 && height > 1) {
         GLenum fboStatus;
-        // 1. создаем текстуру заданых размеров
+        // 1. создаем текстуру заданных размеров
         if(!(id = makeEmpty(GL_RGBA, GL_RGBA, width, height))) {
             ILOG("Не удалось создать текстуру для FBO!");
             return 0;
@@ -160,7 +156,7 @@ u32 zTexture::makeFBO(int width, int height) {
         }
         // 4. делаем созданный FBO текущим
         glBindFramebuffer(GL_FRAMEBUFFER, idFBO);
-        // 5. присоединяем созданные текстуры к текущему FBO
+        // 5. присоединяем созданную текстуру к текущему FBO
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, id, 0);
         // 6. проверим текущий FBO на корректность
         if((fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE) {

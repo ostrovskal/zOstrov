@@ -100,7 +100,7 @@ zViewSwitch::zViewSwitch(zStyle* _styles, i32 _id, u32 _text) : zViewCheck(_styl
     minMaxSize.set(z_dp(z.R.dimen.switchMinWidth), 0, z_dp(z.R.dimen.switchMinHeight), 0);
     setOnAnimation([this](zView*, int) {
         float pos; auto visible(animator.update(pos));
-        trumb->bound.x = drw[DRW_FK]->bound.x + ((float)fkW / 16.0f) * pos;
+        trumb->bound.x = drw[DRW_FK]->bound.x + ((float)fkW / 8.0f) * pos;
         invalidate();
         return visible;
     });
@@ -110,8 +110,8 @@ void zViewSwitch::checked(bool set) {
     // применить checked
     if(isChecked() != set) {
         animator.clear();
-        animator.init(!set * 8.0f, false);
-        animator.add(set * 8.0f, zInterpolator::LINEAR, 8);
+        animator.init(!set * 4.0f, false);
+        animator.add(set * 4.0f, zInterpolator::LINEAR, 4);
         updateStatus(ZS_CHECKED, set);
         post(MSG_ANIM, duration, 0);
     }
@@ -122,7 +122,7 @@ void zViewSwitch::onLayout(crti &position, bool changed) {
     if(changed) {
         auto bound(&drw[DRW_FK]->bound);
         trumb->measure(fkW, fkH, 0, false);
-        trumb->bound.x = bound->x + ((float) fkW / 16.0f) * (isChecked() * 8);
+        trumb->bound.x = bound->x + ((float) fkW / 8.0f) * (isChecked() * 4);
         trumb->bound.y = bound->y;
     }
 }

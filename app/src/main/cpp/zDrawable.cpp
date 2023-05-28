@@ -236,11 +236,10 @@ int zDrawable::makeText(cstr text, int len, zTextPaint* paint) {
         auto glyph(texture->paramGlyph(ch + offsetBold));
         if(!glyph) continue;
         tex.set(glyph); tex.w += tex.x; tex.h += tex.y;
-        auto cw((int)trunc((float)glyph[2] * factor));
+        auto cw((int)round((float)glyph[2] * factor));
         if(ch == ' ') cw = 10.0f;
         _pos.set(stx, sty + (int)round((float)(glyph[1] - offsetY) * factor), cw, (int)round((float)glyph[3] * factor));
         // нарисовать
-//        idx += makeTriangle(_pos, tex, &vertices[idx], paint->italic);
         idx += makeQuad(_pos, tex, &vertices[idx], paint->italic, true);
         stx += cw;
     }
@@ -250,15 +249,13 @@ int zDrawable::makeText(cstr text, int len, zTextPaint* paint) {
     stx += paint->preWidth + paint->italic * factor;
     // strike
     if(style & ZS_TEXT_STRIKE) {
-        _pos.set(0, 1 + ht / 2, stx - 2, (int)(2.0f * factor));
-        //idx += makeTriangle(_pos, tex, &vertices[idx], 0);
+        _pos.set(0, 1 + ht / 2, stx - 2, (int)round(2.0f * factor));
         idx += makeQuad(_pos, tex, &vertices[idx], 0, true);
     }
     // underline
     if(style & ZS_TEXT_UNDERLINE) {
-        auto bs((int)trunc((float)texture->descent * factor + 0.5f));
-        _pos.set(0, ht - bs, stx - 2, (int)(2.0f * factor));
-//        idx += makeTriangle(_pos, tex, &vertices[idx], 0);
+        auto bs((int)round((float)texture->descent * factor + 0.5f));
+        _pos.set(0, ht - bs, stx - 2, (int)round(2.0f * factor));
         idx += makeQuad(_pos, tex, &vertices[idx], 0, true);
     }
     count = idx;
@@ -343,7 +340,8 @@ void zDrawable::drawFBO(zView* prev, const std::function<void(void)>& _draw) {
     if(texture) {
         // установить целевую текстуру
         setFBO(true, true);
-        zView::fbo = view; manager->screen = view->rview;
+        zView::fbo = view;
+        manager->screen = view->rview;
         // нарисовать в текстуру
         _draw();
         // восстановить предыдущую цель
@@ -362,7 +360,7 @@ void zDrawable::drawFBO(zView* prev, const std::function<void(void)>& _draw) {
 szi zDrawable::resolveSize(int wmax, int hmax, u32 gravity) const {
     int w(0), h(0);
     // определить габариты картинки
-    if(texture/* && wmax > 0 && hmax > 0*/) {
+    if(texture) {
         auto rect(rectTile(tile));
         w = rect.w, h = rect.h; auto rel((float)w / (float)h);
         switch(gravity & ZS_SCALE_MASK) {

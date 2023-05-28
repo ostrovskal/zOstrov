@@ -102,7 +102,7 @@ pti zViewEdit::positionFromIndex(int _indexText) {
         auto idx(_indexText - c->text.count());
         if(idx <= 0) {
             getStringFromCache(i, bound, pos);
-            x = pos.x + drw[DRW_TXT]->sizeText(z_ptrUTF8(filter->getText(c->text), visibleIndex), c->size, _indexText);
+            x = pos.x + drw[DRW_TXT]->sizeText(c->text, c->size, _indexText);
             break;
         }
         _indexText = idx; y += c->size; i++;
@@ -116,7 +116,7 @@ int zViewEdit::indexFromPosition(cpti& screen, bool exact) {
     for(auto& c : textCache) {
         if(screen.y < (pos.y + c->size)) {
             getStringFromCache(i, bound, pos);
-            idx += drw[DRW_TXT]->indexOf(c->text, c->size, screen.x, pos.x, exact, &pos.x);
+            idx += visibleIndex + drw[DRW_TXT]->indexOf(c->text, c->size, screen.x, pos.x, exact, &pos.x);
             break;
         }
         pos.y += c->size; idx += c->text.count(); i++;
@@ -155,15 +155,11 @@ i32 zViewEdit::keyEvent(int key, bool sysKey) {
         // enter
         updateText(MSG_EDIT_FINISH);
         manager->changeFocus(nullptr);
-    } else {
+    } else if(key) {
         auto caretPos(caretIndex);
         if(key == '\b') {
-            if(caretPos > 0) {
-                removeText(visibleIndex + --caretPos, 1);
-            }
-        } else {
-            insertText(visibleIndex + caretPos++, (char *) &key);
-        }
+            if(caretPos > 0) removeText(--caretPos, 1);
+        } else insertText(caretPos++, (char *) &key);
         if(caretPos != caretIndex) {
             updateText(MSG_EDIT);
             caretIndex = correct(caretPos);
@@ -208,6 +204,7 @@ void zViewEdit::correctCaretPosition(int _index) {
             case ZS_GRAVITY_END:     x = wmax; break;
         }
         caretScreen.x += x;
+        caretIndex = 0;
     }
 }
 
@@ -243,7 +240,7 @@ int zViewEdit::correct(int _index) {
         }
         if(idx) {
             // корректировать начальный индекс текста/позицию каретки
-            visibleIndex += idx; _index -= idx;
+            visibleIndex += idx;
             update = true;
         }
     } else {

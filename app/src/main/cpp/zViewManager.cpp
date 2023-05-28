@@ -229,7 +229,11 @@ void zViewManager::drawViews() {
     common->layout(rcommon);
     // 3. состояния представлений
     if(bufViewStates) stateAllViews(Z_LOAD, nullptr, nullptr);
-    // 4. анимация
+    // 4. отрисовка всех представлений
+    zView::fbo = nullptr;
+    common->draw();
+    zGL::instance()->swap();
+    // 5. анимация
     if(status & Z_ANIM) {
         while((msg = manager->event.obtain())) {
             // отправить на обработку в представление
@@ -241,10 +245,6 @@ void zViewManager::drawViews() {
             }
         }
     }
-    // 5. отрисовка всех представлений
-    zView::fbo = nullptr;
-    common->draw();
-    zGL::instance()->swap();
 #ifndef NDEBUG
     if(debug && showTri) {
         if(oldTri != countVertices) {
@@ -311,7 +311,7 @@ void zViewManager::stateAllViews(u32 action, u8** _ptr, u32* _size) {
         auto _bufStates(new u8[_sizeStates]);
         *_ptr = _bufStates; *_size = _sizeStates;
         // также запомнить статус клавиатуры
-        dwordLE(&_bufStates, 0);//keyboard ? keyboard->getOwnerID() : 0);
+        dwordLE(&_bufStates, keyboard ? keyboard->getOwnerID() : 0);
         // count structures viewStates
         dwordLE(&_bufStates, viewStates.size());
         for(auto& vs : viewStates) {
@@ -455,13 +455,13 @@ void zViewManager::showSoftKeyboard(u32 idOwner, bool _show) {
     keyboard->show(idOwner, _show);
 }
 
-u8* zImageCache::load(cstr _name) {
+u8* zImageCache::load(cstr _name, i32& size) {
     u8* ptr; zStringUTF8 name(_name);
     if(name.indexOf("/") == -1) {
         // загрузить изображение из активов и скопировать ее в текстуру
-        ptr = manager->assetFile("textures/" + name + ".ttl", nullptr);
+        ptr = manager->assetFile("textures/" + name + ".ttl", &size);
     } else {
-        zFile f(name, true); ptr = (u8*)f.readn();
+        zFile f(name, true); size = f.length(); ptr = (u8*)f.readn();
     }
     return ptr;
 }
@@ -477,9 +477,10 @@ zTexture* zImageCache::get(cstr _name, zTexture* t) {
         return _tx->tex;
     }
     // 2. создать новую
-    zTexture* tx; auto ptr(load(_name));
-    if(ptr) {
-        tx = new zTexture(_name, ptr); delete ptr;
+    zTexture* tx; i32 size(0);
+    auto ptr(load(_name, size));
+    if(ptr && size) {
+        tx = new zTexture(_name, ptr, size); delete ptr;
     } else {
         ILOG("Ошибка при загрузке текстуры - %s", _name);
         return get("znull", nullptr);
@@ -550,8 +551,9 @@ void zImageCache::info() {
 
 void zImageCache::update() {
     for(auto& t: tex) {
-        auto ptr(load(t.tex->name));
-        if(ptr) { t.tex->makeTexture(ptr); delete ptr; }
+        i32 size;
+        auto ptr(load(t.tex->name, size));
+        if(ptr && size) { t.tex->makeTexture(ptr, size); delete ptr; }
     }
 }
 

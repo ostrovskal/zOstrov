@@ -7,6 +7,11 @@ zViewKeyboard::zViewKeyboard(cstr nameLayouts) : zViewGroup(styles_default, z.R.
     updateStatus(ZS_SYSTEM, true); updateStatus(ZS_VISIBLED, false);
     setDrawable(nullptr, DRW_FBO); duration = 20;
     setOnAnimation([this] (zView*, int) {
+        if(current && owner && nPressSpec) {
+            auto but(&current->buttons[butIdx]); nPressSpec++;
+            if(but->spec == "DELETE" && nPressSpec > 15 && !(nPressSpec & 3)) owner->keyEvent('\b', false);
+            return true;
+        }
         // сдвигаем родительский
         float v; auto visible(animator.update(v));
         auto heightScreen(zGL::instance()->getSizeScreen(true));
@@ -79,8 +84,7 @@ void zViewKeyboard::setLayout(const zStringUTF8 &_name) {
     auto idx(layouts.indexOf(_name));
     if(idx != -1) {
         if(current) prevName = current->names[0];
-        current = &layouts[idx];
-        requestLayout();
+        current = &layouts[idx]; requestLayout();
     } else {
         current = nullptr;
     }
@@ -98,6 +102,9 @@ i32 zViewKeyboard::onTouchEvent(zTouch *touch) {
                     drw[DRW_FK]->measure(r.w, r.h, 0, false);
                     drw[DRW_FK]->bound = r;
                     butIdx = i;
+                    if(but->spec == "DELETE"/* || but->spec == "SHIFT"*/) {
+                        nPressSpec = 1; post(MSG_ANIM, duration, 0);
+                    }
                 }
                 return TOUCH_STOP;
             }
@@ -105,15 +112,31 @@ i32 zViewKeyboard::onTouchEvent(zTouch *touch) {
                 // кнопка отпущена
                 zStringUTF8 *_switch(nullptr);
                 int keyCode{0};
+                if(nPressSpec) {
+                    auto isFinish(nPressSpec > 15);
+                    nPressSpec = 0; manager->eraseAllEventsView(this);
+                    if(isFinish) { butIdx = -1; return TOUCH_STOP; }
+                }
                 if(but->spec == "DELETE") keyCode = '\b';
                 else if(but->spec == "ENTER") keyCode = '\n';
-                else if(but->spec == "SHIFT") _switch = &current->names[KEYBOARD_SHIFT];
+                else if(but->spec == "SHIFT") {
+                    if(!(activeShift = touch->isDblClicked())) {
+                        _switch = &current->names[KEYBOARD_SHIFT];
+                    } else {
+                        if(current->names[KEYBOARD_INPUT].isEmpty())
+                            _switch = &current->names[KEYBOARD_SHIFT];
+                        else {
+                            isDrawing = true;
+                            invalidate();
+                        }
+                    }
+                }
                 else if(but->spec == "LANG") _switch = &current->names[KEYBOARD_LANG];
                 else if(but->spec == "SPEC") _switch = &current->names[KEYBOARD_DIGIT];
                 else keyCode = but->name[touch->isLongClick()];
-                if(!_switch) {
+                if(!_switch && keyCode) {
                     if(owner) owner->keyEvent(keyCode, false);
-                    if(current->names[KEYBOARD_INPUT].isNotEmpty()) {
+                    if(current->names[KEYBOARD_INPUT].isNotEmpty() && !activeShift) {
                         _switch = &current->names[KEYBOARD_INPUT];
                     }
                 }
@@ -133,12 +156,13 @@ void zViewKeyboard::onMeasure(cszm& spec) {
     deltaWidth = ((float)widthSize / (float)sz.w);
     deltaHeight = ((float)heightSize / (float)sz.h);
     setMeasuredDimension(widthSize, heightSize);
+    isDrawing = true;
 }
 
 void zViewKeyboard::onLayout(crti &position, bool changed) {
     zViewGroup::onLayout(position, changed);
     drw[DRW_FBO]->bound = rview; rclip = rview;
-    updateStatus(ZS_DIRTY_LAYER, !changed | isUpdate);
+    updateStatus(ZS_DIRTY_LAYER, isDrawing);
     if(isUpdate) {
         isUpdate = false;
         auto checked(updateStatus(ZS_CHECKED, owner != nullptr) != 0);
@@ -163,28 +187,31 @@ void zViewKeyboard::onDrawFBO() {
 
 void zViewKeyboard::onDraw() {
     // сформировать клавиатуру
-    if(!current) return;
-    zStringUTF8 n1, n2;
+    if(!current || !isDrawing) return;
+    zStringUTF8 n1, n2; u32 color;
     auto baseTxt(atView<zViewText>(0)), altTxt(atView<zViewText>(1));
     baseTxt->updateStatus(ZS_VISIBLED, true); altTxt->updateStatus(ZS_VISIBLED, true);
     for(auto& b : current->buttons) {
-        auto& nm(b.name);
+        auto& nm(b.name); auto isHighlight(false);
         if(b.spec.isNotEmpty()) {
             n1 = nm; n2.empty();
-            baseTxt->drw[DRW_FK]->color = zColor::gray;
+            color = zColor::gray.toARGB();
+            isHighlight = (b.spec == "SHIFT" && activeShift);
         } else {
             n1 = nm.substr(0, 1);
             n2 = nm.substr(1, 1);
-            baseTxt->drw[DRW_FK]->color = theme->themeColor;
+            color = theme->themeColor;
         }
-        auto r(b.rview);
+        auto r(b.rview); baseTxt->drw[DRW_FK]->color = color;
         r.x = rview.x + r.x * deltaWidth; r.w *= deltaWidth;
         r.y = rview.y + r.y * deltaHeight; r.h *= deltaHeight;
         szm spec(zMeasure(MEASURE_EXACT, r.w), zMeasure(MEASURE_EXACT, r.h));
+        baseTxt->setTextColorForeground(isHighlight ? 0xff0000ff : 0xffffffff);
         baseTxt->setText(n1, true); baseTxt->measure(spec); baseTxt->layout(r); baseTxt->draw();
         if(n2.isNotEmpty() && n1 != n2) { altTxt->setText(n2, true); altTxt->measure(spec); altTxt->layout(r); altTxt->draw(); }
     }
     baseTxt->updateStatus(ZS_VISIBLED, false); altTxt->updateStatus(ZS_VISIBLED, false);
+    isDrawing = false;
 }
 
 i32 zViewKeyboard::keyEvent(int key, bool sysKey) {
@@ -199,6 +226,7 @@ i32 zViewKeyboard::keyEvent(int key, bool sysKey) {
 void zViewKeyboard::show(u32 _id, bool set) {
     if(current) {
         auto root(manager->getSystemView(true));
+        nPressSpec = 0; activeShift = false;
         if(set) {
             owner = manager->idView(_id);
             cstr _defName(defName);
@@ -225,6 +253,6 @@ void zViewKeyboard::show(u32 _id, bool set) {
 }
 
 void zViewKeyboard::requestLayout() {
-    if(!atView(0)->isVisibled())
+    if(countChildren() && !atView(0)->isVisibled())
         zViewGroup::requestLayout();
 }

@@ -10,8 +10,8 @@ static zStyle styles_z_keyboardbase[] = {
 	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_TEXT_FOREGROUND_COLOR, 0xffffffff },
 	{ Z_TEXT_STYLE, ZS_TEXT_BOLD },
-	{ Z_TEXT_SIZE, 17 },
-	{ Z_PADDING, 0x01010101 },
+	{ Z_TEXT_SIZE, 16 },
+	{ Z_PADDING, 0x00000101 },
 	{ Z_IPADDING, 0x02020202 },
 	{ Z_DISPLAY, 0 },
 	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_CENTER }
@@ -23,8 +23,8 @@ static zStyle styles_z_keyboardalt[] = {
 	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_TEXT_FOREGROUND_COLOR, 0xffafafaf },
 	{ Z_TEXT_STYLE, ZS_TEXT_BOLD },
-	{ Z_TEXT_SIZE, 15 },
-	{ Z_PADDING, 0x01010101 },
+	{ Z_TEXT_SIZE, 14 },
+	{ Z_PADDING, 0x00000101 },
 	{ Z_IPADDING, 0x03030303 },
 	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_END | ZS_GRAVITY_BOTTOM }
 };

@@ -33,7 +33,7 @@ protected:
         int sz{0}; i64 millis{0};
         bool operator == (cstr n) const { return tex->name == n; }
     };
-    static u8* load(cstr _name) ;
+    static u8* load(cstr _name, i32& size) ;
     int findOlder();
     // текущий/максимальный размер
     int curSize{0}, maxSize{0};

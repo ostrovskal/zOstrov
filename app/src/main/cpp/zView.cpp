@@ -32,7 +32,11 @@ pti zView::applyGravity(crti& sizeParent, crti& sizeChild, u32 _gravity) {
 void zView::changeTheme() {
     drw[DRW_FBO]->release();
     status &= ~ZS_MEASURE; status |= ZS_DIRTY_LAYER;
-    if(manager->isChangeTheme()) onInit(true);
+    if(manager->isChangeTheme()) {
+        onInit(true);
+    } else {
+        oldPos.set(INT_MAX, INT_MAX, 0, 0);
+    }
 }
 
 void zView::onInit(bool _theme) {
@@ -422,15 +426,14 @@ zViewScrollBar::zViewScrollBar(zView* group, bool _vert) : zView(styles_z_scroll
     zView::onInit(false);
     size = styles->_int(Z_SCROLLBAR_SIZE, 4);
     fade = styles->_int(Z_SCROLLBAR_FADE, 0);
-    animator.init(3.0f, false);
-    animator.add(0.2f, zInterpolator::LINEAR, 20);
     setOnAnimation([this](zView*, int) { return updateStatus(ZS_VISIBLED, animator.update(alpha)); });
 }
 
 void zViewScrollBar::awaken() {
     updateStatus(ZS_VISIBLED, true);
     drw[DRW_BK]->measure(rview.w, rview.h, 0, false);
-    animator.restart();
+    animator.init(3.0f, false);
+    animator.add(0.2f, zInterpolator::LINEAR, 20);
     // запустить фейдинг
     if(fade) post(MSG_ANIM, duration, 0);
 }

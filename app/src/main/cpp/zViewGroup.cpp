@@ -83,7 +83,7 @@ void zViewGroup::disable(bool set) {
 void zViewGroup::draw() {
     if(isVisibled()) {
         // рисуем
-        if(testFlags(ZS_DIRTY_LAYER)) {
+        if(isDirty()) {
             drw[DRW_FBO]->drawFBO(fbo, [this] {
                 drw[DRW_BK]->draw(&rview);
                 // селектор
@@ -97,9 +97,7 @@ void zViewGroup::draw() {
                 // глоу
                 if(glow && glow->isVisibled()) glow->draw();
             });
-            if(drw[DRW_FBO]->isValid()) {
-                updateStatus(ZS_DIRTY_LAYER, false);
-            }
+            updateStatus(ZS_DIRTY_LAYER, !isFBO());
         }
         onDrawFBO();
         drawDebug();

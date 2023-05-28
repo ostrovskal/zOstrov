@@ -69,4 +69,10 @@ protected:
     bool isUpdate{false};
     // текущая кнопка
     int butIdx{-1};
+    // признак нажатия спец. кнопки
+    int nPressSpec{0};
+    // признак актинового шифта
+    bool activeShift{false};
+    // признак рисования
+    bool isDrawing{true};
 };
