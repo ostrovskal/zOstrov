@@ -160,8 +160,8 @@ zViewSlider::zViewSlider(zStyle* _styles, i32 _id, u32 _text, cszi& _range, int 
         float value; static zMatrix rot;
         animator.update(value);
         if(mode & ZS_SLIDER_ROTATE) rot.rotate(0, 0, deg2rad(value * 360.0f)); else rot.identity();
-        int v(-(int)roundf((value * speedTrack) * drw[DRW_FK]->bound.w));
-        drw[DRW_FK]->bound.buf[isVertical()] = posTrack + (v % drw[DRW_FK]->bound.w);
+        int v(-(int)roundf((value * speedTrack) * drw[DRW_FK]->bound[vert + 2]));
+        drw[DRW_FK]->bound[vert] = posTrack + (v % drw[DRW_FK]->bound[vert + 2]);
         if(value >= 0.5f) value = 1.0f - value;
         value += 0.5f;
         if(mode & ZS_SLIDER_SCALE) mtxTrumb.scale(value, value, 0.0f); else mtxTrumb.identity();
@@ -187,7 +187,6 @@ void zViewSlider::onInit(bool _theme) {
     auto _pos(pos); pos = -1; setProgress(_pos);
     // инициализировать ползунок
     trumb->init(drw[DRW_FK], drw[DRW_FK]->getTileNum(1));
-    animator.clear();
     animator.init(0.0f, true);
     animator.add(1.0f, zInterpolator::LINEAR, 12);
     if(speedTrack || mode) post(MSG_ANIM, duration, 0);
@@ -199,31 +198,30 @@ void zViewSlider::showTips() {
 
 void zViewSlider::onDraw() {
     // нарисовать трек
-    static zMatrix m, mr;
-    auto w(drw[DRW_FK]->bound.w); auto clip(drawableClip()); auto offs(drw[DRW_FK]->offsetBound());
-    if(isVertical()) mr.rotate(0, 0, deg2rad(90.0f)); else mr.identity();
-    auto _clip(clip.padding(sizeTrumb2, 0));
+    static zMatrix m, r;
+    auto w(drw[DRW_FK]->bound.w); auto offs(drw[DRW_FK]->offsetBound());
+    auto clip(drawableClip()); auto _clip(rclient.padding(!vert * sizeTrumb2, vert * sizeTrumb2));
+    if(vert) r.rotate(0, 0, deg2rad(90)); else r.identity();
     for(int i = 0 ; i < segments; i++) {
-        drw[DRW_FK]->drawCommon(_clip, mr * m.translate(w * i + offs.x, offs.y, 0.0f), true);
+        drw[DRW_FK]->drawCommon(_clip, r * m.translate(offs.x, offs.y, 0.0f), true);
+        offs[vert] += w;
     }
     // нарисовать текст
     zViewText::drawText();
     // нарисовать ползунок
     offs = trumb->offsetBound();
     trumb->drawCommon(clip, mtxTrumb * m.translate(offs.x, offs.y, 0.0f), true);
-    drw[DRW_FBO]->texture->save(manager->getBasePath(1) + "slider.tga");
+    drw[DRW_FBO]->texture->save(manager->getBasePath(1) + z_fmt("slider_%i.tga", id).str());
 }
 
 void zViewSlider::onMeasure(cszm& spec) {
     zViewText::onMeasure(spec);
-    // проверка на макс. размер в зависимости от ориентации(с проверкой на прогресс)
-    if(spec.w.isNotExact()) {
-        if(vert) rview.w = z_min(rview.w, minMaxSize.y);
+    // проверка на макс. размер в зависимости от ориентации
+    if(vert) {
+        if(spec.h.isNotExact()) rview.h = z_min(rview.h, minMaxSize.y);
+        if(spec.w.isNotExact()) rview.w = z_min(rview.w, minMaxSize.h);
+        setMeasuredDimension(rview.w, rview.h);
     }
-    if(spec.h.isNotExact()) {
-        if(!vert) rview.h = z_min(rview.h, minMaxSize.h);
-    }
-    setMeasuredDimension(rview.w, rview.h);
 }
 
 void zViewSlider::onLayout(crti &position, bool changed) {
@@ -234,17 +232,16 @@ void zViewSlider::onLayout(crti &position, bool changed) {
 void zViewSlider::updateLayout(bool changed) {
     if(changed) {
         // пересоздать трек
-        auto sz(drw[DRW_FK]->resolveSize(rclient.h, rclient.h, 0));
-        sz.w /= 2; sz.h /= 2; drw[DRW_FK]->measure(sz.w, sz.h, 0, false);
-        auto vert(isVertical()); auto bound(&drw[DRW_FK]->bound);
-        *bound = rclient.xy(); *bound += applyGravity(rclient, sz, ZS_GRAVITY_VCENTER);
-        posTrack = bound->buf[vert];
+        auto trkSz(z_min(rclient.w, rclient.h)); drw[DRW_FK]->measure(trkSz, trkSz, 3, false);
+        auto bound(&drw[DRW_FK]->bound); *bound = rclient.xy();
+        *bound += applyGravity(rclient, szi(trkSz, trkSz), vert ? ZS_GRAVITY_HCENTER : ZS_GRAVITY_VCENTER);
+        posTrack = (*bound)[vert];
         // размер ползунка
         sizeTrumb = rclient[3 - vert]; sizeTrumb2 = sizeTrumb / 2;
         // длина трэка(в зависимости от ориентации)
         auto lenTrack(rclient[vert + 2]);
         // количество сегментов трека
-        segments = (int)roundf((float)lenTrack / (float)sz.w) + 2;
+        segments = (int)roundf((float)lenTrack / (float)trkSz) + 2;
         // дельта ползунка
         delta = (float)(lenTrack - sizeTrumb) / (float)range.interval();
         // cформировать ползунок
@@ -257,7 +254,6 @@ i32 zViewSlider::onTouchEvent(zTouch *touch) {
     auto ret(touch->isCaptured());
     if(ret) {
         //вычислить ближайшую позицию, исходя из диапазона слайдера
-        auto vert(isVertical());
         auto dir((int)touch->cpt[vert] - sizeTrumb2 - rclient[vert]);
         // установить новый прогресс
         setProgress(range.w + (int)round((float)dir / delta));
@@ -269,10 +265,8 @@ i32 zViewSlider::onTouchEvent(zTouch *touch) {
 }
 
 void zViewSlider::updateTrumb() {
-    // определеть рект
-    auto vert(isVertical());
-    auto offs((int)round((float)(pos - range.w) * delta));
-    trumb->bound.set(rclient.x + !vert * offs, rclient.y + vert * offs, sizeTrumb, sizeTrumb);
+    trumb->bound.set(rclient.x, rclient.y, sizeTrumb, sizeTrumb);
+    trumb->bound[vert] += (int)roundf((float)(pos - range.w) * delta);
     invalidate();
 }
 
@@ -315,7 +309,7 @@ void zViewProgress::onInit(bool _theme) {
 
 void zViewProgress::updateLayout(bool changed) {
     if(changed) {
-        delta = (float)rclient[isVertical() + 2] / (float)range.interval();
+        delta = (float)rclient[vert + 2] / (float)range.interval();
         sizeTrumb = z_min(rclient.w, rclient.h); sizeTrumb2 = sizeTrumb / 2;
         updateTrumb();
     }
@@ -328,9 +322,9 @@ void zViewProgress::updateTrumb() {
         trumb->measure(sizeTrumb, sizeTrumb, 3, false);
         bound->x = center.x - sizeTrumb2; bound->y = center.y - sizeTrumb2;
     } else {
-        auto vert(isVertical()); auto val((float)pos * delta);
-        trumb->measure(vert ? rclient.w : (int)roundf(val), vert ? (int)roundf(val) : rclient.h, 0, false);
-        bound->x = rclient.x; bound->y = rclient.y;
+        auto v((int)roundf((float)pos * delta));
+        trumb->measure(vert ? rclient.w : v, vert ? v : rclient.h, 3, false);
+        *bound = rclient.xy();
     }
     invalidate();
 }

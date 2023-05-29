@@ -182,7 +182,7 @@ void zTexture::setFBO(bool set, bool clear) {
             glDisable(GL_SCISSOR_TEST);
 //            glClearColor(1,1,1,1);
             glClear(GL_COLOR_BUFFER_BIT);
-//            glClearColor(0, 0, 0, 0);
+  //          glClearColor(0, 0, 0, 0);
             glEnable(GL_SCISSOR_TEST);
         }
     } else {

@@ -323,7 +323,7 @@ bool zScrollLayout::scrolling(int _delta) {
         if(_delta >= 0 && delta < 0)
             delta = 0;
         auto upd(delta1 != delta);
-        child->scroll.buf[vert] = delta;
+        child->scroll[vert] = delta;
         if(upd) {
             child->requestLayout();
         } else if(glow) {

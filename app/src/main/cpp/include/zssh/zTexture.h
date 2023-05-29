@@ -61,7 +61,7 @@ public:
     // оператор сравнения по имени
     bool operator == (cstr n) const { return name == n; }
     // имя
-    zString name{};
+    zStringUTF8 name{};
     // количество ссылок
     i32 ref{0};
     // базовая линия шрифта

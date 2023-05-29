@@ -269,8 +269,9 @@ void zViewManager::drawViews() {
 }
 
 void zViewManager::drawCaret(zView* _view) {
-    if(caret && caret->parent == _view)
+    if(caret && caret->parent == _view) {
         caret->draw();
+    }
 }
 
 void zViewManager::saveStateView(zViewGroup *view, zView::STATE &state, int &index) {

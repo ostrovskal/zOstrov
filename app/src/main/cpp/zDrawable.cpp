@@ -102,7 +102,7 @@ int zDrawable::makePatch9(crti& pos, crti& tex, crti& p9) const {
 }
 
 void zDrawable::draw(rti *rect) {
-    static zMatrix t, m; static rti _bound;
+    static zMatrix t, m;
     if(vertices && visible) {
         auto clip(view->drawableClip());
         // определение видимости
@@ -110,7 +110,7 @@ void zDrawable::draw(rti *rect) {
             // цвет
             auto _a(color.a);
             // установка смещения
-            _bound = (rect ? *rect : bound) - manager->screen;
+            auto _bound = (rect ? *rect : bound) - manager->screen;
             ptf offs((float)_bound.x - vertices->x, (float)_bound.y - vertices->y);
             auto fbo(!view->isFBO() || index == DRW_FBO);
             if(fbo) {
@@ -408,8 +408,8 @@ void zDrawableDivider::init(const zParamDrawable& p) {
 
 void zDrawableDivider::set(int pos, int pad) {
     static rti r; auto v(view->isVertical());
-    r.buf[!v] = view->rclient[!v]; r.buf[v] = pos + pad;
-    r.buf[v + 2] = size; r.buf[!v + 2] = view->rclient[!v + 2];
+    r[!v] = view->rclient[!v]; r[v] = pos + pad;
+    r[v + 2] = size; r[!v + 2] = view->rclient[!v + 2];
     draw(&r);
 }
 

@@ -404,8 +404,8 @@ void zViewGlow::start(float _delta, bool _vert, bool _flow) {
     drw[DRW_BK]->measure(_vert * parent->rclient.w, !_vert * parent->rclient.h, !_vert + 1, false);
     // габариты и позиция
     rview.w = drw[DRW_BK]->bound.w; rview.h = drw[DRW_BK]->bound.h;
-    rview.buf[!_vert] = parent->rclient.buf[!_vert];
-    rview.buf[_vert]  = parent->edges(_vert, _flow);
+    rview[!_vert] = parent->rclient[!_vert];
+    rview[_vert]  = parent->edges(_vert, _flow);
     mtx = mtxScale * mtxRot;
     // анимация
     _delta = fabs(_delta);

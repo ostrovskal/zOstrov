@@ -26,11 +26,11 @@
     <dimen name="switchMinHeight">20dp</dimen>
     <dimen name="progressMinWidth">70dp</dimen>
     <dimen name="progressMinHeight">10dp</dimen>
-    <dimen name="progressMaxWidth">140dp</dimen>
+    <dimen name="progressMaxWidth">150dp</dimen>
     <dimen name="progressMaxHeight">20dp</dimen>
-    <dimen name="sliderMinWidth">55dp</dimen>
+    <dimen name="sliderMinWidth">70dp</dimen>
     <dimen name="sliderMinHeight">25dp</dimen>
-    <dimen name="sliderMaxWidth">70dp</dimen>
+    <dimen name="sliderMaxWidth">150dp</dimen>
     <dimen name="sliderMaxHeight">35dp</dimen>
     <dimen name="selectMinWidth">60dp</dimen>
     <dimen name="selectMinHeight">40dp</dimen>

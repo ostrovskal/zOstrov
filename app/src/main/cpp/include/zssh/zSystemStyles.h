@@ -415,7 +415,7 @@ static zStyle styles_z_llinear[] = {
 	{ Z_DIVIDER | ZT_THEME, Z_COLOR_DIVIDER },
 	{ Z_DIVIDER_TYPE, ZS_DIVIDER_BEGIN | ZS_DIVIDER_MIDDLE | ZS_DIVIDER_FINISH },
 	{ Z_PADDING, 0x05050505 },
-	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_HCENTER }
+	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_CENTER }
 };
 
 static zStyle styles_z_tabwidget[] = {

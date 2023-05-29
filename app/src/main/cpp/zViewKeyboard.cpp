@@ -8,8 +8,8 @@ zViewKeyboard::zViewKeyboard(cstr nameLayouts) : zViewGroup(styles_default, z.R.
     setDrawable(nullptr, DRW_FBO); duration = 20;
     setOnAnimation([this] (zView*, int) {
         if(current && owner && nPressSpec) {
-            auto but(&current->buttons[butIdx]); nPressSpec++;
-            if(but->spec == "DELETE" && nPressSpec > 15 && !(nPressSpec & 3)) owner->keyEvent('\b', false);
+            auto but(&current->buttons[butIdx]);
+            if(but->spec == "DELETE" && nPressSpec > 15 && !(nPressSpec++ & 1)) owner->keyEvent('\b', false);
             return true;
         }
         // сдвигаем родительский
@@ -46,7 +46,7 @@ zViewKeyboard::zViewKeyboard(cstr nameLayouts) : zViewGroup(styles_default, z.R.
             int _idx(0);
             while((nodeBut = nodeLyt->getTag(_idx++))) {
                 static cstr _coords[] = { "x", "y", "width", "height" };
-                for(int i = 0 ; i < 4; i++) but.rview.buf[i] = z_ston(nodeBut->getAttrVal(_coords[i], "0"), RADIX_DEC);
+                for(int i = 0 ; i < 4; i++) but.rview[i] = z_ston(nodeBut->getAttrVal(_coords[i], "0"), RADIX_DEC);
                 but.name = nodeBut->getAttrVal("com", "");
                 but.spec = nodeBut->getAttrVal("spec", "");
                 lyt.buttons += but;
@@ -161,8 +161,7 @@ void zViewKeyboard::onMeasure(cszm& spec) {
 
 void zViewKeyboard::onLayout(crti &position, bool changed) {
     zViewGroup::onLayout(position, changed);
-    drw[DRW_FBO]->bound = rview; rclip = rview;
-    updateStatus(ZS_DIRTY_LAYER, isDrawing);
+    rclip = rview; updateStatus(ZS_DIRTY_LAYER, isDrawing);
     if(isUpdate) {
         isUpdate = false;
         auto checked(updateStatus(ZS_CHECKED, owner != nullptr) != 0);
@@ -180,7 +179,7 @@ void zViewKeyboard::onLayout(crti &position, bool changed) {
 }
 
 void zViewKeyboard::onDrawFBO() {
-    drw[DRW_FBO]->draw(nullptr);
+    drw[DRW_FBO]->draw(&rview);
     // нарисовать нажатую кнопку
     if(butIdx != -1) drw[DRW_FK]->draw(nullptr);
 }

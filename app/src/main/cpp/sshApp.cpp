@@ -82,12 +82,13 @@ static zStyle styles_z_scrolllayout[] = {
 void sshApp::setContent() {
     //debug = true;
   //  return;
-    auto scl = new zScrollLayout(styles_z_scrolllayout, 0, true);
-    auto ll = new zLinearLayout(styles_z_llinear, 0, true);
+    auto scl = new zScrollLayout(styles_z_scrolllayout, 0, false);
+    auto ll = new zLinearLayout(styles_z_llinear, 0, false);
     auto chk = new zViewCheck(styles_z_checkbox, 1, z.R.string.enter_family);
     auto vw = new zViewButton(styles_z_button, 22, z.R.string.textSpan, z.R.integer.iconCancel);
-    auto sl = new zViewSlider(styles_z_slider, 1, z.R.string.Sergey, szi(10, 32), 16, false);
-    auto prg = new zViewProgress(styles_z_linearprogress, 1, 0, szi(0, 48), 16, false);
+    auto sl = new zViewSlider(styles_z_slider, 1, 0, szi(10, 32), 16, true);
+    auto sl1 = new zViewSlider(styles_z_slider, 1, 0, szi(10, 32), 16, false);
+    auto prg = new zViewProgress(styles_z_linearprogress, 1, 0, szi(0, 48), 16, true);
     auto edt1 = new zViewEdit(styles_z_edittext, 112, z.R.string.Sergey);
     auto edt2 = new zViewEdit(styles_z_edittext, 111, z.R.string.Sergey);
     auto edt3 = new zViewEdit(styles_z_edittext, 110, z.R.string.Sergey);
@@ -101,25 +102,28 @@ void sshApp::setContent() {
     //scl1->attach(ll1, VIEW_MATCH, VIEW_MATCH);
     scl->attach(ll, VIEW_WRAP, VIEW_WRAP);
     //ll1->attach(ll, VIEW_MATCH, VIEW_MATCH);
+    ll->attach(prg, ZS_GRAVITY_CENTER, 0, VIEW_WRAP, VIEW_MATCH );
+    ll->attach(edt3, 350, VIEW_WRAP)->updateStatus(ZS_NOWRAP, true);
+    ll->attach(sl, ZS_GRAVITY_CENTER, 0, VIEW_WRAP, VIEW_MATCH );
+    ll->attach(sl1, ZS_GRAVITY_CENTER, 0, 450, VIEW_WRAP );
     ll->attach(chk, VIEW_WRAP, VIEW_WRAP );
     //ll->attach(new zViewSwitch(styles_z_switchbutton, 2, z.R.string.enter_family), VIEW_MATCH, VIEW_WRAP );
-    int vv = VIEW_MATCH;
-    ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.textSpan, 10), vv, VIEW_WRAP )->
+    int vv = VIEW_WRAP;
+    ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.textSpan, 10), 350, VIEW_WRAP )->
                 setForegroundGravity(ZS_GRAVITY_START | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_START | ZS_GRAVITY_VCENTER);
-    ll->attach(new zViewSwitch(styles_z_switchbutton, 2, z.R.string.Sergey), VIEW_MATCH, VIEW_WRAP );
+    ll->attach(new zViewSwitch(styles_z_switchbutton, 2, z.R.string.Sergey), VIEW_WRAP, VIEW_WRAP );
     ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.first_form, 10), vv, VIEW_WRAP )->
             setForegroundGravity(ZS_GRAVITY_START | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER);
     ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.first_form, 10), vv, VIEW_WRAP )->
             setForegroundGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_START | ZS_GRAVITY_VCENTER);
-    ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.first_form, 10), vv, VIEW_WRAP )->
+    ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.first_form, 10), ZS_GRAVITY_TOP, 0, vv, VIEW_WRAP )->
             setForegroundGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_HCENTER | ZS_GRAVITY_VCENTER);
-    ll->attach(sl, ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP );
-    ll->attach(edt3, 350, VIEW_WRAP)->updateStatus(ZS_NOWRAP, true);
-    ll->attach(vw, VIEW_MATCH, VIEW_WRAP)->setOnClick([this](zView* v, bool) {
+    ll->attach(vw, VIEW_WRAP, VIEW_WRAP)->setOnClick([this, ll, scl](zView* v, bool) {
+        scl->setOrientation(!scl->isVertical());
+        ll->setOrientation(!ll->isVertical());
         setTheme(theme->styles == themeLight ? themeDark : themeLight, nullptr, nullptr);
     });
     ll->attach(edt1, ZS_GRAVITY_END, 0, 300, VIEW_WRAP)->setGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER);
-    ll->attach(prg, ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP );
     ll->attach(edt2, 400, VIEW_WRAP)->setGravity(ZS_GRAVITY_HCENTER | ZS_GRAVITY_VCENTER);
     /*
     //root->attach(img, ZS_GRAVITY_START, 0, VIEW_WRAP, VIEW_WRAP );
