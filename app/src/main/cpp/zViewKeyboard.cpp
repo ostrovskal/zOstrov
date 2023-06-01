@@ -8,8 +8,8 @@ zViewKeyboard::zViewKeyboard(cstr nameLayouts) : zViewGroup(styles_default, z.R.
     setDrawable(nullptr, DRW_FBO); duration = 20;
     setOnAnimation([this] (zView*, int) {
         if(current && owner && nPressSpec) {
-            auto but(&current->buttons[butIdx]);
-            if(but->spec == "DELETE" && nPressSpec > 15 && !(nPressSpec++ & 1)) owner->keyEvent('\b', false);
+            auto but(&current->buttons[butIdx]); nPressSpec++;
+            if(but->spec == "DELETE" && nPressSpec > 15 && !(nPressSpec & 1)) owner->keyEvent('\b', false);
             return true;
         }
         // сдвигаем родительский

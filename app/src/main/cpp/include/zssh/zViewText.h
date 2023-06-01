@@ -193,7 +193,7 @@ public:
     // установить цвет подсказки
     void setTextHintColor(u32 _color) { colorHint = _color; setText(realText, true); }
     // обновление текста
-    void updateText(int _what) { if(onChangeText) onChangeText(this, _what); notifyOwner(_what, this, caretIndex); }
+    virtual void updateText(int _what) { if(onChangeText) onChangeText(this, _what); notifyOwner(_what, this, caretIndex); }
 protected:
     // отрисовка
     virtual void onDraw() override;

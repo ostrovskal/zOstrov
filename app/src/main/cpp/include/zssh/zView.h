@@ -92,8 +92,6 @@ public:
     virtual void visibility(bool _visible) { if(isVisibled() != _visible) { updateStatus(ZS_VISIBLED, _visible); requestLayout(); } }
     // блокировка/разблокировка
     virtual void disable(bool _disable) { updateStatus(ZS_DISABLED, _disable); }
-    // установка ориентации
-    virtual void setOrientation(bool _vert) { if(_vert != vert) { vert = _vert; requestLayout(); } }
     // запрос на полное обновление иерархии представлений
     virtual void requestLayout();
     // запрос на обновление координат иерархии представлений
@@ -256,7 +254,7 @@ protected:
     // установка гравитации
     void _setGravity(u32 _g, u8* p) { if(_g != (*p & ZS_GRAVITY_MASK)) { *p &= ~ZS_GRAVITY_MASK; *p |= (u8)_g; requestLayout(); } }
     // область обрезки
-    virtual rti drawableClip() const { return z_clipRect(parent->rclip, rview); }
+    virtual rti drawableClip() const { return z_clipRect(parent->rclip, rclient); }
     // проверка на режим блокировки
     virtual bool testLocked() const { return false; }
     // событие привязки к макету
@@ -345,9 +343,6 @@ public:
     zViewCaret();
     // обновление
     void update(zView* own, int x, int y, int h);
-protected:
-    // период
-    int blink{0};
 };
 
 class zFlyng : public zView {

@@ -123,11 +123,12 @@ void zViewText::onLayout(crti &position, bool changed) {
         // позиция текста
         if(textCache.isNotEmpty()) {
             auto r(rclient - szi(ipad.extent(false), ipad.extent(true)));
-            if((drw[DRW_TXT]->bound.w + _width) > r.w) {
-                _width *= ((_grav & ZS_GRAVITY_HORZ) == ZS_GRAVITY_START) * 2 - 1;
+            _grav = ((_grav & ZS_GRAVITY_HORZ) == ZS_GRAVITY_START);
+            if((widthRectCache + _width) > r.w) {
+                _width *= _grav * 2 - 1;
             } else {
                 r.w -= _width;
-                _width *= ((_grav & ZS_GRAVITY_HORZ) == ZS_GRAVITY_START);
+                _width *= _grav;
             }
             bound = &drw[DRW_TXT]->bound; bound->w = r.w;
             *bound = applyGravity(r, *bound, gravity); *bound += r;

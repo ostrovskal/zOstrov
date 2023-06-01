@@ -77,7 +77,7 @@ protected:
     virtual void onMeasure(cszm& spec) override;
     virtual void onLayout(crti &position, bool changed) override;
     void childUpdateText(bool _empty);
-    void updateChildPosition();
+    void layoutChild();
     int frame{0};
     bool textEmpty{false};
 };

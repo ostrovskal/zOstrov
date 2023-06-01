@@ -125,13 +125,13 @@ void zLinearLayout::onMeasure(cszm& spec) {
 
 pti zLinearLayout::applyGravity(crti& sizeParent, crti& sizeChild, u32 _gravity) {
     auto ret(zView::applyGravity(sizeParent, sizeChild, _gravity));
-    if(isVertical()) ret.y = 0; else ret.x = 0;
+    ret[vert] = 0;
     return ret;
 }
 
 void zLinearLayout::onLayout(crti &position, bool changed) {
     zView::onLayout(position, changed);
-    auto r(rclient); auto vert(isVertical()); auto pt(&r.buf[vert]);
+    auto r(rclient); auto pt(&r[vert]);
     // размер разделителя
     auto divSize((div && (div->type & ZS_DIVIDER_MIDDLE)) ? (div->size + div->padEnd + div->padBegin) : 0);
     // начальная координата с учетом разделителя
@@ -291,8 +291,7 @@ i32 zScrollLayout::onTouchEvent(zTouch *touch) {
     bool drag(false);
     touch->drag(sizeTouch, [this, &drag, &touch](cszi& offs, bool event) {
         // если сдвинули - определяем дельту в зависимости от ориентации
-        auto vert(isVertical());
-        auto _delta(vert ? offs.h : offs.w);
+        auto _delta(offs[vert]);
         if(_delta) {
             // определяем время сдвига
             auto t((int)((touch->ctm - touch->btm) / 50000000));
@@ -315,8 +314,7 @@ i32 zScrollLayout::onTouchEvent(zTouch *touch) {
 bool zScrollLayout::scrolling(int _delta) {
     auto child(atView(0));
     if(child) {
-        auto vert(isVertical());
-        auto vEnd(vert ? rclient.h : rclient.w);
+        auto vEnd(rclient[vert + 2]);
         auto delta1(delta); delta -= _delta;
         if(_delta < 0 && (delta + vEnd) >= childSize)
             delta = childSize - vEnd;
@@ -341,103 +339,87 @@ bool zScrollLayout::scrolling(int _delta) {
 
 class zLayoutEdit : public zViewEdit {
 public:
-    zLayoutEdit(zEditLayout* _lyt, zViewEdit* _edit) : zViewEdit(_edit->styles, _edit->id, 0), lyt(_lyt) {
-        setHint(_edit->getHint());
-    }
+    zLayoutEdit(zEditLayout* _lyt, zViewEdit* _edit) : zViewEdit(_edit->styles, _edit->id, 0), lyt(_lyt) { }
 protected:
-/*
-    void messageReceive(HANDLER_MESSAGE *msg) override {
-        if(msg->what == MSG_EDIT) {
-            lyt->childUpdateText(z_isempty(getText()));
-        }
-        zViewEdit::messageReceive(msg);
+    void updateText(int _what) override {
+        if(_what == MSG_EDIT) lyt->childUpdateText(z_isempty(getText()));
+        zViewEdit::updateText(_what);
     }
-*/
     zEditLayout* lyt{nullptr};
 };
 
+static zStyle styles_z_hint[] = {
+        { Z_FBO, true },
+        { Z_IPADDING, 0x0 },
+        { Z_BEHAVIOR, 0 },
+        { Z_TEXT_NOWRAP, true },
+        { Z_DURATION, 20},
+        { Z_TEXT_FONT | ZT_END, z.R.drawable.font1 }
+};
+
 zView *zEditLayout::attach(zView *v, int width, int height, int where) {
-    auto edit(dynamic_cast<zViewEdit*>(v));
-    if(countChildren() == 0 && edit) {
-        auto _edit(new zLayoutEdit(this, edit));
-        zViewGroup::attach(_edit, width, height, where);
-        auto _gravity(_edit->gravity);
-        auto hintString(edit->getHint());
-        auto hintColor(edit->getTextHintColor());
-        auto hint(new zViewText(styles_default, 0, 0));
-        zViewGroup::attach(hint, width, height, where);
-        hint->setTextSize(_edit->getTextSize());
-        hint->setTextStyle(_edit->getTextStyle());
-        hint->setWrap(true);
-        hint->setText(hintString, true);
-        hint->setTextColorForeground(hintColor);
-        hint->setGravity(_gravity);
-        hint->updateStatus(ZS_TOUCHABLE | ZS_FOCUSABLE, false);
-        //_edit->setGravity(_gravity, true);
-        duration = 20;
-        delete edit;
-        return _edit;
+    auto _edit(dynamic_cast<zViewEdit*>(v));
+    if(countChildren() == 0 && _edit) {
+        setOnAnimation([this](zView*, int) {
+            frame += !textEmpty * 2 - 1;
+            layoutChild();
+            return (frame > 0 && frame < 4);
+        });
+        auto edit(new zLayoutEdit(this, _edit));
+        auto hint(new zViewText(styles_z_hint, 0, 0));
+        zViewGroup::attach(edit, width, height, where);
+        zViewGroup::attach(hint, VIEW_WRAP, VIEW_WRAP, where);
+        hint->setTextSize(edit->getTextSize());
+        hint->setTextStyle(edit->getTextStyle());
+        hint->setText(_edit->getHint(), true);
+        hint->setTextColorForeground(edit->getTextHintColor());
+        hint->setGravity(edit->gravity);
+        return edit;
     }
     return nullptr;
 }
 
 void zEditLayout::onMeasure(cszm& spec) {
-/*
     int childWidth(0), childHeight(0);
-    auto child(atView<zViewEdit>(0));
-    if(child) {
-        measureChild(child, widthSpec, heightSpec);
-        childWidth = child->rview.w; childHeight = child->rview.h;
-        child->setHint("");
-        auto hint(atView<zViewText>(1));
-        measureChild(hint, widthSpec, heightSpec);
+    auto edit(atView<zViewEdit>(0));
+    if(edit) {
+        measureChild(edit, spec);
+        childWidth = edit->rview.w; childHeight = edit->rview.h;
+        auto hint(atView<zViewText>(1)); measureChild(hint, spec);
         // добавить высоту подсказки
         childHeight += hint->rview.h;
     }
-    defaultOnMeasure(widthSpec, heightSpec, childWidth, childHeight);
-*/
+    defaultOnMeasure(spec, childWidth, childHeight);
 }
 
 void zEditLayout::onLayout(crti &position, bool changed) {
     zView::onLayout(position, changed);
-    updateChildPosition();
+    layoutChild();
 }
 
-void zEditLayout::updateChildPosition() {
-    auto child(atView<zViewEdit>(0));
-    if(child) {
+void zEditLayout::layoutChild() {
+    auto edit(atView<zViewEdit>(0));
+    if(edit) {
         auto hint(atView<zViewText>(1));
-        auto esub((rview.h - child->sizes(true)) / 2);
+        auto esub((rview.h - edit->sizes(true)) / 2);
         auto hsub((rview.h - hint->sizes(true)) / 2);
-        esub += (frame * esub / 6);
-        hsub -= (frame * hsub / 6);
-        auto wmax(child->getWidthMax());
-        child->layout(rti(rclient.x, rclient.y + esub, child->rview.w, child->rview.h));
+        esub += (frame * esub / 4); hsub -= (frame * hsub / 4);
+        auto wmax(edit->getWidthMax());
+        edit->layout(rti(rclient.x, rclient.y + esub, edit->rview.w, edit->rview.h));
         // позиционировать текст по горизонтали
-        int x(child->rclient.x + child->ipad.x);
+        int x(edit->rclient.x + edit->ipad.x);
         switch(hint->gravity & ZS_GRAVITY_HORZ) {
-            case ZS_GRAVITY_START: break;
-            case ZS_GRAVITY_END: x += (wmax - hint->rview.w - child->ipad.extent(false)); break;
-            default: x += (wmax - hint->rview.w) / 2; break;
+            case ZS_GRAVITY_END:     x += (wmax - hint->rview.w - edit->ipad.extent(false)); break;
+            case ZS_GRAVITY_HCENTER: x += (wmax - hint->rview.w) / 2; break;
         }
         hint->layout(rti(x, rclient.y + hsub, hint->rview.w, hint->rview.h));
-        auto rc(&child->rclip);
-//        hint->drw[DRW_TXT]->rclip.set(rc->x, rclip.y, rc->w, rclip.h);
     }
 }
 
-/*
-bool zEditLayout::onRedraw() {
-    frame += !textEmpty * 2 - 1;
-    invalidate();
-    return (frame <= 0 || frame >= 6);
-}
-
-*/
 void zEditLayout::childUpdateText(bool _empty) {
     textEmpty = _empty;
-//    if((_empty && frame != 0) || (!_empty && frame != 6))
-  //      post(MSG_REDRAW);
+    if((_empty && frame != 0) || (!_empty && frame != 4))
+        post(MSG_ANIM, duration, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -451,8 +433,7 @@ zTabLayout::zTabLayout(zStyle* _styles, i32 _id, zStyle* _styles_capt, int _grav
 //    caption->drs[DR_IDX_SEL] = new zDrawable(this);
     // макет контента
     content = new zFrameLayout(styles_z_tabcontent, 0);
-    auto vert(isVertical());
-    attach(content,vert * VIEW_MATCH, !vert * VIEW_MATCH);
+    attach(content, vert * VIEW_MATCH, !vert * VIEW_MATCH);
     attach(caption, vert ? VIEW_MATCH : VIEW_WRAP, vert ? VIEW_WRAP : VIEW_MATCH, (_gravityCaption & (ZS_GRAVITY_START | ZS_GRAVITY_TOP)) ? 0 : -1);
 }
 

@@ -381,7 +381,6 @@ zViewGlow::zViewGlow(zView* group) : zView(styles_z_glow, 0) {
     setOnAnimation([this](zView*, int) {
         float v; bool cont;
         if((cont = animator.update(v))) {
-            auto vert(isVertical());
             // посчитать альфу
             alpha = v / 3.0f;
             // посчитать размер
@@ -475,16 +474,18 @@ zViewCaret::zViewCaret() : zView(styles_z_caret, 0) {
     drw[DRW_BK]->view = this;
     drw[DRW_BK]->measure(3, 10, 0, false);
     setOnAnimation([this](zView*, int) {
-        updateStatus(ZS_VISIBLED, (blink++ & 1));
-        return drw[DRW_BK]->view != nullptr;
+        updateStatus(ZS_VISIBLED, (animator.frame++ & 1));
+        return parent != nullptr;
     });
 }
 
 void zViewCaret::update(zView* own, int x, int y, int h) {
-    parent = own; blink = 0;
-    updateStatus(ZS_VISIBLED, own != nullptr);
+    parent = own; updateStatus(ZS_VISIBLED, own != nullptr);
     if(own) {
         rview.set(x + own->rclient.x, y + own->rclient.y, 3, h);
+        rclient = rview; animator.frame = 0;
+        RTI_LOG("own", own->rclient);
+        RTI_LOG("car", rview);
         drw[DRW_BK]->bound = rview;
         setScale(1.0f, (float) h / 10.0f);
         post(MSG_ANIM, duration, 0);

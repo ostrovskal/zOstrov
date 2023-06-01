@@ -23,8 +23,6 @@ public:
     virtual int computeScrollExtent(bool _vert) const override;
     // вернуть имя типа
     virtual cstr typeName() const override { return "zViewBaseRibbon"; }
-    // установка ориентации
-    virtual void setOrientation(bool vert) override;
     // установка адаптера
     virtual void setAdapter(zBaseAdapter* _adapter);
     // установка выделенного элемента
@@ -115,8 +113,6 @@ public:
     virtual void onInit(bool _theme) override;
     // вернуть имя типа
     virtual cstr typeName() const override { return "zViewTable"; }
-    // смена ориентации
-    virtual void setOrientation(bool _vert) override;
     // установка параметров
     //void setParameters(const i32* params);
     // возврат параметров

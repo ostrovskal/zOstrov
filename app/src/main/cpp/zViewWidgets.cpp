@@ -231,17 +231,17 @@ void zViewSlider::onLayout(crti &position, bool changed) {
 
 void zViewSlider::updateLayout(bool changed) {
     if(changed) {
-        // пересоздать трек
-        auto trkSz(z_min(rclient.w, rclient.h)); drw[DRW_FK]->measure(trkSz, trkSz, 3, false);
-        auto bound(&drw[DRW_FK]->bound); *bound = rclient.xy();
-        *bound += applyGravity(rclient, szi(trkSz, trkSz), vert ? ZS_GRAVITY_HCENTER : ZS_GRAVITY_VCENTER);
-        posTrack = (*bound)[vert];
         // размер ползунка
-        sizeTrumb = rclient[3 - vert]; sizeTrumb2 = sizeTrumb / 2;
+        sizeTrumb = z_min(rclient.w, rclient.h); sizeTrumb2 = sizeTrumb / 2;
+        // пересоздать трек
+        drw[DRW_FK]->measure(sizeTrumb, sizeTrumb, 3, false);
+        auto bound(&drw[DRW_FK]->bound); *bound = rclient.xy();
+        *bound += applyGravity(rclient, szi(sizeTrumb, sizeTrumb), vert ? ZS_GRAVITY_HCENTER : ZS_GRAVITY_VCENTER);
+        posTrack = (*bound)[vert];
         // длина трэка(в зависимости от ориентации)
         auto lenTrack(rclient[vert + 2]);
         // количество сегментов трека
-        segments = (int)roundf((float)lenTrack / (float)trkSz) + 2;
+        segments = (int)roundf((float)lenTrack / (float)sizeTrumb) + 2;
         // дельта ползунка
         delta = (float)(lenTrack - sizeTrumb) / (float)range.interval();
         // cформировать ползунок
