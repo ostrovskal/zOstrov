@@ -119,10 +119,11 @@ protected:
     // размер ползунка
     int sizeTrumb{1}, sizeTrumb2{1};
     // количество сегментов трека
-    int segments{0};
-    int posTrack{0};
+    int segments{0}, posTrack{0};
     // дельта
     float delta{1.0f};
+    // признак отрисовки
+    bool isDraw{false};
     // внутренний отрисовщик ползунка
     zDrawable* trumb{nullptr};
     // режим анимации ползунка

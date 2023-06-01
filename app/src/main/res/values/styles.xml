@@ -392,21 +392,22 @@
     </style>
     <style name="tabWidget">
         <item name="foreground">%drawable/bitmap_icons</item>
-        <item name="iconScale">0.75</item>
+        <item name="icon">%drawable/bitmap_icons</item>
+        <item name="minSizeW">16dp</item>
+        <item name="minSizeH">16dp</item>
+        <item name="iconScale">0.5</item>
         <item name="iconGravity">center</item>
+        <item name="iconColor">#ffffffff</item>
+        <item name="font">@drawable/font1</item>
         <item name="textSize">@dimen/textText</item>
         <item name="textColor">%color/color_tab_text</item>
         <item name="gravity">center</item>
-        <item name="pad">2dp</item>
     </style>
     <style name="tabHost">
         <item name="background">%color/color_tab</item>
         <item name="bkTiles">@integer/gradientDiag</item>
         <item name="selector">%color/color_selector</item>
         <item name="selTiles">@integer/gradientDiag</item>
-        <item name="divider">%color/color_divider</item>
-        <item name="divSize">@dimen/divider</item>
-        <item name="divType">middle</item>
     </style>
     <style name="ccontroller">
         <item name="fbo">true</item>

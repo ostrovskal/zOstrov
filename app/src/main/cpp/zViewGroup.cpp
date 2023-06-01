@@ -87,7 +87,7 @@ void zViewGroup::draw() {
             drw[DRW_FBO]->drawFBO(fbo, [this] {
                 drw[DRW_BK]->draw(&rview);
                 // селектор
-                drw[DRW_SEL]->draw(&rclient);
+                drw[DRW_SEL]->draw(nullptr);
                 onDraw();
                 // дочерние
                 for(auto v : children) v->draw();

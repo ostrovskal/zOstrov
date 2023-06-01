@@ -157,16 +157,17 @@ zViewSlider::zViewSlider(zStyle* _styles, i32 _id, u32 _text, cszi& _range, int 
                    z_dp(z.R.dimen.sliderMinHeight), z_dp(z.R.dimen.sliderMaxHeight));
     if(_text > 0) tips = theme->findString(_text) + " ";
     setOnAnimation([this](zView*, int) {
-        float value; static zMatrix rot;
-        animator.update(value);
-        if(mode & ZS_SLIDER_ROTATE) rot.rotate(0, 0, deg2rad(value * 360.0f)); else rot.identity();
-        int v(-(int)roundf((value * speedTrack) * drw[DRW_FK]->bound[vert + 2]));
-        drw[DRW_FK]->bound[vert] = posTrack + (v % drw[DRW_FK]->bound[vert + 2]);
-        if(value >= 0.5f) value = 1.0f - value;
-        value += 0.5f;
-        if(mode & ZS_SLIDER_SCALE) mtxTrumb.scale(value, value, 0.0f); else mtxTrumb.identity();
-        mtxTrumb = rot * mtxTrumb;
-        invalidate();
+        if(isDraw) {
+            float value; zMatrix rot;
+            animator.update(value);
+            if(mode & ZS_SLIDER_ROTATE) rot.rotate(0, 0, deg2rad(value * 360.0f));
+            int v(-(int) roundf((value * speedTrack) * drw[DRW_FK]->bound[vert + 2]));
+            drw[DRW_FK]->bound[vert] = posTrack + (v % drw[DRW_FK]->bound[vert + 2]);
+            if(value >= 0.5f) value = 1.0f - value; value += 0.5f;
+            if(mode & ZS_SLIDER_SCALE) mtxTrumb.scale(value, value, 0.0f); else mtxTrumb.identity();
+            mtxTrumb = rot * mtxTrumb;
+            invalidate(); isDraw = false;
+        }
         return 1;
     });
 }
@@ -189,7 +190,6 @@ void zViewSlider::onInit(bool _theme) {
     trumb->init(drw[DRW_FK], drw[DRW_FK]->getTileNum(1));
     animator.init(0.0f, true);
     animator.add(1.0f, zInterpolator::LINEAR, 12);
-    if(speedTrack || mode) post(MSG_ANIM, duration, 0);
 }
 
 void zViewSlider::showTips() {
@@ -197,6 +197,7 @@ void zViewSlider::showTips() {
 }
 
 void zViewSlider::onDraw() {
+    isDraw = true;
     // нарисовать трек
     static zMatrix m, r;
     auto w(drw[DRW_FK]->bound.w); auto offs(drw[DRW_FK]->offsetBound());
@@ -211,7 +212,6 @@ void zViewSlider::onDraw() {
     // нарисовать ползунок
     offs = trumb->offsetBound();
     trumb->drawCommon(clip, mtxTrumb * m.translate(offs.x, offs.y, 0.0f), true);
-    drw[DRW_FBO]->texture->save(manager->getBasePath(1) + z_fmt("slider_%i.tga", id).str());
 }
 
 void zViewSlider::onMeasure(cszm& spec) {
@@ -230,6 +230,7 @@ void zViewSlider::onLayout(crti &position, bool changed) {
 }
 
 void zViewSlider::updateLayout(bool changed) {
+    if(speedTrack || mode) post(MSG_ANIM, duration, 0);
     if(changed) {
         // размер ползунка
         sizeTrumb = z_min(rclient.w, rclient.h); sizeTrumb2 = sizeTrumb / 2;

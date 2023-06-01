@@ -92,7 +92,7 @@ static zStyle styles_z_bar[] = {
 };
 
 static zStyle styles_z_barbutton[] = {
-	{ Z_SIZE, 0x20002000 },
+	{ Z_SIZE, 0x00200020 },
 	{ Z_FOREGROUND | ZT_THEME, Z_BITMAP_COMMON },
 	{ Z_FOREGROUND_COLOR, 0xffffffff },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
@@ -101,7 +101,7 @@ static zStyle styles_z_barbutton[] = {
 };
 
 static zStyle styles_z_baroverflow[] = {
-	{ Z_SIZE, 0x20002000 },
+	{ Z_SIZE, 0x00200020 },
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_FOREGROUND_COLOR, 0xffffffff },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
@@ -131,7 +131,7 @@ static zStyle styles_z_barpopup[] = {
 };
 
 static zStyle styles_z_formcaption[] = {
-	{ Z_SIZE, 0x32001400 },
+	{ Z_SIZE, 0x00320014 },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_PADDING, 0x01010101 },
@@ -218,7 +218,7 @@ static zStyle styles_z_button[] = {
 
 static zStyle styles_z_tools[] = {
 	{ Z_FBO, true },
-	{ Z_SIZE, 0x32003200 },
+	{ Z_SIZE, 0x00320032 },
 	{ Z_ICON | ZT_THEME, Z_BITMAP_ICONS },
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_ICON_COLOR, 0xffffffff },
@@ -420,22 +420,22 @@ static zStyle styles_z_llinear[] = {
 
 static zStyle styles_z_tabwidget[] = {
 	{ Z_FOREGROUND | ZT_THEME, Z_BITMAP_ICONS },
-	{ Z_ICON_SCALE, 49151 },
+	{ Z_ICON | ZT_THEME, Z_BITMAP_ICONS },
+	{ Z_SIZE, 0x00100010 },
+	{ Z_ICON_SCALE, 32767 },
 	{ Z_ICON_GRAVITY, ZS_GRAVITY_CENTER },
+	{ Z_ICON_COLOR, 0xffffffff },
+	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_TEXT_SIZE, z.R.dimen.textText },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_TAB_TEXT },
-	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
-	{ Z_PADDING | ZT_END, 0x02020202 }
+	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_CENTER }
 };
 
 static zStyle styles_z_tabhost[] = {
 	{ Z_BACKGROUND | ZT_THEME, Z_COLOR_TAB },
 	{ Z_BACKGROUND_TILES, z.R.integer.gradientDiag },
 	{ Z_SELECTOR | ZT_THEME, Z_COLOR_SELECTOR },
-	{ Z_SELECTOR_TILES, z.R.integer.gradientDiag },
-	{ Z_DIVIDER | ZT_THEME, Z_COLOR_DIVIDER },
-	{ Z_DIVIDER_SIZE, z.R.dimen.divider },
-	{ Z_DIVIDER_TYPE | ZT_END, ZS_DIVIDER_MIDDLE }
+	{ Z_SELECTOR_TILES | ZT_END, z.R.integer.gradientDiag }
 };
 
 static zStyle styles_z_ccontroller[] = {

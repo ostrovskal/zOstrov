@@ -433,56 +433,51 @@ void zEditLayout::childUpdateText(bool _empty) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 zTabLayout::zTabLayout(zStyle* _styles, i32 _id, zStyle* _styles_capt, int _gravityCaption) :
-        zLinearLayout(styles_z_tabs, _id, (_gravityCaption & ZS_GRAVITY_VERT) != 0), styles_caption(_styles_capt) {
+        zLinearLayout(styles_z_tabs, _id, (_gravityCaption & ZS_GRAVITY_VERT) != 0), styles_caption(_styles_capt), gravCapt(_gravityCaption) {
     // макет заголовков
     caption = new zLinearLayout(_styles, 0, (_gravityCaption & ZS_GRAVITY_VERT) == 0);
-//    caption->drs[DR_IDX_SEL] = new zDrawable(this);
     // макет контента
     content = new zFrameLayout(styles_z_tabcontent, 0);
-    attach(content, vert * VIEW_MATCH, !vert * VIEW_MATCH);
-    attach(caption, vert ? VIEW_MATCH : VIEW_WRAP, vert ? VIEW_WRAP : VIEW_MATCH, (_gravityCaption & (ZS_GRAVITY_START | ZS_GRAVITY_TOP)) ? 0 : -1);
 }
 
 void zTabLayout::onInit(bool _theme) {
     zViewGroup::onInit(_theme);
+    detachAllViews();
+    attach(caption, vert ? VIEW_MATCH : VIEW_WRAP, vert ? VIEW_WRAP : VIEW_MATCH);
+    attach(content, VIEW_MATCH, VIEW_MATCH);
 }
 
 void zTabLayout::showPage(int _page) {
     if(_page >= 0 && _page < caption->countChildren()) {
-        // страница видима
-        content->atView(_page)->updateStatus(ZS_VISIBLED, true);
-        page = _page;
-        // заголовок - показать селектор
+        // спрятать активную страницу
+        if(activePage != -1) content->atView(activePage)->updateStatus(ZS_VISIBLED, false);
+        // активная страница
+        activePage = _page;
+        // показать новую страницу
+        content->atView(activePage)->updateStatus(ZS_VISIBLED, true);
+        // показать селектор
         showSelector();
         requestLayout();
     }
 }
 
 void zTabLayout::showSelector() {
-    auto r(&caption->atView(page)->rclient);
-    caption->drw[DRW_SEL]->measure(r->w, r->h, 0, false);
+    auto r(&caption->atView(activePage)->rview);
+    caption->drw[DRW_SEL]->measure(r->w, r->h, 3, false);
+    caption->drw[DRW_SEL]->bound = r->xy();
 }
 
-void zTabLayout::hidePage(int _page) {
-    if(_page >= 0 && _page < caption->countChildren()) {
-        // страница - невидима
-        content->atView(_page)->updateStatus(ZS_VISIBLED, false);
-    }
-}
-
-void zTabLayout::addPage(u32 tabText, i32 tabIcon, zViewGroup* group) {
+void zTabLayout::addPage(zViewGroup* group, u32 tabText, i32 tabIcon) {
     auto countPages(caption->countChildren());
     auto v(new zViewButton(styles_caption, countPages, tabText, tabIcon));
     v->setOnClick([this](zView* v, int) { setActivePage(v->id); });
     caption->attach(v, VIEW_WRAP, VIEW_WRAP);
     content->attach(group, VIEW_MATCH, VIEW_MATCH);
-    if(countPages) hidePage(countPages);
+    if(countPages) group->updateStatus(ZS_VISIBLED, false);
 }
 
 void zTabLayout::setActivePage(int _page) {
     if(_page != getActivePage()) {
-        // скрыть предыдущую страницу
-        hidePage(page);
         // показать новую
         showPage(_page);
         // вызвать событие
@@ -497,14 +492,13 @@ const zViewGroup* zTabLayout::getContentPage(int _page) const {
 void zTabLayout::stateView(STATE &state, bool save, int &index) {
     zView::stateView(state, save, index);
     if(save) {
-        state.data += page;
+        state.data += activePage;
     } else {
-        page = (int)state.data[index++];
+        activePage = (int)state.data[index++];
     }
 }
 
 void zTabLayout::onLayout(crti &position, bool changed) {
     zLinearLayout::onLayout(position, changed);
-    if(page == -1) setActivePage(0);
-    showSelector();
+    if(activePage == -1) setActivePage(0);
 }

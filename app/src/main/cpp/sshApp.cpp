@@ -80,16 +80,17 @@ static zStyle styles_z_scrolllayout[] = {
 };
 
 void sshApp::setContent() {
-    //debug = true;
-    auto cell = new zCellLayout(styles_default, 0, szi(7, 0), 10);
+    debug = true;
     auto scl = new zScrollLayout(styles_z_scrolllayout, 0, true);
+    auto cell = new zCellLayout(styles_default, 0, szi(7, 0), 10);
+    auto tab = new zTabLayout(styles_z_tabhost, 0, styles_z_tabwidget, ZS_GRAVITY_TOP);
     auto ll = new zLinearLayout(styles_z_llinear, 0, true);
     auto el = new zEditLayout(styles_default, 0);
     auto chk = new zViewCheck(styles_z_checkbox, 1, z.R.string.enter_family);
     auto vw = new zViewButton(styles_z_button, 22, z.R.string.textSpan, z.R.integer.iconCancel);
     auto sl = new zViewSlider(styles_z_slider, 1, 0, szi(10, 32), 16, true);
     auto sl1 = new zViewSlider(styles_z_slider, 1, 0, szi(10, 32), 16, false);
-    auto prg = new zViewProgress(styles_z_linearprogress, 1, 0, szi(0, 48), 4, false);
+    auto prg = new zViewProgress(styles_z_linearprogress, 1, 0, szi(0, 48), 14, true);
     auto edt1 = new zViewEdit(styles_z_edittext, 112, z.R.string.Sergey);
     auto edt2 = new zViewEdit(styles_z_edittext, 111, z.R.string.Sergey);
     auto edt3 = new zViewEdit(styles_z_edittext, 110, z.R.string.Sergey);
@@ -98,29 +99,26 @@ void sshApp::setContent() {
     auto ll1 = new zLinearLayout(styles_z_default_layout, 0, false);
     auto img = new zViewImage(styles_z_text, 0, z.R.integer.button3);
 */
-    root->attach(cell, ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_MATCH)->pad.set(10, 10, 10, 10);
+    root->attach(tab, VIEW_MATCH, VIEW_MATCH);
+    tab->addPage(ll, 0, z.R.integer.iconCancel);
+    tab->addPage(cell, 0, z.R.integer.iconOk);
+//    root->attach(cell, ZS_GRAVITY_CENTER, 0, VIEW_WRAP, VIEW_WRAP)->pad.set(10, 10, 10, 10);
     //scl->attach(cell, VIEW_MATCH, VIEW_MATCH);
-    cell->attach(vw, 1, 1, 6, 3);
-    cell->attach(chk, 2, 2, 4, 2);
     cell->attach(edt1, 0, 4, 4, 1);
-    return;
-    //scl1->attach(scl, VIEW_MATCH, VIEW_MATCH);
-    //scl1->attach(ll1, VIEW_MATCH, VIEW_MATCH);
-    scl->attach(ll, VIEW_WRAP, VIEW_WRAP);
-    ll->attach(el, VIEW_WRAP, VIEW_WRAP);
-    //ll1->attach(ll, VIEW_MATCH, VIEW_MATCH);
-    ll->attach(prg, ZS_GRAVITY_CENTER, 0, VIEW_WRAP, VIEW_WRAP );
+    cell->attach(sl, 0, 0, 1, 12);
+    cell->attach(prg, 5, 0, 1, 12);
+    cell->attach(sl1, 0, 0, 7, 1);
+    //ll->attach(el, VIEW_WRAP, VIEW_WRAP);
+    //ll->attach(prg, ZS_GRAVITY_CENTER, 0, VIEW_WRAP, VIEW_WRAP );
     el->attach(edt3, VIEW_WRAP, VIEW_WRAP)->updateStatus(ZS_NOWRAP, true);
-    ll->attach(sl, ZS_GRAVITY_CENTER, 0, VIEW_WRAP, 150 );
-    ll->attach(sl1, ZS_GRAVITY_CENTER, 0, 450, VIEW_WRAP );
     ll->attach(chk, VIEW_WRAP, VIEW_WRAP );
     ll->attach(vw, VIEW_WRAP, VIEW_WRAP)->setOnClick([this, prg](zView* v, bool) {
-        prg->setProgress(prg->getProgress() + 1);
+      //  prg->setProgress(prg->getProgress() + 1);
         setTheme(theme->styles == themeLight ? themeDark : themeLight, nullptr, nullptr);
     });
     //ll->attach(new zViewSwitch(styles_z_switchbutton, 2, z.R.string.enter_family), VIEW_MATCH, VIEW_WRAP );
     int vv = VIEW_WRAP;
-    ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.textSpan, 10), 350, VIEW_WRAP )->
+    ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.textSpan, 10), VIEW_WRAP, VIEW_WRAP )->
                 setForegroundGravity(ZS_GRAVITY_START | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_START | ZS_GRAVITY_VCENTER);
     ll->attach(new zViewSwitch(styles_z_switchbutton, 2, z.R.string.Sergey), VIEW_WRAP, VIEW_WRAP );
     ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.first_form, 10), vv, VIEW_WRAP )->
@@ -129,7 +127,7 @@ void sshApp::setContent() {
             setForegroundGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_START | ZS_GRAVITY_VCENTER);
     ll->attach(new zViewRadio(styles_z_radiobutton, 1, z.R.string.first_form, 10), ZS_GRAVITY_TOP, 0, vv, VIEW_WRAP )->
             setForegroundGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER)->setGravity(ZS_GRAVITY_HCENTER | ZS_GRAVITY_VCENTER);
-    ll->attach(edt1, ZS_GRAVITY_END, 0, 300, VIEW_WRAP)->setGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER);
+    //ll->attach(edt1, ZS_GRAVITY_END, 0, 300, VIEW_WRAP)->setGravity(ZS_GRAVITY_END | ZS_GRAVITY_VCENTER);
     ll->attach(edt2, 400, VIEW_WRAP)->setGravity(ZS_GRAVITY_HCENTER | ZS_GRAVITY_VCENTER);
     /*
     //root->attach(img, ZS_GRAVITY_START, 0, VIEW_WRAP, VIEW_WRAP );

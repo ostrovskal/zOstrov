@@ -86,7 +86,7 @@ class zTabLayout : public zLinearLayout {
 public:
     zTabLayout(zStyle* _styles, i32 _id, zStyle* _styles_capt, int _gravityCaption);
     // добавить страницу
-    virtual void addPage(u32 tabText, i32 tabIcon, zViewGroup* page);
+    virtual void addPage(zViewGroup* page, u32 tabText, i32 tabIcon = -1);
     // сохранение/восстановление
     virtual void stateView(STATE &state, bool save, int &index) override;
     // установить активную страницу
@@ -95,17 +95,13 @@ public:
     virtual void onInit(bool theme) override;
     // вернуть имя типа
     virtual cstr typeName() const override { return "zTabLayout"; }
-    // установить селектор
-    void setSelector(const zParamDrawable& params);
     // вернуть активную страницу
-    int getActivePage() const { return page; }
+    int getActivePage() const { return activePage; }
     // вернуть содержимое активной страницы
     const zViewGroup* getContentPage(int page) const;
     // установка события смены вкладки
     void setOnTabChange(std::function<void(zView*, int)> _change) { onTabChange = _change; }
 protected:
-    // спрятать страницу
-    virtual void hidePage(int _page);
     // показать страницу
     virtual void showPage(int _page);
     // позиционирование
@@ -117,9 +113,11 @@ protected:
     // макет содержимого
     zFrameLayout* content{nullptr};
     // активная вкладка
-    int page{-1};
+    int activePage{-1};
+    // гравитация заголовка
+    u32 gravCapt{0};
     // стили заголовков
     zStyle* styles_caption{nullptr};
-    // событие смены вкладики
-    std::function<void(zView*, int)> onTabChange;
+    // событие смены вкладки
+    std::function<void(zView*, int)> onTabChange{nullptr};
 };
