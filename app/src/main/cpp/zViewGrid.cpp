@@ -155,9 +155,4 @@ void zViewGrid::childMeasure(zView *child, zLayoutParams *lps) {
     auto hspec(makeChildMeasureSpec(vert ? spec1 : spec2, padMargin(true), lps->h));
     child->measure( { wspec, hspec } );
 }
-
-void zViewGrid::setOrientation(bool _vert) {
-    zViewBaseRibbon::setOrientation(_vert);
-    linesGrid = params[TABLE_LINES];
-}
 */

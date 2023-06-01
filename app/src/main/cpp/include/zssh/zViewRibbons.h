@@ -113,10 +113,10 @@ public:
     virtual void onInit(bool _theme) override;
     // вернуть имя типа
     virtual cstr typeName() const override { return "zViewTable"; }
-    // установка параметров
-    //void setParameters(const i32* params);
-    // возврат параметров
-    //void getParameters(i32* params) const;
+    // установка параметра
+    void setParameters(int param, i32 value);
+    // возврат параметра
+    i32 getParameters(i32 param) const;
 protected:
     virtual void childMeasure(zView *child, zLayoutParams *lps) override;
     // вычисление размера

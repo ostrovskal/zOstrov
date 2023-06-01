@@ -138,11 +138,10 @@ void zViewText::onLayout(crti &position, bool changed) {
 }
 
 const zViewText::CACHE* zViewText::getStringFromCache(int i, rti* tbound, pti& pos) {
-    static int shift[4] = { 31, 31, 0, 1 };
     if(i >= 0 && i < textCache.size()) {
         auto cacheStr(textCache[i]);
         // применить гравитацию
-        pos.x = tbound->x + ((tbound->w - cacheStr->width) >> shift[gravity & 3]);
+        pos.x = tbound->x + ((tbound->w - cacheStr->width) >> gravity_shift[gravity & 3]);
         //DLOG("x: %i _x:%i w:%i cw:%i g:%X %s", pos.x, tbound->x, tbound->w, cacheStr->width, gravity, cacheStr->text.str());
         return cacheStr;
     }

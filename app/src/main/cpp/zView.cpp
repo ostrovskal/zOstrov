@@ -20,12 +20,11 @@ zView::~zView() {
 }
 
 pti zView::applyGravity(crti& sizeParent, crti& sizeChild, u32 _gravity) {
-    static int shift[4] = { 31, 31, 0, 1 };
     pti ret;
     int sw((int)(_gravity & ZS_GRAVITY_HORZ));
-    ret.x = (sizeParent.w - sizeChild.w) >> shift[sw & 3];
+    ret.x = (sizeParent.w - sizeChild.w) >> gravity_shift[sw & 3];
     int sh((int)(_gravity & ZS_GRAVITY_VERT));
-    ret.y = (sizeParent.h - sizeChild.h) >> shift[(sh >> 2) & 3];
+    ret.y = (sizeParent.h - sizeChild.h) >> gravity_shift[(sh >> 2) & 3];
     return ret;
 }
 
@@ -484,8 +483,6 @@ void zViewCaret::update(zView* own, int x, int y, int h) {
     if(own) {
         rview.set(x + own->rclient.x, y + own->rclient.y, 3, h);
         rclient = rview; animator.frame = 0;
-        RTI_LOG("own", own->rclient);
-        RTI_LOG("car", rview);
         drw[DRW_BK]->bound = rview;
         setScale(1.0f, (float) h / 10.0f);
         post(MSG_ANIM, duration, 0);

@@ -157,14 +157,14 @@ static int z_clamp(int v, int mx) {
 }
 
 zCellLayout::zCellLayout(zStyle* _styles, i32 _id, cszi& _cell, i32 _space) : zViewGroup(_styles, _id) {
-    cells = _cell; space = _space;
+    cells = _cell; space = _space; cellDebug = cells;
 }
 
 static void correctSize(zLayoutParams* lps, int cols, int rows) {
     lps->x = z_clamp(lps->x, cols - 1);
     lps->y = z_clamp(lps->y, rows - 1);
-    if(lps->x + lps->w > cols) lps->w = cols - lps->x;
-    if(lps->y + lps->h > rows) lps->h = rows - lps->y;
+    if((lps->x + lps->w) > cols) lps->w = cols - lps->x;
+    if((lps->y + lps->h) > rows) lps->h = rows - lps->y;
 }
 
 void zCellLayout::onMeasure(cszm& spec) {
@@ -172,41 +172,28 @@ void zCellLayout::onMeasure(cszm& spec) {
     auto wpad(pad.extent(false)), hpad(pad.extent(true));
     auto spc(space * 2), cols(z_max(1, cells.w)), rows(z_max(1, cells.h));
     // размеры по умолчанию
+    auto hCell((float)(height - hpad) / (float)rows);
+    auto wCell((float)(width - wpad)  / (float)cols);
+    if(cells.w <= 0) wCell = hCell, cols = (int)((float)(width - wpad) / wCell);
+    else if(cells.h <= 0) hCell = wCell, rows = (int)((float)(height - hpad) / hCell);
     auto wExact(spec.w.isExact()), hExact(spec.h.isExact());
-    auto hCell((float)(hExact * (height - hpad)) / (float)rows);
-    auto wCell((float)(wExact * (width - wpad))  / (float)cols);
-    if(cells.w <= 0) wCell = hCell, cols = rows;
-    else if(cells.h <= 0) hCell = wCell, rows = cols;
     if(!(wExact && hExact)) {
         // определяем максимальный размер ячейки
         for(auto &child: children) {
             if(child->isVisibled()) {
                 // параметры макета
                 auto lps(&child->lps);
-                // корректируем габариты
-                correctSize(lps, cols, rows);
                 // определяем габариты дочернего
-                szm childSpec(makeChildMeasureSpec(spec.w, padMargin(false), VIEW_WRAP),
-                              makeChildMeasureSpec(spec.h, padMargin(true),  VIEW_WRAP));
-                child->measure(childSpec);
+                child->measure({ makeChildMeasureSpec(spec.w, 0, VIEW_WRAP),
+                                 makeChildMeasureSpec(spec.h, 0, VIEW_WRAP) });
                 // определяем максимальный размер ячейки
-                if(!wExact) wCell = z_max(wCell, (float)(child->rview.w + spc) / lps->w);
-                if(!hExact) hCell = z_max(hCell, (float)(child->rview.h + spc) / lps->h);
+                if(!wExact) wCell = z_max(wCell, (float)(child->rview.w - spc) / lps->w);
+                if(!hExact) hCell = z_max(hCell, (float)(child->rview.h - spc) / lps->h);
             }
         }
     }
     wCell = (wCell ? wCell : 40_dp);
     hCell = (hCell ? hCell : 40_dp);
-    // ставим фактические размеры
-    for(auto &child: children) {
-        if(child->isVisibled()) {
-            // параметры макета
-            auto lps(&child->lps);
-            szm childSpec(zMeasure(MEASURE_EXACT, (int)(lps->w * wCell + space)),
-                          zMeasure(MEASURE_EXACT, (int)(lps->h * hCell + space)));
-            child->measure(childSpec);
-        }
-    }
     // определяем габариты макета
     if(!hExact) {
         height = hpad + hCell * rows;
@@ -220,7 +207,26 @@ void zCellLayout::onMeasure(cszm& spec) {
             width = z_min(spec.w.size(), width);
         }
     }
+    rows = (height - hpad) / hCell; height = hpad + hCell * rows;
+    cols = (width - wpad) / wCell; width = wpad + wCell * cols;
+    cellDebug.w = cols; cellDebug.h = rows;
+    // ставим фактические размеры
+    for(auto &child: children) {
+        if(child->isVisibled()) {
+            // параметры макета
+            auto lps(&child->lps);
+            // корректируем габариты
+            correctSize(lps, cols, rows);
+            // определяем габариты дочернего
+            szm childSpec(zMeasure(MEASURE_EXACT, (int)(lps->w * wCell - spc)),
+                          zMeasure(MEASURE_EXACT, (int)(lps->h * hCell - spc)));
+            child->measure(childSpec);
+        }
+    }
     cell.set(wCell, hCell);
+//    DLOG("wc:%f hc:%f", wCell, hCell);
+//    DLOG("w:%i h:%i", width, height);
+//    DLOG("col:%i row:%i", cols, rows);
     setMeasuredDimension(width, height);
 }
 
@@ -232,7 +238,7 @@ void zCellLayout::onLayout(crti &position, bool changed) {
             auto lps(&child->lps);
             r.x = (rclient.x + (int)((float)lps->x * cell.w + (float)space));
             r.y = (rclient.y + (int)((float)lps->y * cell.h + (float)space));
-            r = child->rview.size();
+            r.w = child->rview.w; r.h = child->rview.h;
             child->layout(r);
         }
     }
@@ -339,7 +345,7 @@ bool zScrollLayout::scrolling(int _delta) {
 
 class zLayoutEdit : public zViewEdit {
 public:
-    zLayoutEdit(zEditLayout* _lyt, zViewEdit* _edit) : zViewEdit(_edit->styles, _edit->id, 0), lyt(_lyt) { }
+    zLayoutEdit(zEditLayout* _lyt, zViewEdit* _edit) : zViewEdit(_edit->styles, _edit->id, 0), lyt(_lyt) {  }
 protected:
     void updateText(int _what) override {
         if(_what == MSG_EDIT) lyt->childUpdateText(z_isempty(getText()));
@@ -437,10 +443,14 @@ zTabLayout::zTabLayout(zStyle* _styles, i32 _id, zStyle* _styles_capt, int _grav
     attach(caption, vert ? VIEW_MATCH : VIEW_WRAP, vert ? VIEW_WRAP : VIEW_MATCH, (_gravityCaption & (ZS_GRAVITY_START | ZS_GRAVITY_TOP)) ? 0 : -1);
 }
 
+void zTabLayout::onInit(bool _theme) {
+    zViewGroup::onInit(_theme);
+}
+
 void zTabLayout::showPage(int _page) {
     if(_page >= 0 && _page < caption->countChildren()) {
-        // страница - видима
-        content->atView(_page)->updateStatus(ZS_VISIBLED,true);
+        // страница видима
+        content->atView(_page)->updateStatus(ZS_VISIBLED, true);
         page = _page;
         // заголовок - показать селектор
         showSelector();
@@ -491,10 +501,6 @@ void zTabLayout::stateView(STATE &state, bool save, int &index) {
     } else {
         page = (int)state.data[index++];
     }
-}
-
-void zTabLayout::onInit(bool _theme) {
-    zViewGroup::onInit(_theme);
 }
 
 void zTabLayout::onLayout(crti &position, bool changed) {

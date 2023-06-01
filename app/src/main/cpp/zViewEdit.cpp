@@ -199,6 +199,7 @@ void zViewEdit::correctCaretPosition(int _index) {
     caretScreen = positionFromIndex(_index);
     if(realText.isEmpty()) {
         caretScreen.x = rclient.x + ipad.x; auto x(0);
+        caretScreen.y = rclient.y + ((rclient.h - getTextSize()) >> gravity_shift[((gravity & ZS_GRAVITY_VERT) >> 2) & 3]);
         switch(gravity & ZS_GRAVITY_HORZ) {
             case ZS_GRAVITY_HCENTER: x = wmax / 2; break;
             case ZS_GRAVITY_END:     x = wmax; break;

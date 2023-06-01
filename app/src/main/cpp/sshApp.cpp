@@ -80,8 +80,8 @@ static zStyle styles_z_scrolllayout[] = {
 };
 
 void sshApp::setContent() {
-    debug = true;
-  //  return;
+    //debug = true;
+    auto cell = new zCellLayout(styles_default, 0, szi(7, 0), 10);
     auto scl = new zScrollLayout(styles_z_scrolllayout, 0, true);
     auto ll = new zLinearLayout(styles_z_llinear, 0, true);
     auto el = new zEditLayout(styles_default, 0);
@@ -98,7 +98,12 @@ void sshApp::setContent() {
     auto ll1 = new zLinearLayout(styles_z_default_layout, 0, false);
     auto img = new zViewImage(styles_z_text, 0, z.R.integer.button3);
 */
-    root->attach(scl, VIEW_MATCH, VIEW_MATCH);
+    root->attach(cell, ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_MATCH)->pad.set(10, 10, 10, 10);
+    //scl->attach(cell, VIEW_MATCH, VIEW_MATCH);
+    cell->attach(vw, 1, 1, 6, 3);
+    cell->attach(chk, 2, 2, 4, 2);
+    cell->attach(edt1, 0, 4, 4, 1);
+    return;
     //scl1->attach(scl, VIEW_MATCH, VIEW_MATCH);
     //scl1->attach(ll1, VIEW_MATCH, VIEW_MATCH);
     scl->attach(ll, VIEW_WRAP, VIEW_WRAP);

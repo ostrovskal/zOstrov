@@ -14,6 +14,8 @@
 
 #include <curl2/curl.h>
 
+static int gravity_shift[4] = { 31, 31, 0, 1 };
+
 constexpr int MSG_ALL              = 0;
 constexpr int MSG_ANIM             = 1;
 constexpr int MSG_EDIT             = 2;
