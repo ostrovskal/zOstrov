@@ -120,7 +120,7 @@ static zStyle styles_z_menuimage[] = {
 
 static zStyle styles_z_barpopup[] = {
 	{ Z_DIVIDER | ZT_THEME, Z_COLOR_DIVIDER },
-	{ Z_DIVIDER_SIZE, z.R.dimen.divider },
+	{ Z_DIVIDER_SIZE, 0x00000002 },
 	{ Z_DIVIDER_TYPE, ZS_DIVIDER_MIDDLE },
 	{ Z_BACKGROUND | ZT_THEME, Z_COLOR_MENU },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
@@ -218,7 +218,7 @@ static zStyle styles_z_button[] = {
 
 static zStyle styles_z_tools[] = {
 	{ Z_FBO, true },
-	{ Z_SIZE, 0x00320032 },
+	{ Z_SIZE, 0x00200020 },
 	{ Z_ICON | ZT_THEME, Z_BITMAP_ICONS },
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_ICON_COLOR, 0xffffffff },
@@ -295,9 +295,8 @@ static zStyle styles_z_ribbon[] = {
 	{ Z_BACKGROUND_TILES, z.R.integer.selectDrop },
 	{ Z_PADDING, 0x05050505 },
 	{ Z_DIVIDER | ZT_THEME, Z_COLOR_DIVIDER },
-	{ Z_DIVIDER_SIZE, z.R.dimen.divider },
 	{ Z_DIVIDER_TYPE, ZS_DIVIDER_MIDDLE },
-	{ Z_DIVIDER_PADDING | ZT_END, 0x02020202 }
+	{ Z_DIVIDER_SIZE | ZT_END, 0x02000202 }
 };
 
 static zStyle styles_z_table[] = {
@@ -312,21 +311,19 @@ static zStyle styles_z_table[] = {
 	{ Z_SPACING_LINE, 0 },
 	{ Z_SPACING_CELL, 0 },
 	{ Z_CELL_SIZE, 90 },
-	{ Z_MODE, ZS_TABLE_UNIFORM },
+	{ Z_MODE, ZS_GRID_UNIFORM },
 	{ Z_LINES, 0 },
 	{ Z_DIVIDER | ZT_THEME, Z_COLOR_DIVIDER },
-	{ Z_DIVIDER_SIZE, z.R.dimen.divider },
 	{ Z_DIVIDER_TYPE, ZS_DIVIDER_MIDDLE },
-	{ Z_DIVIDER_PADDING, 0x03030303 },
+	{ Z_DIVIDER_SIZE, 0x03000302 },
 	{ Z_SCROLLBAR_TILES | ZT_END, z.R.integer.gradientRadial }
 };
 
 static zStyle styles_z_select[] = {
 	{ Z_FBO, true },
 	{ Z_DIVIDER | ZT_THEME, Z_COLOR_DIVIDER },
-	{ Z_DIVIDER_SIZE, z.R.dimen.divider },
 	{ Z_DIVIDER_TYPE, ZS_DIVIDER_MIDDLE },
-	{ Z_DIVIDER_PADDING, 0x02020202 },
+	{ Z_DIVIDER_SIZE, 0x02000202 },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_BACKGROUND, z.R.drawable.zssh },
 	{ Z_BACKGROUND_TILES, z.R.integer.selectDrop },
@@ -370,7 +367,7 @@ static zStyle styles_z_linearprogress[] = {
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_FOREGROUND_TILES | ZT_THEME, Z_PROGRESS_TILES },
 	{ Z_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_PROGRESS },
-	{ Z_COLOR_PROGRESS_PRIMARY | ZT_THEME, Z_COLOR_PROGRESS_PRIMARY },
+	{ Z_PRIMARY | ZT_THEME, Z_COLOR_PROGRESS_PRIMARY },
 	{ Z_PADDING, 0x03030303 },
 	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
@@ -411,9 +408,9 @@ static zStyle styles_z_switchbutton[] = {
 };
 
 static zStyle styles_z_llinear[] = {
-	{ Z_DIVIDER_PADDING, 0x03030303 },
+	{ Z_DIVIDER_SIZE, 0x03000300 },
 	{ Z_DIVIDER | ZT_THEME, Z_COLOR_DIVIDER },
-	{ Z_DIVIDER_TYPE, ZS_DIVIDER_BEGIN | ZS_DIVIDER_MIDDLE | ZS_DIVIDER_FINISH },
+	{ Z_DIVIDER_TYPE, ZS_DIVIDER_BEGIN | ZS_DIVIDER_MIDDLE | ZS_DIVIDER_END },
 	{ Z_PADDING, 0x05050505 },
 	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_CENTER }
 };
@@ -565,7 +562,7 @@ static zStyle styles_z_progress1[] = {
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_FOREGROUND_TILES, 0x0014140C },
 	{ Z_FOREGROUND_COLOR, 0xffffffff },
-	{ Z_COLOR_PROGRESS_PRIMARY | ZT_THEME, Z_COLOR_PROGRESS_PRIMARY },
+	{ Z_PRIMARY | ZT_THEME, Z_COLOR_PROGRESS_PRIMARY },
 	{ Z_TEXT_FONT | ZT_THEME, Z_FONT2 },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_PROGRESS_TEXT },
 	{ Z_TEXT_SIZE, 20 },

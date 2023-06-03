@@ -3,25 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:z="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    z:background="0xff804000" z:decorate="vscrollbar|glow" z:pad="5dp"
+    z:background="#ff804000" z:decorate="vscrollbar|glow" z:pad="5dp"
     android:layout_width="match_parent" android:layout_height="match_parent">
     <LinearLayout
         android:orientation="vertical" android:id="@+id/lyt1"
-        android:layout_width="match_parent" android:layout_height="wrap_content" z:styles="!style/llinear">
+        android:layout_width="match_parent" android:layout_height="wrap_content" z:styles="@style/llinear">
         <ProgressBar
             android:id="@+id/progress1" android:layout_width="100dp" android:layout_height="100dp"
             android:layout_gravity="center" android:layout_weight="3" android:text="Sergey"
-            z:styles="!style/circularProgress" z:range="0,70" z:pos="50"/>
+            z:styles="@style/circularProgress" z:range="0,70" z:pos="50"/>
         <EditLayout android:id="@+id/editlyt1" android:layout_width="wrap_content" android:layout_height="wrap_content">
             <EditText
                 android:layout_weight="2" android:text="Sergey"
                 android:id="@+id/edit1" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                z:styles="!style/edittext" z:inputMode="text" z:hint="@string/enter_family" />
+                z:styles="@style/edittext" z:inputMode="text" z:hint="@string/enter_family" />
         </EditLayout>
         <GridView android:id="@+id/grid1" android:layout_width="300dp" android:layout_height="400dp"
             android:layout_weight="2"
-            z:styles="!style/table" android:orientation="horizontal" />
+            z:styles="@style/table" android:orientation="horizontal" />
         <Form android:id="@+id/form" android:layout_width="500dp" android:layout_height="400dp"
-            z:styles="!style/form" android:text="@string/first_form" z:styleCaption="!style/formCaption" z:styleFooter="!style/formFooter" />
+            z:styles="@style/form" android:text="@string/first_form" z:styleCaption="@style/formCaption" z:styleFooter="@style/formFooter" />
     </LinearLayout>
 </ScrollView>

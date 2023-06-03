@@ -176,7 +176,8 @@ enum ViewStyles {
     Z_CHART_FLAGS               = (64 | ZTT_INT),
     Z_IPADDING                  = (65 | ZTT_VEC),
     Z_FBO                       = (66 | ZTT_INT),
-    Z_ICON_TILES                = (67 | ZTT_INT | ZTT_THM)
+    Z_ICON_TILES                = (67 | ZTT_INT | ZTT_THM),
+    Z_PRIMARY                   = (68 | ZTT_INT | ZTT_THM)
 };
 
 // значения для темы

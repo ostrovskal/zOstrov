@@ -384,7 +384,7 @@ szi zDrawable::resolveSize(int wmax, int hmax, u32 gravity) const {
 int zDrawableDivider::resolve(int count) const {
     int _size(0), middle(0); count--;
     if(type & ZS_DIVIDER_BEGIN) _size += size + padEnd;
-    if(type & ZS_DIVIDER_FINISH) _size += size + padBegin;
+    if(type & ZS_DIVIDER_END) _size += size + padBegin;
     if((type & ZS_DIVIDER_MIDDLE) && count > 0) {
         auto parent((zViewGroup*)view);
         for(int i = 0; i < count; i++) middle += (parent->atView(i)->isVisibled());
@@ -399,10 +399,9 @@ void zDrawableDivider::measure(int width, int height, int pivot, bool isSave) {
 }
 
 void zDrawableDivider::init(const zParamDrawable& p) {
-    type     = p.type;
-    size     = p.size & 0xff;
-    padBegin = (p.size >> 8) & 0xff;
-    padEnd   = (p.size >> 16) & 0xff;
+    auto sz(&p.size);
+    type     = p.type; size     = sz[3];
+    padBegin = sz[0];  padEnd   = sz[2];
     zDrawable::init(p);
 }
 
@@ -427,7 +426,7 @@ void zDrawableDivider::make(int extra, int count, int idx) {
             if(v->isVisibled()) set(v->edges(vert, true) + extra + v->margin[vert + 2], padBegin);
         }
     }
-    if(count && (type & ZS_DIVIDER_FINISH)) {
+    if(count && (type & ZS_DIVIDER_END)) {
         auto v(_parent->atView(count - 1)); if(!v->isVisibled()) v = view;
         set(v->edges(vert, true) + v->margin[vert + 2], padBegin);
     }

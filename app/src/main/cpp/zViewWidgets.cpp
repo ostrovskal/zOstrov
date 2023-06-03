@@ -304,7 +304,7 @@ void zViewProgress::onDraw() {
 
 void zViewProgress::onInit(bool _theme) {
     zViewSlider::onInit(_theme);
-    trumb->color.set(styles->_int(Z_COLOR_PROGRESS_PRIMARY, 0xffa00000));
+    trumb->color.set(styles->_int(Z_PRIMARY, 0xffa00000));
     if(mode == ZS_SLIDER_ROTATE) post(MSG_ANIM, duration, 0);
 }
 

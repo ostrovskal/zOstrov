@@ -138,9 +138,9 @@ enum { TOUCH_CONTINUE, TOUCH_FINISH, TOUCH_ACTION, TOUCH_STOP };
 #define ZS_CHART_SCROLL                 8
 #define ZS_MODE_CHART_MASK              (ZS_CHART_DIAGRAMM | ZS_CHART_GRAPH | ZS_CHART_CIRCULAR)
 // таблица
-#define ZS_TABLE_SPACING                1 // пространство между ячейками
-#define ZS_TABLE_CELL                   2 // растягивать ячейки
-#define ZS_TABLE_UNIFORM                3 // пространство между ячейками – расстояние
+#define ZS_GRID_SPACING                 1 // пространство между ячейками
+#define ZS_GRID_CELL                    2 // растягивать ячейки
+#define ZS_GRID_UNIFORM                 3 // пространство между ячейками – расстояние
 #define ZS_MODE_TABLE_MASK              (ZS_TABLE_SPACING | ZS_TABLE_CELL | ZS_TABLE_UNIFORM)
 // редактор
 #define ZS_EDIT_TEXT                    0
@@ -153,7 +153,7 @@ enum { TOUCH_CONTINUE, TOUCH_FINISH, TOUCH_ACTION, TOUCH_STOP };
 // разделитель
 #define ZS_DIVIDER_BEGIN                1
 #define ZS_DIVIDER_MIDDLE               2
-#define ZS_DIVIDER_FINISH               4
+#define ZS_DIVIDER_END                  4
 #define ZS_MODE_DIVIDER_MASK            (ZS_DIVIDER_BEGIN | ZS_DIVIDER_MIDDLE | ZS_DIVIDER_FINISH)
 // текст
 #define ZS_TEXT_NORMAL                  0

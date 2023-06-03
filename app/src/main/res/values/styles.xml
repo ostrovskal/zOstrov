@@ -40,7 +40,7 @@
         <item name="duration">500</item>
     </style>
     <style name="editButClear">
-        <item name="foreground">!drawable/zssh</item>
+        <item name="foreground">@drawable/zssh</item>
         <item name="fkGravity">center</item>
         <item name="fkTiles">@integer/iconEdit</item>
         <item name="tap">hovered</item>
@@ -79,8 +79,8 @@
         <item name="pad">2dp</item>
     </style>
     <style name="barButton">
-        <item name="minSizeW">32dp</item>
-        <item name="minSizeH">32dp</item>
+        <item name="sizeMinW">32dp</item>
+        <item name="sizeMinH">32dp</item>
         <item name="foreground">%drawable/bitmap_common</item>
         <item name="fkColor">#ffffff</item>
         <item name="gravity">center</item>
@@ -88,8 +88,8 @@
         <item name="pad">2dp</item>
     </style>
     <style name="barOverflow">
-        <item name="minSizeW">32dp</item>
-        <item name="minSizeH">32dp</item>
+        <item name="sizeMinW">32dp</item>
+        <item name="sizeMinH">32dp</item>
         <item name="foreground">@drawable/zssh</item>
         <item name="fkColor">#ffffff</item>
         <item name="gravity">center</item>
@@ -117,8 +117,8 @@
         <item name="padVert">2dp</item>
     </style>
     <style name="formCaption">
-        <item name="minSizeW">@dimen/headerMinWidth</item>
-        <item name="minSizeH">@dimen/headerMinHeight</item>
+        <item name="sizeMinW">@dimen/headerMinWidth</item>
+        <item name="sizeMinH">@dimen/headerMinHeight</item>
         <item name="gravity">center</item>
         <item name="font">@drawable/font1</item>
         <item name="pad">1dp</item>
@@ -134,13 +134,13 @@
         <item name="foreground">@drawable/zssh</item>
         <item name="icon">@drawable/zssh</item>
         <item name="fkTiles">@integer/button2</item>
-        <item name="iconScale">0.66</item>
+        <item name="icScale">0.66</item>
         <item name="fkGravity">center|height</item>
         <item name="tap">pressed</item>
         <item name="pad">2dp</item>
         <item name="fkScale">0.95</item>
-        <item name="iconColor">#efffffff</item>
-        <item name="iconGravity">center|height</item>
+        <item name="icColor">#efffffff</item>
+        <item name="icGravity">center|height</item>
     </style>
     <style name="spin_item">
         <item name="textColor">%color/color_text_text</item>
@@ -171,7 +171,7 @@
         <item name="pad">2dp</item>
     </style>
     <style name="spin_capt">
-        <item name="textSingle">true</item>
+        <item name="textWrap">true</item>
         <item name="fkGravity">center</item>
         <item name="foreground">@drawable/zssh</item>
         <item name="fkTiles">@integer/selectCapt</item>
@@ -183,7 +183,7 @@
         <item name="fbo">true</item>
         <item name="icon">%drawable/bitmap_icons</item>
         <item name="foreground">@drawable/zssh</item>
-        <item name="iconColor">#ffffff</item>
+        <item name="icColor">#ffffff</item>
         <item name="fkGravity">center</item>
         <item name="textDistance">3dp</item>
         <item name="fkScale">0.75</item>
@@ -192,18 +192,18 @@
         <item name="textSize">@dimen/textText</item>
         <item name="pad">3dp</item>
         <item name="gravity">center</item>
-        <item name="iconGravity">end|center_vertical</item>
+        <item name="icGravity">end|center_vertical</item>
         <item name="tap">hovered</item>
         <item name="fkTiles">@integer/gradientRadial</item>
-        <item name="iconScale">0.5</item>
+        <item name="icScale">0.5</item>
     </style>
     <style name="tools">
         <item name="fbo">true</item>
-        <item name="minSizeH">@dimen/toolsMinHeight</item>
-        <item name="minSizeW">@dimen/toolsMinWidth</item>
+        <item name="sizeMinH">32dp</item>
+        <item name="sizeMinW">32dp</item>
         <item name="icon">%drawable/bitmap_icons</item>
         <item name="foreground">@drawable/zssh</item>
-        <item name="iconColor">#ffffff</item>
+        <item name="icColor">#ffffff</item>
         <item name="fkGravity">center</item>
         <item name="textDistance">0dp</item>
         <item name="fkScale">0.75</item>
@@ -211,10 +211,10 @@
         <item name="textSize">@dimen/textText</item>
         <item name="pad">3dp</item>
         <item name="gravity">center</item>
-        <item name="iconGravity">center</item>
+        <item name="icGravity">center</item>
         <item name="tap">hovered</item>
         <item name="fkTiles">@integer/tools</item>
-        <item name="iconScale">0.5</item>
+        <item name="icScale">0.5</item>
     </style>
     <style name="checkbox">
         <item name="fbo">true</item>
@@ -250,16 +250,16 @@
         <item name="foreground">@drawable/zssh</item>
         <item name="fkTiles">@integer/edit</item>
         <item name="fkScale">0.75</item>
-        <item name="iconGravity">end|center_vertical</item>
+        <item name="icGravity">end|center_vertical</item>
         <item name="icon">@drawable/zssh</item>
-        <item name="iconTiles">@integer/iconEdit</item>
-        <item name="iconScale">0.75</item>
+        <item name="icTiles">@integer/iconEdit</item>
+        <item name="icScale">0.75</item>
         <item name="textDistance">2dp</item>
         <item name="fkGravity">center</item>
         <item name="pad">5dp</item>
         <item name="ipad">5dp</item>
         <item name="inputMode">text</item>
-        <item name="textSingle">false</item>
+        <item name="textWrap">false</item>
         <item name="gravity">start|center_vertical</item>
         <item name="textColor">%color/color_text_text</item>
         <item name="textSize">@dimen/textText</item>
@@ -277,7 +277,7 @@
         <item name="divider">%color/color_divider</item>
         <item name="divSize">@dimen/divider</item>
         <item name="divType">middle</item>
-        <item name="divPad">2dp</item>
+        <item name="divPadHorz">2dp</item>
     </style>
     <style name="table">
         <item name="fbo">true</item>
@@ -296,7 +296,7 @@
         <item name="divider">%color/color_divider</item>
         <item name="divSize">@dimen/divider</item>
         <item name="divType">middle</item>
-        <item name="divPad">3dp</item>
+        <item name="divPadHorz">3dp</item>
         <item name="tilesScrollBars">@integer/gradientRadial</item>
     </style>
     <style name="select">
@@ -304,7 +304,7 @@
         <item name="divider">%color/color_divider</item>
         <item name="divSize">@dimen/divider</item>
         <item name="divType">middle</item>
-        <item name="divPad">2dp</item>
+        <item name="divPadHorz">2dp</item>
         <item name="gravity">center</item>
         <item name="background">@drawable/zssh</item>
         <item name="bkTiles">@integer/selectDrop</item>
@@ -345,7 +345,7 @@
         <item name="foreground">@drawable/zssh</item>
         <item name="fkTiles">%integer/progress_tiles</item>
         <item name="fkColor">%color/color_progress</item>
-        <item name="primaryColor">%color/color_progress_primary</item>
+        <item name="primary">%color/color_progress_primary</item>
         <item name="pad">3dp</item>
         <item name="font">@drawable/font1</item>
         <item name="fkGravity">center</item>
@@ -384,20 +384,20 @@
         <item name="fkScale">1.0</item>
     </style>
     <style name="llinear">
-        <item name="divPad">3dp</item>
+        <item name="divPadHorz">3dp</item>
         <item name="divider">%color/color_divider</item>
-        <item name="divType">begin|middle|finish</item>
+        <item name="divType">begin|middle|end</item>
         <item name="pad">5dp</item>
         <item name="gravity">center</item>
     </style>
     <style name="tabWidget">
         <item name="foreground">%drawable/bitmap_icons</item>
         <item name="icon">%drawable/bitmap_icons</item>
-        <item name="minSizeW">16dp</item>
-        <item name="minSizeH">16dp</item>
-        <item name="iconScale">0.5</item>
-        <item name="iconGravity">center</item>
-        <item name="iconColor">#ffffffff</item>
+        <item name="sizeMinW">16dp</item>
+        <item name="sizeMinH">16dp</item>
+        <item name="icScale">0.5</item>
+        <item name="icGravity">center</item>
+        <item name="icColor">#ffffffff</item>
         <item name="font">@drawable/font1</item>
         <item name="textSize">@dimen/textText</item>
         <item name="textColor">%color/color_tab_text</item>
@@ -449,11 +449,11 @@
         <item name="pad">5dp</item>
     </style>
     <style name="chartDiagramm">
-        <item name="styles">!style/chart</item>
+        <item name="styles">@style/chart</item>
         <item name="chartMode">diagramm</item>
     </style>
     <style name="chartGraph">
-        <item name="styles">!style/chart</item>
+        <item name="styles">@style/chart</item>
         <item name="chartMode">graph</item>
     </style>
 </resources>

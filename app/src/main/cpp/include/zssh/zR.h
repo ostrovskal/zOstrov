@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Thu Jun  1 19:02:36 2023
+// Sat Jun  3 15:53:37 2023
 
 #pragma once
 
@@ -95,12 +95,13 @@ struct _z {
 				acontrollerMap	= 0x00100006, 	ccontrollerMap	= 0x00100007, 
 				themeDark	= 0x00100008, 	themeLight	= 0x00100009, 	textSpan	= 0x0010000A, 
 				first_form	= 0x0010000B, 	enter_family	= 0x0010000C, 	Sergey	= 0x0010000D, 
-				Perekljuchatelw	= 0x0010000E, 			};
+				_string_app_name	= 0x0010000E, 	Perekljuchatelw	= 0x0010000F, 
+			};
 		}; 
 		_string string;
 		struct _array {
 			enum { 
-				spinArray	= 0x0010000F, 			};
+				spinArray	= 0x00100010, 			};
 		}; 
 		_array array;
 		struct _style {
@@ -210,9 +211,10 @@ static zResource z_resources[] = {
 		{ _z::_R::_string::first_form, "First form!!!" },
 		{ _z::_R::_string::enter_family, "Entering family" },
 		{ _z::_R::_string::Sergey, "Sergey" },
+		{ _z::_R::_string::_string_app_name, "@string/app_name" },
 		{ _z::_R::_string::Perekljuchatelw, "Переключатель" },
 		/* array */
-		{ _z::_R::_array::spinArray | ZT_END, "Ivan,Irina,Sergey Shatalov,Maxim,Vladislav,06.06.1979,Shatalov Sergey,Olga,Viktor Alexeevish,Cat,Maria,Nina Shatalova,Alex,Alexandr" }
+		{ _z::_R::_array::spinArray | ZT_END, "Ivan|Irina|Sergey Shatalov|Maxim|Vladislav|06.06.1979|Shatalov Sergey|Olga|Viktor Alexeevish|Cat|Maria|Nina Shatalova|Alex|Alexandr" }
 };
 
 /* string resources [values_ru] */
@@ -223,7 +225,7 @@ static zResource z_resources_ru[] = {
 		{ _z::_R::_string::first_form, "Первая форма!!!" },
 		{ _z::_R::_string::enter_family, "Введите фамилию и отчество" },
 		/* array */
-		{ _z::_R::_array::spinArray | ZT_END, "Иван,Ирина,Сергей Викторович,Максим,Владислав,06.06.1979,Шаталов Сергей,Ольга,Виктор Алексеевич,Катя,Маша,Нина Шаталова,Алекс,Саша" }
+		{ _z::_R::_array::spinArray | ZT_END, "Иван|Ирина|Сергей Викторович|Максим|Владислав|06.06.1979|Шаталов Сергей|Ольга|Виктор Алексеевич|Катя|Маша|Нина Шаталова|Алекс|Саша" }
 };
 
 

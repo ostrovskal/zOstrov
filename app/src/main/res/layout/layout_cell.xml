@@ -14,11 +14,11 @@
         android:layout_x="0px" android:layout_y="3px" android:layout_width="2px" android:layout_height="1px"
         z:textColor="%color/color_text_text" z:textSize="30sp" z:hint="@string/app_name"
         z:pad="10dp" android:gravity="center_vertical" z:foreground="%drawable/bitmap_common" z:fkTiles="@integer/edit"
-        z:font="%drawable/font1" z:textSingle="true" />
+        z:font="%drawable/font1" z:textWrap="true" />
     <Button
         android:id="@+id/button1"
         android:layout_x="0px" android:layout_y="4px" android:layout_width="2px" android:layout_height="1px"
-        z:fkTiles="@integer/gradientRadial" z:foreground="@drawable/zssh" z:fkGravity="center" z:icon="@integer/iconCancel"
+        z:fkTiles="@integer/gradientRadial" z:foreground="@drawable/zssh" z:fkGravity="center" z:iconka="@integer/iconCancel"
         z:font="%drawable/font1" android:gravity="center" z:fkScale="1.0"
         android:text="@string/themeDark" z:textColor="%color/color_text_text" z:textSize="40sp"
         z:pad="5dp" z:tap="hovered" />
@@ -41,9 +41,9 @@
         android:id="@+id/progress1"
         android:layout_x="0px" android:layout_y="7px" android:layout_width="2px" android:layout_height="1px"
         z:foreground="@drawable/zssh" z:fkTile1="@integer/progressWait" z:fkTile2="@integer/rectRound" z:fkTile3="@integer/rectRound"
-        z:fkColor="#ffffff" z:primaryColor="%color/color_progress_primary"
+        z:fkColor="#ffffff" z:primary="%color/color_progress_primary"
         z:pad="5dp" android:orientation="horizontal" z:font="%drawable/font2"
-        z:textColor="%color/color_progress_text" z:textSize="20sp" android:gravity="center" z:shadowOffset="0,0"
+        z:textColor="%color/color_progress_text" z:textSize="20sp" android:gravity="center" z:textShadowOffset="0,0"
         z:padStart="1dp" z:padTop="2dp" z:padEnd="3dp" z:padBottom="4dp"
         z:range="0,70" z:pos="50" z:sliderMode="rotate" z:display="visibled|tips" z:fkScale="2.5" />
 </CellLayout>

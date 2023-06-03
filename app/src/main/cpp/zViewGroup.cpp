@@ -166,8 +166,8 @@ void zViewGroup::onInit(bool _theme) {
             case Z_DIVIDER_COLOR:       dv.color    = v; break;
             case Z_DIVIDER_TILES:       dv.tiles    = v; break;
             case Z_DIVIDER_PADDING:     dv.padding  = v; break;
-            case Z_DIVIDER_SIZE:        dv.size     = v; break;
             case Z_DIVIDER_TYPE:        dv.type     = v; break;
+            case Z_DIVIDER_SIZE:        dv.size     = v; break;
             case Z_SELECTOR:            sl.texture  = v; break;
             case Z_SELECTOR_COLOR:      sl.color    = v; break;
             case Z_SELECTOR_TILES:      sl.tiles    = v; break;
