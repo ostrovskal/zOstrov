@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Sat Jun  3 15:53:37 2023
+// Sat Jun  3 22:22:40 2023
 
 #pragma once
 
@@ -83,10 +83,9 @@ struct _z {
 				menuOverflow	= 0x00101003, 	ok	= 0x00101004, 	yes	= 0x00101005, 
 				no	= 0x00101006, 	def	= 0x00101007, 	toast	= 0x00101008, 
 				actionBar	= 0x00101009, 	wndPopup	= 0x0010100A, 	root	= 0x0010100B, 
-				common	= 0x0010100C, 	keyboard	= 0x0010100D, 	lyt1	= 0x0010100E, 
-				progress1	= 0x0010100F, 	editlyt1	= 0x00101010, 	edit1	= 0x00101011, 
-				grid1	= 0x00101012, 	form	= 0x00101013, 	list1	= 0x00101014, 
-				button1	= 0x00101015, 	switch1	= 0x00101016, 	seek	= 0x00101017, 
+				common	= 0x0010100C, 	keyboard	= 0x0010100D, 	edit1	= 0x0010100E, 
+				button1	= 0x0010100F, 	switch1	= 0x00101010, 	seek	= 0x00101011, 
+				progress1	= 0x00101012, 	edit2	= 0x00101013, 	form	= 0x00101014, 
 			};
 		}; 
 		_id id;
@@ -94,14 +93,14 @@ struct _z {
 			enum { 
 				acontrollerMap	= 0x00100006, 	ccontrollerMap	= 0x00100007, 
 				themeDark	= 0x00100008, 	themeLight	= 0x00100009, 	textSpan	= 0x0010000A, 
-				first_form	= 0x0010000B, 	enter_family	= 0x0010000C, 	Sergey	= 0x0010000D, 
-				_string_app_name	= 0x0010000E, 	Perekljuchatelw	= 0x0010000F, 
+				first_form	= 0x0010000B, 	enter_family	= 0x0010000C, 	podskazka	= 0x0010000D, 
+				Perekljuchatelw	= 0x0010000E, 	slayder	= 0x0010000F, 	Sergey	= 0x00100010, 
 			};
 		}; 
 		_string string;
 		struct _array {
 			enum { 
-				spinArray	= 0x00100010, 			};
+				spinArray	= 0x00100011, 			};
 		}; 
 		_array array;
 		struct _style {
@@ -121,10 +120,11 @@ struct _z {
 				llinear	= 0x00100023, 	tabWidget	= 0x00100024, 	tabHost	= 0x00100025, 
 				ccontroller	= 0x00100026, 	acontroller	= 0x00100027, 	form	= 0x00100028, 
 				chart	= 0x00100029, 	chartDiagramm	= 0x0010002A, 	chartGraph	= 0x0010002B, 
-				zscrolllayout1	= 0x0010002C, 	edit1	= 0x0010002D, 	zcelllayout1	= 0x0010002E, 
-				list1	= 0x0010002F, 	zviewedit1	= 0x00100030, 	button1	= 0x00100031, 
-				switch1	= 0x00100032, 	seek	= 0x00100033, 	progress1	= 0x00100034, 
-	};
+				zlinearlayout1	= 0x0010002C, 	zlinearlayout2	= 0x0010002D, 
+				edit1	= 0x0010002E, 	button1	= 0x0010002F, 	switch1	= 0x00100030, 
+				seek	= 0x00100031, 	edit2	= 0x00100032, 	zcelllayout1	= 0x00100033, 
+				zviewedit1	= 0x00100034, 	zviewbutton1	= 0x00100035, 	zviewswitch1	= 0x00100036, 
+				zviewslider1	= 0x00100037, 	progress1	= 0x00100038, 	};
 		};
 		_style style;
 	};
@@ -181,14 +181,18 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::chart, styles_z_chart },
 		{ _z::_R::_style::chartDiagramm, styles_z_chartdiagramm },
 		{ _z::_R::_style::chartGraph, styles_z_chartgraph },
-		{ _z::_R::_style::zscrolllayout1, styles_z_zscrolllayout1 },
+		{ _z::_R::_style::zlinearlayout1, styles_z_zlinearlayout1 },
+		{ _z::_R::_style::zlinearlayout2, styles_z_zlinearlayout2 },
 		{ _z::_R::_style::edit1, styles_z_edit1 },
-		{ _z::_R::_style::zcelllayout1, styles_z_zcelllayout1 },
-		{ _z::_R::_style::list1, styles_z_list1 },
-		{ _z::_R::_style::zviewedit1, styles_z_zviewedit1 },
 		{ _z::_R::_style::button1, styles_z_button1 },
 		{ _z::_R::_style::switch1, styles_z_switch1 },
 		{ _z::_R::_style::seek, styles_z_seek },
+		{ _z::_R::_style::edit2, styles_z_edit2 },
+		{ _z::_R::_style::zcelllayout1, styles_z_zcelllayout1 },
+		{ _z::_R::_style::zviewedit1, styles_z_edit1 },
+		{ _z::_R::_style::zviewbutton1, styles_z_zviewbutton1 },
+		{ _z::_R::_style::zviewswitch1, styles_z_switch1 },
+		{ _z::_R::_style::zviewslider1, styles_z_zviewslider1 },
 		{ _z::_R::_style::progress1 | ZT_END, styles_z_progress1 }
 };
 
@@ -210,9 +214,10 @@ static zResource z_resources[] = {
 		{ _z::_R::_string::textSpan, "Finish work background application after blocked screen helps saved battery." },
 		{ _z::_R::_string::first_form, "First form!!!" },
 		{ _z::_R::_string::enter_family, "Entering family" },
-		{ _z::_R::_string::Sergey, "Sergey" },
-		{ _z::_R::_string::_string_app_name, "@string/app_name" },
+		{ _z::_R::_string::podskazka, "подсказка" },
 		{ _z::_R::_string::Perekljuchatelw, "Переключатель" },
+		{ _z::_R::_string::slayder, "слайдер" },
+		{ _z::_R::_string::Sergey, "Sergey" },
 		/* array */
 		{ _z::_R::_array::spinArray | ZT_END, "Ivan|Irina|Sergey Shatalov|Maxim|Vladislav|06.06.1979|Shatalov Sergey|Olga|Viktor Alexeevish|Cat|Maria|Nina Shatalova|Alex|Alexandr" }
 };

@@ -75,7 +75,6 @@ void zAbsoluteLayout::onLayout(crti &position, bool changed) {
 void zLinearLayout::onMeasure(cszm& spec) {
     int width, height, allWeight(0); szm childSpec;
     int wmax(0), hmax(0), marginsChild(0); int* side; bool isWeights(false);
-    bool vert(isVertical());
     // размер разделителя
     auto divSize(div ? div->resolve(countChildren()) : 0);
     if(vert) hmax = divSize; else wmax = divSize;

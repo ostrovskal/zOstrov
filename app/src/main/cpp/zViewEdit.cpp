@@ -250,9 +250,9 @@ int zViewEdit::correct(int _index) {
     if(update) {
         // установить новый текст
         setText(realText, true);
-        // получить новую позицию каретки на экране
-        correctCaretPosition(_index);
     }
+    // получить новую позицию каретки на экране
+    correctCaretPosition(_index);
     return _index;
 }
 

@@ -136,6 +136,7 @@ i32 zViewKeyboard::onTouchEvent(zTouch *touch) {
                 else keyCode = but->name[touch->isLongClick()];
                 if(!_switch && keyCode) {
                     if(owner) owner->keyEvent(keyCode, false);
+                    if(owner && owner->edges(true, true) != yEdge) show(owner->id, true);
                     if(current->names[KEYBOARD_INPUT].isNotEmpty() && !activeShift) {
                         _switch = &current->names[KEYBOARD_INPUT];
                     }
@@ -225,19 +226,21 @@ i32 zViewKeyboard::keyEvent(int key, bool sysKey) {
 void zViewKeyboard::show(u32 _id, bool set) {
     if(current) {
         auto root(manager->getSystemView(true));
-        nPressSpec = 0; activeShift = false;
         if(set) {
+            auto isOwner(owner != nullptr);
             owner = manager->idView(_id);
-            cstr _defName(defName);
-            if(owner) {
-                auto name(owner->getDefaultKeyboardLayer());
-                if(layouts.indexOf(name) != -1) _defName = name;
+            if(!isOwner) {
+                cstr _defName(defName);
+                if(owner) {
+                    auto name(owner->getDefaultKeyboardLayer());
+                    if(layouts.indexOf(name) != -1) _defName = name;
+                }
+                setLayout(_defName);
             }
-            setLayout(_defName);
             if(_id <= 0 || isChecked()) {
                 // берем нижнюю координату владельца
-                auto y(owner->edges(true, true));
-                y -= rview.y;
+                yEdge = owner->edges(true, true);
+                auto y(yEdge - rview.y);
                 if(y > 0) root->lps.y -= y;
                 return;
             }
@@ -245,6 +248,7 @@ void zViewKeyboard::show(u32 _id, bool set) {
         } else {
             if(!isChecked()) return;
             owner = nullptr;
+            nPressSpec = 0; activeShift = false;
         }
         isUpdate = true;
         requestLayout();

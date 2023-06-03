@@ -74,6 +74,6 @@ void sshApp::run() {
 #include "zssh/zViewRibbons.h"
 
 void sshApp::setContent() {
-    debug = true;
-    #include "zssh/layout_cell.h"
+    //debug = true;
+    #include "zssh/layout_main.h"
 }

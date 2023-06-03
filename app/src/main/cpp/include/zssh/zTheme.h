@@ -141,7 +141,7 @@ enum ViewStyles {
     Z_DIVIDER					= (33 | ZTT_INT | ZTT_THM),
     Z_DIVIDER_COLOR				= (34 | ZTT_INT | ZTT_THM),
     Z_DIVIDER_TILES				= (35 | ZTT_INT | ZTT_THM),
-    Z_DIVIDER_PADDING			= (36 | ZTT_VEC | ZTT_THM),
+    Z_DIVIDER_PADDING			= (36 | ZTT_INT | ZTT_THM),
     Z_DIVIDER_SIZE				= (37 | ZTT_VEC | ZTT_THM),
     Z_DIVIDER_TYPE				= (38 | ZTT_INT | ZTT_THM),
     // иконка

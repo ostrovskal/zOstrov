@@ -75,4 +75,6 @@ protected:
     bool activeShift{false};
     // признак рисования
     bool isDrawing{true};
+    // нижняя граница владельца
+    int yEdge{0};
 };

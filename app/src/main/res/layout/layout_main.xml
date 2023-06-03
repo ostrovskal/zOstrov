@@ -1,27 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:z="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    z:background="#ff804000" z:decorate="vscrollbar|glow" z:pad="5dp"
+    android:orientation="horizontal"
+    z:styles="@style/llinear"
+    z:divColor="#ffffffff"
+    z:pad="5dp"
     android:layout_width="match_parent" android:layout_height="match_parent">
     <LinearLayout
-        android:orientation="vertical" android:id="@+id/lyt1"
-        android:layout_width="match_parent" android:layout_height="wrap_content" z:styles="@style/llinear">
-        <ProgressBar
-            android:id="@+id/progress1" android:layout_width="100dp" android:layout_height="100dp"
-            android:layout_gravity="center" android:layout_weight="3" android:text="Sergey"
-            z:styles="@style/circularProgress" z:range="0,70" z:pos="50"/>
-        <EditLayout android:id="@+id/editlyt1" android:layout_width="wrap_content" android:layout_height="wrap_content">
-            <EditText
-                android:layout_weight="2" android:text="Sergey"
-                android:id="@+id/edit1" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                z:styles="@style/edittext" z:inputMode="text" z:hint="@string/enter_family" />
-        </EditLayout>
-        <GridView android:id="@+id/grid1" android:layout_width="300dp" android:layout_height="400dp"
-            android:layout_weight="2"
-            z:styles="@style/table" android:orientation="horizontal" />
-        <Form android:id="@+id/form" android:layout_width="500dp" android:layout_height="400dp"
-            z:styles="@style/form" android:text="@string/first_form" z:styleCaption="@style/formCaption" z:styleFooter="@style/formFooter" />
+        android:orientation="vertical"
+        z:styles="@style/llinear"
+        z:pad="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <EditText
+        android:id="@+id/edit1" z:inputMode="text"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        z:textColor="%color/color_text_text" z:textSize="20sp" z:hint="подсказка" z:fkGravity="center"
+        z:icon="@drawable/zssh" z:icGravity="end" z:icColor="#ffffffff" z:icTiles="@integer/iconEdit"
+        z:pad="10dp" android:gravity="center_vertical" z:foreground="%drawable/bitmap_common" z:fkTiles="@integer/edit"
+        z:font="%drawable/font1" z:textWrap="true" />
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            z:fkTiles="@integer/gradientRadial" z:foreground="@drawable/zssh" z:fkGravity="center" z:iconka="@integer/iconCancel"
+            z:font="%drawable/font1" android:gravity="center" z:fkScale="0.5" z:icon="@drawable/zssh" z:icScale="0.5"
+            android:text="@string/themeDark" z:textColor="%color/color_text_text" z:textSize="15sp" z:icGravity="end|center_vertical"
+            z:pad="5dp" z:tap="pressed" />
+        <Switch
+            android:id="@+id/switch1" android:layout_width="match_parent" android:layout_height="wrap_content"
+            z:foreground="%drawable/bitmap_common"
+            z:fkGravity="end|center_vertical"
+            z:fkTile1="@integer/switchTrack" z:fkTile2="@integer/switchTrumb"
+            z:font="%drawable/font2"
+            z:text="Переключатель" z:textSize="20sp" z:textColor="%color/color_text_text"
+            z:gravity="start|center_vertical"
+            z:pad="5dp" z:duration="30" />
+        <SeekBar
+            android:id="@+id/seek"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            z:foreground="%drawable/bitmap_common"
+            z:fkScale="1.0" z:fkGravity="center"
+            z:speedTrack="0.5" z:progress="30"
+            z:font="%drawable/font2" z:text="слайдер"
+            z:textSize="20sp" z:textColor="%color/color_slider_text"
+            z:fkTile1="@integer/sliderTrack2" z:fkTile2="@integer/sliderTrumb2"
+            z:gravity="center" z:sliderMode="%integer/slider_mode"
+            z:duration="40" z:orientation="horizontal"
+            z:display="visibled|tips"
+            z:pad="1dp" z:range="0,70" />
+    <ProgressBar
+        android:id="@+id/progress1" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Sergey" z:layout_gravity="center"
+        z:styles="@style/linearProgress" z:range="0,70" z:progress="50"/>
+    <EditText
+        android:id="@+id/edit2" android:layout_width="match_parent" android:layout_height="wrap_content"
+        z:styles="@style/edittext" z:inputMode="text" z:hint="@string/enter_family" />
+    <!--
+            <EditLayout android:id="@+id/editlyt1" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            </EditLayout>
+            <GridView android:id="@+id/grid1" android:layout_width="300dp" android:layout_height="400dp"
+                android:layout_weight="2"
+                z:styles="@style/table" android:orientation="horizontal" />
+    -->
+    <Form android:id="@+id/form" android:layout_width="500dp" android:layout_height="400dp"
+        z:styles="@style/form" android:text="@string/first_form" z:styleCaption="@style/formCaption" z:styleFooter="@style/formFooter" />
     </LinearLayout>
-</ScrollView>
+</LinearLayout>

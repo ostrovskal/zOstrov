@@ -7,7 +7,8 @@
         <item name="font">@drawable/font1</item>
         <item name="textColor">#ffffffff</item>
         <item name="textStyle">bold</item>
-        <item name="textSize">16sp</item>
+        <item name="textSize">17sp</item>
+        <item name="textWrap">true</item>
         <item name="padEnd">1dp</item>
         <item name="padBottom">1dp</item>
         <item name="ipad">2dp</item>
@@ -18,6 +19,7 @@
         <item name="display">none</item>
         <item name="fkGravity">center</item>
         <item name="font">@drawable/font1</item>
+        <item name="textWrap">true</item>
         <item name="textColor">#ffafafaf</item>
         <item name="textStyle">bold</item>
         <item name="textSize">14sp</item>
@@ -246,7 +248,7 @@
         <item name="textSize">@dimen/textText</item>
     </style>
     <style name="edittext">
-        <item name="fbo">true</item>
+        <item name="fbo">false</item>
         <item name="foreground">@drawable/zssh</item>
         <item name="fkTiles">@integer/edit</item>
         <item name="fkScale">0.75</item>
@@ -387,6 +389,7 @@
         <item name="divPadHorz">3dp</item>
         <item name="divider">%color/color_divider</item>
         <item name="divType">begin|middle|end</item>
+        <item name="divSize">3dp</item>
         <item name="pad">5dp</item>
         <item name="gravity">center</item>
     </style>

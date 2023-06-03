@@ -224,6 +224,7 @@ void zViewManager::drawViews() {
     countVertices = 0; countLn = 0; countObjs = 0;
 #endif
     rti rcommon(zGL::instance()->getSizeScreen());
+    screen.set(0, 0, rcommon.w, rcommon.h);
     glScissor(rcommon.x, rcommon.y, rcommon.w, rcommon.h);
     glClear(GL_COLOR_BUFFER_BIT);
     // 1. выполнить подсчет габаритов всех представлений

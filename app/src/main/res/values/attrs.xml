@@ -71,7 +71,7 @@
 		<attr name="fkTile3" format="integer|string"/>
 		<attr name="fkTile4" format="integer|string"/>
 		<attr name="duration" format="integer|string"/>
-		<attr name="gravity" format="flags">
+		<attr name="gravity" format="flags|string">
 			<flag name="start" value="1"/>
 			<flag name="end" value="2"/>
 			<flag name="top" value="4"/>
@@ -80,20 +80,7 @@
 			<flag name="center_horizontal" value="32"/>
 			<flag name="center" value="64"/>
 		</attr>
-		<attr name="fkGravity" format="flags">
-			<flag name="start" value="1"/>
-			<flag name="end" value="2"/>
-			<flag name="top" value="4"/>
-			<flag name="bottom" value="8"/>
-			<flag name="center_vertical" value="16"/>
-			<flag name="center_horizontal" value="32"/>
-			<flag name="center" value="64"/>
-			<flag name="min" value="128"/>
-			<flag name="max" value="256"/>
-			<flag name="width" value="512"/>
-			<flag name="height" value="1024"/>
-		</attr>
-		<attr name="icGravity" format="flags">
+		<attr name="fkGravity" format="flags|string">
 			<flag name="start" value="1"/>
 			<flag name="end" value="2"/>
 			<flag name="top" value="4"/>
@@ -106,7 +93,20 @@
 			<flag name="width" value="512"/>
 			<flag name="height" value="1024"/>
 		</attr>
-		<attr name="behavior" format="flags">
+		<attr name="icGravity" format="flags|string">
+			<flag name="start" value="1"/>
+			<flag name="end" value="2"/>
+			<flag name="top" value="4"/>
+			<flag name="bottom" value="8"/>
+			<flag name="center_vertical" value="16"/>
+			<flag name="center_horizontal" value="32"/>
+			<flag name="center" value="64"/>
+			<flag name="min" value="128"/>
+			<flag name="max" value="256"/>
+			<flag name="width" value="512"/>
+			<flag name="height" value="1024"/>
+		</attr>
+		<attr name="behavior" format="flags|string">
 			<flag name="none" value="1"/>
 			<flag name="clickable" value="2"/>
 			<flag name="longClickable" value="4"/>
@@ -114,7 +114,7 @@
 			<flag name="focusableInTouch" value="16"/>
 			<flag name="touchable" value="32"/>
 		</attr>
-		<attr name="display" format="flags">
+		<attr name="display" format="flags|string">
 			<flag name="none" value="1"/>
 			<flag name="visibled" value="2"/>
 			<flag name="disabled" value="4"/>
@@ -122,18 +122,18 @@
 			<flag name="tips" value="16"/>
 			<flag name="checked" value="32"/>
 		</attr>
-		<attr name="tap" format="enum">
+		<attr name="tap" format="enum|string">
 			<enum name="pressed" value="1"/>
 			<enum name="inverted" value="2"/>
 			<enum name="hovered" value="4"/>
 		</attr>
-		<attr name="decorate" format="flags">
+		<attr name="decorate" format="flags|string">
 			<flag name="glow" value="1"/>
 			<flag name="vscrollbar" value="2"/>
 			<flag name="hscrollbar" value="4"/>
 			<flag name="scrollbar" value="8"/>
 		</attr>
-		<attr name="shape" format="enum">
+		<attr name="shape" format="enum|string">
 			<enum name="rect" value="1"/>
 			<enum name="round" value="2"/>
 			<enum name="oval" value="4"/>
@@ -141,7 +141,7 @@
 		<attr name="bkText" format="reference|color|string"/>
 		<attr name="bkTextColor" format="color|string"/>
 		<attr name="font" format="reference|color|string"/>
-		<attr name="textStyle" format="flags">
+		<attr name="textStyle" format="flags|string">
 			<flag name="normal" value="1"/>
 			<flag name="bold" value="2"/>
 			<flag name="italic" value="4"/>
@@ -156,7 +156,7 @@
 		<attr name="textShadowColor" format="color|string"/>
 		<attr name="textHighlightColor" format="color|string"/>
 		<attr name="textShadowOffset" format="string"/>
-		<attr name="formMode" format="flags">
+		<attr name="formMode" format="flags|string">
 			<flag name="none" value="1"/>
 			<flag name="ok" value="2"/>
 			<flag name="yes_no" value="4"/>
@@ -168,14 +168,14 @@
 		<attr name="icScale" format="float"/>
 		<attr name="icColor" format="color|string"/>
 		<attr name="icTiles" format="integer|string"/>
-		<attr name="chartMode" format="flags">
+		<attr name="chartMode" format="flags|string">
 			<flag name="diagramm" value="1"/>
 			<flag name="graph" value="2"/>
 			<flag name="circular" value="4"/>
 			<flag name="stretch" value="8"/>
 			<flag name="scroll" value="16"/>
 		</attr>
-		<attr name="inputMode" format="enum">
+		<attr name="inputMode" format="enum|string">
 			<enum name="text" value="1"/>
 			<enum name="number" value="2"/>
 			<enum name="phone" value="4"/>
@@ -184,7 +184,7 @@
 			<enum name="zx" value="32"/>
 		</attr>
 		<attr name="speedTrack" format="float"/>
-		<attr name="sliderMode" format="enum">
+		<attr name="sliderMode" format="enum|string">
 			<enum name="none" value="1"/>
 			<enum name="rotate" value="2"/>
 			<enum name="scale" value="4"/>
@@ -193,7 +193,7 @@
 		<attr name="spacingLine" format="dimension"/>
 		<attr name="spacingCell" format="dimension"/>
 		<attr name="cellSize" format="dimension"/>
-		<attr name="gridMode" format="enum">
+		<attr name="gridMode" format="enum|string">
 			<enum name="cell" value="1"/>
 			<enum name="spacing" value="2"/>
 			<enum name="uniform" value="4"/>
@@ -206,7 +206,7 @@
 		<attr name="divColor" format="color|string"/>
 		<attr name="divTiles" format="integer|string"/>
 		<attr name="divSize" format="dimension"/>
-		<attr name="divType" format="flags">
+		<attr name="divType" format="flags|string">
 			<flag name="begin" value="1"/>
 			<flag name="middle" value="2"/>
 			<flag name="end" value="4"/>
@@ -237,20 +237,20 @@
 		<attr name="iconka" format="integer|string"/>
 		<attr name="hint" format="string"/>
 		<attr name="range" format="string"/>
-		<attr name="orientation" format="enum">
+		<attr name="orientation" format="enum|string">
 			<enum name="vertical" value="1"/>
 			<enum name="horizontal" value="2"/>
 		</attr>
-		<attr name="pos" format="integer|string"/>
+		<attr name="progress" format="integer|string"/>
 		<attr name="count" format="integer|string"/>
 		<attr name="styleCaption" format="reference"/>
 		<attr name="styleFooter" format="reference"/>
-		<attr name="chartGravity" format="enum">
+		<attr name="chartGravity" format="enum|string">
 			<enum name="top" value="1"/>
 			<enum name="bottom" value="2"/>
 			<enum name="center_vertical" value="4"/>
 		</attr>
-		<attr name="tabGravity" format="enum">
+		<attr name="tabGravity" format="enum|string">
 			<enum name="top" value="1"/>
 			<enum name="start" value="2"/>
 		</attr>

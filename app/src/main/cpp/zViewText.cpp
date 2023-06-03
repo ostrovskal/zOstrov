@@ -25,9 +25,16 @@ zViewText::~zViewText() {
 
 void zViewText::setText(const zStringUTF8& _text, bool force) {
     if(force || realText != _text) {
+        auto changed(rview.isNotEmpty());
         realText = _text;
         clearCacheSpans(false);
-        requestLayout();
+        if(changed) {
+            auto rv(rview), rc(rclient);
+            onMeasure(measureSpec);
+            changed = (rv != rview);
+//            rview = rv; rclient = rc;
+        }
+        if(changed) requestLayout();
     }
 }
 
@@ -79,7 +86,7 @@ void zViewText::onMeasure(cszm& spec) {
         // коррекция по макс. ширине
         if(minMaxSize.y) width = z_min(minMaxSize.y, width);
         // выполнить ограничение размера
-        if(widthSize && widthMode == MEASURE_MOST) width = z_min(width, widthSize);
+        //if(widthSize && widthMode == MEASURE_MOST) width = z_min(width, widthSize);
     }
     // определить высоту текста
     if(heightSize && heightMode == MEASURE_EXACT) {
@@ -92,7 +99,7 @@ void zViewText::onMeasure(cszm& spec) {
         // коррекция по макс. высоте
         if(minMaxSize.h) height = z_min(minMaxSize.h, height);
         // выполнить ограничение размера
-        if(heightSize && heightMode == MEASURE_MOST) height = z_min(height, heightSize);
+        //if(heightSize && heightMode == MEASURE_MOST) height = z_min(height, heightSize);
     }
     setMeasuredDimension(width, height);
     // габариты фореграунда

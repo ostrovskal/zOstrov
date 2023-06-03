@@ -327,13 +327,12 @@ void zDrawable::init(const zDrawable* drw, int _tile) {
 
 void zDrawable::init(u32 _tx, u32 _cl, i32 _tl, u32 _pd, float _sc) {
     if(_tx & 0xff000000) {
-        _cl = _tx; _tx = z.R.drawable.zssh;
-        if(_tl == -1) _tl = z.R.integer.rect;
+        if(!_cl) _cl = _tx; if(_tl == -1) _tl = z.R.integer.rect;
+        _tx = z.R.drawable.zssh;
     } else if(!_cl) _cl = theme->themeColor;
     padding.set(_pd); color.set(_cl); scale = _sc;
     texture = manager->loadResourceTexture(_tx, texture);
     tiles = _tl; setTileNum(0);
-//    if(texture) bound = rectTile(tile);
 }
 
 void zDrawable::drawFBO(zView* prev, const std::function<void(void)>& _draw) {
@@ -399,7 +398,7 @@ void zDrawableDivider::measure(int width, int height, int pivot, bool isSave) {
 }
 
 void zDrawableDivider::init(const zParamDrawable& p) {
-    auto sz(&p.size);
+    auto sz((u8*)&p.size);
     type     = p.type; size     = sz[3];
     padBegin = sz[0];  padEnd   = sz[2];
     zDrawable::init(p);

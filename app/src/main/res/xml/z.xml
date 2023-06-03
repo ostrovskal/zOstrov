@@ -243,7 +243,7 @@
             <item name="vertical" value="true" />
             <item name="horizontal" value="false" />
         </attr>
-        <attr name="pos" translate="0" format="integer" />
+        <attr name="progress" translate="0" format="integer" />
         <attr name="count" translate="0" format="integer" />
         <attr name="styleCaption" translate="" format="reference" />
         <attr name="styleFooter" translate="" format="reference" />
@@ -272,8 +272,8 @@
         <attr name="ScrollView" translate="zScrollLayout" format="orientation" layout="1" remark="0" />
         <attr name="EditLayout" translate="zEditLayout" format="" layout="1" remark="0" />
         <attr name="TextView" translate="zViewText" format="text" />
-        <attr name="SeekBar" translate="zViewSlider" format="text|range|pos|orientation" />
-        <attr name="ProgressBar" translate="zViewProgress" format="text|range|pos|orientation" />
+        <attr name="SeekBar" translate="zViewSlider" format="text|range|progress|orientation" />
+        <attr name="ProgressBar" translate="zViewProgress" format="text|range|progress|orientation" />
         <attr name="Switch" translate="zViewSwitch" format="text" />
         <attr name="Button" translate="zViewButton" format="text|iconka" />
         <attr name="CheckBox" translate="zViewCheck" format="text" />
@@ -286,6 +286,6 @@
         <attr name="NavigationView" translate="zViewController" format="file" />
         <attr name="TabWidget" translate="TabWidget" format="" remark="1" />
         <attr name="VideoView" translate="zViewVideo" format="file|assets" />
-        <attr name="ImageView" translate="zViewImage" format="icon" />
+        <attr name="ImageView" translate="zViewImage" format="iconka" />
     </widgets>
 </root>
