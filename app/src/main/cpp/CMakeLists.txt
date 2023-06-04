@@ -28,6 +28,9 @@ add_library(zssh SHARED
 		zViewSelect.cpp
 		zViewPopup.cpp
         zCommonAdapters.cpp
+		zActionBar.cpp
+		zSoundManager.cpp
+		zSensorManager.cpp
 )
 
 find_package(zstandard REQUIRED CONFIG)

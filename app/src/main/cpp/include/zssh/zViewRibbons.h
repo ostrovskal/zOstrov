@@ -177,7 +177,6 @@ protected:
 
 class zViewSelect : public zViewGroup {
 public:
-    /*
     // конструктор
     zViewSelect(zStyle* _styles, i32 id);
     // деструктор
@@ -233,5 +232,74 @@ protected:
     int selectItem{0};
     // событие выделения
     std::function<void(zView*, int)> onChangeSelected;
-     */
 };
+
+/*
+class zActionBar : public zLinearLayout {
+public:
+    enum { ACTION_DELAY = 300 };
+    // конструктор
+    zActionBar(zStyle* _styles, zStyle* _styles_buttons, zStyle* _styles_popup);
+    // деструктор
+    virtual ~zActionBar();
+    // отобразить/скрыть
+    virtual void show(bool _show);
+    // проверка на режим блокировки
+    virtual bool testLocked() const override;
+    // уведомление владельца
+    virtual void notifyOwner(int what, zView *view, int arg) override;
+    // установка содержимого
+    virtual void setContent(zView* _view);
+    // вернуть имя типа
+    virtual cstr typeName() const override { return "zActionBar"; }
+    // формирователь
+    bool setMenu(int iconApp, zMenuItem* _menu);
+    // установка адаптера
+    void setAdapter(zAdapterList* _adapter);
+protected:
+    class zAdapterMenu : public zAdapterArray<MENUITEM> {
+    public:
+        zAdapterMenu(zActionBar* _bar, zAdapterList* _list) : zAdapterArray<MENUITEM>(), list(_list), bar(_bar) {}
+        void setPopup(POPUPMENU* _popup) { popupmenu = _popup; notifyOwners(); }
+        virtual int getCount() const override { return popupmenu ? popupmenu->size() : 0; }
+        virtual const MENUITEM& getItem(int position) const override { return *popupmenu->getItem(position); }
+        virtual zView* getView(int position, zView *convert, zViewGroup *parent) override;
+    protected:
+        zActionBar* bar{nullptr};
+        zAdapterList* list{nullptr};
+        POPUPMENU* popupmenu{nullptr};
+    };
+    // вычисление габаритов
+    virtual void onMeasure(int widthSpec, int heightSpec) override;
+    // анимация появления
+    virtual bool onRedraw() override;
+    // вычисление кнопок действий
+    int measureButton(int _id, int _image, int widthSize, int heightSize, POPUPMENU* _pop, bool isMeasure);
+    // формирование меню
+    void recursiveMenu(POPUPMENU* pop);
+    // сброс кнопки overflow
+    void resetOverflow();
+    // клик
+    void clickPopup(zView* view, POPUPMENU* pop);
+    // корень меню
+    POPUPMENU* root{nullptr};
+    // кнопка вызова страндартного меню
+    POPUPMENU overflow{};
+    // адаптер
+    zAdapterMenu* adapter{nullptr};
+    // стили кнопок
+    zStyle* styles_buttons{nullptr};
+    // содержимое
+    zFrameLayout* content{nullptr};
+    // окно
+    zViewPopup* popup{nullptr};
+    // список
+    zViewDropdown* dropdown{nullptr};
+    // ожидание анимации/текущий фрейм
+    int delay{ACTION_DELAY}, frame{8};
+    // объект для рекурсии
+    zMenuItem* _menu{nullptr};
+    // нажатая кнопка
+    zView* buttonView{nullptr};
+};
+*/

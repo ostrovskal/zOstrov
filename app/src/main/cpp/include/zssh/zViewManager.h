@@ -9,6 +9,8 @@
 #include "zCommonLayout.h"
 #include "zViewForms.h"
 #include "zViewKeyboard.h"
+#include "zSensorManager.h"
+#include "zSoundManager.h"
 
 class zImageCache {
 public:
@@ -132,9 +134,9 @@ public:
     // кэш текстур
     zImageCache* cache{nullptr};
     // менеджер звука
-//    zSoundManager sound{};
+    zSoundManager sound{};
     // менеджер датчиков
-//    zSensorManager sensor{};
+    zSensorManager sensor{};
     // количество треугольников в кадре
     i32 countVertices{0};
     // количество линий в кадре
