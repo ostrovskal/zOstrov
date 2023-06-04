@@ -344,6 +344,7 @@ class zViewCaret : public zView {
 public:
     // конструктор
     zViewCaret();
+    virtual rti drawableClip() const override { return z_clipRect(parent->rclip, parent->rview); }
     // обновление
     void update(zView* own, int x, int y, int h);
 };

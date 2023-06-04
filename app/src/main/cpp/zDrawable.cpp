@@ -172,7 +172,7 @@ void zDrawable::measure(int width, int height, int pivot, bool isSave) {
         if(!isSave) {
             if(!width) width = tex.w;
             if(!height) height = tex.h;
-            bound.set((pivot & 1) * -(width >> 1), (pivot >> 1) * -(height >> 1), width, height);
+            bound.set((pivot & PIVOT_X) * -(width >> 1), (pivot >> 1) * -(height >> 1), width, height);
         }
         // применить отступ к текстуре
         if(padding.isNotEmpty()) {

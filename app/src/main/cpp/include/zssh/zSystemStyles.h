@@ -510,6 +510,7 @@ static zStyle styles_z_edit1[] = {
 	{ Z_ICON_GRAVITY, ZS_GRAVITY_END },
 	{ Z_ICON_COLOR, 0xffffffff },
 	{ Z_ICON_TILES, z.R.integer.iconEdit },
+	{ Z_TEXT_STYLE, ZS_TEXT_BOLD_ITALIC | ZS_TEXT_UNDERLINE },
 	{ Z_PADDING, 0x0A0A0A0A },
 	{ Z_GRAVITY, ZS_GRAVITY_VCENTER },
 	{ Z_FOREGROUND | ZT_THEME, Z_BITMAP_COMMON },

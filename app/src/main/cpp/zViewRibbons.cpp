@@ -122,7 +122,8 @@ bool zViewBaseRibbon::scrolling(int _delta) {
             auto pos(atView(0)->edges(vert, false));
             auto isEdgeStart(pos >= edge.w);
             // последний выше нижней грани?
-            pos = atView(count - 1)->edges(vert, true);
+            auto _div(div && (div->type & ZS_DIVIDER_END) ? div->size + div->padBegin : 0);
+            pos = atView(count - 1)->edges(vert, true) + _div;
             auto isEdgeEnd(pos <= edge.h);
             auto isScrollToStart(!(isPosStart && isEdgeStart));
             auto isScrollToEnd(!(isPosEnd && isEdgeEnd));

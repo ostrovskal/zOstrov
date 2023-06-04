@@ -15,7 +15,7 @@
             android:id="@+id/edit1" z:inputMode="text"
             android:layout_x="0px" android:layout_y="3px" android:layout_width="2px" android:layout_height="1px"
             z:textColor="%color/color_text_text" z:textSize="20sp" z:hint="подсказка" z:fkGravity="center"
-            z:icon="@drawable/zssh" z:icGravity="end" z:icColor="#ffffffff" z:icTiles="@integer/iconEdit"
+            z:icon="@drawable/zssh" z:icGravity="end" z:icColor="#ffffffff" z:icTiles="@integer/iconEdit" z:textStyle="bold_italic|underline"
             z:pad="10dp" android:gravity="center_vertical" z:foreground="%drawable/bitmap_common" z:fkTiles="@integer/edit"
             z:font="%drawable/font1" z:textWrap="true" />
         <Button

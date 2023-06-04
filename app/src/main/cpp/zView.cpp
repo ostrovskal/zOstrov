@@ -482,7 +482,6 @@ void zFlyng::stop() {
 zViewCaret::zViewCaret() : zView(styles_z_caret, 0) {
     zView::onInit(false);
     drw[DRW_BK]->view = this;
-    drw[DRW_BK]->measure(3, 10, 0, false);
     setOnAnimation([this](zView*, int) {
         updateStatus(ZS_VISIBLED, (animator.frame++ & 1));
         return parent != nullptr;
@@ -492,10 +491,11 @@ zViewCaret::zViewCaret() : zView(styles_z_caret, 0) {
 void zViewCaret::update(zView* own, int x, int y, int h) {
     parent = own; updateStatus(ZS_VISIBLED, own != nullptr);
     if(own) {
-        rview.set(x + own->rclient.x, y + own->rclient.y, 3, h);
-        rclient = rview; animator.frame = 0;
-        drw[DRW_BK]->bound = rview;
-        setScale(1.0f, (float) h / 10.0f);
+        auto _own(dynamic_cast<zViewEdit*>(own));
+        if(_own) setRotation(0, 0, (_own->getTextStyle() & ZS_TEXT_ITALIC) * 8);
+        rview.set(x + own->rclient.x + 2, y + own->rclient.y, 4, h);
+        drw[DRW_BK]->measure(4, h, PIVOT_ALL, false);
+        animator.frame = 0;
         post(MSG_ANIM, duration, 0);
     }
 }

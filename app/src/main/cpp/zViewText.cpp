@@ -166,8 +166,8 @@ void zViewText::drawText() {
         auto screenX(manager->screen.x), screenY(manager->screen.y);
         // длина текста в символах
         int countChars(0); for(auto &t: textCache) countChars += t->text.count();
-        // создать буферы вершин
-        drw[DRW_TXT]->make(countChars * 5);
+        // создать буферы вершин(с учетом strike|underline)
+        drw[DRW_TXT]->make((countChars + 2) * 5);
         // высота текстуры
         auto htex(drw[DRW_TXT]->texture->getSize().h / 2);
         // отрисовка
