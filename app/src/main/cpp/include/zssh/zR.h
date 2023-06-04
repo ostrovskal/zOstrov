@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Sun Jun  4 16:14:18 2023
+// Sun Jun  4 16:19:50 2023
 
 #pragma once
 
@@ -131,9 +131,10 @@ struct _z {
 				zviewswitch1	= 0x00100038, 	switch2	= 0x00100039, 	switch3	= 0x0010003A, 
 				zviewslider1	= 0x0010003B, 	seek1	= 0x0010003C, 	button11	= 0x0010003D, 
 				seek2	= 0x0010003E, 	edit2	= 0x0010003F, 	zlinearlayout3	= 0x00100040, 
-				zviewbutton2	= 0x00100041, 	zviewslider2	= 0x00100042, 	zviewslider3	= 0x00100043, 
-				zviewslider4	= 0x00100044, 	zscrolllayout2	= 0x00100045, 
-				zviewslider5	= 0x00100046, 	zviewslider6	= 0x00100047, 	};
+				zviewedit2	= 0x00100041, 	zviewbutton2	= 0x00100042, 	zviewslider2	= 0x00100043, 
+				zviewslider3	= 0x00100044, 	zviewslider4	= 0x00100045, 	zviewedit3	= 0x00100046, 
+				zscrolllayout2	= 0x00100047, 	zviewslider5	= 0x00100048, 
+				zviewslider6	= 0x00100049, 	};
 		};
 		_style style;
 	};
@@ -211,10 +212,12 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::seek2, styles_z_seek2 },
 		{ _z::_R::_style::edit2, styles_z_edit2 },
 		{ _z::_R::_style::zlinearlayout3, styles_z_zlinearlayout3 },
+		{ _z::_R::_style::zviewedit2, styles_z_zviewedit2 },
 		{ _z::_R::_style::zviewbutton2, styles_z_zviewbutton2 },
 		{ _z::_R::_style::zviewslider2, styles_z_zviewslider2 },
 		{ _z::_R::_style::zviewslider3, styles_z_zviewslider3 },
 		{ _z::_R::_style::zviewslider4, styles_z_zviewslider4 },
+		{ _z::_R::_style::zviewedit3, styles_z_zviewedit3 },
 		{ _z::_R::_style::zscrolllayout2, styles_z_zscrolllayout2 },
 		{ _z::_R::_style::zviewslider5, styles_z_zviewslider5 },
 		{ _z::_R::_style::zviewslider6, styles_z_zviewslider6 }

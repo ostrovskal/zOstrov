@@ -267,21 +267,23 @@ ptf zDrawable::offsetBound() const {
     return { (float)(bound.x - rv->x) - vertices->x, (float)(bound.y - rv->y) - vertices->y };
 }
 
-int zDrawable::sizeText(cstr _text, u32 heightText, int lengthText) const {
+int zDrawable::sizeText(cstr _text, u32 heightText, int lengthText, bool _bold) const {
     int len, width(0); auto factor(scaleFactor(heightText, true));
+    auto offsetBold(224 * _bold);
     while (lengthText-- > 0 && z_isUTF8(_text)) {
         // определить ширину символа
-        width += texture->widthGlyph(z_decodeUTF8(z_charUTF8(_text, &len)), factor);
+        width += texture->widthGlyph(offsetBold + z_decodeUTF8(z_charUTF8(_text, &len)), factor);
         _text += len;
     }
     return width;
 }
 
-int zDrawable::indexOf(cstr _text, u32 heightText, int screenLimit, int screenX, bool exact, int *posScreen) const {
+int zDrawable::indexOf(cstr _text, u32 heightText, int screenLimit, int screenX, bool _bold, bool exact, int *posScreen) const {
     int wGlyph(0), _count(0), len; auto factor(scaleFactor(heightText, true));
+    auto offsetBold(224 * _bold);
     while(z_isUTF8(_text)) {
         // определить ширину символа
-        wGlyph = texture->widthGlyph(z_decodeUTF8(z_charUTF8(_text, &len)), factor);
+        wGlyph = texture->widthGlyph(offsetBold + z_decodeUTF8(z_charUTF8(_text, &len)), factor);
         // проверить на лимит
         if((screenX + wGlyph) >= screenLimit) break;
         screenX += wGlyph; _text += len; _count++;
@@ -299,12 +301,12 @@ float zDrawable::scaleFactor(u32 value, bool text) const {
     return ((float)value / h);
 }
 
-int zDrawable::indexReverseOf(cstr _text, u32 heightText, int limitPix, int lengthText) const {
-    int posPix(0), _count(0);
+int zDrawable::indexReverseOf(cstr _text, u32 heightText, int limitPix, int lengthText, bool _bold) const {
+    int posPix(0), _count(0); auto offsetBold(224 * _bold);
     auto factor(scaleFactor(heightText, true));
     while(z_isUTF8(_text) && lengthText-- > 0) {
         // определить ширину символа
-        auto wGlyph(texture->widthGlyph(z_decodeUTF8(z_charUTF8(z_ptrUTF8(_text, lengthText))), factor));
+        auto wGlyph(texture->widthGlyph(offsetBold + z_decodeUTF8(z_charUTF8(z_ptrUTF8(_text, lengthText))), factor));
         // проверить на лимит
         if((posPix + wGlyph) >= limitPix) break;
         posPix += wGlyph; _count++;

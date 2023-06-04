@@ -65,10 +65,10 @@ public:
     // сформировать текст
     int makeText(cstr text, int len, zTextPaint* paint);
     // вернуть длину текста в пикселях
-    int sizeText(cstr text, u32 heightText, int lengthText) const;
+    int sizeText(cstr text, u32 heightText, int lengthText, bool _bold) const;
     // вернуть ближайщую позицию в тексте(limitPix - предел/posPix - начальная коор. текста)
-    int indexOf(cstr text, u32 heightText, int screenLimit, int screenX, bool exact = false, int *posScreen = nullptr) const;
-    int indexReverseOf(cstr _text, u32 heightText, int screenLimit, int lengthText) const;
+    int indexOf(cstr text, u32 heightText, int screenLimit, int screenX, bool _bold, bool exact = false, int *posScreen = nullptr) const;
+    int indexReverseOf(cstr _text, u32 heightText, int screenLimit, int lengthText, bool _bold) const;
     ptf offsetBound() const;
     // вычислить размер, с учетом масштабирования
     virtual szi resolveSize(int wmax, int hmax, u32 gravity) const;

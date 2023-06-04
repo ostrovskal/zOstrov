@@ -3,17 +3,19 @@
 			VIEW_MATCH, VIEW_MATCH)); 
 	auto grp10((zLinearLayout*)grp00->attach(new zLinearLayout(styles_z_llinear, 0, true), 
 			VIEW_MATCH, VIEW_WRAP)); 
-	grp10->attach(new zViewEdit(styles_z_zviewedit1, z.R.id.edit1, z.R.string.podskazka), 
-			VIEW_MATCH, VIEW_WRAP);
-	auto grp20((zLinearLayout*)grp10->attach(new zLinearLayout(styles_z_zlinearlayout1, 0, false), 
+	auto grp20((zEditLayout*)grp10->attach(new zEditLayout(styles_default, 0), 
 			VIEW_MATCH, VIEW_WRAP)); 
-	grp20->attach(new zViewRadio(styles_z_radiobutton, 0, z.R.string.radio_1, 1), 
+	grp20->attach(new zViewEdit(styles_z_zviewedit1, z.R.id.edit1, z.R.string.podskazka), 
+			VIEW_MATCH, VIEW_WRAP);
+	auto grp21((zLinearLayout*)grp10->attach(new zLinearLayout(styles_z_zlinearlayout1, 0, false), 
+			VIEW_MATCH, VIEW_WRAP)); 
+	grp21->attach(new zViewRadio(styles_z_radiobutton, 0, z.R.string.radio_1, 1), 
 			VIEW_WRAP, VIEW_MATCH);
-	grp20->attach(new zViewRadio(styles_z_zviewradio1, 0, z.R.string.radio_2, 1), 
+	grp21->attach(new zViewRadio(styles_z_zviewradio1, 0, z.R.string.radio_2, 1), 
 			VIEW_WRAP, VIEW_MATCH);
-	grp20->attach(new zViewRadio(styles_z_radiobutton, 0, z.R.string.radio_3, 1), 
+	grp21->attach(new zViewRadio(styles_z_radiobutton, 0, z.R.string.radio_3, 1), 
 			VIEW_WRAP, VIEW_MATCH);
-	grp20->attach(new zViewCheck(styles_z_zviewcheck1, 0, z.R.string.Flagzok), 
+	grp21->attach(new zViewCheck(styles_z_zviewcheck1, 0, z.R.string.Flagzok), 
 			VIEW_WRAP, VIEW_MATCH);
 	grp10->attach(new zViewButton(styles_z_zviewbutton1, z.R.id.button1, z.R.string.Nagzmi_na_menja__, z.R.integer.iconCancel), 
 			VIEW_MATCH, VIEW_WRAP);
@@ -35,6 +37,6 @@
 			ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP);
 	grp10->attach(new zViewEdit(styles_z_edit2, z.R.id.edit2, z.R.string.enter_family), 
 			VIEW_MATCH, VIEW_WRAP);
-	/* auto grp21((zViewForm*)root->attach(new zViewForm(styles_z_form, z.R.id.form, styles_z_formcaption, styles_z_formfooter, z.R.string.first_form, false), 
+	/* auto grp22((zViewForm*)root->attach(new zViewForm(styles_z_form, z.R.id.form, styles_z_formcaption, styles_z_formfooter, z.R.string.first_form, false), 
 			500_dp, 400_dp)); 
 */

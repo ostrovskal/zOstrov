@@ -583,7 +583,8 @@ static zStyle styles_z_zviewedit1[] = {
 	{ Z_FOREGROUND | ZT_THEME, Z_BITMAP_COMMON },
 	{ Z_FOREGROUND_TILES, z.R.integer.edit },
 	{ Z_TEXT_FONT | ZT_THEME, Z_FONT1 },
-	{ Z_TEXT_NOWRAP | ZT_END, true }
+	{ Z_TEXT_NOWRAP, true },
+	{ Z_TEXT_STYLE | ZT_END, ZS_TEXT_ITALIC }
 };
 
 static zStyle styles_z_zlinearlayout1[] = {
@@ -722,12 +723,31 @@ static zStyle styles_z_seek2[] = {
 
 static zStyle styles_z_edit2[] = {
 	{ Z_STYLES, z.R.style.edittext },
-	{ Z_MODE | ZT_END, ZS_EDIT_TEXT }
+	{ Z_MODE, ZS_EDIT_TEXT },
+	{ Z_TEXT_STYLE | ZT_END, ZS_TEXT_BOLD_ITALIC | ZS_TEXT_STRIKE }
 };
 
 static zStyle styles_z_zlinearlayout3[] = {
 	{ Z_STYLES, z.R.style.llinear },
 	{ Z_MARGINS | ZT_END, 0x05050505 }
+};
+
+static zStyle styles_z_zviewedit2[] = {
+	{ Z_MODE, ZS_EDIT_TEXT },
+	{ Z_FBO, true },
+	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_TEXT_TEXT },
+	{ Z_TEXT_SIZE, 20 },
+	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
+	{ Z_ICON, z.R.drawable.zssh },
+	{ Z_ICON_GRAVITY, ZS_GRAVITY_END },
+	{ Z_ICON_COLOR, 0xffffffff },
+	{ Z_ICON_TILES, z.R.integer.iconEdit },
+	{ Z_PADDING, 0x01010101 },
+	{ Z_GRAVITY, ZS_GRAVITY_VCENTER },
+	{ Z_FOREGROUND | ZT_THEME, Z_BITMAP_COMMON },
+	{ Z_FOREGROUND_TILES, z.R.integer.edit },
+	{ Z_TEXT_FONT | ZT_THEME, Z_FONT1 },
+	{ Z_TEXT_NOWRAP | ZT_END, true }
 };
 
 static zStyle styles_z_zviewbutton2[] = {
@@ -795,6 +815,11 @@ static zStyle styles_z_zviewslider4[] = {
 	{ Z_MARGINS, 0x0A030F05 },
 	{ Z_DISPLAY, ZS_VISIBLED | ZS_TIPS },
 	{ Z_PADDING | ZT_END, 0x00000000 }
+};
+
+static zStyle styles_z_zviewedit3[] = {
+	{ Z_STYLES, z.R.style.edittext },
+	{ Z_MODE | ZT_END, ZS_EDIT_TEXT }
 };
 
 static zStyle styles_z_zscrolllayout2[] = {

@@ -11,14 +11,18 @@
         z:styles="@style/llinear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    <EditText
-        android:id="@+id/edit1" z:inputMode="text"
-        z:fbo="true" z:text="Пример текста"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        z:textColor="%color/color_text_text" z:textSize="20sp" z:hint="подсказка" z:fkGravity="center"
-        z:icon="@drawable/zssh" z:icGravity="end" z:icColor="#ffffffff" z:icTiles="@integer/iconEdit"
-        z:pad="1dp" android:gravity="center_vertical" z:foreground="%drawable/bitmap_common" z:fkTiles="@integer/edit"
-        z:font="%drawable/font1" z:textWrap="true" z:textStyle="italic" />
+        <EditLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/edit1" z:inputMode="text"
+                z:fbo="true" z:text="Пример текста"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                z:textColor="%color/color_text_text" z:textSize="20sp" z:hint="подсказка" z:fkGravity="center"
+                z:icon="@drawable/zssh" z:icGravity="end" z:icColor="#ffffffff" z:icTiles="@integer/iconEdit"
+                z:pad="1dp" android:gravity="center_vertical" z:foreground="%drawable/bitmap_common" z:fkTiles="@integer/edit"
+                z:font="%drawable/font1" z:textWrap="true" z:textStyle="italic" />
+        </EditLayout>
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
