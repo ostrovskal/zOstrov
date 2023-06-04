@@ -92,6 +92,8 @@ public:
     virtual void visibility(bool _visible) { if(isVisibled() != _visible) { updateStatus(ZS_VISIBLED, _visible); requestLayout(); } }
     // блокировка/разблокировка
     virtual void disable(bool _disable) { updateStatus(ZS_DISABLED, _disable); }
+    // запрос на полное обновление позиций представлений
+    virtual void requestPosition();
     // запрос на полное обновление иерархии представлений
     virtual void requestLayout();
     // запрос на обновление координат иерархии представлений
@@ -254,7 +256,7 @@ protected:
     // установка гравитации
     void _setGravity(u32 _g, u8* p) { if(_g != (*p & ZS_GRAVITY_MASK)) { *p &= ~ZS_GRAVITY_MASK; *p |= (u8)_g; requestLayout(); } }
     // область обрезки
-    virtual rti drawableClip() const { return z_clipRect(parent->rclip, rclient); }
+    virtual rti drawableClip() const { return z_clipRect(parent->rclip, rview); }
     // проверка на режим блокировки
     virtual bool testLocked() const { return false; }
     // событие привязки к макету
@@ -319,6 +321,7 @@ protected:
 
 // прокрутка
 class zViewScrollBar : public zView {
+    friend class zViewGroup;
 public:
     // конструктор
     zViewScrollBar(zView* group, bool _vert);

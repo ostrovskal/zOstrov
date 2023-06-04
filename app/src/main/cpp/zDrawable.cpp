@@ -104,7 +104,12 @@ int zDrawable::makePatch9(crti& pos, crti& tex, crti& p9) const {
 void zDrawable::draw(rti *rect) {
     static zMatrix t, m;
     if(vertices && visible) {
-        auto clip(view->drawableClip());
+        rti clip;
+        switch(index) {
+            case DRW_BK: clip = view->drawableClip(); break;
+            case DRW_FBO: clip = view->parent->rclip; break;
+            default: clip = view->rclip; break;
+        }
         // определение видимости
         if(texture && clip.isNotEmpty()) {
             // цвет
@@ -382,13 +387,15 @@ szi zDrawable::resolveSize(int wmax, int hmax, u32 gravity) const {
 //                                                        DIVIDER                                                                         //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int zDrawableDivider::resolve(int count) const {
+int zDrawableDivider::resolve(int count, bool _visible) const {
     int _size(0), middle(0); count--;
     if(type & ZS_DIVIDER_BEGIN) _size += size + padEnd;
     if(type & ZS_DIVIDER_END) _size += size + padBegin;
     if((type & ZS_DIVIDER_MIDDLE) && count > 0) {
-        auto parent((zViewGroup*)view);
-        for(int i = 0; i < count; i++) middle += (parent->atView(i)->isVisibled());
+        if(_visible) {
+            auto parent((zViewGroup *)view);
+            for(int i = 0; i < count; i++) middle += (parent->atView(i)->isVisibled());
+        } else middle = count;
         _size += (size + padBegin + padEnd) * middle;
     }
     return _size;
@@ -413,22 +420,23 @@ void zDrawableDivider::set(int pos, int pad) {
     draw(&r);
 }
 
-void zDrawableDivider::make(int extra, int count, int idx) {
+void zDrawableDivider::make(int extra, int countItems, int idx) {
     auto _parent((zViewGroup*)view); auto vert(view->isVertical());
-//    extra += ((params[zViewTable::TABLE_LINES_SPACE] * 2 - (size + padBegin + padEnd) / 2);
+    auto childCount(_parent->countChildren());
+    auto alles(childCount && (idx + childCount) == countItems);
     // если первый и нужен первый
     if(idx == 0 && (type & ZS_DIVIDER_BEGIN)) {
         auto v(_parent->atView(0)); auto p(-(padEnd + size)); if(!v->isVisibled()) v = view, p = 0;
         set(v->edges(vert, false) - v->margin[vert], p);
     }
     if(type & ZS_DIVIDER_MIDDLE) {
-        for(int i = 0; i < count - 1; i++) {
+        for(int i = 0; i < childCount - alles; i++) {
             auto v(_parent->atView(i));
             if(v->isVisibled()) set(v->edges(vert, true) + extra + v->margin[vert + 2], padBegin);
         }
     }
-    if(count && (type & ZS_DIVIDER_END)) {
-        auto v(_parent->atView(count - 1)); if(!v->isVisibled()) v = view;
+    if(alles && (type & ZS_DIVIDER_END)) {
+        auto v(_parent->atView(childCount - 1)); if(!v->isVisibled()) v = view;
         set(v->edges(vert, true) + v->margin[vert + 2], padBegin);
     }
 }

@@ -8,6 +8,8 @@
 		<attr name="rotate" format="float"/>
 		<attr name="rotateX" format="float"/>
 		<attr name="rotateY" format="float"/>
+		<attr name="translateX" format="float"/>
+		<attr name="translateY" format="float"/>
 		<attr name="sizeMinW" format="dimension"/>
 		<attr name="sizeMinH" format="dimension"/>
 		<attr name="sizeMaxW" format="dimension"/>

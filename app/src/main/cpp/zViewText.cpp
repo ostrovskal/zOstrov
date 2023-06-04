@@ -30,8 +30,8 @@ void zViewText::setText(const zStringUTF8& _text, bool force) {
         clearCacheSpans(false);
         if(changed) {
             auto rv(rview), rc(rclient);
-            szm spec(zMeasure(lps.w == VIEW_MATCH ? MEASURE_EXACT : MEASURE_UNDEF, measureSpec.w.size()),
-                     zMeasure(lps.h == VIEW_MATCH ? MEASURE_EXACT : MEASURE_UNDEF, measureSpec.h.size()));
+            szm spec(zMeasure(lps.w == VIEW_WRAP ? MEASURE_UNDEF : MEASURE_EXACT, measureSpec.w.size()),
+                     zMeasure(lps.h == VIEW_WRAP ? MEASURE_UNDEF : MEASURE_EXACT, measureSpec.h.size()));
             onMeasure(spec);
             changed = (rv != rview);
         }

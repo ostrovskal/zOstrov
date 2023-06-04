@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Sun Jun  4 16:19:50 2023
+// Mon Jun  5 01:14:46 2023
 
 #pragma once
 
@@ -83,11 +83,12 @@ struct _z {
 				menuOverflow	= 0x00101003, 	ok	= 0x00101004, 	yes	= 0x00101005, 
 				no	= 0x00101006, 	def	= 0x00101007, 	toast	= 0x00101008, 
 				actionBar	= 0x00101009, 	wndPopup	= 0x0010100A, 	root	= 0x0010100B, 
-				common	= 0x0010100C, 	keyboard	= 0x0010100D, 	edit1	= 0x0010100E, 
-				button1	= 0x0010100F, 	switch1	= 0x00101010, 	seek	= 0x00101011, 
-				progress1	= 0x00101012, 	switch2	= 0x00101013, 	switch3	= 0x00101014, 
-				seek1	= 0x00101015, 	button11	= 0x00101016, 	seek2	= 0x00101017, 
-				edit2	= 0x00101018, 	form	= 0x00101019, 			};
+				common	= 0x0010100C, 	keyboard	= 0x0010100D, 	list1	= 0x0010100E, 
+				edit1	= 0x0010100F, 	button1	= 0x00101010, 	switch1	= 0x00101011, 
+				seek	= 0x00101012, 	progress1	= 0x00101013, 	switch2	= 0x00101014, 
+				switch3	= 0x00101015, 	seek1	= 0x00101016, 	button11	= 0x00101017, 
+				seek2	= 0x00101018, 	edit2	= 0x00101019, 	form	= 0x0010101A, 
+			};
 		}; 
 		_id id;
 		struct _string {
@@ -118,23 +119,23 @@ struct _z {
 				spin_item	= 0x00100012, 	list_item	= 0x00100013, 	menu_item	= 0x00100014, 
 				spin_capt	= 0x00100015, 	button	= 0x00100016, 	tools	= 0x00100017, 
 				checkbox	= 0x00100018, 	radiobutton	= 0x00100019, 	edittext	= 0x0010001A, 
-				ribbon	= 0x0010001B, 	table	= 0x0010001C, 	select	= 0x0010001D, 
+				ribbon	= 0x0010001B, 	grid	= 0x0010001C, 	select	= 0x0010001D, 
 				msgForm	= 0x0010001E, 	slider	= 0x0010001F, 	linearProgress	= 0x00100020, 
 				circularProgress	= 0x00100021, 	switchButton	= 0x00100022, 
 				llinear	= 0x00100023, 	tabWidget	= 0x00100024, 	tabHost	= 0x00100025, 
 				ccontroller	= 0x00100026, 	acontroller	= 0x00100027, 	form	= 0x00100028, 
 				chart	= 0x00100029, 	chartDiagramm	= 0x0010002A, 	chartGraph	= 0x0010002B, 
-				zcelllayout1	= 0x0010002C, 	edit1	= 0x0010002D, 	button1	= 0x0010002E, 
-				switch1	= 0x0010002F, 	seek	= 0x00100030, 	progress1	= 0x00100031, 
-				zscrolllayout1	= 0x00100032, 	zviewedit1	= 0x00100033, 	zlinearlayout1	= 0x00100034, 
-				zviewradio1	= 0x00100035, 	zviewcheck1	= 0x00100036, 	zviewbutton1	= 0x00100037, 
-				zviewswitch1	= 0x00100038, 	switch2	= 0x00100039, 	switch3	= 0x0010003A, 
-				zviewslider1	= 0x0010003B, 	seek1	= 0x0010003C, 	button11	= 0x0010003D, 
-				seek2	= 0x0010003E, 	edit2	= 0x0010003F, 	zlinearlayout3	= 0x00100040, 
-				zviewedit2	= 0x00100041, 	zviewbutton2	= 0x00100042, 	zviewslider2	= 0x00100043, 
-				zviewslider3	= 0x00100044, 	zviewslider4	= 0x00100045, 	zviewedit3	= 0x00100046, 
-				zscrolllayout2	= 0x00100047, 	zviewslider5	= 0x00100048, 
-				zviewslider6	= 0x00100049, 	};
+				zcelllayout1	= 0x0010002C, 	list1	= 0x0010002D, 	edit1	= 0x0010002E, 
+				button1	= 0x0010002F, 	switch1	= 0x00100030, 	seek	= 0x00100031, 
+				progress1	= 0x00100032, 	zscrolllayout1	= 0x00100033, 	zviewedit1	= 0x00100034, 
+				zlinearlayout1	= 0x00100035, 	zviewradio1	= 0x00100036, 	zviewcheck1	= 0x00100037, 
+				zviewbutton1	= 0x00100038, 	zviewswitch1	= 0x00100039, 	switch2	= 0x0010003A, 
+				switch3	= 0x0010003B, 	zviewslider1	= 0x0010003C, 	seek1	= 0x0010003D, 
+				button11	= 0x0010003E, 	seek2	= 0x0010003F, 	edit2	= 0x00100040, 
+				zlinearlayout3	= 0x00100041, 	zviewedit2	= 0x00100042, 	zviewbutton2	= 0x00100043, 
+				zviewslider2	= 0x00100044, 	zviewslider3	= 0x00100045, 	zviewslider4	= 0x00100046, 
+				zviewedit3	= 0x00100047, 	zscrolllayout2	= 0x00100048, 	zviewslider5	= 0x00100049, 
+				zviewslider6	= 0x0010004A, 	};
 		};
 		_style style;
 	};
@@ -175,7 +176,7 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::radiobutton, styles_z_radiobutton },
 		{ _z::_R::_style::edittext, styles_z_edittext },
 		{ _z::_R::_style::ribbon, styles_z_ribbon },
-		{ _z::_R::_style::table, styles_z_table },
+		{ _z::_R::_style::grid, styles_z_grid },
 		{ _z::_R::_style::select, styles_z_select },
 		{ _z::_R::_style::msgForm, styles_z_msgform },
 		{ _z::_R::_style::slider, styles_z_slider },
@@ -192,6 +193,7 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::chartDiagramm, styles_z_chartdiagramm },
 		{ _z::_R::_style::chartGraph, styles_z_chartgraph },
 		{ _z::_R::_style::zcelllayout1, styles_z_zcelllayout1 },
+		{ _z::_R::_style::list1, styles_z_list1 },
 		{ _z::_R::_style::edit1, styles_z_edit1 },
 		{ _z::_R::_style::button1, styles_z_button1 },
 		{ _z::_R::_style::switch1, styles_z_switch1 },

@@ -132,7 +132,7 @@ public:
     // формирование
     void make(int extra, int count, int idx);
     // определение размера всех разделителей
-    int resolve(int count) const;
+    int resolve(int count, bool _visible) const;
     // тип отображения/размер
     int type{0}, size{1}, padBegin{0}, padEnd{0};
 protected:

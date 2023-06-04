@@ -13,7 +13,9 @@ zViewGroup::zViewGroup(zStyle* _styles, i32 _id): zView(_styles, _id) {
 
 void zViewGroup::offsetChildren(int delta, bool vert) {
     for(auto& child : children) {
-        child->rview.offset(!vert * delta, vert * delta);
+        auto pos(child->oldPos);
+        pos.offset(!vert * delta, vert * delta);
+        child->layout(pos);
     }
 }
 
@@ -45,16 +47,16 @@ zView* zViewGroup::attach(zView *v, int x, int y, int width, int height, int whe
     return v;
 }
 
-void zViewGroup::removeAllViews() {
-    for(auto& child : children) child->_detach();
+void zViewGroup::removeAllViews(bool _update) {
+    for(auto child : children) child->_detach();
     children.clear();
-    requestLayout();
+    if(_update) requestLayout();
 }
 
-void zViewGroup::detachAllViews() {
-    for(auto& child : children) child->_detach();
+void zViewGroup::detachAllViews(bool _update) {
+    for(auto child : children) child->_detach();
     children.free();
-    requestLayout();
+    if(_update) requestLayout();
 }
 
 void zViewGroup::_remove(zView* v, bool _del) {
@@ -156,11 +158,11 @@ void zViewGroup::onInit(bool _theme) {
     // сначало основные
     zView::onInit(_theme);
     // теперь специфичные
-    int decor(0); zParamDrawable dv, sl;
-    styles->enumerate([this, &dv, &sl, &decor, _theme](u32 attr) {
+    int decor(0); zParamDrawable dv, sl, sc; sc.size = 2_dp; sc.tiles = z.R.integer.gradientRadial;
+    styles->enumerate([this, &dv, &sl, &sc, &decor, _theme](u32 attr) {
         auto v((int)zTheme::value.u); attr |= _theme * ZTT_THM;
         switch(attr) {
-            case Z_SIZE_TOUCH:		    sizeTouch.set(v); break;
+            case Z_SIZE_TOUCH:		    sizeTouch.set(v);break;
             case Z_DECORATE:            decor       = v; break;
             case Z_DIVIDER:             dv.texture  = v; break;
             case Z_DIVIDER_COLOR:       dv.color    = v; break;
@@ -172,6 +174,9 @@ void zViewGroup::onInit(bool _theme) {
             case Z_SELECTOR_COLOR:      sl.color    = v; break;
             case Z_SELECTOR_TILES:      sl.tiles    = v; break;
             case Z_SELECTOR_PADDING:    sl.padding  = v; break;
+            case Z_SCROLLBAR_SIZE:      sc.size     = v; break;
+            case Z_SCROLLBAR_FADE:      sc.type     = v; break;
+            case Z_SCROLLBAR_TILES:     sc.tiles    = v; break;
         }
     });
     // глоу
@@ -181,6 +186,7 @@ void zViewGroup::onInit(bool _theme) {
     if(decor & ZS_SCROLLBAR) {
         if((decor & ZS_SCROLLBAR) == ZS_SCROLLBAR) decor = vert * ZS_VSCROLLBAR;
         scrollBar = new zViewScrollBar(this, (decor & ZS_SCROLLBAR) == ZS_VSCROLLBAR);
+        scrollBar->fade = sc.type; scrollBar->size = sc.size; scrollBar->drw[DRW_BK]->tile = sc.tiles;
     }
     // селектор
     setDrawable(&sl, DRW_SEL);

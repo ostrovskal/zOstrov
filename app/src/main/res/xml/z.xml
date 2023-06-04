@@ -8,6 +8,8 @@
         <attr name="rotate" translate="Z_ROTATE" format="float" />
         <attr name="rotateX" translate="Z_ROTATE_X" format="float" />
         <attr name="rotateY" translate="Z_ROTATE_Y" format="float" />
+        <attr name="translateX" translate="Z_TRANSLATE_X" format="float" />
+        <attr name="translateY" translate="Z_TRANSLATE_Y" format="float" />
         <attr name="sizeMinW" translate="Z_SIZE" format="complexY" />
         <attr name="sizeMinH" translate="Z_SIZE" format="complexH" />
         <attr name="sizeMaxW" translate="Z_SIZE" format="complexX" />

@@ -29,9 +29,9 @@
         <item name="gravity">end|bottom</item>
     </style>
     <style name="scrollbar">
-        <item name="background">#ffffffff</item>
+        <item name="background">#ffafafaf</item>
         <item name="bkTiles">@integer/gradientRadial</item>
-        <item name="sizeScrollBars">4dp</item>
+        <item name="sizeScrollBars">2dp</item>
         <item name="fadeScrollBars">true</item>
     </style>
     <style name="glow">
@@ -147,6 +147,7 @@
     <style name="spin_item">
         <item name="textColor">%color/color_text_text</item>
         <item name="textSize">@dimen/menuText</item>
+        <item name="font">@drawable/font1</item>
         <item name="gravity">center</item>
         <item name="foreground">@drawable/zssh</item>
         <item name="fkGravity">center</item>
@@ -154,8 +155,11 @@
         <item name="fkTiles">@integer/selectItem</item>
     </style>
     <style name="list_item">
+        <item name="fbo">true</item>
         <item name="textColor">%color/color_text_text</item>
         <item name="textSize">@dimen/menuText</item>
+        <item name="font">@drawable/font1</item>
+        <item name="textStyle">bold_italic</item>
         <item name="gravity">center</item>
         <item name="foreground">@drawable/zssh</item>
         <item name="fkGravity">center</item>
@@ -166,6 +170,7 @@
         <item name="textSize">@dimen/menuText</item>
         <item name="gravity">start|center_vertical</item>
         <item name="foreground">@drawable/zssh</item>
+        <item name="font">@drawable/font1</item>
         <item name="fkTile1">@integer/checkOff</item>
         <item name="fkTile2">@integer/checkOn</item>
         <item name="fkGravity">end</item>
@@ -177,6 +182,7 @@
         <item name="fkGravity">center</item>
         <item name="foreground">@drawable/zssh</item>
         <item name="fkTiles">@integer/selectCapt</item>
+        <item name="font">@drawable/font1</item>
         <item name="textSize">@dimen/textText</item>
         <item name="textColor">%color/color_highlight_text</item>
         <item name="gravity">center</item>
@@ -271,6 +277,7 @@
         <item name="fbo">true</item>
         <item name="selector">%color/color_selector</item>
         <item name="fadeScrollBars">false</item>
+        <item name="tilesScrollBars">@integer/rect</item>
         <item name="duration">30</item>
         <item name="decorate">glow|scrollbar</item>
         <item name="background">@drawable/zssh</item>
@@ -278,10 +285,10 @@
         <item name="pad">5dp</item>
         <item name="divider">%color/color_divider</item>
         <item name="divSize">@dimen/divider</item>
-        <item name="divType">middle</item>
+        <item name="divType">begin|middle|end</item>
         <item name="divPadHorz">2dp</item>
     </style>
-    <style name="table">
+    <style name="grid">
         <item name="fbo">true</item>
         <item name="selector">%color/color_selector</item>
         <item name="fadeScrollBars">false</item>
@@ -297,7 +304,7 @@
         <item name="lines">0</item>
         <item name="divider">%color/color_divider</item>
         <item name="divSize">@dimen/divider</item>
-        <item name="divType">middle</item>
+        <item name="divType">begin|middle|end</item>
         <item name="divPadHorz">3dp</item>
         <item name="tilesScrollBars">@integer/gradientRadial</item>
     </style>

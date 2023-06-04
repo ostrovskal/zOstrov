@@ -76,8 +76,6 @@ protected:
     int deltaItem{0};
     // начальная/конечная грань
     szi edge{};
-    // признак сдвига на последний элемент
-    bool isOffsetEnd{false};
     // индекс первого видимого элемента
     i32 firstItem{0};
     // адаптер
@@ -106,7 +104,7 @@ protected:
 
 class zViewGrid : public zViewBaseRibbon {
 public:
-    enum { TABLE_LINES, TABLE_CELLS_SPACE, TABLE_LINES_SPACE, TABLE_CELL_SIZE, TABLE_MODE };
+    enum { GRID_CELLS_SPACE, GRID_LINES_SPACE, GRID_CELL_SIZE, GRID_MODE, GRID_LINES };
     // конструктор
     zViewGrid(zStyle* _styles, i32 _id, bool _vert) : zViewBaseRibbon(_styles, _id, _vert) { }
     // загрузка стилей
@@ -114,7 +112,7 @@ public:
     // вернуть имя типа
     virtual cstr typeName() const override { return "zViewTable"; }
     // установка параметра
-    void setParameters(int param, i32 value);
+    void setParameters(i32 param, i32 value);
     // возврат параметра
     i32 getParameters(i32 param) const;
 protected:
@@ -130,9 +128,9 @@ protected:
     // Создание линии
     zView* makeLine(int position, int coord, bool flow);
     // установленные параметры
-    i32 _params[5]{};
+    i32 _params[GRID_LINES + 1]{};
     // Простанство между линиями/Пространство между ячейками/Размер ячейки
-    i32 params[3]{};
+    i32 params[GRID_MODE + 1]{};
 };
 
 class zViewPopup : public zViewGroup {

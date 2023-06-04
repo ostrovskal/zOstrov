@@ -12,7 +12,7 @@ zViewPopup::zViewPopup(zStyle* _styles, zView* _owner, zView* _content) : zViewG
 }
 
 void zViewPopup::setContent(zView* _content) {
-    detachAllViews();
+    detachAllViews(false);
     attach(_content, VIEW_MATCH, VIEW_MATCH);
     content = _content;
 }
@@ -75,7 +75,7 @@ i32 zViewPopup::keyEvent(int key, bool sysKey) {
 }
 
 szi zViewDropdown::measureChildrenSize(cszm& spec) {
-    int wSize(0), hSize(div && div->resolve(countItem));
+    int wSize(0), hSize(div && div->resolve(countItem, true));
     for(int i = 0 ; i < countItem; i++) {
         auto child(obtainView(i));
         if(!child) continue;

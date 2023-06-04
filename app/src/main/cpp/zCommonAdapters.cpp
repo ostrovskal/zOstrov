@@ -26,17 +26,14 @@ zView* zFabricSelectItem::make(zViewGroup* parent) {
 }
 
 zView* zFabricListItem::make(zViewGroup* parent) {
-    int cell(100_dp);
+    int w(VIEW_MATCH), h(VIEW_WRAP);
     auto v(new zViewText(styles, 0, 0));
-/*
     auto tbl(dynamic_cast<zViewGrid*>(parent));
     if(tbl) {
-        i32 params[5]; tbl->getParameters(params);
-        auto tmp(params[zViewGrid::TABLE_CELL_SIZE]);
-        if(tmp) cell = tmp;
+        auto tmp(tbl->getParameters(zViewGrid::GRID_CELL_SIZE));
+        if(tmp) w = tmp, h = tmp;
     }
-*/
-    v->lps.set(0, 0, cell, cell);
+    v->lps.set(0, 0, w, h);
     v->onInit(false);
     return v;
 }
@@ -74,13 +71,11 @@ zView *zAdapterList::createView(int position, zView *convert, zViewGroup *parent
     auto nv(convert);
     if(!nv) nv = _fabric->make(parent);
     nv->id = position;
-/*
     auto tv(dynamic_cast<zViewText*>(nv));
     if(tv) {
         tv->setText(getItem(position), false);
-        auto sv(dynamic_cast<zViewSelect*>(parent));
-        if(sv && color) tv->setTextColorForeground(sv->getSelectedItem() == position ? tv->getTextColorHighlight() : tv->getTextColorDefault());
+        //auto sv(dynamic_cast<zViewSelect*>(parent));
+        //if(sv && color) tv->setTextColorForeground(sv->getSelectedItem() == position ? tv->getTextColorHighlight() : tv->getTextColorDefault());
     }
-*/
     return nv;
 }

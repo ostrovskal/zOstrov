@@ -75,5 +75,9 @@ void sshApp::run() {
 
 void sshApp::setContent() {
     //debug = true;
-    #include "zssh/layout_linear.h"
+    #include "zssh/layout_cell.h"
+    auto lst(idView<zViewRibbon>(z.R.id.list1));
+    zArray<zStringUTF8> objects(theme->findArray(z.R.array.spinArray));
+    auto adapter(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
+    lst->setAdapter(adapter);
 }

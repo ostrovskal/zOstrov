@@ -54,9 +54,9 @@ public:
     // удалить дочернее представление
     virtual void remove(zView* v) { _remove(v, true); }
     // удаление всех дочерних
-    void removeAllViews();
+    virtual void removeAllViews(bool _update);
     // отсоеденить все дочерние представления
-    void detachAllViews();
+    virtual void detachAllViews(bool _update);
     // вернуть представление по типу
     template<typename T = zView> T* tpView(int* idx) const {
         T* v(nullptr); int i;

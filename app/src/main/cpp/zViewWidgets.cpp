@@ -117,10 +117,6 @@ void zViewSwitch::checked(bool set) {
     }
 }
 
-void zViewSwitch::onMeasure(cszm &spec) {
-    zViewText::onMeasure(spec);
-}
-
 void zViewSwitch::onLayout(crti &position, bool changed) {
     zViewText::onLayout(position, changed);
     if(changed) {
@@ -323,12 +319,10 @@ void zViewProgress::updateLayout(bool changed) {
     if(changed) {
         delta = (float)rclient[vert + 2] / (float)range.interval();
         sizeTrumb = z_min(z_min(minMaxSize[1 + vert * 2], rclient.w), z_min(minMaxSize[3 - vert * 2], rclient.h)); sizeTrumb2 = sizeTrumb / 2;
-        auto bound(&drw[DRW_FK]->bound); *bound = rclient.xy();
-        (*bound)[1 - vert] += applyGravity(rclient, szi(sizeTrumb, sizeTrumb), fkGravity)[!vert];
         if(mode == ZS_SLIDER_ROTATE) {
             auto center(rclient.center());
             trumb->measure(sizeTrumb, sizeTrumb, 3, false);
-            bound->x = center.x - sizeTrumb2; bound->y = center.y - sizeTrumb2;
+            trumb->bound.x = center.x - sizeTrumb2; trumb->bound.y = center.y - sizeTrumb2;
         } else updateTrumb();
     }
 }
@@ -336,9 +330,11 @@ void zViewProgress::updateLayout(bool changed) {
 void zViewProgress::updateTrumb() {
     if(mode != ZS_SLIDER_ROTATE) {
         auto v((int)roundf((float)pos * delta));
+        auto pt(applyGravity(rclient, szi(sizeTrumb, sizeTrumb), fkGravity)[!vert]);
         trumb->measure(vert ? sizeTrumb : v, vert ? v : sizeTrumb, PIVOT_ALL, false);
-        auto& bound(trumb->bound); bound = rclient.xy();
-        bound[1 - vert] += applyGravity(rclient, szi(sizeTrumb, sizeTrumb), fkGravity)[!vert];
+        drw[DRW_FK]->measure(vert ? sizeTrumb : rclient.w, vert ? rclient.h : sizeTrumb , PIVOT_ALL, false);
+        drw[DRW_FK]->bound = rclient.xy(); trumb->bound = rclient.xy();
+        trumb->bound[1 - vert] += pt; drw[DRW_FK]->bound[1 - vert] += pt;
         invalidate();
     }
 }

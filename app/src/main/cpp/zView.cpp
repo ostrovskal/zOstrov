@@ -212,6 +212,14 @@ void zView::requestLayout() {
     }
 }
 
+void zView::requestPosition() {
+    if(isVisibled()) {
+        status &= ~ZS_LAYOUT;
+        if(parent && parent->testFlags(ZS_LAYOUT))
+            parent->requestPosition();
+    }
+}
+
 void zView::invalidate() {
     if(isVisibled()) {
         status |= ZS_DIRTY_LAYER;
@@ -362,7 +370,7 @@ void zView::_detach() {
     // убрать фокус
     if(isFocus()) manager->changeFocus(nullptr);
     // убрать тап
-    updateStatus(ZS_TAP, ZS_TAP, false);
+    updateStatus(ZS_TAP, false);
     // вызвать событие отсоединения
     onDetach();
     // удалить связанные события
@@ -384,6 +392,7 @@ zViewGlow::zViewGlow(zView* group) : zView(styles_z_glow, 0) {
             // посчитать размер
             mtxScale.scale(vert ? 1 : v, vert ? v : 1, 1);
             mtx = mtxScale * mtxRot;
+            invalidate();
         } else {
             updateStatus(ZS_VISIBLED, false);
         }
@@ -423,7 +432,10 @@ zViewScrollBar::zViewScrollBar(zView* group, bool _vert) : zView(styles_z_scroll
     zView::onInit(false);
     size = styles->_int(Z_SCROLLBAR_SIZE, 4);
     fade = styles->_int(Z_SCROLLBAR_FADE, 0);
-    setOnAnimation([this](zView*, int) { return updateStatus(ZS_VISIBLED, animator.update(alpha)); });
+    setOnAnimation([this](zView*, int) {
+        invalidate();
+        return updateStatus(ZS_VISIBLED, animator.update(alpha));
+    });
 }
 
 void zViewScrollBar::awaken() {

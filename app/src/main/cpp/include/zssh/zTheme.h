@@ -25,7 +25,7 @@ public:
     // найти атрибут в стилях
     const zStyle* findAttribute(u32 attr) const;
     // найти массив в ресурсах
-    zArray<zStringUTF8> findArray(u32 _value) const { return zStringUTF8(getResource(_value)).split(","); }
+    zArray<zStringUTF8> findArray(u32 _value) const { return zStringUTF8(getResource(_value)).split("|"); }
     // найти строку в ресурсах
     zStringUTF8 findString(u32 _value) const { return getResource(_value); }
     // значение определенного типа

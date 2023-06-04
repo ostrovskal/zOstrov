@@ -32,9 +32,9 @@ static zStyle styles_z_keyboardalt[] = {
 };
 
 static zStyle styles_z_scrollbar[] = {
-	{ Z_BACKGROUND, 0xffffffff },
+	{ Z_BACKGROUND, 0xffafafaf },
 	{ Z_BACKGROUND_TILES, z.R.integer.gradientRadial },
-	{ Z_SCROLLBAR_SIZE, 4 },
+	{ Z_SCROLLBAR_SIZE, 2 },
 	{ Z_SCROLLBAR_FADE | ZT_END, true }
 };
 
@@ -162,6 +162,7 @@ static zStyle styles_z_formfooter[] = {
 static zStyle styles_z_spin_item[] = {
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_TEXT_TEXT },
 	{ Z_TEXT_SIZE, z.R.dimen.menuText },
+	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
@@ -170,8 +171,11 @@ static zStyle styles_z_spin_item[] = {
 };
 
 static zStyle styles_z_list_item[] = {
+	{ Z_FBO, true },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_TEXT_TEXT },
 	{ Z_TEXT_SIZE, z.R.dimen.menuText },
+	{ Z_TEXT_FONT, z.R.drawable.font1 },
+	{ Z_TEXT_STYLE, ZS_TEXT_BOLD_ITALIC },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
@@ -183,6 +187,7 @@ static zStyle styles_z_menu_item[] = {
 	{ Z_TEXT_SIZE, z.R.dimen.menuText },
 	{ Z_GRAVITY, ZS_GRAVITY_START | ZS_GRAVITY_VCENTER },
 	{ Z_FOREGROUND, z.R.drawable.zssh },
+	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_FOREGROUND_TILES, 0x00002B2A },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_END },
 	{ Z_TEXT_DISTANCE, 8 },
@@ -194,6 +199,7 @@ static zStyle styles_z_spin_capt[] = {
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_FOREGROUND_TILES, z.R.integer.selectCapt },
+	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_TEXT_SIZE, z.R.dimen.textText },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_HIGHLIGHT_TEXT },
 	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_CENTER }
@@ -291,17 +297,18 @@ static zStyle styles_z_ribbon[] = {
 	{ Z_FBO, true },
 	{ Z_SELECTOR | ZT_THEME, Z_COLOR_SELECTOR },
 	{ Z_SCROLLBAR_FADE, false },
+	{ Z_SCROLLBAR_TILES, z.R.integer.rect },
 	{ Z_DURATION, 30 },
 	{ Z_DECORATE, ZS_GLOW | ZS_SCROLLBAR },
 	{ Z_BACKGROUND, z.R.drawable.zssh },
 	{ Z_BACKGROUND_TILES, z.R.integer.selectDrop },
 	{ Z_PADDING, 0x05050505 },
 	{ Z_DIVIDER | ZT_THEME, Z_COLOR_DIVIDER },
-	{ Z_DIVIDER_TYPE, ZS_DIVIDER_MIDDLE },
+	{ Z_DIVIDER_TYPE, ZS_DIVIDER_BEGIN | ZS_DIVIDER_MIDDLE | ZS_DIVIDER_END },
 	{ Z_DIVIDER_SIZE | ZT_END, 0x02000202 }
 };
 
-static zStyle styles_z_table[] = {
+static zStyle styles_z_grid[] = {
 	{ Z_FBO, true },
 	{ Z_SELECTOR | ZT_THEME, Z_COLOR_SELECTOR },
 	{ Z_SCROLLBAR_FADE, false },
@@ -316,7 +323,7 @@ static zStyle styles_z_table[] = {
 	{ Z_MODE, ZS_GRID_UNIFORM },
 	{ Z_LINES, 0 },
 	{ Z_DIVIDER | ZT_THEME, Z_COLOR_DIVIDER },
-	{ Z_DIVIDER_TYPE, ZS_DIVIDER_MIDDLE },
+	{ Z_DIVIDER_TYPE, ZS_DIVIDER_BEGIN | ZS_DIVIDER_MIDDLE | ZS_DIVIDER_END },
 	{ Z_DIVIDER_SIZE, 0x03000302 },
 	{ Z_SCROLLBAR_TILES | ZT_END, z.R.integer.gradientRadial }
 };
@@ -489,6 +496,11 @@ static zStyle styles_z_zcelllayout1[] = {
 	{ Z_PADDING | ZT_END, 0x01010101 }
 };
 
+static zStyle styles_z_list1[] = {
+	{ Z_STYLES, z.R.style.ribbon },
+	{ Z_BACKGROUND_TILES | ZT_END, z.R.integer.selectDrop }
+};
+
 static zStyle styles_z_edit1[] = {
 	{ Z_MODE, ZS_EDIT_TEXT },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_TEXT_TEXT },
@@ -549,8 +561,8 @@ static zStyle styles_z_seek[] = {
 
 static zStyle styles_z_progress1[] = {
 	{ Z_FOREGROUND, z.R.drawable.zssh },
-	{ Z_FOREGROUND_TILES, 0x0014140C },
-	{ Z_FOREGROUND_COLOR, 0xffffffff },
+	{ Z_FOREGROUND_TILES, 0x00001414 },
+	{ Z_FOREGROUND_COLOR, 0x7fffffff },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_PRIMARY | ZT_THEME, Z_COLOR_PROGRESS_PRIMARY },
 	{ Z_TEXT_FONT | ZT_THEME, Z_FONT2 },

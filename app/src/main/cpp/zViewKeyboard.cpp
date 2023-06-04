@@ -67,7 +67,7 @@ zViewKeyboard::~zViewKeyboard() {
 
 void zViewKeyboard::onInit(bool _theme) {
     zViewGroup::onInit(_theme);
-    if(countChildren()) removeAllViews();
+    if(countChildren()) removeAllViews(false);
     // основной текст
     attach(new zViewText(styles_z_keyboardbase, 0, 0), 100, 100);
     // альтернативный текст

@@ -79,7 +79,7 @@ void zViewForm::close(int code) {
 }
 
 zView* zViewForm::setContent(zView* view) {
-    content->removeAllViews();
+    content->removeAllViews(false);
     content->attach(view, VIEW_MATCH, VIEW_MATCH);
     return view;
 }
