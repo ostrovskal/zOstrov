@@ -25,9 +25,9 @@
     <dimen name="switchMinWidth">50dp</dimen>
     <dimen name="switchMinHeight">20dp</dimen>
     <dimen name="progressMinWidth">70dp</dimen>
-    <dimen name="progressMinHeight">10dp</dimen>
+    <dimen name="progressMinHeight">20dp</dimen>
     <dimen name="progressMaxWidth">150dp</dimen>
-    <dimen name="progressMaxHeight">20dp</dimen>
+    <dimen name="progressMaxHeight">30dp</dimen>
     <dimen name="sliderMinWidth">70dp</dimen>
     <dimen name="sliderMinHeight">25dp</dimen>
     <dimen name="sliderMaxWidth">150dp</dimen>

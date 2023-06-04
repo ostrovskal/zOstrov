@@ -73,51 +73,49 @@ void zAbsoluteLayout::onLayout(crti &position, bool changed) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void zLinearLayout::onMeasure(cszm& spec) {
-    int width, height, allWeight(0); szm childSpec;
-    int wmax(0), hmax(0), marginsChild(0); int* side; bool isWeights(false);
-    // размер разделителя
+    int sizeMatch(0), allWeight(0), marginsChild(0), countMatch(0); bool isWeights(false);
+    szi _max, _wh;  szm childSpec;
     auto divSize(div ? div->resolve(countChildren()) : 0);
-    if(vert) hmax = divSize; else wmax = divSize;
+    _max[vert] = divSize + pad.extent(vert);
     // определяем габариты и веса дочерних
+    auto _undef(spec[vert].mode() != MEASURE_UNDEF);
     for(auto child : children) {
         if(child->isVisibled()) {
             measureChild(child, spec);
-            auto size(child->sizes(vert));
+            // определение количества дочерних с VIEW_MATCH
+            if(_undef && child->lps[vert + 2] != VIEW_MATCH) _max[vert]  += child->sizes(vert); else countMatch++;
+            _max[!vert] = z_max(_max[!vert], child->sizes(!vert));
             marginsChild += child->margin.extent(vert);
-            if(vert) {
-                hmax += size;
-                wmax = z_max(wmax, child->sizes(false));
-            } else {
-                wmax += size;
-                hmax = z_max(hmax, child->sizes(true));
-            }
             // весь вес
             auto weight(child->lps.weight);
             isWeights |= (weight != 0);
             allWeight += z_max(1, weight);
         }
     }
-    if(vert) {
-        if(spec.h.isExact()) hmax = spec.h.size() - pad.extent(true);
-        height = hmax - divSize; width = wmax; side = &height;
-    } else {
-        if(spec.w.isExact()) wmax = spec.w.size()  - pad.extent(false);
-        width = wmax - divSize; height = hmax; side = &width;
+    // определение габаритов для дочерних с VIEW_MATCH
+    if(_undef && countMatch) {
+        sizeMatch = (spec[vert].size() - _max[vert]) / countMatch;
+        for(auto child : children) {
+            if(child->isVisibled() && child->lps[vert + 2] == VIEW_MATCH) _max[vert] += sizeMatch;
+        }
     }
+    if(spec[vert].isExact()) _max[vert] = spec[vert].size() - pad.extent(vert);
+    _wh = _max; _wh[vert] -= divSize;
     // снова определяем размеры дочерних с учетом веса
     for(auto child: children) {
         if(child->isVisibled()) {
             auto& lps(child->lps);
             auto weight(z_max<float>(1.0f, (float)child->lps.weight));
             if(isWeights) weight /= (float)allWeight;
-            auto size(isWeights ? (zMeasure)roundf((float)(*side - marginsChild) * weight) : lps[vert + 2]), wh(lps[3 - vert]);
-            childSpec.set(makeChildMeasureSpec(zMeasure(MEASURE_EXACT, width), 0, vert ? wh : size),
-                          makeChildMeasureSpec(zMeasure(MEASURE_EXACT, height), 0, vert ? size : wh));
+            auto _size(lps[vert + 2] == VIEW_MATCH ? sizeMatch : (int)lps[vert + 2]);
+            auto size(isWeights ? (int)roundf((float)(_wh[vert] - marginsChild) * weight) : _size), wh((int)lps[3 - vert]);
+            childSpec.set(makeChildMeasureSpec(zMeasure(MEASURE_EXACT, _wh.w), 0, vert ? wh : size),
+                          makeChildMeasureSpec(zMeasure(MEASURE_EXACT, _wh.h), 0, vert ? size : wh));
             child->measure(childSpec);
-            if(!isWeights) *side -= child->sizes(vert);
+            if(!isWeights) _wh[vert] -= child->sizes(vert);
         }
     }
-    defaultOnMeasure(spec, wmax, hmax);
+    defaultOnMeasure(spec, _max.w, _max.h);
     // разделитель
     if(div) div->measure(0, 0, 3, false);
 }

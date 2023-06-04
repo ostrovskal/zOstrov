@@ -8,7 +8,7 @@
 	grp10->attach(new zViewButton(styles_z_button1, z.R.id.button1, z.R.string.themeDark, z.R.integer.iconCancel), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp10->attach(new zViewSwitch(styles_z_switch1, z.R.id.switch1, z.R.string.Perekljuchatelw), 
-			VIEW_MATCH, VIEW_WRAP);
+			VIEW_MATCH, VIEW_MATCH);
 	grp10->attach(new zViewSlider(styles_z_seek, z.R.id.seek, z.R.string.slayder, szi(0, 70), 30, false), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp10->attach(new zViewProgress(styles_z_linearprogress, z.R.id.progress1, z.R.string.Sergey, szi(0, 70), 50, false), 

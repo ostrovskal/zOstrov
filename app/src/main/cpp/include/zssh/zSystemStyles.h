@@ -522,7 +522,7 @@ static zStyle styles_z_button1[] = {
 	{ Z_ICON, z.R.drawable.zssh },
 	{ Z_ICON_SCALE, 32767 },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_TEXT_TEXT },
-	{ Z_TEXT_SIZE, 15 },
+	{ Z_TEXT_SIZE, 25 },
 	{ Z_ICON_GRAVITY, ZS_GRAVITY_END | ZS_GRAVITY_VCENTER },
 	{ Z_PADDING, 0x05050505 },
 	{ Z_TAP | ZT_END, ZS_PRESSED }

@@ -215,13 +215,13 @@ void zViewSlider::onDraw() {
 }
 
 void zViewSlider::onMeasure(cszm& spec) {
-    zViewText::onMeasure(spec);
-    // проверка на макс. размер в зависимости от ориентации
+    auto minMax(minMaxSize);
     if(vert) {
-        if(spec.h.isNotExact()) rview.h = z_min(rview.h, minMaxSize.y);
-        if(spec.w.isNotExact()) rview.w = z_min(rview.w, minMaxSize.h);
-        setMeasuredDimension(rview.w, rview.h);
+        std::swap(minMaxSize.x, minMaxSize.y);
+        std::swap(minMaxSize.w, minMaxSize.h);
     }
+    zViewText::onMeasure(spec);
+    minMaxSize = minMax;
 }
 
 void zViewSlider::onLayout(crti &position, bool changed) {

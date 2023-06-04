@@ -25,10 +25,10 @@
             android:layout_width="match_parent" android:layout_height="wrap_content"
             z:fkTiles="@integer/gradientRadial" z:foreground="@drawable/zssh" z:fkGravity="center" z:iconka="@integer/iconCancel"
             z:font="%drawable/font1" android:gravity="center" z:fkScale="0.5" z:icon="@drawable/zssh" z:icScale="0.5"
-            android:text="@string/themeDark" z:textColor="%color/color_text_text" z:textSize="15sp" z:icGravity="end|center_vertical"
+            android:text="@string/themeDark" z:textColor="%color/color_text_text" z:textSize="25sp" z:icGravity="end|center_vertical"
             z:pad="5dp" z:tap="pressed" />
         <Switch
-            android:id="@+id/switch1" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:id="@+id/switch1" android:layout_width="match_parent" android:layout_height="match_parent"
             z:foreground="%drawable/bitmap_common"
             z:fkGravity="end|center_vertical"
             z:fkTile1="@integer/switchTrack" z:fkTile2="@integer/switchTrumb"
