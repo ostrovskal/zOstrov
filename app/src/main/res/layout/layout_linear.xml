@@ -2,115 +2,142 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:z="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
+    android:orientation="vertical"
+    z:decorate="scrollbar|glow"
     z:pad="5dp"
     android:layout_width="match_parent" android:layout_height="match_parent">
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         z:styles="@style/llinear"
-        z:margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     <EditText
-        android:id="@+id/edit1" z:inputMode="text" android:layout_weight="1"
-        z:fbo="true"
+        android:id="@+id/edit1" z:inputMode="text"
+        z:fbo="true" z:text="Пример текста"
         android:layout_width="match_parent" android:layout_height="wrap_content"
         z:textColor="%color/color_text_text" z:textSize="20sp" z:hint="подсказка" z:fkGravity="center"
         z:icon="@drawable/zssh" z:icGravity="end" z:icColor="#ffffffff" z:icTiles="@integer/iconEdit"
         z:pad="1dp" android:gravity="center_vertical" z:foreground="%drawable/bitmap_common" z:fkTiles="@integer/edit"
-        z:font="%drawable/font1" z:textWrap="true" />
+        z:font="%drawable/font1" z:textWrap="true" z:textStyle="italic" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            z:pad="3dp"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                z:layout_group="1" z:text="radio 1"
+                z:styles="@style/radiobutton" />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                z:layout_group="1" z:text="radio 2"
+                z:display="visibled|checked"
+                z:styles="@style/radiobutton" />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                z:layout_group="1" z:text="radio 3"
+                z:styles="@style/radiobutton" />
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                z:display="visibled|checked"
+                z:text="Флажок" z:styles="@style/checkbox" />
+        </LinearLayout>
         <Button
-            android:id="@+id/button1" android:layout_weight="1"
+            android:id="@+id/button1"
             android:layout_width="match_parent" android:layout_height="wrap_content"
             z:fkTiles="@integer/gradientRadial" z:foreground="@drawable/zssh" z:fkGravity="center" z:iconka="@integer/iconCancel"
-            z:font="%drawable/font1" android:gravity="center" z:fkScale="0.5" z:icon="@drawable/zssh" z:icScale="0.5"
-            android:text="@string/themeDark" z:textColor="%color/color_text_text" z:textSize="25sp" z:icGravity="end|center_vertical"
+            z:font="%drawable/font3" android:gravity="center" z:fkScale="0.5" z:icon="@drawable/zssh" z:icScale="0.5"
+            android:text="Нажми на меня:)" z:textColor="%color/color_text_text" z:textSize="25sp" z:icGravity="end|center_vertical"
             z:pad="5dp" z:tap="pressed" />
         <Switch
             android:id="@+id/switch1" android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:foreground="%drawable/bitmap_common" android:layout_weight="1"
+            z:foreground="%drawable/bitmap_common"
             z:fkGravity="end|center_vertical"
             z:fkTile1="@integer/switchTrack" z:fkTile2="@integer/switchTrumb"
-            z:font="%drawable/font2"
-            z:text="Переключатель" z:textSize="20sp" z:textColor="%color/color_text_text"
+            z:font="%drawable/font4"
+            z:text="Режим готовности" z:textSize="20sp" z:textColor="%color/color_text_text"
             z:gravity="start|center_vertical"
             z:pad="5dp" z:duration="30" />
         <Switch
             android:id="@+id/switch2" android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:foreground="%drawable/bitmap_common" android:layout_weight="1"
+            z:foreground="%drawable/bitmap_common"
             z:fkGravity="end|center_vertical"
             z:fkTile1="@integer/switchTrack" z:fkTile2="@integer/switchTrumb"
-            z:font="%drawable/font2"
+            z:font="%drawable/font1" z:textStyle="bold"
             z:text="Переключатель" z:textSize="20sp" z:textColor="%color/color_text_text"
             z:gravity="start|center_vertical"
             z:pad="5dp" z:duration="30" />
         <Switch
             android:id="@+id/switch3" android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:foreground="%drawable/bitmap_common" android:layout_weight="1"
+            z:foreground="%drawable/bitmap_common"
             z:fkGravity="end|center_vertical"
             z:fkTile1="@integer/switchTrack" z:fkTile2="@integer/switchTrumb"
-            z:font="%drawable/font2"
-            z:text="Переключатель" z:textSize="20sp" z:textColor="%color/color_text_text"
+            z:font="%drawable/font3" z:textStyle="italic|strike|underline"
+            z:text="Активация" z:textSize="20sp" z:textColor="%color/color_text_text"
             z:gravity="start|center_vertical"
+            z:display="visibled|checked"
             z:pad="5dp" z:duration="30" />
         <SeekBar
             android:id="@+id/seek"
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:foreground="%drawable/bitmap_common" android:layout_weight="1"
+            z:foreground="%drawable/bitmap_common"
             z:fkScale="1.0" z:fkGravity="center"
-            z:speedTrack="0.5" z:progress="30"
+            z:speedTrack="0.5" z:progress="3"
             z:font="%drawable/font2" z:text="слайдер"
             z:textSize="20sp" z:textColor="%color/color_slider_text"
             z:fkTile1="@integer/sliderTrack2" z:fkTile2="@integer/sliderTrumb2"
             z:gravity="center" z:sliderMode="%integer/slider_mode"
             z:duration="40" z:orientation="horizontal"
-            z:marginStart="10dp"
-            z:marginBottom="5dp"
-            z:marginEnd="15dp"
-            z:marginTop="3dp"
             z:display="visibled|tips"
-            z:pad="0dp" z:range="0,70" />
+            z:range="5,40" />
         <SeekBar
             android:id="@+id/seek1"
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:foreground="%drawable/bitmap_common" android:layout_weight="1"
+            z:foreground="%drawable/bitmap_common"
             z:fkScale="1.0" z:fkGravity="center"
-            z:speedTrack="0.5" z:progress="30"
-            z:font="%drawable/font1" z:text="слайдер"
+            z:speedTrack="0.5" z:progress="130"
+            z:font="%drawable/font1"
             z:textSize="20sp" z:textColor="%color/color_slider_text"
             z:fkTile1="@integer/sliderTrack2" z:fkTile2="@integer/sliderTrumb2"
             z:gravity="center" z:sliderMode="%integer/slider_mode"
             z:duration="40" z:orientation="horizontal"
             z:marginStart="10dp"
-            z:marginBottom="5dp"
-            z:marginEnd="15dp"
             z:marginTop="3dp"
             z:display="visibled|tips"
-            z:pad="0dp" z:range="0,70" />
+            z:pad="3dp" z:range="50,170" />
+        <Button
+            android:id="@+id/button11"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            z:fkTiles="@integer/gradientRadial" z:foreground="@drawable/zssh" z:fkGravity="center" z:iconka="@integer/iconCancel"
+            z:font="%drawable/font1" android:gravity="center" z:fkScale="0.5" z:icon="@drawable/zssh" z:icScale="0.5"
+            android:text="Текст на кнопке" z:textColor="%color/color_text_text" z:textSize="25sp" z:icGravity="start|center_vertical"
+            z:textStyle="underline|bold_italic"
+            z:pad="5dp" z:tap="pressed" />
         <SeekBar
             android:id="@+id/seek2"
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:foreground="%drawable/bitmap_common" android:layout_weight="1"
+            z:foreground="%drawable/bitmap_common"
             z:fkScale="1.0" z:fkGravity="center"
             z:speedTrack="0.5" z:progress="30"
-            z:font="%drawable/font2" z:text="слайдер"
+            z:font="%drawable/font2"
             z:textSize="20sp" z:textColor="%color/color_slider_text"
             z:fkTile1="@integer/sliderTrack1" z:fkTile2="@integer/sliderTrumb1"
-            z:gravity="center" z:sliderMode="%integer/slider_mode"
+            z:gravity="center"
             z:duration="40" z:orientation="horizontal"
-            z:marginStart="10dp"
-            z:marginBottom="5dp"
-            z:marginEnd="15dp"
-            z:marginTop="3dp"
+            z:sliderMode="scale"
             z:display="visibled|tips"
-            z:pad="0dp" z:range="0,70" />
+            z:pad="1dp" z:range="0,70" />
     <ProgressBar
         android:id="@+id/progress1" android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="Sergey" z:layout_gravity="center"  z:styles="@style/linearProgress" android:layout_weight="1"
+        android:text="Sergey" z:layout_gravity="center"  z:styles="@style/linearProgress"
         z:range="0,170" z:progress="250" z:orientation="horizontal" />
     <EditText
-        android:id="@+id/edit2" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_weight="1"
-        z:styles="@style/edittext" z:inputMode="text" z:hint="@string/enter_family" />
+        android:id="@+id/edit2" android:layout_width="match_parent" android:layout_height="wrap_content"
+        z:styles="@style/edittext" z:inputMode="text" z:hint="@string/enter_family" z:textStyle="bold_italic|strike"/>
     <!--
             <EditLayout android:id="@+id/editlyt1" android:layout_width="wrap_content" android:layout_height="wrap_content">
             </EditLayout>

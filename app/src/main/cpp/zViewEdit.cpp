@@ -276,7 +276,7 @@ void zViewEdit::onLayout(crti &position, bool changed) {
 void zViewEdit::onMeasure(cszm& spec) {
     zViewText::onMeasure(spec);
     auto butW(icSize.w);
-    if(but) but->measure(szm(zMeasure(MEASURE_EXACT, butW), zMeasure(MEASURE_EXACT, icSize.h))); else butW = 0;
+    if(but) but->measure({zMeasure(MEASURE_EXACT, butW), zMeasure(MEASURE_EXACT, icSize.h)}); else butW = 0;
     wmax = rclient.w - distance - butW - ipad.extent(false);
 }
 

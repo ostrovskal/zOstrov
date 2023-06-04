@@ -14,7 +14,7 @@
 
 #include <curl2/curl.h>
 
-static int gravity_shift[4] = { 31, 31, 0, 1 };
+static int gravity_shift[] = { 31, 31, 0, 1 };
 
 constexpr int MSG_ALL              = 0;
 constexpr int MSG_ANIM             = 1;
@@ -29,6 +29,10 @@ constexpr int MEASURE_MASK_MODE	   = 0xC0000000;
 constexpr int MEASURE_EXACT  	   = 0x80000000;
 constexpr int MEASURE_MOST  	   = 0x40000000;
 constexpr int MEASURE_UNDEF  	   = 0x00000000;
+
+constexpr int PIVOT_X               = 1;
+constexpr int PIVOT_Y               = 2;
+constexpr int PIVOT_ALL             = 3;
 
 /* background */
 #define DRW_BK                      0

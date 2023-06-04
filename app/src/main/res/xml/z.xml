@@ -277,7 +277,7 @@
         <attr name="Switch" translate="zViewSwitch" format="text" />
         <attr name="Button" translate="zViewButton" format="text|iconka" />
         <attr name="CheckBox" translate="zViewCheck" format="text" />
-        <attr name="RadioButton" translate="zViewRadio" format="text|radio_group" />
+        <attr name="RadioButton" translate="zViewRadio" format="text|layout_group" />
         <attr name="RatingBar" translate="zViewChart" format="chartGravity" />
         <attr name="EditText" translate="zViewEdit" format="hint" />
         <attr name="ListView" translate="zViewRibbon" format="orientation" />

@@ -117,6 +117,10 @@ void zViewSwitch::checked(bool set) {
     }
 }
 
+void zViewSwitch::onMeasure(cszm &spec) {
+    zViewText::onMeasure(spec);
+}
+
 void zViewSwitch::onLayout(crti &position, bool changed) {
     zViewText::onLayout(position, changed);
     if(changed) {
@@ -151,7 +155,7 @@ void zViewSwitch::stateView(zView::STATE &state, bool save, int &index) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 zViewSlider::zViewSlider(zStyle* _styles, i32 _id, u32 _text, cszi& _range, int _pos, bool _vert) :
-        zViewText(_styles, _id, _text), range(_range), pos(_pos) {
+        zViewText(_styles, _id, 0), range(_range), pos(_pos) {
     trumb = new zDrawable(this, 0); vert = _vert;
     minMaxSize.set(z_dp(z.R.dimen.sliderMinWidth), z_dp(z.R.dimen.sliderMaxWidth),
                    z_dp(z.R.dimen.sliderMinHeight), z_dp(z.R.dimen.sliderMaxHeight));
@@ -197,28 +201,34 @@ void zViewSlider::showTips() {
 }
 
 void zViewSlider::onDraw() {
-    isDraw = true;
     // нарисовать трек
     static zMatrix m, r;
-    auto w(drw[DRW_FK]->bound.w); auto offs(drw[DRW_FK]->offsetBound());
-    auto clip(drawableClip()); auto _clip(rclient.padding(!vert * sizeTrumb2, vert * sizeTrumb2));
-    if(vert) r.rotate(0, 0, deg2rad(90)); else r.identity();
-    for(int i = 0 ; i < segments; i++) {
-        drw[DRW_FK]->drawCommon(_clip, r * m.translate(offs.x, offs.y, 0.0f), true);
-        offs[vert] += w;
+    auto clip(drawableClip());
+    if(clip.isNotEmpty()) {
+        ptf offs;
+        auto _clip(z_clipRect(parent->rclip, rclient.padding(!vert * sizeTrumb2, vert * sizeTrumb2)));
+        if(_clip.isNotEmpty()) {
+            auto w(drw[DRW_FK]->bound.w); offs = drw[DRW_FK]->offsetBound();
+            if(vert) r.rotate(0, 0, deg2rad(90)); else r.identity();
+            for(int i = 0; i < segments; i++) {
+                drw[DRW_FK]->drawCommon(_clip, r * m.translate(offs.x, offs.y, 0.0f), true);
+                offs[vert] += w;
+            }
+        }
+        // нарисовать текст
+        zViewText::drawText();
+        // нарисовать ползунок
+        offs = trumb->offsetBound();
+        trumb->drawCommon(clip, mtxTrumb * m.translate(offs.x, offs.y, 0.0f), true);
+        isDraw = true;
     }
-    // нарисовать текст
-    zViewText::drawText();
-    // нарисовать ползунок
-    offs = trumb->offsetBound();
-    trumb->drawCommon(clip, mtxTrumb * m.translate(offs.x, offs.y, 0.0f), true);
 }
 
 void zViewSlider::onMeasure(cszm& spec) {
     auto minMax(minMaxSize);
     if(vert) {
-        std::swap(minMaxSize.x, minMaxSize.y);
-        std::swap(minMaxSize.w, minMaxSize.h);
+        std::swap(minMaxSize.x, minMaxSize.w);
+        std::swap(minMaxSize.y, minMaxSize.h);
     }
     zViewText::onMeasure(spec);
     minMaxSize = minMax;
@@ -233,11 +243,11 @@ void zViewSlider::updateLayout(bool changed) {
     if(speedTrack || mode) post(MSG_ANIM, duration, 0);
     if(changed) {
         // размер ползунка
-        sizeTrumb = z_min(rclient.w, rclient.h); sizeTrumb2 = sizeTrumb / 2;
+        sizeTrumb = z_min(z_min(minMaxSize[1 + vert * 2], rclient.w), z_min(minMaxSize[3 - vert * 2], rclient.h)); sizeTrumb2 = sizeTrumb / 2;
         // пересоздать трек
         drw[DRW_FK]->measure(sizeTrumb, sizeTrumb, 3, false);
         auto bound(&drw[DRW_FK]->bound); *bound = rclient.xy();
-        *bound += applyGravity(rclient, szi(sizeTrumb, sizeTrumb), vert ? ZS_GRAVITY_HCENTER : ZS_GRAVITY_VCENTER);
+        (*bound)[1 - vert] += applyGravity(rclient, szi(sizeTrumb, sizeTrumb), fkGravity)[!vert];
         posTrack = (*bound)[vert];
         // длина трэка(в зависимости от ориентации)
         auto lenTrack(rclient[vert + 2]);
@@ -268,6 +278,7 @@ i32 zViewSlider::onTouchEvent(zTouch *touch) {
 void zViewSlider::updateTrumb() {
     trumb->bound.set(rclient.x, rclient.y, sizeTrumb, sizeTrumb);
     trumb->bound[vert] += (int)roundf((float)(pos - range.w) * delta);
+    trumb->bound[1 - vert] += applyGravity(rclient, szi(sizeTrumb, sizeTrumb), fkGravity)[!vert];
     invalidate();
 }
 
@@ -311,23 +322,25 @@ void zViewProgress::onInit(bool _theme) {
 void zViewProgress::updateLayout(bool changed) {
     if(changed) {
         delta = (float)rclient[vert + 2] / (float)range.interval();
-        sizeTrumb = z_min(rclient.w, rclient.h); sizeTrumb2 = sizeTrumb / 2;
-        updateTrumb();
+        sizeTrumb = z_min(z_min(minMaxSize[1 + vert * 2], rclient.w), z_min(minMaxSize[3 - vert * 2], rclient.h)); sizeTrumb2 = sizeTrumb / 2;
+        auto bound(&drw[DRW_FK]->bound); *bound = rclient.xy();
+        (*bound)[1 - vert] += applyGravity(rclient, szi(sizeTrumb, sizeTrumb), fkGravity)[!vert];
+        if(mode == ZS_SLIDER_ROTATE) {
+            auto center(rclient.center());
+            trumb->measure(sizeTrumb, sizeTrumb, 3, false);
+            bound->x = center.x - sizeTrumb2; bound->y = center.y - sizeTrumb2;
+        } else updateTrumb();
     }
 }
 
 void zViewProgress::updateTrumb() {
-    auto bound(&trumb->bound);
-    if(mode == ZS_SLIDER_ROTATE) {
-        auto center(rclient.center());
-        trumb->measure(sizeTrumb, sizeTrumb, 3, false);
-        bound->x = center.x - sizeTrumb2; bound->y = center.y - sizeTrumb2;
-    } else {
+    if(mode != ZS_SLIDER_ROTATE) {
         auto v((int)roundf((float)pos * delta));
-        trumb->measure(vert ? rclient.w : v, vert ? v : rclient.h, 3, false);
-        *bound = rclient.xy();
+        trumb->measure(vert ? sizeTrumb : v, vert ? v : sizeTrumb, PIVOT_ALL, false);
+        auto& bound(trumb->bound); bound = rclient.xy();
+        bound[1 - vert] += applyGravity(rclient, szi(sizeTrumb, sizeTrumb), fkGravity)[!vert];
+        invalidate();
     }
-    invalidate();
 }
 
 void zViewProgress::showTips() {

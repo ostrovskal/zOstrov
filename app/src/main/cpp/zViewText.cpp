@@ -30,13 +30,13 @@ void zViewText::setText(const zStringUTF8& _text, bool force) {
         clearCacheSpans(false);
         if(changed) {
             auto rv(rview), rc(rclient);
-            szm spec(zMeasure(measureSpec.w.isExact() ? MEASURE_EXACT : MEASURE_UNDEF, measureSpec.w.size()),
-                     zMeasure(measureSpec.h.isExact() ? MEASURE_EXACT : MEASURE_UNDEF, measureSpec.h.size()));
+            szm spec(zMeasure(lps.w == VIEW_MATCH ? MEASURE_EXACT : MEASURE_UNDEF, measureSpec.w.size()),
+                     zMeasure(lps.h == VIEW_MATCH ? MEASURE_EXACT : MEASURE_UNDEF, measureSpec.h.size()));
             onMeasure(spec);
             changed = (rv != rview);
         }
         if(changed) {
-//            DLOG("text update");
+            DLOG("text update");
             requestLayout();
         }
     }
@@ -234,12 +234,12 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
     static CACHE tcache;
     int width(0), maxHeight(0), maxWidth(0), sepPos(0), sepWidth(0), height(0), _count;
     // проверить на кэшированные значения
-    if(widthRect <= 0 || isWrap()) widthRect = INT_MAX;
     if(textCache.isNotEmpty() && widthRect >= widthRectCache) {
 //        DLOG("from cache %s", textCache[0]->text.str());
         for(auto& cache : textCache) maxHeight += cache->size;
         return { widthRectCache, maxHeight };
     }
+    if(widthRect <= 0 || isWrap()) widthRect = INT_MAX;
     textCache.clear();
     auto isEdit(dynamic_cast<zViewEdit*>(this));
     // разбить текст по спец. символам по ширине ректа

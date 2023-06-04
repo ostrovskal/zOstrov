@@ -10,8 +10,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void zFrameLayout::onMeasure(cszm& spec) {
-    auto sz(measureChildren(spec));
-    defaultOnMeasure(spec, sz.w, sz.h);
+    defaultOnMeasure(spec, measureChildren(spec));
 }
 
 void zFrameLayout::onLayout(crti &position, bool changed) {
@@ -76,16 +75,18 @@ void zLinearLayout::onMeasure(cszm& spec) {
     int sizeMatch(0), allWeight(0), marginsChild(0), countMatch(0); bool isWeights(false);
     szi _max, _wh;  szm childSpec;
     auto divSize(div ? div->resolve(countChildren()) : 0);
-    _max[vert] = divSize + pad.extent(vert);
+    _max[vert] = divSize + padMargin(vert);
     // определяем габариты и веса дочерних
     auto _undef(spec[vert].mode() != MEASURE_UNDEF);
     for(auto child : children) {
         if(child->isVisibled()) {
             measureChild(child, spec);
-            // определение количества дочерних с VIEW_MATCH
-            if(_undef && child->lps[vert + 2] != VIEW_MATCH) _max[vert]  += child->sizes(vert); else countMatch++;
-            _max[!vert] = z_max(_max[!vert], child->sizes(!vert));
             marginsChild += child->margin.extent(vert);
+            // определение количества дочерних с VIEW_MATCH
+            if(!_undef || child->lps[vert + 2] != VIEW_MATCH)
+                _max[vert] += child->sizes(vert); else countMatch++;
+            _max[!vert] = z_max(_max[!vert], child->sizes(!vert));
+//            DLOG("child %i %i %s", child->sizes(false), child->sizes(true), child->typeName());
             // весь вес
             auto weight(child->lps.weight);
             isWeights |= (weight != 0);
@@ -93,31 +94,33 @@ void zLinearLayout::onMeasure(cszm& spec) {
         }
     }
     // определение габаритов для дочерних с VIEW_MATCH
-    if(_undef && countMatch) {
+    if(countMatch) {
         sizeMatch = (spec[vert].size() - _max[vert]) / countMatch;
         for(auto child : children) {
-            if(child->isVisibled() && child->lps[vert + 2] == VIEW_MATCH) _max[vert] += sizeMatch;
+            if(child->isVisibled() && child->lps[vert + 2] == VIEW_MATCH)
+                _max[vert] += sizeMatch;
         }
     }
-    if(spec[vert].isExact()) _max[vert] = spec[vert].size() - pad.extent(vert);
-    _wh = _max; _wh[vert] -= divSize;
+    if(spec[vert].isExact()) _max[vert] = spec[vert].size() - padMargin(vert);
+    _wh = _max; _wh[vert] -= (marginsChild + divSize);
     // снова определяем размеры дочерних с учетом веса
     for(auto child: children) {
         if(child->isVisibled()) {
             auto& lps(child->lps);
             auto weight(z_max<float>(1.0f, (float)child->lps.weight));
             if(isWeights) weight /= (float)allWeight;
-            auto _size(lps[vert + 2] == VIEW_MATCH ? sizeMatch : (int)lps[vert + 2]);
-            auto size(isWeights ? (int)roundf((float)(_wh[vert] - marginsChild) * weight) : _size), wh((int)lps[3 - vert]);
-            childSpec.set(makeChildMeasureSpec(zMeasure(MEASURE_EXACT, _wh.w), 0, vert ? wh : size),
-                          makeChildMeasureSpec(zMeasure(MEASURE_EXACT, _wh.h), 0, vert ? size : wh));
+            auto _size(_undef && lps[vert + 2] == VIEW_MATCH ? sizeMatch : child->rview[vert + 2]);
+            //DLOG("_size %i %i", _size, _wh.h);
+            auto size(isWeights ? (int)roundf((float)_wh[vert] * weight) : _size), wh((int)lps[3 - vert]);
+            childSpec.set(makeChildMeasureSpec(zMeasure(MEASURE_EXACT, _wh.w), child->margin.extent(false), vert ? wh : size),
+                          makeChildMeasureSpec(zMeasure(MEASURE_EXACT, _wh.h), child->margin.extent(true), vert ? size : wh));
             child->measure(childSpec);
-            if(!isWeights) _wh[vert] -= child->sizes(vert);
+            //_wh[vert] -= child->sizes(vert);
         }
     }
-    defaultOnMeasure(spec, _max.w, _max.h);
+    defaultOnMeasure(spec, _max);
     // разделитель
-    if(div) div->measure(0, 0, 3, false);
+    if(div) div->measure(0, 0, PIVOT_ALL, false);
 }
 
 pti zLinearLayout::applyGravity(crti& sizeParent, crti& sizeChild, u32 _gravity) {
@@ -194,15 +197,11 @@ void zCellLayout::onMeasure(cszm& spec) {
     // определяем габариты макета
     if(!hExact) {
         height = hpad + hCell * rows;
-        if(spec.h.mode() == MEASURE_MOST) {
-            height = z_min(spec.h.size(), height);
-        }
+        if(spec.h.mode() == MEASURE_MOST) height = z_min(spec.h.size(), height);
     }
     if(!wExact) {
         width = wpad + wCell * cols;
-        if(spec.w.mode() == MEASURE_MOST) {
-            width = z_min(spec.w.size(), width);
-        }
+        if(spec.w.mode() == MEASURE_MOST) width = z_min(spec.w.size(), width);
     }
     rows = (height - hpad) / hCell; height = hpad + hCell * rows;
     cols = (width - wpad) / wCell; width = wpad + wCell * cols;
@@ -246,7 +245,7 @@ void zCellLayout::onLayout(crti &position, bool changed) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void zScrollLayout::onMeasure(cszm& spec) {
-    int childWidth(0), childHeight(0);
+    szi size;
     if(countChildren()) {
         auto child(atView(0));
         auto sw(spec.w.size()), sh(spec.h.size());
@@ -258,22 +257,19 @@ void zScrollLayout::onMeasure(cszm& spec) {
         } else {
             if(vert) {
                 wmms = zMeasure((sw != 0) * spec.w.mode(), sw);
-                hmms = zMeasure(MEASURE_UNDEF, 0);
+                hmms = zMeasure(MEASURE_UNDEF, sh);
             } else {
-                wmms = zMeasure(MEASURE_UNDEF, 0);
+                wmms = zMeasure(MEASURE_UNDEF, sw);
                 hmms = zMeasure((sh != 0) * spec.h.mode(), sh);
             }
         }
-        szm childSpec(makeChildMeasureSpec(wmms, padMargin(false), lps->w),
-                      makeChildMeasureSpec(hmms, padMargin(true), lps->h));
-        child->measure(childSpec);
-        childWidth  = child->sizes(false);
-        childHeight = child->sizes(true);
+        measureChild(child, {wmms, hmms});
+        size.set(child->sizes(false), child->sizes(true));
     }
-    defaultOnMeasure(spec, childWidth, childHeight);
-    childWidth  = z_max(rclient.w, childWidth);
-    childHeight = z_max(rclient.h, childHeight);
-    childSize   = vert ? childHeight : childWidth;
+    defaultOnMeasure(spec, size);
+    size.w    = z_max(rclient.w, size.w);
+    size.h    = z_max(rclient.h, size.h);
+    childSize = size[vert];
 }
 
 void zScrollLayout::onLayout(crti &position, bool changed) {
@@ -383,16 +379,15 @@ zView *zEditLayout::attach(zView *v, int width, int height, int where) {
 }
 
 void zEditLayout::onMeasure(cszm& spec) {
-    int childWidth(0), childHeight(0);
+    szi size;
     auto edit(atView<zViewEdit>(0));
     if(edit) {
         measureChild(edit, spec);
-        childWidth = edit->rview.w; childHeight = edit->rview.h;
         auto hint(atView<zViewText>(1)); measureChild(hint, spec);
         // добавить высоту подсказки
-        childHeight += hint->rview.h;
+        size.set(edit->rview.w, edit->rview.h + hint->rview.h);
     }
-    defaultOnMeasure(spec, childWidth, childHeight);
+    defaultOnMeasure(spec, size);
 }
 
 void zEditLayout::onLayout(crti &position, bool changed) {

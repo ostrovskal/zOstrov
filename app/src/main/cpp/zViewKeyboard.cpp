@@ -241,7 +241,7 @@ void zViewKeyboard::show(u32 _id, bool set) {
                 // берем нижнюю координату владельца
                 yEdge = owner->edges(true, true);
                 auto y(yEdge - rview.y);
-                if(y > 0) root->lps.y -= y;
+                if(y > 0) root->scroll.y += y, offsetY = y;
                 return;
             }
             updateStatus(ZS_VISIBLED, true);

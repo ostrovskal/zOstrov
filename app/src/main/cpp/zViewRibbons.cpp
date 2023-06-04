@@ -287,7 +287,7 @@ void zViewBaseRibbon::onMeasure(cszm& spec) {
     // расчитать габариты всех дочерних
     auto size(measureChildrenSize(spec));
     cacheViews.clear();
-    defaultOnMeasure(spec, size.w, size.h);
+    defaultOnMeasure(spec, size);
     // дивидер
     if(div) div->measure(0, 0, 0, false);
 }

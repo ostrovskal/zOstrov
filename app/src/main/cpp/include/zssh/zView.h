@@ -284,7 +284,7 @@ protected:
     // стереть событие касания
     void eraseTouchHandler();
     // установка габаритов по умолчанию
-    void defaultOnMeasure(cszm& spec, int width, int height);
+    void defaultOnMeasure(cszm& spec, szi size);
     // ориентация
     bool vert{false};
     // родитель

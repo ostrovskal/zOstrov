@@ -69,6 +69,7 @@ public:
 protected:
     // событие позиционировани¤
     virtual void onLayout(crti &position, bool changed) override;
+    virtual void onMeasure(cszm &spec) override;
     virtual void onDraw() override;
     // ползунок
     zDrawable* trumb{nullptr};

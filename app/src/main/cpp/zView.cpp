@@ -249,34 +249,33 @@ void zView::layout(crti& position) {
     }
 }
 
-void zView::defaultOnMeasure(cszm& spec, int width, int height) {
+void zView::defaultOnMeasure(cszm& spec, szi size) {
     auto ws(spec.w.size()), hs(spec.h.size());
     auto wm(spec.w.mode()), hm(spec.h.mode());
     if(ws && wm == MEASURE_EXACT) {
-        width = ws;
+        size.w = ws;
     } else {
-        width += pad.extent(false);
-        width = z_max(minMaxSize.x, width);
+        size.w = z_max(minMaxSize.x, size.w + pad.extent(false));
         // коррекция по макс. ширине
-        if(minMaxSize.y) width = z_min(minMaxSize.y, width);
-        if(ws && wm == MEASURE_MOST) width = z_min(width, ws);
+        if(minMaxSize.y) size.w = z_min(minMaxSize.y, size.w);
+        if(ws && wm == MEASURE_MOST) size.w = z_min(size.w, ws);
     }
     if(hs && hm == MEASURE_EXACT) {
-        height = hs;
+        size.h = hs;
     } else {
-        height += pad.extent(true);
-        height = z_max(minMaxSize.w, height);
+        size.h = z_max(minMaxSize.w, size.h + pad.extent(true));
         // коррекция по макс. высоте
-        if(minMaxSize.h) height = z_min(minMaxSize.h, height);
-        if(hs && hm == MEASURE_MOST) height = z_min(height, hs);
+        if(minMaxSize.h) size.h = z_min(minMaxSize.h, size.h);
+        if(hs && hm == MEASURE_MOST) size.h = z_min(size.h, hs);
     }
-    setMeasuredDimension(width, height);
+    setMeasuredDimension(size.w, size.h);
 }
 
 void zView::onLayout(crti &position, bool changed) {
     rview.x = position.x + margin.x; rview.y = position.y + margin.y;
+    rti _position(position); _position.w -= margin.extent(false); _position.h -= margin.extent(true);
     // учитывать внешний отступ при выравнивании
-    rview += parent->applyGravity(position, rview + margin.size(), lps.gravity ? lps.gravity : parent->gravity);
+    rview += parent->applyGravity(_position, rview, lps.gravity ? lps.gravity : parent->gravity);
     rview -= scroll;
     // вычислить позицию клиента
     rclient.x = rview.x + pad.x; rclient.y = rview.y + pad.y;

@@ -230,7 +230,7 @@ zMeasure zViewGroup::makeChildMeasureSpec(const zMeasure& spec, int padding, zMe
                     break;
             }
             break;
-            // родитель навязал нам максимальный размер
+        // родитель навязал нам максимальный размер
         case MEASURE_MOST:
             switch (childDimension) {
                 case VIEW_WRAP:
@@ -247,7 +247,7 @@ zMeasure zViewGroup::makeChildMeasureSpec(const zMeasure& spec, int padding, zMe
                     break;
             }
             break;
-            // родитель спросил, насколько большими мы хотим быть
+        // родитель спросил, насколько большими мы хотим быть
         default:
         case MEASURE_UNDEF:
             switch (childDimension) {

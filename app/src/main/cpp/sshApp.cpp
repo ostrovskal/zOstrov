@@ -75,5 +75,5 @@ void sshApp::run() {
 
 void sshApp::setContent() {
     //debug = true;
-    #include "zssh/layout_main.h"
+    #include "zssh/layout_linear.h"
 }

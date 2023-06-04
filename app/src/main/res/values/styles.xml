@@ -355,8 +355,8 @@
         <item name="textColor">%color/color_progress_text</item>
         <item name="sliderMode">none</item>
         <item name="display">visibled|tips</item>
-        <item name="textSize">@dimen/hintText</item>
-        <item name="fkScale">0.7</item>
+        <item name="textSize">11sp</item>
+        <item name="fkScale">1.7</item>
     </style>
     <style name="circularProgress">
         <item name="gravity">center</item>
