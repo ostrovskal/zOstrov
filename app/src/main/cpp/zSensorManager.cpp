@@ -9,8 +9,8 @@ zSensorManager::zSensorManager() {
     if((engine = ASensorManager_getInstance())) {
         ASensorList sensorList;
         int numSensors(ASensorManager_getSensorList(engine, &sensorList));
+        DLOG("************Sensors Available********************");
         for(int count = 0 ; count < numSensors ; count++ ){
-            DLOG("************Sensors Available********************");
             DLOG("%s(%s)", ASensor_getName(sensorList[count]), ASensor_getVendor(sensorList[count]));
         }
     }

@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Mon Jun  5 17:43:18 2023
+// Mon Jun  5 19:53:24 2023
 
 #pragma once
 
@@ -53,7 +53,7 @@ struct _z {
 				progressMinWidth	= 70, 	progressMinHeight	= 22, 	progressMaxWidth	= 150, 
 				progressMaxHeight	= 22, 	sliderMinWidth	= 90, 	sliderMinHeight	= 25, 
 				sliderMaxWidth	= 150, 	sliderMaxHeight	= 35, 	selectMinWidth	= 60, 
-				selectMinHeight	= 40, 	chartMinWidth	= 12, 	chartMinHeight	= 5, 
+				selectMinHeight	= 30, 	chartMinWidth	= 12, 	chartMinHeight	= 5, 
 				editMinWidth	= 110, 	editMinHeight	= 30, 	divider	= 2, 	menuText	= 18, 
 				hintText	= 14, 	textText	= 16, 	messageText	= 22, 	headerText	= 17, 
 			};

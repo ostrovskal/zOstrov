@@ -5,6 +5,10 @@
 #include "zssh/zCommon.h"
 #include "zssh/zViewRibbons.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                               DROPDOWN                                                                 //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 szi zViewDropdown::measureChildrenSize(cszm& spec) {
     szi size(0, div ? div->resolve(countItem, false) : 0);
     for(int i = 0 ; i < countItem; i++) {
@@ -21,6 +25,10 @@ szi zViewDropdown::measureChildrenSize(cszm& spec) {
     return size;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                SELECT                                                                  //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 zViewSelect::zViewSelect(zStyle* _styles, i32 _id) : zViewGroup(_styles, _id) {
     dropdown = new zViewDropdown(_styles);
     popup    = new zViewPopup(styles_default, this, dropdown);
@@ -29,6 +37,7 @@ zViewSelect::zViewSelect(zStyle* _styles, i32 _id) : zViewGroup(_styles, _id) {
 }
 
 zViewSelect::~zViewSelect() {
+    manager->getSystemView(false)->detach(popup);
     SAFE_DELETE(popup);
     SAFE_DELETE(dropdown);
     if(adapter) {
@@ -40,7 +49,7 @@ zViewSelect::~zViewSelect() {
 i32 zViewSelect::onTouchEvent(zTouch *touch) {
     if(touch->click()) {
         // показать попап
-        popup->show(pti());
+        popup->show(pti(0, rview.h));
     }
     return TOUCH_STOP;
 }
@@ -76,39 +85,34 @@ void zViewSelect::setItemSelected(int item) {
     popup->dismiss();
     // вызов события
     if(onChangeSelected) onChangeSelected(this, selectItem);
+    // перерисовать
     invalidate();
 }
 
 void zViewSelect::onMeasure(cszm& spec) {
     // габариты по умолчанию
     int width(minMaxSize.x), height(minMaxSize.w);
-    // подсчитать габариты списка
-    // ширина - как у селекта, высота - неизвестно
+    // если нет заголовка
     if(!countChildren()) setItemSelected(selectItem);
-    dropdown->measure({makeChildMeasureSpec(0, 0, VIEW_WRAP), makeChildMeasureSpec(0, 0, VIEW_WRAP)});
+    // ширина/высота - неизвестно
+    dropdown->measure({zMeasure(MEASURE_UNDEF, 0), zMeasure(MEASURE_UNDEF, 0)});
     auto view(atView(0));
     if(view) {
-        view->measure({makeChildMeasureSpec(spec.w, padMargin(false), lps.w), makeChildMeasureSpec(spec.h, padMargin(true), VIEW_WRAP)});
+        view->measure({zMeasure(MEASURE_EXACT, dropdown->rclient.w), zMeasure(MEASURE_UNDEF, 0)});
         // подсчитать габариты селекта
-        auto widthSize(spec.w.size()), heightSize(spec.h.size());
-        if(spec.h.isExact()) {
-            height = heightSize;
-        } else {
-            height = z_max(minMaxSize.w, view->rview.h);
-            if(heightSize && spec.h.mode() == MEASURE_MOST) height = z_min(height, heightSize);
-        }
-        if(spec.w.isExact()) {
-            width = widthSize;
-        } else {
-            width = z_max(minMaxSize.x, z_max(view->rview.w, dropdown->rview.w));
+        auto heightSize(spec.h.size()), widthSize(spec.w.size());
+        if(spec.w.isExact()) width = widthSize;
+        else {
+            width = z_max(minMaxSize.x, view->rview.w + pad.extent(false));
             if(widthSize && spec.w.mode() == MEASURE_MOST) width = z_min(width, widthSize);
         }
-        view->measure({makeChildMeasureSpec(zMeasure(MEASURE_EXACT, width), padMargin(false), VIEW_MATCH),
-                      makeChildMeasureSpec(zMeasure(MEASURE_EXACT, height), padMargin(true), VIEW_MATCH)});
-        // если селект стал больше по ширине, пересчитать ширину списка
-        if(width > dropdown->rview.w) {
-            dropdown->measure({makeChildMeasureSpec(zMeasure(MEASURE_EXACT, width), 0, VIEW_MATCH), makeChildMeasureSpec(0, 0, VIEW_WRAP)});
+        if(spec.h.isExact()) height = heightSize;
+        else {
+            height = z_max(minMaxSize.w, view->rview.h + pad.extent(true));
+            if(heightSize && spec.h.mode() == MEASURE_MOST) height = z_min(height, heightSize);
         }
+        view->measure({zMeasure(MEASURE_EXACT, width - pad.extent(false)), zMeasure(MEASURE_EXACT, height - pad.extent(true))});
+        dropdown->measure({zMeasure(MEASURE_EXACT, width - pad.extent(false)), zMeasure(MEASURE_UNDEF, 0)});
     }
     setMeasuredDimension(width, height);
 }
@@ -123,4 +127,69 @@ void zViewSelect::onLayout(crti& position, bool changed) {
 void zViewSelect::changeTheme() {
     popup->changeTheme();
     zViewGroup::changeTheme();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                 POPUP                                                                  //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+zViewPopup::zViewPopup(zStyle* _styles, zView* _owner, zView* _content) : zViewGroup(_styles, z.R.id.wndPopup), owner(_owner) {
+    setContent(_content);
+    updateStatus(ZS_VISIBLED, false);
+    updateStatus(ZS_SYSTEM, true);
+}
+
+void zViewPopup::setContent(zView* _content) {
+    detach(content);
+    if(_content) {
+        attach(_content, VIEW_MATCH, VIEW_MATCH);
+        content = _content;
+    }
+}
+
+void zViewPopup::show(cpti& _offs) {
+    offs = _offs;
+    manager->getSystemView(false)->attach(this, VIEW_WRAP, VIEW_WRAP);
+    updateStatus(ZS_VISIBLED, true);
+    if(content) content->requestLayout();
+}
+
+i32 zViewPopup::touchEvent(AInputEvent *event) {
+    auto action(zTouch::getEventAction(event));
+    if(action == AMOTION_EVENT_ACTION_POINTER_DOWN || action == AMOTION_EVENT_ACTION_DOWN) {
+        if(!zTouch::intersect(event, rview)) {
+            dismiss(); return TOUCH_STOP;
+        }
+    }
+    return zViewGroup::touchEvent(event);
+}
+
+void zViewPopup::onLayout(crti &position, bool changed) {
+    rview.x = owner->rview.x + offs.x;
+    rview.y = owner->edges(true, false) + offs.y;
+    // проверка по гор.
+    auto wScreen(zGL::instance()->getSizeScreen(false));
+    if(rview.extent(false) > wScreen) rview.x = wScreen - rview.w;
+    // проверка по верт.
+    auto hScreen(zGL::instance()->getSizeScreen(true));
+    if(rview.extent(true) > hScreen) {
+        auto sub(rview.extent(true) - hScreen);
+        // вниз - за пределы экрана
+        // проверить вверх
+        auto ry(owner->edges(true, false) - offs.y - rview.h);
+        if(ry < 0) {
+            ry = -ry;
+            if(sub > ry) sub = ry, rview.y = 0;
+        } else rview.y = ry, sub = 0;
+        content->rview.h -= sub; content->rclient.h -= sub;
+        rview.h -= sub; rclient.h -= sub;
+    }
+    zView::onLayout(rview, changed);
+    rti r(rclient.x, rclient.y, content->rview.w, content->rview.h);
+    content->layout(r);
+}
+
+i32 zViewPopup::keyEvent(int key, bool sysKey) {
+    if(sysKey && key == AKEYCODE_BACK) { dismiss(); return 1; }
+    return 0;
 }

@@ -163,7 +163,6 @@
         <item name="font">@drawable/font1</item>
         <item name="textStyle">bold_italic</item>
         <item name="gravity">center</item>
-        <item name="textWrap">true</item>
         <item name="foreground">@drawable/zssh</item>
         <item name="fkGravity">center</item>
         <item name="fkTiles">@integer/selectItem</item>
@@ -176,6 +175,7 @@
         <item name="font">@drawable/font1</item>
         <item name="fkTile1">@integer/checkOff</item>
         <item name="fkTile2">@integer/checkOn</item>
+        <item name="textWrap">true</item>
         <item name="fkGravity">end</item>
         <item name="textDistance">8dp</item>
         <item name="pad">2dp</item>
@@ -323,7 +323,7 @@
         <item name="bkTiles">@integer/selectDrop</item>
         <item name="fadeScrollBars">false</item>
         <item name="decorate">vscrollbar|glow</item>
-        <item name="pad">3dp</item>
+        <item name="pad">1dp</item>
         <item name="selector">%color/color_selector</item>
     </style>
     <style name="msgForm">

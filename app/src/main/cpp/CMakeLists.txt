@@ -26,7 +26,6 @@ add_library(zssh SHARED
 		zViewRibbons.cpp
         zViewGrid.cpp
 		zViewSelect.cpp
-		zViewPopup.cpp
         zCommonAdapters.cpp
 		zActionBar.cpp
 		zSoundManager.cpp

@@ -139,13 +139,12 @@ class zViewPopup : public zViewGroup {
 public:
     // конструктор
 	zViewPopup(zStyle* _styles, zView* _owner, zView* _content);
-    virtual ~zViewPopup() { dismiss(); }
     // отобразить
     virtual void show(cpti& _offs);
     // обработка касания
     virtual i32 touchEvent(AInputEvent *event) override;
     // отставка
-    virtual void dismiss();
+    virtual void dismiss() { }
     // нажатие клавиши
     virtual i32 keyEvent(int key, bool sysKey) override;
     // вернуть имя типа
@@ -154,7 +153,9 @@ public:
     void setContent(zView* content);
 protected:
     virtual void onLayout(crti &position, bool changed) override;
-    virtual void onMeasure(cszm& spec) override;
+    virtual void onMeasure(cszm& spec) override {
+        setMeasuredDimension(content->rview.w + pad.extent(false), content->rview.h + pad.extent(true));
+    }
     // владелец
     zView* owner{nullptr};
     // содержимое

@@ -179,7 +179,6 @@ static zStyle styles_z_list_item[] = {
 	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_TEXT_STYLE, ZS_TEXT_BOLD_ITALIC },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
-	{ Z_TEXT_NOWRAP, true },
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_FOREGROUND_TILES | ZT_END, z.R.integer.selectItem }
@@ -192,6 +191,7 @@ static zStyle styles_z_menu_item[] = {
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_FOREGROUND_TILES, 0x00002B2A },
+	{ Z_TEXT_NOWRAP, true },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_END },
 	{ Z_TEXT_DISTANCE, 8 },
 	{ Z_PADDING | ZT_END, 0x02020202 }
@@ -342,7 +342,7 @@ static zStyle styles_z_select[] = {
 	{ Z_BACKGROUND_TILES, z.R.integer.selectDrop },
 	{ Z_SCROLLBAR_FADE, false },
 	{ Z_DECORATE, ZS_VSCROLLBAR | ZS_GLOW },
-	{ Z_PADDING, 0x03030303 },
+	{ Z_PADDING, 0x01010101 },
 	{ Z_SELECTOR | ZT_THEME | ZT_END, Z_COLOR_SELECTOR }
 };
 

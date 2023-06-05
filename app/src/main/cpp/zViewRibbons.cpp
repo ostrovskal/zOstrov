@@ -152,8 +152,6 @@ bool zViewBaseRibbon::scrolling(int _delta) {
                 requestPosition();
                 // отправляем событие скролла
                 if(onChangeScroll) onChangeScroll(this, firstItem);
-                // сбрасываем клик
-                clickItem = -1;
                 return zViewGroup::scrolling(_delta);
             }
             // Предел прокрутки. Запуск эффекта
@@ -294,7 +292,7 @@ i32 zViewBaseRibbon::onTouchEvent(zTouch *touch) {
         if(_delta) {
             flyng->stop();
             // определяем время сдвига
-            if(event && flyng->start(touch, _delta)) selectItem = -1;
+            if(event && flyng->start(touch, _delta)) clickItem = -1;
                 // иначе - просто скроллим на дельту
             else scrolling(_delta);
             // признак перетаскивания
