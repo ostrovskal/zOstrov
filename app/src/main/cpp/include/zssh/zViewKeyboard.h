@@ -20,7 +20,7 @@ public:
     // отобразить/скрыть
     virtual void show(u32 _id, bool set);
     // установка текущего макета
-    void setLayout(const zStringUTF8& name);
+    void setLayout(czs& name);
     // не обновлять
     virtual void requestLayout() override;
     // вернуть идентификатор владельца

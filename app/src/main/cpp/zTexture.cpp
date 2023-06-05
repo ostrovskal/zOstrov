@@ -24,7 +24,7 @@ void zTexture::enableFilter(bool set) const {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST + set);
 }
 
-bool zTexture::save(const zStringUTF8& path) const {
+bool zTexture::save(czs& path) const {
     if(idFBO) {
         auto width(_size.w), height(_size.h);
         std::unique_ptr<u8> ptr(new u8[width * height * 4]);

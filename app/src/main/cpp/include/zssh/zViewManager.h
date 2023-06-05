@@ -63,10 +63,8 @@ public:
 //    virtual bool initializeMenuItem(POPUPMENU* menu) { return true; }
     // привязка формы
     virtual zViewForm* attachForm(zViewForm* form, cszi& rect);
-    // обработка события кнопок
-//    virtual int processEventKeys(int key);
     // обработка сенсоров
-//    virtual void processSensors(int id) const { sensor.processSensor(id); }
+    virtual void processSensors(int id) const { sensor.processSensor(id); }
     // отображение тоста
     static void showToast(cstr _text, zStyle* _styles = nullptr);
     // обработка события кнопок
@@ -124,7 +122,7 @@ public:
     // вернуть представление по типу
     template<typename T = zView> T* tpView(int* idx) const { return common->tpView<T>(idx); }
     // базовые пути приложения
-    const zStringUTF8& getBasePath(int idx) const { return basePaths[idx]; }
+    czs& getBasePath(int idx) const { return basePaths[idx]; }
     // хэндлер касаний
     zTouchHandler touch;
     // хэндлер событий

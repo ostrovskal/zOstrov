@@ -44,6 +44,7 @@ void zView::onInit(bool _theme) {
         auto v(&zTheme::value); auto val((int)v->u);
         attr |= _theme * ZTT_THM;
         switch(attr) {
+            case Z_SHAPE:               shape       = val; break;
             case Z_DURATION:			duration    = (u64)val; break;
             case Z_SCALE_X:				scale.w     = v->f; break;
             case Z_SCALE_Y:				scale.h     = v->f; break;
@@ -55,7 +56,7 @@ void zView::onInit(bool _theme) {
             case Z_ALPHA:				alpha 	    = v->f; break;
             case Z_FBO:                 setDrawable(nullptr, DRW_FBO); break;
             case Z_BEHAVIOR:            updateStatus(ZS_BEHAVIOR_MASK, val, true); break;
-            case Z_DISPLAY:             updateStatus(ZS_DISPLAY_MASK, val, true); break;
+            case Z_VISIBLED:            updateStatus(ZS_VISIBLED, val); break;
             case Z_TAP:			        updateStatus(ZS_TAP_MASK, val, true); break;
             case Z_GRAVITY:			    setGravity(val); break;
             case Z_SIZE:			    minMaxSize.set(val); break;
@@ -72,6 +73,7 @@ void zView::onInit(bool _theme) {
             case Z_BACKGROUND_COLOR:	bk.color	= val; break;
             case Z_BACKGROUND_TILES:	bk.tiles 	= val; break;
             case Z_BACKGROUND_PADDING:  bk.padding	= val; break;
+            case Z_DECORATE:            updateStatus(ZS_DECORATE_MASK, val, true); break;
         }
     });
     // базовые отображатели
@@ -119,6 +121,8 @@ void zView::draw() {
             updateStatus(ZS_DIRTY_LAYER, !isFBO());
         }
         onDrawFBO();
+        // форма обрезки
+        if(shape) drawShape();
         drawDebug();
         // каретка
         manager->drawCaret(this);
@@ -279,6 +283,10 @@ void zView::defaultOnMeasure(cszm& spec, szi size) {
     setMeasuredDimension(size.w, size.h);
 }
 
+void zView::drawShape() {
+
+}
+
 void zView::onLayout(crti &position, bool changed) {
     rview.x = position.x + margin.x; rview.y = position.y + margin.y;
     rti _position(position); _position.w -= margin.extent(false); _position.h -= margin.extent(true);
@@ -388,7 +396,7 @@ zViewGlow::zViewGlow(zView* group) : zView(styles_z_glow, 0) {
         float v; bool cont;
         if((cont = animator.update(v))) {
             // посчитать альфу
-            alpha = v / 3.0f;
+            alpha = v / 2.0f;
             // посчитать размер
             mtxScale.scale(vert ? 1 : v, vert ? v : 1, 1);
             mtx = mtxScale * mtxRot;
@@ -414,12 +422,46 @@ void zViewGlow::start(float _delta, bool _vert, bool _flow) {
     rview[_vert]  = parent->edges(_vert, _flow);
     mtx = mtxScale * mtxRot;
     // анимация
-    _delta = fabs(_delta);
+    _delta = z_min(2.0f, fabs(_delta * 50.0f));
     animator.init(0.0f, false);
-    animator.add(z_min(3.0f, _delta / 10.0f), zInterpolator::LINEAR, z_min<int>(8, _delta / 2));
+    animator.add(_delta, zInterpolator::LINEAR, 8);
     animator.add(0.0f, zInterpolator::EASEINCUBIC, 10);
     // запуск анимации
     post(MSG_ANIM, duration, 0);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                        FLYNG                                                                           //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+zFlyng::zFlyng(zView* group) : zView(styles_default, 0) {
+    parent = group;
+    setOnAnimation([this](zView*, int) {
+        float p; bool cont;
+        if((cont = animator.update(p))) {
+            auto v(dynamic_cast<zViewGroup*>(parent));
+            if(v) cont = !v->scrolling(p);
+        }
+        return cont;
+    });
+}
+
+bool zFlyng::start(zTouch* touch, int delta) {
+    auto t((int)((touch->ctm - touch->btm) / 2000000));
+    // если отпустили и время < 15(выбрано экспериментально)
+    if(t < 15) {
+        delta *= (15 - t) / 2;
+//        DLOG("fling %i", delta);
+        animator.init(delta, false);
+        animator.add(0, zInterpolator::EASEOUTCUBIC, abs(delta / 3));
+        post(MSG_ANIM, duration, 0);
+    }
+    return t < 15;
+}
+
+void zFlyng::stop() {
+    animator.clear();
+    manager->eraseAllEventsView(this);
 }
 
 
@@ -445,34 +487,6 @@ void zViewScrollBar::awaken() {
     animator.add(0.2f, zInterpolator::LINEAR, 20);
     // запустить фейдинг
     if(fade) post(MSG_ANIM, duration, 0);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                                        FLYNG                                                                           //
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-zFlyng::zFlyng(zView* group) : zView(styles_default, 0) {
-    parent = group;
-    setOnAnimation([this](zView*, int) {
-        float p(0.0f);
-        if(animator.update(p)) {
-            ((zViewGroup*)parent)->scrolling(p * 5.0f);
-            return 1;
-        }
-        updateStatus(ZS_VISIBLED, false);
-        return 0;
-    });
-}
-
-void zFlyng::start(float delta) {
-    updateStatus(ZS_VISIBLED, true);
-    animator.init(0, false);
-    animator.add(delta * 2, zInterpolator::EASEINOUTCUBIC, delta);
-    post(MSG_ANIM, duration, 0);
-}
-
-void zFlyng::stop() {
-    animator.clear();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

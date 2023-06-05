@@ -19,7 +19,7 @@ public:
 
 class zFilterMail : public zFilterEdit {
 public:
-    int convertChar(const zStringUTF8& t, int ch, int pos) override {
+    int convertChar(czs& t, int ch, int pos) override {
         if(ch == '@' && t.indexOf("@") != -1) ch = 0;
         return ch;
     }
@@ -27,7 +27,7 @@ public:
 
 class zFilterPhone : public zFilterEdit {
 public:
-    int convertChar(const zStringUTF8& t, int ch, int pos) override {
+    int convertChar(czs& t, int ch, int pos) override {
         return ch * (pos ? isdigit(ch) : (ch != '+'));
     }
     [[nodiscard]] cstr getKeboardLayer() const override { return "digit123"; }
@@ -35,7 +35,7 @@ public:
 
 class zFilterPassword : public zFilterEdit {
 public:
-    const zStringUTF8& getText(const zStringUTF8 &_text) override {
+    czs& getText(const zStringUTF8 &_text) override {
         if(_text.count() != text.count()) text = zStringUTF8('*', _text.count());
         return text;
     }
@@ -44,7 +44,7 @@ public:
 
 class zFilterZx : public zFilterEdit {
 public:
-    int convertChar(const zStringUTF8& t, int ch, int pos) override {
+    int convertChar(czs& t, int ch, int pos) override {
         auto _count(t.count());
         switch(t[0]) {
             case '#': // hex
@@ -63,7 +63,7 @@ public:
 
 class zFilterNumber : public zFilterEdit {
 public:
-    int convertChar(const zStringUTF8& t, int ch, int pos) override {
+    int convertChar(czs& t, int ch, int pos) override {
         return ch * (ch == '.' ? (t.indexOf(".") != -1) : isdigit(ch));
     }
     [[nodiscard]] cstr getKeboardLayer() const override { return "digit123"; }
@@ -148,6 +148,7 @@ void zViewEdit::onDraw() {
 
 i32 zViewEdit::keyEvent(int key, bool sysKey) {
     if(testFlags(ZS_READ_ONLY)) return 0;
+    if(realText.count() >= maxLength) return 0;
     // применить фильтр
     if(filter && key >= ' ') {
         if(!(key = filter->convertChar(realText, key, caretIndex)))

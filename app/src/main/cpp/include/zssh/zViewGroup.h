@@ -103,7 +103,7 @@ protected:
     // вычисление одного дочернего
     virtual void measureChild(zView* child, cszm& spec);
     // обновить глоу
-    void updateGlow(int _delta) { if(glow) glow->start(_delta, vert, _delta < 0); }
+    void updateGlow(int _delta) { if(glow) glow->start((float)_delta / (float)sizes(vert), vert, _delta < 0); }
     // удалить/отсоединить
     void _remove(zView* v, bool _del);
     // разделитель

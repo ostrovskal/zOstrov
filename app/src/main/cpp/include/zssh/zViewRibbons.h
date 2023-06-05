@@ -205,11 +205,11 @@ protected:
         zAdapterSelect(zViewSelect* _select, zAdapterList* _list) : zAdapterList(), list(_list), select(_select) {}
         virtual void registration(zView* owner) override { return list->registration(owner); }
         virtual void unregistration(zView* owner) override { return list->unregistration(owner); }
-        virtual void insert(int position, const zStringUTF8& t) override { list->insert(position, t); }
+        virtual void insert(int position, czs& t) override { list->insert(position, t); }
         virtual void erase(int position, bool _delete) override { list->erase(position, _delete); }
         virtual void clear(bool _delete) override { list->clear(_delete); }
         virtual int getCount() const override { return list->getCount(); }
-        virtual const zStringUTF8& getItem(int position) const override { return list->getItem(position); }
+        virtual czs& getItem(int position) const override { return list->getItem(position); }
         virtual zView* getView(int position, zView *convert, zViewGroup *parent) override {
             return list->getDropDownView(position, convert, select);
         }

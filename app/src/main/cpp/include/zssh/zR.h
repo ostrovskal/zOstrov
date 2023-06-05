@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Mon Jun  5 01:38:44 2023
+// Mon Jun  5 13:25:49 2023
 
 #pragma once
 
@@ -11,8 +11,8 @@ struct _z {
 		struct _drawable {
 			enum { 
 				font1	= 0x00100000, 	font2	= 0x00100001, 	font3	= 0x00100002, 
-				font4	= 0x00100003, 	znull	= 0x00100004, 	zssh	= 0x00100005, 
-			};
+				font4	= 0x00100003, 	fontDefault	= 0x00100004, 	znull	= 0x00100005, 
+				zssh	= 0x00100006, 			};
 		}; 
 		_drawable drawable;
 		struct _color {
@@ -85,27 +85,28 @@ struct _z {
 				actionBar	= 0x00101009, 	wndPopup	= 0x0010100A, 	root	= 0x0010100B, 
 				common	= 0x0010100C, 	keyboard	= 0x0010100D, 	list1	= 0x0010100E, 
 				edit1	= 0x0010100F, 	button1	= 0x00101010, 	switch1	= 0x00101011, 
-				seek	= 0x00101012, 	progress1	= 0x00101013, 	switch2	= 0x00101014, 
-				switch3	= 0x00101015, 	seek1	= 0x00101016, 	button11	= 0x00101017, 
-				seek2	= 0x00101018, 	edit2	= 0x00101019, 	form	= 0x0010101A, 
-			};
+				seek	= 0x00101012, 	progress1	= 0x00101013, 	grid1	= 0x00101014, 
+				radioDark	= 0x00101015, 	radioLight	= 0x00101016, 	button2	= 0x00101017, 
+				switch2	= 0x00101018, 	switch3	= 0x00101019, 	button3	= 0x0010101A, 
+				seek1	= 0x0010101B, 	button11	= 0x0010101C, 	seek2	= 0x0010101D, 
+				button4	= 0x0010101E, 	edit2	= 0x0010101F, 	progress2	= 0x00101020, 
+				form	= 0x00101021, 			};
 		}; 
 		_id id;
 		struct _string {
 			enum { 
-				acontrollerMap	= 0x00100006, 	ccontrollerMap	= 0x00100007, 
-				themeDark	= 0x00100008, 	themeLight	= 0x00100009, 	textSpan	= 0x0010000A, 
-				first_form	= 0x0010000B, 	enter_family	= 0x0010000C, 	podskazka	= 0x0010000D, 
-				Perekljuchatelw	= 0x0010000E, 	radio_1	= 0x0010000F, 	radio_2	= 0x00100010, 
-				radio_3	= 0x00100011, 	Flagzok	= 0x00100012, 	Nagzmi_na_menja__	= 0x00100013, 
-				Regzim_gotovnosti	= 0x00100014, 	Aktivacija	= 0x00100015, 
-				slayder	= 0x00100016, 	Tekst_na_knopke	= 0x00100017, 	Sergey	= 0x00100018, 
-			};
+				acontrollerMap	= 0x00100007, 	ccontrollerMap	= 0x00100008, 
+				themeDark	= 0x00100009, 	themeLight	= 0x0010000A, 	textSpan	= 0x0010000B, 
+				first_form	= 0x0010000C, 	enter_family	= 0x0010000D, 	podskazka	= 0x0010000E, 
+				Perekljuchatelw	= 0x0010000F, 	Temnaja	= 0x00100010, 	Svetlaja	= 0x00100011, 
+				Flagzok	= 0x00100012, 	Nagzmi_na_menja__	= 0x00100013, 	Regzim_gotovnosti	= 0x00100014, 
+				Aktivacija	= 0x00100015, 	slayder	= 0x00100016, 	Tekst_na_knopke	= 0x00100017, 
+				Sergey	= 0x00100018, 	Progress	= 0x00100019, 			};
 		}; 
 		_string string;
 		struct _array {
 			enum { 
-				spinArray	= 0x00100019, 			};
+				spinArray	= 0x0010001A, 			};
 		}; 
 		_array array;
 		struct _style {
@@ -127,15 +128,15 @@ struct _z {
 				chart	= 0x00100029, 	chartDiagramm	= 0x0010002A, 	chartGraph	= 0x0010002B, 
 				zcelllayout1	= 0x0010002C, 	list1	= 0x0010002D, 	edit1	= 0x0010002E, 
 				button1	= 0x0010002F, 	switch1	= 0x00100030, 	seek	= 0x00100031, 
-				progress1	= 0x00100032, 	zscrolllayout1	= 0x00100033, 	zviewedit1	= 0x00100034, 
-				zlinearlayout1	= 0x00100035, 	zviewradio1	= 0x00100036, 	zviewcheck1	= 0x00100037, 
-				zviewbutton1	= 0x00100038, 	zviewswitch1	= 0x00100039, 	switch2	= 0x0010003A, 
-				switch3	= 0x0010003B, 	zviewslider1	= 0x0010003C, 	seek1	= 0x0010003D, 
-				button11	= 0x0010003E, 	seek2	= 0x0010003F, 	edit2	= 0x00100040, 
-				zlinearlayout3	= 0x00100041, 	zviewedit2	= 0x00100042, 	zviewbutton2	= 0x00100043, 
-				zviewslider2	= 0x00100044, 	zviewslider3	= 0x00100045, 	zviewslider4	= 0x00100046, 
-				zviewedit3	= 0x00100047, 	zscrolllayout2	= 0x00100048, 	zviewslider5	= 0x00100049, 
-				zviewslider6	= 0x0010004A, 	};
+				progress1	= 0x00100032, 	zscrolllayout1	= 0x00100033, 	grid1	= 0x00100034, 
+				zviewedit1	= 0x00100035, 	zlinearlayout1	= 0x00100036, 	radiolight	= 0x00100037, 
+				zviewcheck1	= 0x00100038, 	zviewbutton1	= 0x00100039, 	zviewswitch1	= 0x0010003A, 
+				switch2	= 0x0010003B, 	switch3	= 0x0010003C, 	zviewslider1	= 0x0010003D, 
+				seek1	= 0x0010003E, 	button11	= 0x0010003F, 	seek2	= 0x00100040, 
+				edit2	= 0x00100041, 	zlinearlayout3	= 0x00100042, 	zviewedit2	= 0x00100043, 
+				zviewbutton2	= 0x00100044, 	zviewslider2	= 0x00100045, 	zviewslider3	= 0x00100046, 
+				zviewslider4	= 0x00100047, 	zviewedit3	= 0x00100048, 	zscrolllayout2	= 0x00100049, 
+				zviewslider5	= 0x0010004A, 	zviewslider6	= 0x0010004B, 	};
 		};
 		_style style;
 	};
@@ -200,9 +201,10 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::seek, styles_z_seek },
 		{ _z::_R::_style::progress1, styles_z_progress1 },
 		{ _z::_R::_style::zscrolllayout1, styles_z_zscrolllayout1 },
+		{ _z::_R::_style::grid1, styles_z_grid1 },
 		{ _z::_R::_style::zviewedit1, styles_z_zviewedit1 },
 		{ _z::_R::_style::zlinearlayout1, styles_z_zlinearlayout1 },
-		{ _z::_R::_style::zviewradio1, styles_z_zviewradio1 },
+		{ _z::_R::_style::radiolight, styles_z_radiolight },
 		{ _z::_R::_style::zviewcheck1, styles_z_zviewcheck1 },
 		{ _z::_R::_style::zviewbutton1, styles_z_zviewbutton1 },
 		{ _z::_R::_style::zviewswitch1, styles_z_zviewswitch1 },
@@ -233,6 +235,7 @@ static zResource z_resources[] = {
 		{ _z::_R::_drawable::font2, "font2" },
 		{ _z::_R::_drawable::font3, "font3" },
 		{ _z::_R::_drawable::font4, "font4" },
+		{ _z::_R::_drawable::fontDefault, "fontDefault" },
 		{ _z::_R::_drawable::znull, "znull" },
 		{ _z::_R::_drawable::zssh, "zssh" },
 		/* string */
@@ -245,9 +248,8 @@ static zResource z_resources[] = {
 		{ _z::_R::_string::enter_family, "Entering family" },
 		{ _z::_R::_string::podskazka, "подсказка" },
 		{ _z::_R::_string::Perekljuchatelw, "Переключатель" },
-		{ _z::_R::_string::radio_1, "radio 1" },
-		{ _z::_R::_string::radio_2, "radio 2" },
-		{ _z::_R::_string::radio_3, "radio 3" },
+		{ _z::_R::_string::Temnaja, "Темная" },
+		{ _z::_R::_string::Svetlaja, "Светлая" },
 		{ _z::_R::_string::Flagzok, "Флажок" },
 		{ _z::_R::_string::Nagzmi_na_menja__, "Нажми на меня:)" },
 		{ _z::_R::_string::Regzim_gotovnosti, "Режим готовности" },
@@ -255,6 +257,7 @@ static zResource z_resources[] = {
 		{ _z::_R::_string::slayder, "слайдер" },
 		{ _z::_R::_string::Tekst_na_knopke, "Текст на кнопке" },
 		{ _z::_R::_string::Sergey, "Sergey" },
+		{ _z::_R::_string::Progress, "Прогресс" },
 		/* array */
 		{ _z::_R::_array::spinArray | ZT_END, "Ivan|Irina|Sergey Shatalov|Maxim|Vladislav|06.06.1979|Shatalov Sergey|Olga|Viktor Alexeevish|Cat|Maria|Nina Shatalova|Alex|Alexandr" }
 };

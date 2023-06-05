@@ -116,14 +116,7 @@
 			<flag name="focusableInTouch" value="16"/>
 			<flag name="touchable" value="32"/>
 		</attr>
-		<attr name="display" format="flags|string">
-			<flag name="none" value="1"/>
-			<flag name="visibled" value="2"/>
-			<flag name="disabled" value="4"/>
-			<flag name="readOnly" value="8"/>
-			<flag name="tips" value="16"/>
-			<flag name="checked" value="32"/>
-		</attr>
+		<attr name="visibled" format="boolean"/>
 		<attr name="tap" format="enum|string">
 			<enum name="pressed" value="1"/>
 			<enum name="inverted" value="2"/>
@@ -134,9 +127,14 @@
 			<flag name="vscrollbar" value="2"/>
 			<flag name="hscrollbar" value="4"/>
 			<flag name="scrollbar" value="8"/>
+			<flag name="readOnly" value="16"/>
+			<flag name="tips" value="32"/>
+			<flag name="ellipsis" value="64"/>
+			<flag name="checked" value="128"/>
+			<flag name="disabled" value="256"/>
 		</attr>
 		<attr name="shape" format="enum|string">
-			<enum name="rect" value="1"/>
+			<enum name="none" value="1"/>
 			<enum name="round" value="2"/>
 			<enum name="oval" value="4"/>
 		</attr>
@@ -200,7 +198,7 @@
 			<enum name="spacing" value="2"/>
 			<enum name="uniform" value="4"/>
 		</attr>
-		<attr name="primary" format="reference|color|string"/>
+		<attr name="primary" format="color|string"/>
 		<attr name="selector" format="reference|color|string"/>
 		<attr name="selColor" format="color|string"/>
 		<attr name="selTiles" format="integer|string"/>

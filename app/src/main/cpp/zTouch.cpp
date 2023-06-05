@@ -114,7 +114,7 @@ void zTouch::drag(cszi& cell, const std::function<void(cszi&, bool)>& fn) {
     auto released(isReleased()), _delta(!released && delta(cell));
     // если величина сдвига больше ¤чейки или отпустили
     if(_delta || released) {
-        sz.w *= cell.w; sz.h *= cell.h;
+        //sz.w *= cell.w; sz.h *= cell.h;
         // при ложном срабатывании
         if(delayed(50)) sz.empty();
         fn(sz, released);

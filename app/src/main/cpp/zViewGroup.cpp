@@ -155,10 +155,10 @@ i32 zViewGroup::touchEvent(AInputEvent* event) {
 }
 
 void zViewGroup::onInit(bool _theme) {
-    // сначало основные
     zView::onInit(_theme);
     // теперь специфичные
-    int decor(0); zParamDrawable dv, sl, sc; sc.size = 2_dp; sc.tiles = z.R.integer.gradientRadial;
+    int decor(0); zParamDrawable dv, sl, sc;
+    sc.type = -1; sc.size = 2_dp; sc.tiles = -1;
     styles->enumerate([this, &dv, &sl, &sc, &decor, _theme](u32 attr) {
         auto v((int)zTheme::value.u); attr |= _theme * ZTT_THM;
         switch(attr) {
@@ -186,7 +186,9 @@ void zViewGroup::onInit(bool _theme) {
     if(decor & ZS_SCROLLBAR) {
         if((decor & ZS_SCROLLBAR) == ZS_SCROLLBAR) decor = vert * ZS_VSCROLLBAR;
         scrollBar = new zViewScrollBar(this, (decor & ZS_SCROLLBAR) == ZS_VSCROLLBAR);
-        scrollBar->fade = sc.type; scrollBar->size = sc.size; scrollBar->drw[DRW_BK]->tile = sc.tiles;
+        if(sc.type != -1) scrollBar->fade = sc.type;
+        if(sc.tiles != -1) scrollBar->drw[DRW_BK]->tile = sc.tiles;
+        scrollBar->size = sc.size;
     }
     // селектор
     setDrawable(&sl, DRW_SEL);

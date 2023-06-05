@@ -79,7 +79,7 @@ void zViewKeyboard::onInit(bool _theme) {
     if(!current) setLayout(defName);
 }
 
-void zViewKeyboard::setLayout(const zStringUTF8 &_name) {
+void zViewKeyboard::setLayout(czs& _name) {
     if(current && current->names[0] == _name) return;
     auto idx(layouts.indexOf(_name));
     if(idx != -1) {
@@ -168,9 +168,11 @@ void zViewKeyboard::onLayout(crti &position, bool changed) {
         auto checked(updateStatus(ZS_CHECKED, owner != nullptr) != 0);
         if(owner) {
             auto hScreen(zGL::instance()->getSizeScreen(true));
-            auto delta(hScreen - owner->edges(true, true));
+            yEdge = owner->edges(true, true);
+            auto delta(hScreen - yEdge);
             // проверить если нижняя граница вида меньше высоты клавы, то:
             offsetY = (delta < rview.h ? rview.h - delta : 0);
+            yEdge -= offsetY;
             owner->requestFocus();
         }
         animator.init(!checked * 6.0f - !checked, false);
@@ -195,7 +197,7 @@ void zViewKeyboard::onDraw() {
         auto& nm(b.name); auto isHighlight(false);
         if(b.spec.isNotEmpty()) {
             n1 = nm; n2.empty();
-            color = zColor::gray.toARGB();
+            color = 0xff808080;
             isHighlight = (b.spec == "SHIFT" && activeShift);
         } else {
             n1 = nm.substr(0, 1);
@@ -207,8 +209,8 @@ void zViewKeyboard::onDraw() {
         r.y = rview.y + r.y * deltaHeight; r.h *= deltaHeight;
         szm spec(zMeasure(MEASURE_EXACT, r.w), zMeasure(MEASURE_EXACT, r.h));
         baseTxt->setTextColorForeground(isHighlight ? 0xff0000ff : 0xffffffff);
-        baseTxt->setText(n1, true); baseTxt->measure(spec); baseTxt->layout(r); baseTxt->draw();
-        if(n2.isNotEmpty() && n1 != n2) { altTxt->setText(n2, true); altTxt->measure(spec); altTxt->layout(r); altTxt->draw(); }
+        baseTxt->setTextSpecial(n1, spec); baseTxt->layout(r); baseTxt->draw();
+        if(n2.isNotEmpty() && n1 != n2) { altTxt->setTextSpecial(n2, spec); altTxt->layout(r); altTxt->draw(); }
     }
     baseTxt->updateStatus(ZS_VISIBLED, false); altTxt->updateStatus(ZS_VISIBLED, false);
     isDrawing = false;
@@ -241,7 +243,10 @@ void zViewKeyboard::show(u32 _id, bool set) {
                 // берем нижнюю координату владельца
                 yEdge = owner->edges(true, true);
                 auto y(yEdge - rview.y);
-                if(y > 0) root->scroll.y += y, offsetY = y;
+                if(y > 0) {
+                    root->scroll.y += y, offsetY = y;
+                    owner->requestPosition();
+                }
                 return;
             }
             updateStatus(ZS_VISIBLED, true);

@@ -94,7 +94,7 @@ public:
 protected:
     // Величина смещения относительно начальной точки с учетом размера ячейки [cell]
     bool delta(cszi& cell) {
-        sz.set((int)((cpt.x - bpt.x) / cell.w), (int)((cpt.y - bpt.y) / cell.h));
+        sz.set((int)roundf((cpt.x - bpt.x) / (float)cell.w), (int)(roundf((cpt.y - bpt.y) / (float)cell.h)));
         return (abs(sz.w) > 0 || abs(sz.h) > 0);
     }
     // Длина "линии" между начальной [p] и текущей точкой с учетом размера ячейки [cell]

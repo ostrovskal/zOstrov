@@ -218,6 +218,8 @@ public:
     zMatrix mtxScale{}, mtxRot{}, mtx{};
     // задержка анимации
     u64 duration{50L};
+    // форма обрезки
+    u32 shape{0};
     // привязанное некое значение
     TAG tag{0};
     // идентификатор
@@ -255,6 +257,8 @@ public:
 protected:
     // установка гравитации
     void _setGravity(u32 _g, u8* p) { if(_g != (*p & ZS_GRAVITY_MASK)) { *p &= ~ZS_GRAVITY_MASK; *p |= (u8)_g; requestLayout(); } }
+    // отображение формы обрезки
+    virtual void drawShape();
     // область обрезки
     virtual rti drawableClip() const { return z_clipRect(parent->rclip, rview); }
     // проверка на режим блокировки
@@ -354,6 +358,6 @@ public:
     zFlyng(zView* _group);
     // вернуть имя типа
     virtual cstr typeName() const override { return "zViewFlyng"; }
-    void start(float delta);
+    bool start(zTouch* touch, int delta);
     void stop();
 };

@@ -66,6 +66,7 @@ void sshApp::run() {
         while((sens = ALooper_pollAll((int)isActive() - 1, nullptr, &events, (void**)&source)) >= 0) {
             if(source) source->process(android, source);
             if(android->destroyRequested) return;
+            manager->sensor.processSensor(sens);
         }
         if(isActive()) drawViews();
     }
@@ -75,9 +76,21 @@ void sshApp::run() {
 
 void sshApp::setContent() {
     //debug = true;
-    #include "zssh/layout_cell.h"
-    auto lst(idView<zViewRibbon>(z.R.id.list1));
+    #include "zssh/layout_linear.h"
+    idView(z.R.id.radioLight)->setOnClick([this](zView*, int) {
+        setTheme(themeLight, nullptr, nullptr);
+    });
+    idView(z.R.id.radioDark)->setOnClick([this](zView*, int) {
+        setTheme(themeDark, nullptr, nullptr);
+    });
+    auto grd(idView<zViewGrid>(z.R.id.grid1));
     zArray<zStringUTF8> objects(theme->findArray(z.R.array.spinArray));
+    for(int i = 0 ; i < 1000; i++) {
+        objects += zStringUTF8(z_ntos(&i, RADIX_DEC, false));
+    }
     auto adapter(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
-    lst->setAdapter(adapter);
+    grd->setAdapter(adapter);
+    auto lst(idView<zViewRibbon>(z.R.id.list1));
+    auto adapter1(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
+    lst->setAdapter(adapter1);
 }

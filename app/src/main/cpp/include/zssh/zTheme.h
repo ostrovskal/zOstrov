@@ -21,7 +21,7 @@ public:
     // конструктор
     zTheme();
     // установить новую тему(_styles - массив стилей темы, prefixes - префиксы языка ресурсов(например, ru-en), usr - массив массивов ресурсов, _usr_styles - доп.стили)
-    bool setTheme(zStyle* _styles, const zStringUTF8& lang, zResource** _user_resources, zStyles* _user_styles);
+    bool setTheme(zStyle* _styles, czs& lang, zResource** _user_resources, zStyles* _user_styles);
     // найти атрибут в стилях
     const zStyle* findAttribute(u32 attr) const;
     // найти массив в ресурсах
@@ -110,13 +110,13 @@ enum ViewStyles {
     Z_ALPHA						= (7 | ZTT_FLT), // прозрачность
     Z_GRAVITY					= (8 | ZTT_INT), // гравитация
     Z_DURATION					= (9 | ZTT_INT), // скорость анимации
-    Z_DISPLAY					= (10 | ZTT_INT), // отображение: 1 visible, 2 disable 4 modal
-    Z_BEHAVIOR					= (11 | ZTT_INT), // поведение: 1 clickable, 2 lclickable, 4 touchable, 8 focusable, 16 focusable_in_touch
-    Z_TAP					    = (12 | ZTT_INT), // тип тапа: 1 нажатие 2 инвертирование 4 подсветка
-    Z_DECORATE                  = (13 | ZTT_INT | ZTT_THM), // декорации: 1 glow 2 vscrollbar 4 hscrollbar 8 tips 16 fading
+    Z_VISIBLED					= (10 | ZTT_INT), // отображение
+    Z_BEHAVIOR					= (11 | ZTT_INT), // поведение
+    Z_TAP					    = (12 | ZTT_INT), // тип тапа
+    Z_DECORATE                  = (13 | ZTT_INT | ZTT_THM), // декорации
     Z_SIZE_TOUCH				= (14 | ZTT_VEC), // чувствительность касания
     Z_MODE						= (15 | ZTT_INT | ZTT_THM), // режим для слайдера/прогресса/формы/чарта/сетки/редактора
-    Z_SIZE                      = (16 | ZTT_DMN), // минимальная/максимальные размеры представления
+    Z_SIZE                      = (16 | ZTT_DMN), // минимальный/максимальный размер представления
     // отступы
     Z_MARGINS					= (17 | ZTT_VEC), // отступ от макета
     Z_PADDING					= (18 | ZTT_VEC), // внутренний отступ от бэкграунда
@@ -177,7 +177,9 @@ enum ViewStyles {
     Z_IPADDING                  = (65 | ZTT_VEC),
     Z_FBO                       = (66 | ZTT_INT),
     Z_ICON_TILES                = (67 | ZTT_INT | ZTT_THM),
-    Z_PRIMARY                   = (68 | ZTT_INT | ZTT_THM)
+    Z_PRIMARY                   = (68 | ZTT_INT | ZTT_THM),
+    Z_TEXT_LENGTH               = (69 | ZTT_INT),
+    Z_SHAPE                     = (70 | ZTT_INT)
 };
 
 // значения для темы

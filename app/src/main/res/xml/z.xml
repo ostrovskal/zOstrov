@@ -116,14 +116,7 @@
             <item name="focusableInTouch" value="ZS_FOCUSABLE_IN_TOUCH" />
             <item name="touchable" value="ZS_TOUCHABLE" />
         </attr>
-        <attr name="display" translate="Z_DISPLAY" format="flags">
-            <item name="none" value="0" />
-            <item name="visibled" value="ZS_VISIBLED" />
-            <item name="disabled" value="ZS_DISABLED" />
-            <item name="readOnly" value="ZS_READ_ONLY" />
-            <item name="tips" value="ZS_TIPS" />
-            <item name="checked" value="ZS_CHECKED" />
-        </attr>
+        <attr name="visibled" translate="Z_VISIBLED" format="boolean" />
         <attr name="tap" translate="Z_TAP" format="enum">
             <item name="pressed" value="ZS_PRESSED" />
             <item name="inverted" value="ZS_INVERTED" />
@@ -134,9 +127,14 @@
             <item name="vscrollbar" value="ZS_VSCROLLBAR" />
             <item name="hscrollbar" value="ZS_HSCROLLBAR" />
             <item name="scrollbar" value="ZS_SCROLLBAR" />
+            <item name="readOnly" value="ZS_READ_ONLY" />
+            <item name="tips" value="ZS_TIPS" />
+            <item name="ellipsis" value="ZS_ELLIPSIS" />
+            <item name="checked" value="ZS_CHECKED" />
+            <item name="disabled" value="ZS_DISABLED" />
         </attr>
         <attr name="shape" translate="Z_SHAPE" format="enum">
-            <item name="rect" value="ZS_RECT" />
+            <item name="none" value="0" />
             <item name="round" value="ZS_ROUND" />
             <item name="oval" value="ZS_OVAL" />
         </attr>
@@ -200,7 +198,7 @@
             <item name="spacing" value="ZS_GRID_SPACING" />
             <item name="uniform" value="ZS_GRID_UNIFORM" />
         </attr>
-        <attr name="primary" translate="Z_PRIMARY" format="drawable" />
+        <attr name="primary" translate="Z_PRIMARY" format="color" />
         <attr name="selector" translate="Z_SELECTOR" format="drawable" />
         <attr name="selColor" translate="Z_SELECTOR_COLOR" format="color" />
         <attr name="selTiles" translate="Z_SELECTOR_TILES" format="integer" />

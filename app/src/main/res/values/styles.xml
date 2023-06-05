@@ -12,11 +12,11 @@
         <item name="padEnd">1dp</item>
         <item name="padBottom">1dp</item>
         <item name="ipad">2dp</item>
-        <item name="display">none</item>
+        <item name="visibled">false</item>
         <item name="gravity">center</item>
     </style>
     <style name="keyboardAlt">
-        <item name="display">none</item>
+        <item name="visibled">false</item>
         <item name="fkGravity">center</item>
         <item name="font">@drawable/font1</item>
         <item name="textWrap">true</item>
@@ -306,7 +306,7 @@
         <item name="divSize">@dimen/divider</item>
         <item name="divType">begin|middle|end</item>
         <item name="divPadHorz">3dp</item>
-        <item name="tilesScrollBars">@integer/gradientRadial</item>
+        <item name="tilesScrollBars">@integer/rect</item>
     </style>
     <style name="select">
         <item name="fbo">true</item>
@@ -347,7 +347,7 @@
         <item name="pad">3dp</item>
         <item name="sliderMode">%integer/slider_mode</item>
         <item name="speedTrack">0.5</item>
-        <item name="display">visibled|tips</item>
+        <item name="decorate">tips</item>
     </style>
     <style name="linearProgress">
         <item name="fbo">true</item>
@@ -361,7 +361,7 @@
         <item name="gravity">center</item>
         <item name="textColor">%color/color_progress_text</item>
         <item name="sliderMode">none</item>
-        <item name="display">visibled|tips</item>
+        <item name="decorate">tips</item>
         <item name="textSize">11sp</item>
         <item name="fkScale">1.7</item>
     </style>
@@ -375,7 +375,7 @@
         <item name="fkGravity">center|height</item>
         <item name="fkScale">2.0</item>
         <item name="textColor">%color/color_progress_text</item>
-        <item name="display">visibled|tips</item>
+        <item name="decorate">tips</item>
         <item name="textSize">@dimen/hintText</item>
     </style>
     <style name="switchButton">

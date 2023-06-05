@@ -29,7 +29,7 @@ public:
     // создать текстуру
     void makeTexture(u8* ptr, u32 size);
     // сохранить(tga)
-    bool save(const zStringUTF8& path) const;
+    bool save(czs& path) const;
     // вернуть количество тайлов
     int getCountTiles() const { return count; }
     // установить/сбросить целевую текстуру

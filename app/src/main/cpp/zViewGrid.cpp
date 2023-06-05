@@ -108,7 +108,10 @@ void zViewGrid::onMeasure(cszm& spec) {
 szi zViewGrid::measureChildrenSize(cszm& spec) {
     int i; szi _max;
     auto limC(spec[!vert].size()), limL(spec[vert].size());
-    if(!linesGrid) linesGrid = (limC - pad.extent(vert)) / (params[GRID_CELL_SIZE] + params[GRID_CELLS_SPACE] * 2);
+    auto cell(params[GRID_CELL_SIZE]);
+    if(!limC) { if(cell <= 0) cell = 100_dp; limC = cell * 5; }
+    if(!linesGrid) linesGrid = (limC - pad.extent(vert)) / (cell + params[GRID_CELLS_SPACE] * 2);
+    _params[GRID_LINES] = linesGrid;
     for(i = 0 ; i < countItem; i++) {
         auto child(obtainView(i));
         if(!child) continue;
@@ -119,11 +122,11 @@ szi zViewGrid::measureChildrenSize(cszm& spec) {
         auto rv(child->rview);
         rv[3 - vert] += params[GRID_CELLS_SPACE]; rv[vert + 2] += params[GRID_LINES_SPACE];
         if(_max.isEmpty()) { if(spec[!vert].isNotExact()) limL = rv[3 - vert] * (linesGrid + 1); }
-        auto _wmax(_max[!vert] + rv[3 - vert]);
-        if(_wmax < limL) { _max[vert] = _wmax; continue; }
-        auto _hmax(_max[vert] + rv[vert + 2]);
-        if(_hmax >= limC) break;
-        _max[vert] = _hmax;
+        auto val(_max[!vert] + rv[3 - vert]);
+        if(val < limL) { _max[!vert] = val; continue; }
+        val = _max[vert] + rv[vert + 2];
+        if(val >= limC) break;
+        _max[vert] = val;
     }
     _max[vert] += (div && div->resolve(i / linesGrid, false));
     return _max;

@@ -60,59 +60,58 @@ enum { TOUCH_CONTINUE, TOUCH_FINISH, TOUCH_ACTION, TOUCH_STOP };
 #define ZS_GRAVITY_HORZ             (ZS_GRAVITY_START | ZS_GRAVITY_END | ZS_GRAVITY_HCENTER)
 #define ZS_GRAVITY_VERT             (ZS_GRAVITY_TOP | ZS_GRAVITY_BOTTOM | ZS_GRAVITY_VCENTER)
 #define ZS_GRAVITY_MASK             (ZS_GRAVITY_VERT | ZS_GRAVITY_HORZ)
+
 // стили
+#define ZS_VISIBLED        	        0x80000000U	// невидимо
+#define ZS_DISABLED      	        0x40000000U	// заблокировано
 #define ZS_MEASURE	      	        0x20000000U	// полное обновление
 #define ZS_MEASURE_SET              0x10000000U // признак того, что габариты были установлены
-//#define ZS_VORIENTATION		        0x04000000U	// верт. направление
+#define ZS_CLICKABLE		        0x08004000U	// признак возможности клика
+#define ZS_LCLICKABLE		        0x08204000U	// признак возможности долгого клика
+#define ZS_ELLIPSIS                 0x04000000U // признак ... при завершении текста(если он не поместился)
+#define ZS_READ_ONLY 		        0x02000000U	// только для чтения
+#define ZS_TIPS				        0x01000000U	// признак отображени¤ подсказки
+#define ZS_MODAL   			        0x00800000U	// модальный
 #define ZS_TAP	        	        0x00400000U	// прикоснулись
+#define ZS_CHECKED			        0x00100000U // признак выбора
 #define ZS_NOWRAP                   0x00080000U // признак однострочного текста
 #define ZS_LAYOUT                   0x00040000U // признак вызова layout
+#define ZS_FOCUSABLE_IN_TOUCHABLE   0x00020000U // признак получать фокус при касании
 #define ZS_SYSTEM                   0x00010000U // способен принимать сис. события
+#define ZS_FOCUSABLE                0x00008000U // признак возможности фокуса
+#define ZS_TOUCHABLE                0x00004000U // признак возможности касания
 #define ZS_FBO                      0x00002000U // отрисовка в FBO
 #define ZS_DESTROY                  0x00001000U // признак удаления объекта
-#define ZS_DIRTY_LAYER              0x00000400U // признак перерисовки слоя
+#define ZS_DIRTY_LAYER              0x00000800U // признак перерисовки слоя
+//#define ZS_                         0x00000400U // undef
 // тип тапа
 #define ZS_INVERTED   		        0x00000100U // помечать
 #define ZS_PRESSED   		        0x00000200U // нажимать
 #define ZS_HOVERED 			        0x00000300U // подсвечивать
 #define ZS_TAP_MASK                 (ZS_HOVERED | ZS_INVERTED | ZS_PRESSED)
 
+// значения для атрибутов стилей
+// отображение
+// поведение
+#define ZS_BEHAVIOR_MASK            (ZS_CLICKABLE | ZS_LCLICKABLE | ZS_FOCUSABLE_IN_TOUCHABLE | ZS_FOCUSABLE | ZS_TOUCHABLE)
+
 // масштабирование фореграунда
 #define ZS_SCALE_MIN                16
 #define ZS_SCALE_MAX                32
-#define ZS_SCALE_WIDTH              64
-#define ZS_SCALE_HEIGHT             96
+#define ZS_SCALE_WIDTH              48
+#define ZS_SCALE_HEIGHT             64
 #define ZS_SCALE_MASK               (ZS_SCALE_MIN | ZS_SCALE_MAX | ZS_SCALE_WIDTH | ZS_SCALE_HEIGHT)
 // фигура обрезки
 #define ZS_SHAPE_NONE               0
 #define ZS_SHAPE_OVAL               1
 #define ZS_SHAPE_ROUND              2
 
-// значения для атрибутов стилей
-// отображение
-#define ZS_VISIBLED        	        0x80000000U	// невидимо
-#define ZS_DISABLED      	        0x40000000U	// заблокировано
-#define ZS_READ_ONLY 		        0x02000000U	// только дл¤ чтения
-#define ZS_TIPS				        0x01000000U	// признак отображени¤ подсказки
-#define ZS_MODAL   			        0x00800000U	// модальный
-#define ZS_CHECKED			        0x00100000U // признак выбора
-#define ZS_DISPLAY_MASK             (ZS_VISIBLED | ZS_DISABLED | ZS_READ_ONLY | ZS_TIPS | ZS_MODAL | ZS_CHECKED)
-
-// поведение
-#define ZS_CLICKABLE		        0x08004000U	// признак возможности клика
-#define ZS_LCLICKABLE		        0x08204000U	// признак возможности долгого клика
-#define ZS_FOCUSABLE_IN_TOUCHABLE   0x00020000U // признак получать фокус при касании
-#define ZS_FOCUSABLE                0x00008000U // признак возможности фокуса
-#define ZS_TOUCHABLE                0x00004000U // признак возможности касания
-#define ZS_BEHAVIOR_MASK            (ZS_CLICKABLE | ZS_LCLICKABLE | ZS_FOCUSABLE_IN_TOUCHABLE | ZS_FOCUSABLE | ZS_TOUCHABLE)
-
 // декорации
 #define ZS_GLOW                     1
 #define ZS_VSCROLLBAR               2
 #define ZS_HSCROLLBAR               4
 #define ZS_SCROLLBAR                (ZS_VSCROLLBAR | ZS_HSCROLLBAR)
-#define ZS_DIVIDER                  8
-#define ZS_DECORATE_MASK            (ZS_GLOW | ZS_VSCROLLBAR | ZS_HSCROLLBAR | ZS_DIVIDER | ZS_SCROLLBAR)
+#define ZS_DECORATE_MASK            (ZS_TIPS | ZS_ELLIPSIS | ZS_READ_ONLY | ZS_CHECKED | ZS_DISABLED)
 
 #define ZS_STATES                   (ZS_DIRTY_LAYER | ZS_VISIBLED | ZS_DISABLED | ZS_CHECKED)
 
@@ -145,7 +144,7 @@ enum { TOUCH_CONTINUE, TOUCH_FINISH, TOUCH_ACTION, TOUCH_STOP };
 #define ZS_GRID_SPACING                 1 // пространство между ячейками
 #define ZS_GRID_CELL                    2 // растягивать ячейки
 #define ZS_GRID_UNIFORM                 3 // пространство между ячейками – расстояние
-#define ZS_MODE_TABLE_MASK              (ZS_TABLE_SPACING | ZS_TABLE_CELL | ZS_TABLE_UNIFORM)
+#define ZS_MODE_GRID_MASK               (ZS_GRID_SPACING | ZS_GRID_CELL | ZS_GRID_UNIFORM)
 // редактор
 #define ZS_EDIT_TEXT                    0
 #define ZS_EDIT_NUMERIC                 1
@@ -158,7 +157,7 @@ enum { TOUCH_CONTINUE, TOUCH_FINISH, TOUCH_ACTION, TOUCH_STOP };
 #define ZS_DIVIDER_BEGIN                1
 #define ZS_DIVIDER_MIDDLE               2
 #define ZS_DIVIDER_END                  4
-#define ZS_MODE_DIVIDER_MASK            (ZS_DIVIDER_BEGIN | ZS_DIVIDER_MIDDLE | ZS_DIVIDER_FINISH)
+#define ZS_MODE_DIVIDER_MASK            (ZS_DIVIDER_BEGIN | ZS_DIVIDER_MIDDLE | ZS_DIVIDER_END)
 // текст
 #define ZS_TEXT_NORMAL                  0
 #define ZS_TEXT_BOLD                    1

@@ -49,9 +49,11 @@ public:
     // установить текст по идентификатору из ресурсов
     void setText(u32 _text) { setText(theme->findString(_text), false); }
     // установить текст из строки
-    void setText(const zStringUTF8& _text, bool force);
+    void setText(czs& _text, bool force);
+    // специальный - для клавиатурных кнопок
+    void setTextSpecial(czs& _text, cszm& spec);
     // установка текста парсингом из html
-    bool setHtmlText(const zStringUTF8& html, const std::function<bool(cstr tag, bool end, zHtml* html)>& parser);
+    bool setHtmlText(czs& html, const std::function<bool(cstr tag, bool end, zHtml* html)>& parser);
     // установка макс. линий
     void setWrap(bool set) { if(testFlags(ZS_NOWRAP) != set) { updateStatus(ZS_NOWRAP, set); requestLayout(); } }
     // вернуть макс. линий
@@ -75,7 +77,7 @@ public:
     // установить стиль текста
     void setTextStyle(int _style) { if(defPaint->getStyle() != _style) { defPaint->setStyle(_style); requestLayout(); } }
     // вернуть текст
-    const zStringUTF8& getText() const { return realText; }
+    czs& getText() const { return realText; }
     // вернуть стиль текста
     u32 getTextStyle() const { return defPaint->getStyle(); }
     // вернуть верхнее смещение шрифта
@@ -110,13 +112,15 @@ protected:
     // получить строку из кэша строк
     const CACHE* getStringFromCache(int index, rti* tbound, pti& pos);
     // слить все спаны
-    void mergeSpans(const zStringUTF8& text);
+    void mergeSpans(czs& text);
     // добавление краски в кэш
     zTextPaint* addCache(zTextPaint* _paint) { return cachePaints += new zTextPaint(_paint); }
     // дистанция между текстом и фореграундом
     int distance{0};
     // кэш картинки
     int fkW{0}, fkH{0};
+    // максимальная длина текста(для редактора)
+    int maxLength{32};
     // кэш иконки
     szi icSize{};
     // кэшированное значение ширины wrap текста
@@ -146,9 +150,9 @@ protected:
 class zFilterEdit {
 public:
     // обработать поступивший символ
-    virtual int convertChar(const zStringUTF8& _text, int ch, int pos) { return ch; }
+    virtual int convertChar(czs& _text, int ch, int pos) { return ch; }
     // вернуть текст
-    virtual const zStringUTF8& getText(const zStringUTF8& _text) { return _text; }
+    virtual czs& getText(czs& _text) { return _text; }
     // клава по умолчанию
     virtual cstr getKeboardLayer() const { return nullptr; }
 };
@@ -179,9 +183,9 @@ public:
     // очистка текста
     void clearText();
     // вернуть текст подсказки
-    const zStringUTF8& getHint() const { return hintText; }
+    czs& getHint() const { return hintText; }
     // установить текст подсказки
-    void setHint(const zStringUTF8& _hint) { hintText = _hint; invalidate(); }
+    void setHint(czs& _hint) { hintText = _hint; invalidate(); }
     // максимальная ширина текста
     int getWidthMax() const { return wmax; }
     // установка события редактирования

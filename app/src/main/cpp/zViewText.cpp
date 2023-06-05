@@ -23,20 +23,26 @@ zViewText::~zViewText() {
     SAFE_DELETE(dr);
 }
 
-void zViewText::setText(const zStringUTF8& _text, bool force) {
+void zViewText::setTextSpecial(czs &_text, cszm &spec) {
+    realText = _text; measureSpec.set(0, 0);
+    clearCacheSpans(false);
+    measure(spec);
+}
+
+void zViewText::setText(czs& _text, bool force) {
     if(force || realText != _text) {
         auto changed(rview.isNotEmpty());
         realText = _text;
         clearCacheSpans(false);
         if(changed) {
-            auto rv(rview), rc(rclient);
+            auto rv(rview);
             szm spec(zMeasure(lps.w == VIEW_WRAP ? MEASURE_UNDEF : MEASURE_EXACT, measureSpec.w.size()),
                      zMeasure(lps.h == VIEW_WRAP ? MEASURE_UNDEF : MEASURE_EXACT, measureSpec.h.size()));
             onMeasure(spec);
             changed = (rv != rview);
         }
         if(changed) {
-            DLOG("text update");
+//            z_logBuffer("text update", z_timeMillis(), 32); DLOG("text update");
             requestLayout();
         }
     }
@@ -296,7 +302,7 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
 
 void zViewText::onInit(bool _theme) {
     zView::onInit(_theme);
-    zParamDrawable txt, tbk, ic; tbk.texture = 0x01000000;
+    zParamDrawable txt, tbk, ic; tbk.texture = 0x01000000; txt.texture = z.R.drawable.fontDefault;
     styles->enumerate([this, &ic, &txt, &tbk, _theme](u32 attr) {
         auto v(&zTheme::value); auto val(v->u);
         attr |= _theme * ZTT_THM;
@@ -313,6 +319,7 @@ void zViewText::onInit(bool _theme) {
             case Z_TEXT_BACKGROUND:         tbk.texture = val; break;
             case Z_TEXT_BACKGROUND_COLOR:   tbk.color   = val; break;
             case Z_TEXT_BACKGROUND_TILES:   tbk.tiles   = val; break;
+            case Z_TEXT_LENGTH:             maxLength   = val; break;
             case Z_ICON:                    ic.texture  = val; break;
             case Z_ICON_COLOR:              ic.color    = val; break;
             case Z_ICON_TILES:              ic.tiles    = val; break;
@@ -333,7 +340,7 @@ void zViewText::onInit(bool _theme) {
     setDrawable(&ic, DRW_ICON);
 }
 
-void zViewText::mergeSpans(const zStringUTF8& _text) {
+void zViewText::mergeSpans(czs& _text) {
     // если кэш уже есть - выйти
     if(cacheSpans.isNotEmpty()) return;
     int pos(0);
@@ -446,7 +453,7 @@ void zViewText::delSpan(zTextSpan* _span) {
     if(idx != -1) spans.erase(idx, 1, true);
 }
 
-bool zViewText::setHtmlText(const zStringUTF8& html, const std::function<bool(cstr tag, bool end, zHtml* html)>& parser) {
+bool zViewText::setHtmlText(czs& html, const std::function<bool(cstr tag, bool end, zHtml* html)>& parser) {
     clearCacheSpans(true);
 /*
     realText.empty(); bool listOrdered(true); int listNum(1), listRev(1);

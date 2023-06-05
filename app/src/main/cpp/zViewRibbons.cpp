@@ -146,9 +146,9 @@ bool zViewBaseRibbon::scrolling(int _delta) {
                 }
                 offsetChildren(_delta, vert);
                 if(_delta > 0) fill(deltaItem - _delta);
-                deltaItem = atView(0)->edges(vert, false) - edge.w;
+                auto v(atView(0));
+                deltaItem = (v ? v->edges(vert, false) - edge.w : 0);
                 requestPosition();
-                awakenScroll();
                 return false;
             }
             // Предел прокрутки. Запуск эффекта
@@ -240,6 +240,7 @@ void zViewBaseRibbon::onLayout(crti &position, bool changed) {
     detachAllViews(false);
     // заполнить
     if(countItem > 0) fill(deltaItem);
+    awakenScroll();
 }
 
 szi zViewBaseRibbon::measureChildrenSize(cszm& spec) {
@@ -271,9 +272,7 @@ szi zViewBaseRibbon::measureChildrenSize(cszm& spec) {
 }
 
 void zViewBaseRibbon::onMeasure(cszm& spec) {
-    if(!adapter) {
-        ILOG("Не установлен адаптер в ленте!!!");
-    }
+    if(!adapter) ILOG("Не установлен адаптер в ленте!!!");
     // расчитать габариты всех дочерних
     auto size(measureChildrenSize(spec));
     cacheViews.clear();
@@ -286,21 +285,11 @@ i32 zViewBaseRibbon::onTouchEvent(zTouch *touch) {
     bool drag(false);
     touch->drag(sizeTouch, [this, &drag, &touch](cszi& offs, bool event) {
         // если сдвинули - определяем дельту в зависимости от ориентации
-        auto _delta(offs[vert]);
+        auto _delta(offs[vert] * sizeTouch[vert]);
         if(_delta) {
+            flyng->stop();
             // определяем время сдвига
-            auto t((int)((touch->ctm - touch->btm) / 2000000));
-//            DLOG("delta %i t:%i e:%i", _delta, t, event);
-            // если отпустили и время < 10(выбрано экспериментально)
-            if(event && t < 15) {
-                // запускаем флинг
-                //flyng->pull((float)_delta / (float)sizes(vert), _delta > 0, vert);
-                //flyng->visible = true;
-                // отправляем событие флинга
-                //post(MSG_FLYNG, nullptr);
-                // сбрасываем клик и выделение
-                clickItem = selectItem = -1;
-            } else {
+            if(!(event && flyng->start(touch, _delta))) {
                 // иначе - просто скроллим на дельту
                 scrolling(_delta);
                 // отправляем событие скролла
@@ -309,14 +298,14 @@ i32 zViewBaseRibbon::onTouchEvent(zTouch *touch) {
             // признак перетаскивания
             drag = true;
         }
-        if(!event) selectItem = -1;
+        clickItem = selectItem = -1;
     });
     // если не было перетаскивания
     if(!drag) {
         // если тап
         if(touch->isCaptured()) {
             // останавливаем флинг
-       //     flyng->stop();
+            flyng->stop();
             if(clickItem == -1) {
                 // определяем индекс куда тапнули
                 clickItem = itemFromPoint(touch->cpt);

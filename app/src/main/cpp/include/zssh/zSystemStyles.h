@@ -14,12 +14,12 @@ static zStyle styles_z_keyboardbase[] = {
 	{ Z_TEXT_NOWRAP, true },
 	{ Z_PADDING, 0x00000101 },
 	{ Z_IPADDING, 0x02020202 },
-	{ Z_DISPLAY, 0 },
+	{ Z_VISIBLED, false },
 	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_CENTER }
 };
 
 static zStyle styles_z_keyboardalt[] = {
-	{ Z_DISPLAY, 0 },
+	{ Z_VISIBLED, false },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_TEXT_NOWRAP, true },
@@ -325,7 +325,7 @@ static zStyle styles_z_grid[] = {
 	{ Z_DIVIDER | ZT_THEME, Z_COLOR_DIVIDER },
 	{ Z_DIVIDER_TYPE, ZS_DIVIDER_BEGIN | ZS_DIVIDER_MIDDLE | ZS_DIVIDER_END },
 	{ Z_DIVIDER_SIZE, 0x03000302 },
-	{ Z_SCROLLBAR_TILES | ZT_END, z.R.integer.gradientRadial }
+	{ Z_SCROLLBAR_TILES | ZT_END, z.R.integer.rect }
 };
 
 static zStyle styles_z_select[] = {
@@ -368,7 +368,7 @@ static zStyle styles_z_slider[] = {
 	{ Z_PADDING, 0x03030303 },
 	{ Z_MODE | ZT_THEME, Z_SLIDER_MODE },
 	{ Z_SPEED_TRACK, 32767 },
-	{ Z_DISPLAY | ZT_END, ZS_VISIBLED | ZS_TIPS }
+	{ Z_DECORATE | ZT_END, ZS_TIPS }
 };
 
 static zStyle styles_z_linearprogress[] = {
@@ -383,7 +383,7 @@ static zStyle styles_z_linearprogress[] = {
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_PROGRESS_TEXT },
 	{ Z_MODE, ZS_SLIDER_NONE },
-	{ Z_DISPLAY, ZS_VISIBLED | ZS_TIPS },
+	{ Z_DECORATE, ZS_TIPS },
 	{ Z_TEXT_SIZE, 11 },
 	{ Z_FOREGROUND_SCALE | ZT_END, 111409 }
 };
@@ -398,7 +398,7 @@ static zStyle styles_z_circularprogress[] = {
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER | ZS_SCALE_HEIGHT },
 	{ Z_FOREGROUND_SCALE, 131070 },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_PROGRESS_TEXT },
-	{ Z_DISPLAY, ZS_VISIBLED | ZS_TIPS },
+	{ Z_DECORATE, ZS_TIPS },
 	{ Z_TEXT_SIZE | ZT_END, z.R.dimen.hintText }
 };
 
@@ -556,7 +556,7 @@ static zStyle styles_z_seek[] = {
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_MODE | ZT_THEME, Z_SLIDER_MODE },
 	{ Z_DURATION, 40 },
-	{ Z_DISPLAY, ZS_VISIBLED | ZS_TIPS },
+	{ Z_DECORATE, ZS_TIPS },
 	{ Z_PADDING | ZT_END, 0x01010101 }
 };
 
@@ -572,13 +572,18 @@ static zStyle styles_z_progress1[] = {
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_TEXT_SHADOW_OFFS, 0x0000 },
 	{ Z_PADDING, 0x01020304 },
-	{ Z_DISPLAY, ZS_VISIBLED | ZS_TIPS },
+	{ Z_DECORATE, ZS_TIPS },
 	{ Z_FOREGROUND_SCALE | ZT_END, 163837 }
 };
 
 static zStyle styles_z_zscrolllayout1[] = {
 	{ Z_DECORATE, ZS_SCROLLBAR | ZS_GLOW },
 	{ Z_PADDING | ZT_END, 0x05050505 }
+};
+
+static zStyle styles_z_grid1[] = {
+	{ Z_STYLES, z.R.style.grid },
+	{ Z_BACKGROUND_TILES | ZT_END, z.R.integer.selectDrop }
 };
 
 static zStyle styles_z_zviewedit1[] = {
@@ -604,13 +609,13 @@ static zStyle styles_z_zlinearlayout1[] = {
 	{ Z_PADDING | ZT_END, 0x03030303 }
 };
 
-static zStyle styles_z_zviewradio1[] = {
-	{ Z_DISPLAY, ZS_VISIBLED | ZS_CHECKED },
+static zStyle styles_z_radiolight[] = {
+	{ Z_DECORATE, ZS_CHECKED },
 	{ Z_STYLES | ZT_END, z.R.style.radiobutton }
 };
 
 static zStyle styles_z_zviewcheck1[] = {
-	{ Z_DISPLAY, ZS_VISIBLED | ZS_CHECKED },
+	{ Z_DECORATE, ZS_CHECKED },
 	{ Z_STYLES | ZT_END, z.R.style.checkbox }
 };
 
@@ -664,7 +669,7 @@ static zStyle styles_z_switch3[] = {
 	{ Z_TEXT_SIZE, 20 },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_TEXT_TEXT },
 	{ Z_GRAVITY, ZS_GRAVITY_START | ZS_GRAVITY_VCENTER },
-	{ Z_DISPLAY, ZS_VISIBLED | ZS_CHECKED },
+	{ Z_DECORATE, ZS_CHECKED },
 	{ Z_PADDING, 0x05050505 },
 	{ Z_DURATION | ZT_END, 30 }
 };
@@ -681,7 +686,7 @@ static zStyle styles_z_zviewslider1[] = {
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_MODE | ZT_THEME, Z_SLIDER_MODE },
 	{ Z_DURATION, 40 },
-	{ Z_DISPLAY | ZT_END, ZS_VISIBLED | ZS_TIPS }
+	{ Z_DECORATE | ZT_END, ZS_TIPS }
 };
 
 static zStyle styles_z_seek1[] = {
@@ -697,7 +702,7 @@ static zStyle styles_z_seek1[] = {
 	{ Z_MODE | ZT_THEME, Z_SLIDER_MODE },
 	{ Z_DURATION, 40 },
 	{ Z_MARGINS, 0x0A030000 },
-	{ Z_DISPLAY, ZS_VISIBLED | ZS_TIPS },
+	{ Z_DECORATE, ZS_TIPS },
 	{ Z_PADDING | ZT_END, 0x03030303 }
 };
 
@@ -730,7 +735,7 @@ static zStyle styles_z_seek2[] = {
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_DURATION, 40 },
 	{ Z_MODE, ZS_SLIDER_SCALE },
-	{ Z_DISPLAY, ZS_VISIBLED | ZS_TIPS },
+	{ Z_DECORATE, ZS_TIPS },
 	{ Z_PADDING | ZT_END, 0x01010101 }
 };
 
@@ -792,7 +797,7 @@ static zStyle styles_z_zviewslider2[] = {
 	{ Z_MODE | ZT_THEME, Z_SLIDER_MODE },
 	{ Z_DURATION, 40 },
 	{ Z_MARGINS, 0x0A030F05 },
-	{ Z_DISPLAY, ZS_VISIBLED | ZS_TIPS },
+	{ Z_DECORATE, ZS_TIPS },
 	{ Z_PADDING | ZT_END, 0x00000000 }
 };
 
@@ -809,7 +814,7 @@ static zStyle styles_z_zviewslider3[] = {
 	{ Z_MODE | ZT_THEME, Z_SLIDER_MODE },
 	{ Z_DURATION, 40 },
 	{ Z_MARGINS, 0x0A030F05 },
-	{ Z_DISPLAY, ZS_VISIBLED | ZS_TIPS },
+	{ Z_DECORATE, ZS_TIPS },
 	{ Z_PADDING | ZT_END, 0x00000000 }
 };
 
@@ -826,7 +831,7 @@ static zStyle styles_z_zviewslider4[] = {
 	{ Z_MODE | ZT_THEME, Z_SLIDER_MODE },
 	{ Z_DURATION, 40 },
 	{ Z_MARGINS, 0x0A030F05 },
-	{ Z_DISPLAY, ZS_VISIBLED | ZS_TIPS },
+	{ Z_DECORATE, ZS_TIPS },
 	{ Z_PADDING | ZT_END, 0x00000000 }
 };
 

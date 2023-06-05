@@ -249,7 +249,6 @@ void zScrollLayout::onMeasure(cszm& spec) {
     if(countChildren()) {
         auto child(atView(0));
         auto sw(spec.w.size()), sh(spec.h.size());
-        auto lps(&child->lps);
         int wmms, hmms;
         if(atView<zScrollLayout>(0)) {
             wmms = vert * spec.w;
@@ -290,19 +289,13 @@ i32 zScrollLayout::onTouchEvent(zTouch *touch) {
     bool drag(false);
     touch->drag(sizeTouch, [this, &drag, &touch](cszi& offs, bool event) {
         // если сдвинули - определяем дельту в зависимости от ориентации
-        auto _delta(offs[vert]);
+        auto _delta(offs[vert] * sizeTouch[vert]);
         if(_delta) {
+            flyng->stop();
             // определяем время сдвига
-            auto t((int)((touch->ctm - touch->btm) / 50000000));
-            // если отпустили и время < 15(выбрано экспериментально)
-            if(event && t < 1) {
-                // запускаем флинг
-                flyng->start((float)_delta / (float)sizes(vert));
-            } else {
+            if(!(event && flyng->start(touch, _delta))) {
                 // иначе - просто скроллим на дельту
                 scrolling(_delta);
-                // отправляем событие скролла
-                if(onChangeScroll) onChangeScroll(this, _delta);
             }
             drag = true;
         }
@@ -315,18 +308,18 @@ bool zScrollLayout::scrolling(int _delta) {
     if(child) {
         auto vEnd(rclient[vert + 2]);
         auto delta1(delta); delta -= _delta;
-        if(_delta < 0 && (delta + vEnd) >= childSize)
-            delta = childSize - vEnd;
-        if(_delta >= 0 && delta < 0)
-            delta = 0;
+        if(_delta < 0 && (delta + vEnd) >= childSize) delta = childSize - vEnd;
+        if(_delta >= 0 && delta < 0) delta = 0;
         auto upd(delta1 != delta);
         child->scroll[vert] = delta;
         if(upd) {
-            child->requestLayout();
+            child->requestPosition();
+            // отправляем событие скролла
+            if(onChangeScroll) onChangeScroll(this, _delta);
+            awakenScroll();
         } else if(glow) {
             updateGlow(_delta);
         }
-        awakenScroll();
         return !upd;
     }
     return true;

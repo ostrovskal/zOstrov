@@ -27,6 +27,7 @@ zView* zFabricSelectItem::make(zViewGroup* parent) {
 
 zView* zFabricListItem::make(zViewGroup* parent) {
     int w(VIEW_MATCH), h(VIEW_WRAP);
+    if(!parent->isVertical()) std::swap(w, h);
     auto v(new zViewText(styles, 0, 0));
     auto tbl(dynamic_cast<zViewGrid*>(parent));
     if(tbl) {
