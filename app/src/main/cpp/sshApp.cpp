@@ -97,7 +97,7 @@ void sshApp::setContent() {
     auto adapter(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
     grd->setAdapter(adapter)->setOnChangeSelected([](zView*, int sel) {
         DLOG("grid sel %i", sel);
-    })->setOnClick([grd](zView*, int) {
+    })->setOnClick([](zView*, int) {
     });
     auto lst(idView<zViewRibbon>(z.R.id.list1));
     auto adapter1(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));

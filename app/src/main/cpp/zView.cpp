@@ -504,6 +504,7 @@ zViewCaret::zViewCaret() : zView(styles_z_caret, 0) {
 
 void zViewCaret::update(zView* own, int x, int y, int h) {
     parent = own; updateStatus(ZS_VISIBLED, own != nullptr);
+    DLOG("caret %x", own);
     if(own) {
         auto _own(dynamic_cast<zViewEdit*>(own));
         if(_own) setRotation(0, 0, (_own->getTextStyle() & ZS_TEXT_ITALIC) * 8);

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menuOpenSave">Менеджер…</string>
+    <string name="menuSettings">Установки…</string>
+    <string name="menuProperties">Свойства…</string>
+    <string name="menuSound">Звук</string>
+    <string name="menuMru">Последние…</string>
+    <string name="menuReset">Сброс</string>
+    <string name="menuRestore">Восстановить</string>
+    <string name="menuOperations">Операции…</string>
+    <string name="menuExecute">Выполнение</string>
+    <string name="menuExit">Выход</string>
+    <string name="menuModel">Модель…</string>
+    <string name="menuTurbo">Турбо режим</string>
+    <string name="menuFilter">Фильтрация</string>
+    <string name="menuTape">Магнитофон</string>
+    <string name="menuDebugger">Отладка</string>
+    <string name="menuExeDebugger">Отладчик…</string>
+    <string name="menuSinclair48">Синклер 48K</string>
+    <string name="menuSinclair128">Синклер 128K</string>
+    <string name="menuPentagon">Пентагон 512K</string>
+    <string name="menuScorpion">Скорпион 256K</string>
+    <string name="menuMruEmpty">Пусто</string>
+    <string name="menuKeyJoy">Клавиатура/Джойстик</string>
+    <string name="menuLabel">Метки</string>
+    <string name="menuCode">Код</string>
+    <string name="menuValue">Содержимое</string>
+    <string name="menuQuickSave">QuickSave</string>
+    <string name="menuAsm">Ассемблер</string>
+    <string name="menuTzx">Редактор TZX</string>
+</resources>

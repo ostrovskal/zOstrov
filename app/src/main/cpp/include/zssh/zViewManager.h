@@ -6,7 +6,7 @@
 
 #include "zstandard/zShader.h"
 #include "zViewGroup.h"
-#include "zViewRibbons.h"
+#include "zActionBar.h"
 #include "zCommonLayout.h"
 #include "zViewForms.h"
 #include "zViewKeyboard.h"
@@ -60,8 +60,6 @@ public:
     virtual ~zViewManager();
     // подсчет использования видео памяти
     void volumeVideoMemory(int size, bool _add) { videoMemory += size * (_add * 2 - 1); }
-    // инициализация попап меню
-    virtual bool initializeMenuItem(POPUPMENU* menu) { return true; }
     // привязка формы
     virtual zViewForm* attachForm(zViewForm* form, cszi& rect);
     // обработка сенсоров

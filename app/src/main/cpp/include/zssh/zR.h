@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Mon Jun  5 19:53:24 2023
+// Tue Jun  6 00:37:22 2023
 
 #pragma once
 
@@ -74,7 +74,21 @@ struct _z {
 				radioOff	= 40, 	radioOn	= 41, 	checkOff	= 42, 	checkOn	= 43, 
 				sliderTrumb1	= 44, 	sliderTrumb2	= 45, 	sliderTrack1	= 46, 
 				sliderTrack2	= 47, 	formLight	= 48, 	formDark	= 49, 	iconDef	= 50, 
-				keybButSmall	= 51, 	keybButBig	= 52, 			};
+				keybButSmall	= 51, 	keybButBig	= 52, 	MENU_BROWSER	= 1001, 
+				MENU_SETTINGS	= 1002, 	MENU_PROPS	= 1003, 	MENU_MODEL	= 1004, 
+				MENU_RESET	= 1005, 	MENU_RESTORE	= 1006, 	MENU_EXIT	= 1007, 
+				MENU_KEYBOARD	= 1008, 	MENU_JOYSTICK	= 1009, 	MENU_PROPS_SOUND	= 1010, 
+				MENU_PROPS_MAGNITOPHON	= 1011, 	MENU_PROPS_FILTER	= 1012, 
+				MENU_PROPS_TURBO	= 1013, 	MENU_PROPS_EXECUTE	= 1014, 	MENU_PROPS_DEBUGGER	= 1015, 
+				MENU_DEBUGGER_LABEL	= 1016, 	MENU_DEBUGGER_CODE	= 1017, 	MENU_DEBUGGER_VALUE	= 1018, 
+				MENU_MRU	= 1019, 	MENU_OPERATIONS	= 1020, 	MENU_SHOW_DEBUGGER	= 1021, 
+				MENU_DEBUGGER1	= 1022, 	MENU_POKES	= 1023, 	MENU_MAGIC	= 1024, 
+				MENU_ASSEMBLER	= 1025, 	MENU_EDITOR_TZX	= 1026, 	MENU_MODEL_48KS	= 1300, 
+				MENU_MODEL_128K	= 1301, 	MENU_MODEL_PENTAGON	= 1302, 	MENU_MODEL_SCORPION	= 1303, 
+				MENU_MRU_1	= 1400, 	MENU_MRU_2	= 1401, 	MENU_MRU_3	= 1402, 
+				MENU_MRU_4	= 1403, 	MENU_MRU_5	= 1404, 	MENU_MRU_6	= 1405, 
+				MENU_MRU_7	= 1406, 	MENU_MRU_8	= 1407, 	MENU_MRU_9	= 1408, 
+				MENU_MRU_10	= 1409, 			};
 		}; 
 		_integer integer;
 		struct _id {
@@ -95,18 +109,30 @@ struct _z {
 		_id id;
 		struct _string {
 			enum { 
-				acontrollerMap	= 0x00100007, 	ccontrollerMap	= 0x00100008, 
-				themeDark	= 0x00100009, 	themeLight	= 0x0010000A, 	textSpan	= 0x0010000B, 
-				first_form	= 0x0010000C, 	enter_family	= 0x0010000D, 	podskazka	= 0x0010000E, 
-				Perekljuchatelw	= 0x0010000F, 	Temnaja	= 0x00100010, 	Svetlaja	= 0x00100011, 
-				Flagzok	= 0x00100012, 	Nagzmi_na_menja__	= 0x00100013, 	Regzim_gotovnosti	= 0x00100014, 
-				Aktivacija	= 0x00100015, 	slayder	= 0x00100016, 	Tekst_na_knopke	= 0x00100017, 
-				Sergey	= 0x00100018, 	Progress	= 0x00100019, 			};
+				menuOpenSave	= 0x00100007, 	menuSettings	= 0x00100008, 	menuProperties	= 0x00100009, 
+				menuSound	= 0x0010000A, 	menuPokes	= 0x0010000B, 	menuMru	= 0x0010000C, 
+				menuOperations	= 0x0010000D, 	menuReset	= 0x0010000E, 	menuRestore	= 0x0010000F, 
+				menuExecute	= 0x00100010, 	menuExit	= 0x00100011, 	menuModel	= 0x00100012, 
+				menuTurbo	= 0x00100013, 	menuFilter	= 0x00100014, 	menuTape	= 0x00100015, 
+				menuDebugger	= 0x00100016, 	menuExeDebugger	= 0x00100017, 
+				menuMagic	= 0x00100018, 	menuDisk1	= 0x00100019, 	menuDisk2	= 0x0010001A, 
+				menuDisk3	= 0x0010001B, 	menuDisk4	= 0x0010001C, 	menuSinclair48	= 0x0010001D, 
+				menuSinclair128	= 0x0010001E, 	menuPentagon	= 0x0010001F, 
+				menuScorpion	= 0x00100020, 	menuMruEmpty	= 0x00100021, 	menuKeyJoy	= 0x00100022, 
+				menuLabel	= 0x00100023, 	menuCode	= 0x00100024, 	menuValue	= 0x00100025, 
+				menuQuickSave	= 0x00100026, 	menuAsm	= 0x00100027, 	menuTzx	= 0x00100028, 
+				acontrollerMap	= 0x00100029, 	ccontrollerMap	= 0x0010002A, 
+				themeDark	= 0x0010002B, 	themeLight	= 0x0010002C, 	textSpan	= 0x0010002D, 
+				first_form	= 0x0010002E, 	enter_family	= 0x0010002F, 	podskazka	= 0x00100030, 
+				Perekljuchatelw	= 0x00100031, 	Temnaja	= 0x00100032, 	Svetlaja	= 0x00100033, 
+				Flagzok	= 0x00100034, 	Nagzmi_na_menja__	= 0x00100035, 	Regzim_gotovnosti	= 0x00100036, 
+				Aktivacija	= 0x00100037, 	slayder	= 0x00100038, 	Tekst_na_knopke	= 0x00100039, 
+				Sergey	= 0x0010003A, 	Progress	= 0x0010003B, 			};
 		}; 
 		_string string;
 		struct _array {
 			enum { 
-				spinArray	= 0x0010001A, 			};
+				spinArray	= 0x0010003C, 			};
 		}; 
 		_array array;
 		struct _style {
@@ -239,6 +265,40 @@ static zResource z_resources[] = {
 		{ _z::_R::_drawable::znull, "znull" },
 		{ _z::_R::_drawable::zssh, "zssh" },
 		/* string */
+		{ _z::_R::_string::menuOpenSave, "Browse..." },
+		{ _z::_R::_string::menuSettings, "Settings..." },
+		{ _z::_R::_string::menuProperties, "Properties..." },
+		{ _z::_R::_string::menuSound, "Sound" },
+		{ _z::_R::_string::menuPokes, "Pokes..." },
+		{ _z::_R::_string::menuMru, "Last…" },
+		{ _z::_R::_string::menuOperations, "Operations..." },
+		{ _z::_R::_string::menuReset, "Reset" },
+		{ _z::_R::_string::menuRestore, "Restore" },
+		{ _z::_R::_string::menuExecute, "Executed" },
+		{ _z::_R::_string::menuExit, "Exit" },
+		{ _z::_R::_string::menuModel, "Model..." },
+		{ _z::_R::_string::menuTurbo, "Turbo mode" },
+		{ _z::_R::_string::menuFilter, "Filtered" },
+		{ _z::_R::_string::menuTape, "Tape" },
+		{ _z::_R::_string::menuDebugger, "Debugging" },
+		{ _z::_R::_string::menuExeDebugger, "Debugger…" },
+		{ _z::_R::_string::menuMagic, "MAGIC" },
+		{ _z::_R::_string::menuDisk1, "A:" },
+		{ _z::_R::_string::menuDisk2, "B:" },
+		{ _z::_R::_string::menuDisk3, "C:" },
+		{ _z::_R::_string::menuDisk4, "D:" },
+		{ _z::_R::_string::menuSinclair48, "Sinclair 48K" },
+		{ _z::_R::_string::menuSinclair128, "Sinclair 128K" },
+		{ _z::_R::_string::menuPentagon, "Pentagon 512K" },
+		{ _z::_R::_string::menuScorpion, "Scorpion 256K" },
+		{ _z::_R::_string::menuMruEmpty, "Empty" },
+		{ _z::_R::_string::menuKeyJoy, "Keyboard/Joystick" },
+		{ _z::_R::_string::menuLabel, "Label" },
+		{ _z::_R::_string::menuCode, "Code" },
+		{ _z::_R::_string::menuValue, "Content" },
+		{ _z::_R::_string::menuQuickSave, "QuickSave" },
+		{ _z::_R::_string::menuAsm, "Assembler" },
+		{ _z::_R::_string::menuTzx, "Editor TZX" },
 		{ _z::_R::_string::acontrollerMap, "acontrollerMap.xml" },
 		{ _z::_R::_string::ccontrollerMap, "ccontrollerMap.xml" },
 		{ _z::_R::_string::themeDark, "_dark" },
@@ -266,6 +326,34 @@ static zResource z_resources[] = {
 static zResource z_resources_ru[] = {
 		{ 0, "ru" },
 		/* string */
+		{ _z::_R::_string::menuOpenSave, "Менеджер…" },
+		{ _z::_R::_string::menuSettings, "Установки…" },
+		{ _z::_R::_string::menuProperties, "Свойства…" },
+		{ _z::_R::_string::menuSound, "Звук" },
+		{ _z::_R::_string::menuMru, "Последние…" },
+		{ _z::_R::_string::menuReset, "Сброс" },
+		{ _z::_R::_string::menuRestore, "Восстановить" },
+		{ _z::_R::_string::menuOperations, "Операции…" },
+		{ _z::_R::_string::menuExecute, "Выполнение" },
+		{ _z::_R::_string::menuExit, "Выход" },
+		{ _z::_R::_string::menuModel, "Модель…" },
+		{ _z::_R::_string::menuTurbo, "Турбо режим" },
+		{ _z::_R::_string::menuFilter, "Фильтрация" },
+		{ _z::_R::_string::menuTape, "Магнитофон" },
+		{ _z::_R::_string::menuDebugger, "Отладка" },
+		{ _z::_R::_string::menuExeDebugger, "Отладчик…" },
+		{ _z::_R::_string::menuSinclair48, "Синклер 48K" },
+		{ _z::_R::_string::menuSinclair128, "Синклер 128K" },
+		{ _z::_R::_string::menuPentagon, "Пентагон 512K" },
+		{ _z::_R::_string::menuScorpion, "Скорпион 256K" },
+		{ _z::_R::_string::menuMruEmpty, "Пусто" },
+		{ _z::_R::_string::menuKeyJoy, "Клавиатура/Джойстик" },
+		{ _z::_R::_string::menuLabel, "Метки" },
+		{ _z::_R::_string::menuCode, "Код" },
+		{ _z::_R::_string::menuValue, "Содержимое" },
+		{ _z::_R::_string::menuQuickSave, "QuickSave" },
+		{ _z::_R::_string::menuAsm, "Ассемблер" },
+		{ _z::_R::_string::menuTzx, "Редактор TZX" },
 		{ _z::_R::_string::textSpan, "Завершение работы фоновых приложений после блокировки экрана помогает экономить заряд. С другой стороны, в этом случае вы не будете получать новые сообщения (электронные, текстовые, из соцсетей и т.д.)." },
 		{ _z::_R::_string::first_form, "Первая форма!!!" },
 		{ _z::_R::_string::enter_family, "Введите фамилию и отчество" },
@@ -275,4 +363,53 @@ static zResource z_resources_ru[] = {
 
 
 static zResource* z_resources_ptr_arrays[] = {z_resources, z_resources_ru, nullptr };
+
+// menu
+static zMenuItem [] = {
+	{ menuItem, z.R.integer.MENU_KEYBOARD, z.R.string.menuKeyJoy, z.R.integer.iconGamepad, menuText | actAlways },
+	{ menuPopupBegin, z.R.integer.MENU_DEBUGGER1, z.R.string.menuDebugger, z.R.integer.iconDebugger, menuText | actAlways },
+		{ menuItem, z.R.integer.MENU_DEBUGGER_LABEL, z.R.string.menuLabel, z.R.integer.iconDbgAddress, menuCheck },
+		{ menuItem, z.R.integer.MENU_DEBUGGER_CODE, z.R.string.menuCode, z.R.integer.iconDbgCode, menuCheck },
+		{ menuItem, z.R.integer.MENU_DEBUGGER_VALUE, z.R.string.menuValue, z.R.integer.iconDbgContent, menuCheck },
+	{ menuPopupEnd },
+	{ menuItem, z.R.integer.MENU_BROWSER, z.R.string.menuOpenSave, z.R.integer.iconOpen, menuText | actAlways },
+	{ menuItem, z.R.integer.MENU_SETTINGS, z.R.string.menuSettings, z.R.integer.iconSettings, menuText | actAlways },
+	{ menuPopupBegin, z.R.integer.MENU_PROPS, z.R.string.menuProperties, z.R.integer.iconProperties, menuText | actAlways },
+		{ menuItem, z.R.integer.MENU_PROPS_SOUND, z.R.string.menuSound, z.R.integer.iconSound, menuCheck },
+		{ menuItem, z.R.integer.MENU_PROPS_MAGNITOPHON, z.R.string.menuTape, z.R.integer.iconCasette, menuCheck },
+		{ menuItem, z.R.integer.MENU_PROPS_FILTER, z.R.string.menuFilter, z.R.integer.iconFilter, menuCheck },
+		{ menuItem, z.R.integer.MENU_PROPS_TURBO, z.R.string.menuTurbo, z.R.integer.iconTurbo, menuCheck },
+		{ menuItem, z.R.integer.MENU_PROPS_EXECUTE, z.R.string.menuExecute, z.R.integer.iconLock, menuCheck },
+		{ menuItem, z.R.integer.MENU_PROPS_DEBUGGER, z.R.string.menuDebugger, z.R.integer.iconDebugger, menuCheck },
+	{ menuPopupEnd },
+	{ menuPopupBegin, z.R.integer.MENU_MODEL, z.R.string.menuModel, z.R.integer.iconModel, menuText | actIfRoom },
+		{ menuItem, z.R.integer.MENU_MODEL_48KS, z.R.string.menuSinclair48, z.R.integer.iconComputer, menuRadio },
+		{ menuItem, z.R.integer.MENU_MODEL_128K, z.R.string.menuSinclair128, z.R.integer.iconComputer, menuRadio },
+		{ menuItem, z.R.integer.MENU_MODEL_PENTAGON, z.R.string.menuPentagon, z.R.integer.iconComputer, menuRadio },
+		{ menuItem, z.R.integer.MENU_MODEL_SCORPION, z.R.string.menuScorpion, z.R.integer.iconComputer, menuRadio },
+	{ menuPopupEnd },
+	{ menuPopupBegin, z.R.integer.MENU_OPERATIONS, z.R.string.menuOperations, z.R.integer.iconOperation, menuText | actIfRoom },
+		{ menuItem, z.R.integer.MENU_POKES, z.R.string.menuPokes, z.R.integer.iconPokes, menuText },
+		{ menuItem, z.R.integer.MENU_RESET, z.R.string.menuReset, z.R.integer.iconReset, menuText },
+		{ menuItem, z.R.integer.MENU_RESTORE, z.R.string.menuRestore, z.R.integer.iconRestore, menuText },
+		{ menuItem, z.R.integer.MENU_ASSEMBLER, z.R.string.menuAsm, z.R.integer.iconRom, menuText },
+		{ menuItem, z.R.integer.MENU_EDITOR_TZX, z.R.string.menuTzx, z.R.integer.iconTzx, menuText },
+		{ menuItem, z.R.integer.MENU_MAGIC, z.R.string.menuMagic, z.R.integer.iconMagic, menuText },
+	{ menuPopupEnd },
+	{ menuPopupBegin, z.R.integer.MENU_MRU, z.R.string.menuMru, z.R.integer.iconMru, menuText | actIfRoom },
+		{ menuItem, z.R.integer.MENU_MRU_1, z.R.string.menuMruEmpty, z.R.integer.iconMru, menuText },
+		{ menuItem, z.R.integer.MENU_MRU_2, z.R.string.menuMruEmpty, z.R.integer.iconMru, menuText },
+		{ menuItem, z.R.integer.MENU_MRU_3, z.R.string.menuMruEmpty, z.R.integer.iconMru, menuText },
+		{ menuItem, z.R.integer.MENU_MRU_4, z.R.string.menuMruEmpty, z.R.integer.iconMru, menuText },
+		{ menuItem, z.R.integer.MENU_MRU_5, z.R.string.menuMruEmpty, z.R.integer.iconMru, menuText },
+		{ menuItem, z.R.integer.MENU_MRU_6, z.R.string.menuMruEmpty, z.R.integer.iconMru, menuText },
+		{ menuItem, z.R.integer.MENU_MRU_7, z.R.string.menuMruEmpty, z.R.integer.iconMru, menuText },
+		{ menuItem, z.R.integer.MENU_MRU_8, z.R.string.menuMruEmpty, z.R.integer.iconMru, menuText },
+		{ menuItem, z.R.integer.MENU_MRU_9, z.R.string.menuMruEmpty, z.R.integer.iconMru, menuText },
+		{ menuItem, z.R.integer.MENU_MRU_10, z.R.string.menuMruEmpty, z.R.integer.iconMru, menuText },
+	{ menuPopupEnd },
+	{ menuItem, z.R.integer.MENU_SHOW_DEBUGGER, z.R.string.menuExeDebugger, z.R.integer.iconDebugger, menuText | actNever },
+	{ menuItem, z.R.integer.MENU_EXIT, z.R.string.menuExit, z.R.integer.iconExit, menuText | actNever },
+	{ menuEnd }
+};
 

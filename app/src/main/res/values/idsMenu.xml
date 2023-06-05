@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <integer name="MENU_BROWSER">1001</integer>
+    <integer name="MENU_SETTINGS">1002</integer>
+    <integer name="MENU_PROPS">1003</integer>
+    <integer name="MENU_MODEL">1004</integer>
+    <integer name="MENU_RESET">1005</integer>
+    <integer name="MENU_RESTORE">1006</integer>
+    <integer name="MENU_EXIT">1007</integer>
+    <integer name="MENU_KEYBOARD">1008</integer>
+    <integer name="MENU_JOYSTICK">1009</integer>
+    <integer name="MENU_PROPS_SOUND">1010</integer>
+    <integer name="MENU_PROPS_MAGNITOPHON">1011</integer>
+    <integer name="MENU_PROPS_FILTER">1012</integer>
+    <integer name="MENU_PROPS_TURBO">1013</integer>
+    <integer name="MENU_PROPS_EXECUTE">1014</integer>
+    <integer name="MENU_PROPS_DEBUGGER">1015</integer>
+    <integer name="MENU_DEBUGGER_LABEL">1016</integer>
+    <integer name="MENU_DEBUGGER_CODE">1017</integer>
+    <integer name="MENU_DEBUGGER_VALUE">1018</integer>
+    <integer name="MENU_MRU">1019</integer>
+    <integer name="MENU_OPERATIONS">1020</integer>
+    <integer name="MENU_SHOW_DEBUGGER">1021</integer>
+    <integer name="MENU_DEBUGGER1">1022</integer>
+    <integer name="MENU_POKES">1023</integer>
+    <integer name="MENU_MAGIC">1024</integer>
+    <integer name="MENU_ASSEMBLER">1025</integer>
+    <integer name="MENU_EDITOR_TZX">1026</integer>
+    <integer name="MENU_MODEL_48KS">1300</integer>
+    <integer name="MENU_MODEL_128K">1301</integer>
+    <integer name="MENU_MODEL_PENTAGON">1302</integer>
+    <integer name="MENU_MODEL_SCORPION">1303</integer>
+    <integer name="MENU_MRU_1">1400</integer>
+    <integer name="MENU_MRU_2">1401</integer>
+    <integer name="MENU_MRU_3">1402</integer>
+    <integer name="MENU_MRU_4">1403</integer>
+    <integer name="MENU_MRU_5">1404</integer>
+    <integer name="MENU_MRU_6">1405</integer>
+    <integer name="MENU_MRU_7">1406</integer>
+    <integer name="MENU_MRU_8">1407</integer>
+    <integer name="MENU_MRU_9">1408</integer>
+    <integer name="MENU_MRU_10">1409</integer>
+</resources>

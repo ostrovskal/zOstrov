@@ -609,10 +609,18 @@
 сейчас:
 1. zViewSelect                      +
 2. zViewPopup                       +
+3. zViewDropdown                    +
 
 18:00
 осталось:
-1. доработать onLayout select
-2. zActionBar
-3. zMenu
-4.
+1. доработать onLayout select       +
+2. zActionBar                       +-
+3. zMenu                            +-
+
+6 июня 2023 - 0:30
+завтра:
+1. при отключении клавы - каретка
+2. menu.xml
+3. доделать zActionBar
+4. доработать селектор в списке
+5.

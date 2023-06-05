@@ -317,7 +317,7 @@ i32 zViewBaseRibbon::onTouchEvent(zTouch *touch) {
         } else {
             if(touch->isReleased() && selectItem == itemFromPoint(touch->cpt)) {
                 // отправляем клик
-                if(onClick) onClick(this, selectItem);
+                if(onClick) onClick(atView(selectItem), selectItem);
             }
             clickItem = -1;
         }

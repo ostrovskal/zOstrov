@@ -3,118 +3,146 @@
 //
 
 #include "zssh/zCommon.h"
-#include "zssh/zViewGroup.h"
-#include "zssh/zViewWidgets.h"
-#include "zssh/zViewRibbons.h"
+#include "zssh/zActionBar.h"
 
-/*
-zActionBar::zActionBar(zStyle* _styles, zStyle* _styles_buttons, zStyle* _styles_popup) :
+zMenuItem::~zMenuItem() { SAFE_DELETE(grp); }
+
+zActionBar::zActionBar(zStyle* _styles, zStyle* _styles_buttons, zStyle* _styles_group) :
                     zLinearLayout(_styles, z.R.id.actionBar, false), styles_buttons(_styles_buttons) {
+    dropdown = new zViewDropdown(_styles_group);
+    dropdown->setOnClick([this](zView* v, int sel) {
+        auto item(const_cast<zMenuItem*>(&adapter->getItem(sel)));
+        if(!item->isEnabled()) return;
+        if(onClickMenuItem) onClickMenuItem(v, item);
+        popup->dismiss();
+        if(item->grp) clickGroup(grpView, item->grp);
+    });
+    setOnAnimation([this](zView*, int) {
+        if(isChecked()) {
+            // видима - блокировка? - ждем
+            if(testLocked()) return true;
+        }
+        // анимируем
+        float v; auto cont(animator.update(v));
+        if(rview.h) lps.y = -rview.h + (int)roundf(v * ((float)rview.h / 8.0f));
+        requestLayout();
+        if(!cont) { if(isChecked()) show(!isChecked()); return false; }
+        updateStatus(ZS_VISIBLED, cont);
+        return cont;
+    });
     content  = new zFrameLayout(styles_default, 0);
-    dropdown = new zViewDropdown(this, _styles_popup);
     popup    = new zViewPopup(styles_default, this, dropdown);
-    status   &= ~ZS_VISIBLED;
-    minSize.set(z_dp(z.R.dimen.actionMinWidth), z_dp(z.R.dimen.actionMinHeight));
+    updateStatus(ZS_VISIBLED, false);
+    minMaxSize.set(z_dp(z.R.dimen.actionMinWidth), 0, z_dp(z.R.dimen.actionMinHeight), 0);
 }
 
 zActionBar::~zActionBar() {
     resetOverflow();
-    vmanager->getCommonView()->detach(popup);
+    manager->getSystemView(false)->detach(popup);
     SAFE_DELETE(popup);
+    SAFE_DELETE(dropdown);
+    SAFE_DELETE(content);
     if(adapter) {
-        adapter->unregisterOwner(this);
+        adapter->unregistration(this);
         SAFE_DELETE(adapter);
     }
 }
 
 void zActionBar::setContent(zView* _view) {
     if(content) {
-        content->removeAllViews();
+        content->detachAllViews(false);
         content->attach(_view, VIEW_MATCH, VIEW_MATCH);
     }
 }
 
 void zActionBar::resetOverflow() {
-    for(int i = 0 ; i < overflow.size(); i++) {
-        overflow.children[i]->pop = nullptr;
+    for(int i = 0 ; i < overflow.count(); i++) {
+        overflow.children[i]->grp = nullptr;
     }
     overflow.reset();
 }
 
-void zActionBar::recursiveMenu(POPUPMENU* pop) {
+void zActionBar::recursiveMenu(zMenuGroup* grp) {
+    zMenuGroup* _grp;
     while(_menu->type != menuEnd) {
         switch(_menu->type) {
-            case menuPopupBegin: {
-                auto _pop(new POPUPMENU(_menu->id));
-                pop->add(new MENUITEM(_menu->id, _menu->image, _menu->title, _menu->action | menuPopup, _pop));
-                _menu++; recursiveMenu(_pop);
+            case menuPopupBegin:
+                grp->add(new zMenuItem(_menu->id, _menu->image, theme->findString(_menu->title), _menu->action | menuItemGroup, _grp = new zMenuGroup(_menu->id)));
+                _menu++; recursiveMenu(_grp);
                 break;
-            }
             case menuPopupEnd: return;
             default:
-                pop->add(new MENUITEM(_menu->id, _menu->image, _menu->title, _menu->action, nullptr));
+                grp->add(new zMenuItem(_menu->id, _menu->image, theme->findString(_menu->title), _menu->action, nullptr));
                 break;
         }
         _menu++;
     }
 }
 
-bool zActionBar::setMenu(int iconApp, zMenuItem* menu) {
-    delete root; _menu = menu;
+bool zActionBar::setMenu(int iconApp, MENUITEM* menu) {
+    delete root; _menu = menu; int ii(1);
+    root = new zMenuGroup();
     // изображение программы
-    root = (new POPUPMENU()); root->add(new MENUITEM(z.R.id.menuApp, iconApp, 0, actAlways, nullptr));
+    root->add(new zMenuItem(z.R.id.menuApp, iconApp, "", actAlways, nullptr));
     recursiveMenu(root);
     // отсортировать первый уровень по actAlways
-    int ii(1);
-    for(int i = 1 ; i < root->size(); i++) {
-        auto item(root->getItem(i));
-        if(!item->isAlways()) continue;
-        root->children.swap(i, ii);
-        ii++;
+    for(int i = 1 ; i < root->count(); i++) {
+        auto item(root->atFind(i));
+        if(item->isAlways()) root->children.swap(i, ii++);
     }
     return true;
 }
 
-int zActionBar::measureButton(int _id, int _image, int widthSize, int heightSize, POPUPMENU* pop, bool isMeasure) {
+int zActionBar::measureButton(int _id, int _image, int widthSize, int heightSize, zMenuGroup* grp, bool isMeasure) {
     int width(0);
     auto but(new zViewImage(_id == z.R.id.menuOverflow ? styles_z_baroverflow : styles_buttons, _id, _image));
-    but->setTag((u64)pop); but->setOnClick([this](zView* v, HANDLER_MESSAGE*) {
-        clickPopup(v, (POPUPMENU*)v->tag);
-        vmanager->messagePost(v, MSG_MENU_CLICK, nullptr, 50);
+    but->setTag(TAG{(char*)grp});
+    but->setOnClick([this](zView* v, int) {
+        auto grp((zMenuGroup*)v->tag.str);
+        clickGroup(v, grp);
     });
     attach(but, VIEW_WRAP, VIEW_WRAP);
     if(isMeasure) {
-        auto ws(makeChildMeasureSpec(MAKE_MEASURE_SPEC(MEASURE_MOST, widthSize), padMargin(false), VIEW_WRAP));
-        auto hs(makeChildMeasureSpec(MAKE_MEASURE_SPEC(MEASURE_MOST, heightSize), padMargin(true), VIEW_WRAP));
-        but->measure(ws, hs);
-        width = but->rfull.w;
+        auto ws(makeChildMeasureSpec(zMeasure(MEASURE_MOST, widthSize), but->pad.extent(false), VIEW_WRAP));
+        auto hs(makeChildMeasureSpec(zMeasure(MEASURE_MOST, heightSize), but->pad.extent(true), VIEW_WRAP));
+        but->measure( { ws, hs } ); width = but->rview.w;
     }
     return width;
 }
 
-void zActionBar::onMeasure(int widthSpec, int heightSpec) {
-    auto widthSize(SIZE_MEASURE_SPEC(widthSpec)), heightSize(SIZE_MEASURE_SPEC(heightSpec));
+void zActionBar::clickGroup(zView *view, zMenuGroup *grp) {
+    if(grp && grp->isNotEmpty()) {
+        if(adapter) adapter->setGroup(grp);
+        dropdown->measure( { zMeasure(MEASURE_UNDEF, 0), zMeasure(MEASURE_UNDEF, 0) } );
+        popup->show(pti(view->rview.x, rview.h));
+        if(onClickMenuGroup) onClickMenuGroup(this, grp);
+    } else popup->dismiss();
+    grpView = view;
+}
+
+void zActionBar::onMeasure(cszm& spec) {
+    auto widthSize(spec.w.size()), heightSize(spec.h.size());
     int wContent(z_percent(widthSize, 33)), wBut(0);
-    int width(wContent), i, count(root ? root->size() : 0);
-    detach(content); resetOverflow(); removeAllViews();
+    int width(wContent), i, count(root ? root->count() : 0);
+    detach(content); resetOverflow(); removeAllViews(false);
     for(i = 0 ; i < count; ) {
-        auto item(root->getItem(i++)); auto pop(item->pop);
+        auto item(root->atFind(i++)); auto grp(item->grp);
         if(!item->isVisibled()) continue;
         if(!item->isNever()) {
-            auto w(measureButton(item->id, item->image, widthSize, heightSize, pop, wBut == 0));
+            auto w(measureButton(item->id, item->img, widthSize, heightSize, grp, wBut == 0));
             if(w) wBut = w;
             width += wBut;
             if((width + wBut * 2) >= widthSize) break;
         } else {
-            if(pop && !pop->isNotEmpty()) pop = nullptr;
-            overflow.add(new MENUITEM(item->id, item->image, item->text, item->flags, pop));
+            if(grp && !grp->isNotEmpty()) grp = nullptr;
+            overflow.add(new zMenuItem(item->id, item->img, item->txt, item->flags, grp));
         }
     }
     // overflow
     for(; i < count; i++) {
-        auto item(root->getItem(i)); auto pop(item->pop);
-        if(pop && !pop->isNotEmpty()) pop = nullptr;
-        overflow.add(new MENUITEM(item->id, item->image, item->text, item->flags, pop));
+        auto item(root->atFind(i)); auto grp(item->grp);
+        if(grp && !grp->isNotEmpty()) grp = nullptr;
+        overflow.add(new zMenuItem(item->id, item->img, item->txt, item->flags, grp));
     }
     if(overflow.isNotEmpty() || count == 0) {
         width += measureButton(z.R.id.menuOverflow, z.R.integer.iconMenu, widthSize, heightSize, &overflow, wBut == 0);
@@ -122,78 +150,32 @@ void zActionBar::onMeasure(int widthSpec, int heightSpec) {
     // контент
     wContent += z_max(0, widthSize - width);
     attach(content, wContent, VIEW_MATCH, count != 0);
-    zLinearLayout::onMeasure(widthSpec, heightSpec);
-}
-
-bool zActionBar::onRedraw() {
-    bool isdelay(false);
-    if(!delay) {
-        if(frame >= 0 && frame < 9) {
-            if(rfull.h) {
-                lytParams.y = -rfull.h + frame * (rfull.h / 8);
-                frame += isChecked() * 2 - 1;
-                if(frame <= 0) updateStatus(ZS_VISIBLED, false);
-                invalidate();
-            }
-            return false;
-        }
-        isdelay = isChecked();
-        delay = 1;
-    }
-    if(testLocked() || isdelay) {
-        // подождем
-        post(MSG_REDRAW, nullptr, 20 * ACTION_DELAY);
-    } else {
-        // спратать
-        show(false);
-    }
-    return true;
+    zLinearLayout::onMeasure(spec);
 }
 
 void zActionBar::show(bool _show) {
     if(isChecked() != _show) {
         updateStatus(ZS_CHECKED, _show);
         updateStatus(ZS_VISIBLED, true);
-        delay = 0; frame = 8 * !isChecked();
-        post(MSG_REDRAW);
-        requestLayout();
-        onRedraw();
+        delay = 0;
+        animator.init(8 * !isChecked(), false);
+        animator.add(8 * isChecked(), zInterpolator::LINEAR, 4);
+        if(isChecked()) animator.add(8 * isChecked(), zInterpolator::LINEAR, 128);
+        post(MSG_ANIM, duration, 0);
     }
 }
 
-void zActionBar::setAdapter(zAdapterList* _adapter) {
+zActionBar* zActionBar::setAdapter(zAdapterList* _adapter) {
     if(adapter) {
-        adapter->unregisterOwner(this);
+        adapter->unregistration(this);
         SAFE_DELETE(adapter);
     }
     if(_adapter) {
         adapter = new zAdapterMenu(this, _adapter);
         dropdown->setAdapter(adapter);
-        adapter->registerOwner(this);
+        adapter->registration(this);
     }
-}
-
-void zActionBar::notifyOwner(int what, zView *view, int arg) {
-    if(what == MSG_CLICK) {
-        auto item(&adapter->getItem(arg));
-        if(!item->isEnabled()) return;
-        vmanager->messagePost(view, MSG_MENU_CLICK, nullptr, 20, arg);
-        popup->dismiss();
-        if(item->pop) clickPopup(buttonView, item->pop);
-    }
-}
-
-void zActionBar::clickPopup(zView* view, POPUPMENU* pop) {
-    if(pop && pop->isNotEmpty()) {
-        vmanager->initializeMenuItem(pop);
-        if(adapter) adapter->setPopup(pop);
-        dropdown->measure(zViewGroup::makeChildMeasureSpec(MAKE_MEASURE_SPEC(MEASURE_UNDEF, 0), 0, VIEW_WRAP),
-                          zViewGroup::makeChildMeasureSpec(measureSpec.h, 0, VIEW_WRAP));
-        popup->show(view->rfull.x, 0);
-    } else {
-        popup->dismiss();
-    }
-    buttonView = view;
+    return this;
 }
 
 bool zActionBar::testLocked() const {
@@ -203,33 +185,34 @@ bool zActionBar::testLocked() const {
 
 zView* zActionBar::zAdapterMenu::getView(int position, zView *convert, zViewGroup *parent) {
     auto nv((zLinearLayout*)list->getView(position, convert, bar));
-    auto item(popupmenu->getItem(position));
+    auto item(group->atFind(position));
     nv->id = item->id;
-    nv->disable(!item->enable);
+    nv->disable(!item->isEnabled());
     // иконка
     auto iv(nv->atView<zViewImage>(0));
-    if(iv) iv->setImage(item->image);
+    if(iv) iv->setImage(item->img);
     // текст/check/radio
     auto tv(nv->atView<zViewText>(1));
     if(tv) {
-        int tl1(z.R.integer.iconPopup), tl2(z.R.integer.iconPopup), pos(ZS_POSITION_END);
-        if(!item->isPopup()) {
-            if(item->isText()) {
-                pos = ZS_POSITION_NONE;
-            } else {
+        int tl1(z.R.integer.iconPopup), tl2(z.R.integer.iconPopup), _gravity(ZS_GRAVITY_END);
+        if(!item->isGroup()) {
+            if(item->isText()) _gravity = ZS_GRAVITY_CENTER;
+            else {
                 tl1 = item->isCheckBox() ? z.R.integer.checkOff : z.R.integer.radioOff;
                 tl2 = item->isCheckBox() ? z.R.integer.checkOn : z.R.integer.radioOn;
             }
         }
-        tv->setTileNum(0, tl1); tv->setTileNum(1, tl2);
-        tv->setBitmapPoistion(pos);
-        tv->drs[DR_IDX_FK]->tile = tl1;
-        tv->drs[DR_IDX_FK]->enable = (pos != ZS_POSITION_NONE);
-        tv->checked(item->checked);
-        tv->setText(item->title, false);
+        // тайлы
+        tv->drw[DRW_FK]->tiles = (tl1 | (tl2 >> 8));
+        // гравитация
+        tv->setForegroundGravity(_gravity);
+        // показывать ли?
+        tv->drw[DRW_FK]->visible = (_gravity != ZS_GRAVITY_CENTER);
+        // признак выделения
+        tv->checked(item->isChecked());
+        // установить текст
+        tv->setText(item->getText(), false);
         nv->requestLayout();
     }
     return nv;
 }
-
-*/
