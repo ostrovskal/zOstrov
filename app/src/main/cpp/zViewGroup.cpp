@@ -11,10 +11,10 @@ zViewGroup::zViewGroup(zStyle* _styles, i32 _id): zView(_styles, _id) {
     sizeTouch.set(5_dp, 5_dp);
 }
 
-void zViewGroup::offsetChildren(int delta, bool vert) {
+void zViewGroup::offsetChildren(int delta, bool _vert) {
     for(auto& child : children) {
         auto pos(child->oldPos);
-        pos.offset(!vert * delta, vert * delta);
+        pos.offset(!_vert * delta, _vert * delta);
         child->layout(pos);
     }
 }
@@ -107,19 +107,13 @@ void zViewGroup::draw() {
 }
 
 bool zViewGroup::intersectChildren(int x, int y) const {
-    for(auto& c : children) {
-        if(c->isVisibled()) {
-            if(c->isTouchable()) {
-                auto g(dynamic_cast<zViewGroup*>(c));
-                if(g) {
-                    if(g->intersectChildren(x, y))
-                        return true;
-                } else if(c->rclip.contains(x, y))
-                    return true;
-            }
+    return std::any_of(std::begin(children), std::end(children), [x, y](const auto& c) {
+        if(c->isVisibled() && c->isTouchable()) {
+            auto g(dynamic_cast<zViewGroup*>(c));
+            return ((g && g->intersectChildren(x, y)) || c->rclip.contains(x, y));
         }
-    }
-    return false;
+        return false;
+    });
 }
 
 zView* zViewGroup::sysView() const {
@@ -305,6 +299,12 @@ void zViewGroup::awakenScroll() {
     }
 }
 
+bool zViewGroup::scrolling(int _delta) {
+    // убрать клаву
+    manager->changeFocus(nullptr);
+    return false;
+}
+
 void zViewGroup::changeTheme() {
     for(auto& child : children) {
         child->changeTheme();
@@ -313,6 +313,7 @@ void zViewGroup::changeTheme() {
 }
 
 bool zViewGroup::testLocked() const {
-    //return std::any_of(*children.begin(), *children.last(), isVisibled() && testLocked());
-    return false;
+    return std::any_of(std::begin(children), std::end(children), [](const auto& c) {
+        return c->isVisibled() && c->testLocked();
+    });
 }

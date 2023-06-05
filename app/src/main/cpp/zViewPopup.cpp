@@ -25,7 +25,6 @@ void zViewPopup::show(cpti& _offs) {
 }
 
 void zViewPopup::dismiss() {
-    //if(owner) owner->notifyOwner(MSG_POPUP_DISMISS, this, 0);
     manager->getSystemView(false)->detach(this);
 }
 
@@ -33,8 +32,7 @@ i32 zViewPopup::touchEvent(AInputEvent *event) {
     auto action(zTouch::getEventAction(event));
     if(action == AMOTION_EVENT_ACTION_POINTER_DOWN || action == AMOTION_EVENT_ACTION_DOWN) {
         if(!zTouch::intersect(event, rview)) {
-            dismiss();
-            return TOUCH_STOP;
+            dismiss(); return TOUCH_STOP;
         }
     }
     return zViewGroup::touchEvent(event);
@@ -72,20 +70,4 @@ void zViewPopup::onMeasure(cszm& spec) {
 i32 zViewPopup::keyEvent(int key, bool sysKey) {
     if(sysKey && key == AKEYCODE_BACK) { dismiss(); return 1; }
     return 0;
-}
-
-szi zViewDropdown::measureChildrenSize(cszm& spec) {
-    int wSize(0), hSize(div && div->resolve(countItem, true));
-    for(int i = 0 ; i < countItem; i++) {
-        auto child(obtainView(i));
-        if(!child) continue;
-        // расчитать размер
-        measureChild(child, spec);
-        // добавить в кэш
-        addViewCache(child);
-        // определить макс. габариты
-        wSize = z_max(wSize, child->rview.w);
-        hSize += child->rview.h;
-    }
-    return {wSize, hSize};
 }

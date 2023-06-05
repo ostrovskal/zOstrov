@@ -6,6 +6,7 @@
 
 #include "zstandard/zShader.h"
 #include "zViewGroup.h"
+#include "zViewRibbons.h"
 #include "zCommonLayout.h"
 #include "zViewForms.h"
 #include "zViewKeyboard.h"
@@ -57,10 +58,10 @@ public:
     zViewManager(ANativeActivity* activity, int size_cache);
     // деструктор
     virtual ~zViewManager();
-    // цикл сообщений
-    //virtual void loopMessage(HANDLER_MESSAGE* msg) = 0;
+    // подсчет использования видео памяти
+    void volumeVideoMemory(int size, bool _add) { videoMemory += size * (_add * 2 - 1); }
     // инициализация попап меню
-//    virtual bool initializeMenuItem(POPUPMENU* menu) { return true; }
+    virtual bool initializeMenuItem(POPUPMENU* menu) { return true; }
     // привязка формы
     virtual zViewForm* attachForm(zViewForm* form, cszi& rect);
     // обработка сенсоров
@@ -82,7 +83,7 @@ public:
     // вернуть каретку
     zViewCaret* getCaret() const { return caret; }
     // вернуть панель действий
-//    zActionBar* getActionBar() const { return actionBar; }
+    zActionBar* getActionBar() const { return actionBar; }
     // вернуть клавиатуру
     zViewKeyboard* getKeyboard() const { return keyboard; }
     // вернуть менеджер активов
@@ -210,11 +211,13 @@ private:
     // каретка
     zViewCaret* caret{nullptr};
     // панель действий
-//    zActionBar* actionBar{nullptr};
+    zActionBar* actionBar{nullptr};
     // шейдер
     zShader* program{nullptr};
     // переменные в шейдере
     i32 shaderVars[7]{};
+    // объем видео памяти
+    i32 videoMemory{0};
     // основные пути приложения
     zStringUTF8 basePaths[3];
 };

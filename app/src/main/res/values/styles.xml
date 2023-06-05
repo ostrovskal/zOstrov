@@ -150,8 +150,10 @@
         <item name="font">@drawable/font1</item>
         <item name="gravity">center</item>
         <item name="foreground">@drawable/zssh</item>
+        <item name="textWrap">true</item>
         <item name="fkGravity">center</item>
         <item name="tap">hovered</item>
+        <item name="ipad">3dp</item>
         <item name="fkTiles">@integer/selectItem</item>
     </style>
     <style name="list_item">
@@ -161,6 +163,7 @@
         <item name="font">@drawable/font1</item>
         <item name="textStyle">bold_italic</item>
         <item name="gravity">center</item>
+        <item name="textWrap">true</item>
         <item name="foreground">@drawable/zssh</item>
         <item name="fkGravity">center</item>
         <item name="fkTiles">@integer/selectItem</item>
@@ -184,6 +187,7 @@
         <item name="fkTiles">@integer/selectCapt</item>
         <item name="font">@drawable/font1</item>
         <item name="textSize">@dimen/textText</item>
+        <item name="ipad">3dp</item>
         <item name="textColor">%color/color_highlight_text</item>
         <item name="gravity">center</item>
     </style>
@@ -312,12 +316,12 @@
         <item name="fbo">true</item>
         <item name="divider">%color/color_divider</item>
         <item name="divSize">@dimen/divider</item>
-        <item name="divType">middle</item>
+        <item name="divType">begin|middle|end</item>
         <item name="divPadHorz">2dp</item>
         <item name="gravity">center</item>
         <item name="background">@drawable/zssh</item>
         <item name="bkTiles">@integer/selectDrop</item>
-        <item name="fadeScrollBars">true</item>
+        <item name="fadeScrollBars">false</item>
         <item name="decorate">vscrollbar|glow</item>
         <item name="pad">3dp</item>
         <item name="selector">%color/color_selector</item>

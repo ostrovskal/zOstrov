@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Mon Jun  5 13:25:49 2023
+// Mon Jun  5 17:43:18 2023
 
 #pragma once
 
@@ -85,12 +85,12 @@ struct _z {
 				actionBar	= 0x00101009, 	wndPopup	= 0x0010100A, 	root	= 0x0010100B, 
 				common	= 0x0010100C, 	keyboard	= 0x0010100D, 	list1	= 0x0010100E, 
 				edit1	= 0x0010100F, 	button1	= 0x00101010, 	switch1	= 0x00101011, 
-				seek	= 0x00101012, 	progress1	= 0x00101013, 	grid1	= 0x00101014, 
-				radioDark	= 0x00101015, 	radioLight	= 0x00101016, 	button2	= 0x00101017, 
-				switch2	= 0x00101018, 	switch3	= 0x00101019, 	button3	= 0x0010101A, 
-				seek1	= 0x0010101B, 	button11	= 0x0010101C, 	seek2	= 0x0010101D, 
-				button4	= 0x0010101E, 	edit2	= 0x0010101F, 	progress2	= 0x00101020, 
-				form	= 0x00101021, 			};
+				seek	= 0x00101012, 	progress1	= 0x00101013, 	select	= 0x00101014, 
+				grid1	= 0x00101015, 	radioDark	= 0x00101016, 	radioLight	= 0x00101017, 
+				button2	= 0x00101018, 	switch2	= 0x00101019, 	switch3	= 0x0010101A, 
+				button3	= 0x0010101B, 	seek1	= 0x0010101C, 	button11	= 0x0010101D, 
+				seek2	= 0x0010101E, 	button4	= 0x0010101F, 	edit2	= 0x00101020, 
+				progress2	= 0x00101021, 	form	= 0x00101022, 			};
 		}; 
 		_id id;
 		struct _string {

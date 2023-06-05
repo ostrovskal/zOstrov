@@ -75,8 +75,8 @@ zView *zAdapterList::createView(int position, zView *convert, zViewGroup *parent
     auto tv(dynamic_cast<zViewText*>(nv));
     if(tv) {
         tv->setText(getItem(position), false);
-        //auto sv(dynamic_cast<zViewSelect*>(parent));
-        //if(sv && color) tv->setTextColorForeground(sv->getSelectedItem() == position ? tv->getTextColorHighlight() : tv->getTextColorDefault());
+        auto sv(dynamic_cast<zViewSelect*>(parent));
+        if(sv && color) tv->setTextColorForeground(sv->getSelectedItem() == position ? tv->getTextColorHighlight() : tv->getTextColorDefault());
     }
     return nv;
 }

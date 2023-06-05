@@ -165,8 +165,10 @@ static zStyle styles_z_spin_item[] = {
 	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_FOREGROUND, z.R.drawable.zssh },
+	{ Z_TEXT_NOWRAP, true },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_TAP, ZS_HOVERED },
+	{ Z_IPADDING, 0x03030303 },
 	{ Z_FOREGROUND_TILES | ZT_END, z.R.integer.selectItem }
 };
 
@@ -177,6 +179,7 @@ static zStyle styles_z_list_item[] = {
 	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_TEXT_STYLE, ZS_TEXT_BOLD_ITALIC },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
+	{ Z_TEXT_NOWRAP, true },
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_FOREGROUND_TILES | ZT_END, z.R.integer.selectItem }
@@ -201,6 +204,7 @@ static zStyle styles_z_spin_capt[] = {
 	{ Z_FOREGROUND_TILES, z.R.integer.selectCapt },
 	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_TEXT_SIZE, z.R.dimen.textText },
+	{ Z_IPADDING, 0x03030303 },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_HIGHLIGHT_TEXT },
 	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_CENTER }
 };
@@ -331,12 +335,12 @@ static zStyle styles_z_grid[] = {
 static zStyle styles_z_select[] = {
 	{ Z_FBO, true },
 	{ Z_DIVIDER | ZT_THEME, Z_COLOR_DIVIDER },
-	{ Z_DIVIDER_TYPE, ZS_DIVIDER_MIDDLE },
+	{ Z_DIVIDER_TYPE, ZS_DIVIDER_BEGIN | ZS_DIVIDER_MIDDLE | ZS_DIVIDER_END },
 	{ Z_DIVIDER_SIZE, 0x02000202 },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_BACKGROUND, z.R.drawable.zssh },
 	{ Z_BACKGROUND_TILES, z.R.integer.selectDrop },
-	{ Z_SCROLLBAR_FADE, true },
+	{ Z_SCROLLBAR_FADE, false },
 	{ Z_DECORATE, ZS_VSCROLLBAR | ZS_GLOW },
 	{ Z_PADDING, 0x03030303 },
 	{ Z_SELECTOR | ZT_THEME | ZT_END, Z_COLOR_SELECTOR }

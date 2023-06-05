@@ -18,7 +18,7 @@ zViewBaseRibbon::~zViewBaseRibbon() {
     }
 }
 
-void zViewBaseRibbon::setAdapter(zBaseAdapter* _adapter) {
+zViewBaseRibbon* zViewBaseRibbon::setAdapter(zBaseAdapter* _adapter) {
     reset();
     if(adapter) adapter->unregistration(this);
     adapter = _adapter;
@@ -27,6 +27,7 @@ void zViewBaseRibbon::setAdapter(zBaseAdapter* _adapter) {
         countItem = _adapter->getCount();
     }
     requestLayout();
+    return this;
 }
 
 void zViewBaseRibbon::reset() {
@@ -145,11 +146,15 @@ bool zViewBaseRibbon::scrolling(int _delta) {
                     }
                 }
                 offsetChildren(_delta, vert);
-                if(_delta > 0) fill(deltaItem - _delta);
+                /*if(_delta > 0) */fill(deltaItem - _delta);
                 auto v(atView(0));
                 deltaItem = (v ? v->edges(vert, false) - edge.w : 0);
                 requestPosition();
-                return false;
+                // отправляем событие скролла
+                if(onChangeScroll) onChangeScroll(this, firstItem);
+                // сбрасываем клик
+                clickItem = -1;
+                return zViewGroup::scrolling(_delta);
             }
             // Предел прокрутки. Запуск эффекта
             updateGlow(_delta);
@@ -222,7 +227,7 @@ void zViewBaseRibbon::setItemSelected(int item) {
     if(item >= countItem) item = countItem - 1;
     if(item < 0) item = 0;
     firstItem = item - _count / 2;
-    selectItem = clickItem = -1;
+    selectItem = item;
     requestPosition();
 }
 
@@ -289,16 +294,12 @@ i32 zViewBaseRibbon::onTouchEvent(zTouch *touch) {
         if(_delta) {
             flyng->stop();
             // определяем время сдвига
-            if(!(event && flyng->start(touch, _delta))) {
+            if(event && flyng->start(touch, _delta)) selectItem = -1;
                 // иначе - просто скроллим на дельту
-                scrolling(_delta);
-                // отправляем событие скролла
-                if(onChangeScroll) onChangeScroll(this, _delta);
-            }
+            else scrolling(_delta);
             // признак перетаскивания
             drag = true;
         }
-        clickItem = selectItem = -1;
     });
     // если не было перетаскивания
     if(!drag) {
@@ -308,26 +309,23 @@ i32 zViewBaseRibbon::onTouchEvent(zTouch *touch) {
             flyng->stop();
             if(clickItem == -1) {
                 // определяем индекс куда тапнули
-                clickItem = itemFromPoint(touch->cpt);
-                // вызов события
-                if(clickItem != -1 && selectItem == -1) {
+                if((clickItem = itemFromPoint(touch->cpt)) != -1) {
+                    // вызов события
                     if(onChangeSelected) onChangeSelected(this, clickItem);
+                    // запоминаем выделенный
+                    selectItem = clickItem;
                 }
-                // запоминаем выделенный
-                selectItem = clickItem;
             }
         } else {
-            if(touch->isReleased() && selectItem != -1) {
-                if(selectItem == itemFromPoint(touch->cpt)) {
-                    // отправляем клик
-                    if(onClick) onClick(this, selectItem);
-                }
+            if(touch->isReleased() && selectItem == itemFromPoint(touch->cpt)) {
+                // отправляем клик
+                if(onClick) onClick(this, selectItem);
             }
-            selectItem = clickItem = -1;
+            clickItem = -1;
         }
     }
     // отображаем/скрываем выделение
-    showSelector(selectItem != -1);
+    showSelector(clickItem != -1);
     return drag | touch->isCaptured();
 }
 
@@ -377,8 +375,8 @@ zView* zViewRibbon::addView(int coord, int pos, bool flow, bool end) {
 }
 
 void zViewRibbon::childMeasure(zView* child, zLayoutParams* lps) {
-    auto wSpec(makeChildMeasureSpec((vert ? zMeasure(MEASURE_EXACT, rclient.w) : measureSpec.w), 0, lps->w));
-    auto hSpec(makeChildMeasureSpec((vert ? measureSpec.h : zMeasure(MEASURE_EXACT, rclient.h)), 0, lps->h));
+    auto wSpec(makeChildMeasureSpec((vert ? zMeasure(MEASURE_EXACT, rclient.w) : measureSpec.w), child->margin.extent(false), lps->w));
+    auto hSpec(makeChildMeasureSpec((vert ? measureSpec.h : zMeasure(MEASURE_EXACT, rclient.h)), child->margin.extent(true), lps->h));
     child->measure({ wSpec, hSpec });
 }
 

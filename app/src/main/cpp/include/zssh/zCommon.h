@@ -168,6 +168,78 @@ enum { TOUCH_CONTINUE, TOUCH_FINISH, TOUCH_ACTION, TOUCH_STOP };
 #define ZS_MODE_TEXT_MASK               (ZS_TEXT_STRIKE | ZS_TEXT_UNDERLINE | ZS_TEXT_NORMAL | ZS_TEXT_BOLD | ZS_TEXT_ITALIC | ZS_TEXT_BOLD_ITALIC)
 #define ZS_MODE_TEXT_FLAGS_MASK         (0)
 
+enum MenuItem { menuEnd, menuPopupBegin, menuPopupEnd, menuItem };
+enum MenuAction { actNever = 0, actAlways = 1, actIfRoom = 2 };
+enum MenuGroup { menuText = 4, menuRadio = 8, menuCheck = 16, menuPopup = 32 };
+
+struct zMenuItem {
+    // тип - группа/элемент
+    u32 type;
+    // идентификатор элемента/идентификатор текста
+    i32 id, title;
+    // идентификатор изображения
+    i32 image;
+    // тип(текст/радио/флажок)|размещение(никогда/всегда/если есть место)
+    u32 action;
+};
+
+class MENUITEM;
+class POPUPMENU {
+    friend class zActionBar;
+public:
+    POPUPMENU() { }
+    POPUPMENU(int _id): id(_id) { }
+    ~POPUPMENU() { reset(); }
+    void reset() { children.clear(); }
+    void add(MENUITEM* item) { children += item; }
+    int size() const { return children.size(); }
+    MENUITEM* getItem(int pos) const { return ((pos >= 0 && pos < size()) ? children[pos] : nullptr); }
+    MENUITEM* idFind(int _id) const { return getItem(children.indexOf(_id)); }
+    MENUITEM* atFind(int _idx) const { return getItem(_idx); }
+    void setChecked(int _id, bool _set);
+    bool isNotEmpty() const { return children.size() > 1; }
+    int id{0};
+protected:
+    zArray<MENUITEM*> children{};
+};
+
+class MENUITEM {
+    friend class zActionBar;
+public:
+    MENUITEM() { }
+    MENUITEM(int _id, int _img, int _txt, u32 _flg, POPUPMENU* _pop);
+    ~MENUITEM() { SAFE_DELETE(pop); }
+    bool operator==(int _id) const { return id == _id; }
+    void reset();
+    bool isCheckBox() const { return flags & menuCheck; }
+    bool isRadioButton() const { return flags & menuRadio; }
+    bool isPopup() const { return flags & menuPopup; }
+    bool isAlways() const { return (flags & 3) == actAlways; }
+    bool isNever() const { return (flags & 3) == actNever; }
+    bool isText() const { return flags & menuText; }
+    bool isEnabled() const { return enable; }
+    bool isChecked() const { return checked; }
+    bool isVisibled() const { return visible; }
+    void setText(cstr _text) { title = _text; }
+    void setEnabled(bool _set) { enable = _set; }
+    void setVisibled(bool _set) { visible = _set; }
+    void setChecked(bool _set) { checked = _set; }
+    const zString& getText() const { return title; }
+    // идентификатор/изображение
+    i32 id{0}, image{0};
+protected:
+    // указатель на попап меню
+    POPUPMENU* pop{nullptr};
+    // признак выбранного элемента
+    bool checked{false}, enable{true}, visible{true};
+    // текст
+    i32 text{0};
+    // флаги
+    u32 flags{0};
+    // заголовок
+    zString title;
+};
+
 // основные компоненты
 #include "zstandard/zGL.h"
 #include "zstandard/zJniHelper.h"

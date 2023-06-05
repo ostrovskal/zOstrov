@@ -11,6 +11,7 @@ void zTexture::release() {
     if(idFBO) {
         glDeleteFramebuffers(1, &idFBO);
         idFBO = 0;
+        manager->volumeVideoMemory(_size.w * _size.h * 4, false);
     }
     if(id) {
         glDeleteTextures(1, &id);

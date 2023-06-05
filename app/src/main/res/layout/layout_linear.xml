@@ -11,6 +11,12 @@
         z:styles="@style/llinear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <Spinner
+            android:id="@+id/select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            z:styles="@style/select"
+            />
         <GridView
             android:id="@+id/grid1"
             android:layout_width="wrap_content" android:layout_height="wrap_content"

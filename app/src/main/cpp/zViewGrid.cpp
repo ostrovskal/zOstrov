@@ -5,14 +5,6 @@
 #include "zssh/zCommon.h"
 #include "zssh/zViewRibbons.h"
 
-/*
-void zViewGrid::onDraw() {
-    zViewGroup::onDraw();
-    //if(div) div->make((params[GRID_LINES_SPACE] * 2) - (div->size + div->padBegin + div->padEnd) / 2, countItem, firstItem);
-    if(div) div->make(0, countItem, firstItem);
-}
-*/
-
 void zViewGrid::setParameters(i32 param, i32 value) {
     if(param >= GRID_CELLS_SPACE && param <= GRID_LINES) {
         _params[param] = value;
@@ -134,7 +126,7 @@ szi zViewGrid::measureChildrenSize(cszm& spec) {
 
 void zViewGrid::childMeasure(zView *child, zLayoutParams *lps) {
     szm s(zMeasure(MEASURE_UNDEF, 0), zMeasure(MEASURE_EXACT, params[GRID_CELL_SIZE]));
-    auto wspec(makeChildMeasureSpec(s[vert], 0, lps->w));
-    auto hspec(makeChildMeasureSpec(s[!vert], 0, lps->h));
+    auto wspec(makeChildMeasureSpec(s[vert], child->margin.extent(false), lps->w));
+    auto hspec(makeChildMeasureSpec(s[!vert], child->margin.extent(true), lps->h));
     child->measure( { wspec, hspec } );
 }

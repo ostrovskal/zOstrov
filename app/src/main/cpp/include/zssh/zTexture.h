@@ -25,7 +25,7 @@ public:
     // конструктор
     zTexture(cstr _name, u8* ptr, u32 size) : name(_name) { glGenTextures(1, &id); makeTexture(ptr, size); }
     // деструктор
-    ~zTexture() { SAFE_DELETE(tiles); count = 0; release(); }
+    ~zTexture() { release(); SAFE_DELETE(tiles); count = 0; }
     // создать текстуру
     void makeTexture(u8* ptr, u32 size);
     // сохранить(tga)

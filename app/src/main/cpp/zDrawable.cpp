@@ -152,6 +152,7 @@ void zDrawable::measure(int width, int height, int pivot, bool isSave) {
         // проверить на текстуру
         if(!(texture && texture->isEqual(width, height))) {
             if(!texture) texture = new zTexture();
+            manager->volumeVideoMemory(width * height * 4, true);
             if(!texture->makeFBO(width, height)) {
                 DLOG("error makeFBO %s(%i)", view->typeName(), view->id);
                 release(); return;

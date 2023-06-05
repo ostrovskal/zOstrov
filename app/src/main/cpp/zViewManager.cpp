@@ -221,6 +221,7 @@ void zViewManager::drawViews() {
     static int oldTri(0);
     static int oldLn(0);
     static int oldObjs(0);
+    static int oldVideoMem(0);
     countVertices = 0; countLn = 0; countObjs = 0;
 #endif
     rti rcommon(zGL::instance()->getSizeScreen());
@@ -264,6 +265,10 @@ void zViewManager::drawViews() {
             oldObjs = countObjs;
         }
         showTri = false;
+        if(oldVideoMem != videoMemory) {
+            DLOG("videoMem: %i", videoMemory);
+            oldVideoMem = videoMemory;
+        }
     }
 #endif
     status |= Z_ANIM;

@@ -24,13 +24,15 @@ public:
     // вернуть имя типа
     virtual cstr typeName() const override { return "zViewBaseRibbon"; }
     // установка адаптера
-    virtual void setAdapter(zBaseAdapter* _adapter);
+    virtual zViewBaseRibbon* setAdapter(zBaseAdapter* _adapter);
     // установка выделенного элемента
     void setItemSelected(int item);
     // вернуть выделенный элемент
-    int getItemSelecter() const { return selectItem; }
+    int getItemSelected() const { return selectItem; }
+    // вернуть первый видимый
+    int getFirstItem() const { return firstItem; }
     // установка события выделения
-    void setOnChangeSelected(std::function<void(zView*, int)> _selected) { onChangeSelected = _selected; }
+    zViewBaseRibbon* setOnChangeSelected(std::function<void(zView*, int)> _selected) { onChangeSelected = _selected; return this; }
 protected:
     // позиционирование
     virtual void onLayout(crti &position, bool changed) override;
@@ -137,6 +139,7 @@ class zViewPopup : public zViewGroup {
 public:
     // конструктор
 	zViewPopup(zStyle* _styles, zView* _owner, zView* _content);
+    virtual ~zViewPopup() { dismiss(); }
     // отобразить
     virtual void show(cpti& _offs);
     // обработка касания
@@ -153,26 +156,20 @@ protected:
     virtual void onLayout(crti &position, bool changed) override;
     virtual void onMeasure(cszm& spec) override;
     // владелец
-    zView* owner{ nullptr };
+    zView* owner{nullptr};
     // содержимое
-    zView* content{ nullptr };
+    zView* content{nullptr};
     // смещение от владельца
     pti offs{};
 };
 
 class zViewDropdown : public zViewRibbon {
 public:
-    zViewDropdown(zView* _owner, zStyle* _styles) : zViewRibbon(_styles, -1000, true), owner(_owner) { }
+    // конструктор
+    zViewDropdown(zStyle* styles) : zViewRibbon(styles, 0, true) { }
 protected:
-/*
-    virtual void messageReceive(HANDLER_MESSAGE *msg) override {
-        owner->notifyOwner(msg->what, atView(msg->arg), msg->arg);
-        zViewRibbon::messageReceive(msg);
-    }
-*/
-    virtual szi measureChildrenSize(cszm& spec) override;
-    // владелец
-    zView* owner{ nullptr };
+    // рассчитать габариты всех дочерних
+    virtual szi measureChildrenSize(cszm& spec);
 };
 
 class zViewSelect : public zViewGroup {
@@ -187,18 +184,16 @@ public:
     virtual void changeTheme() override;
     // проверка на режим блокировки
     virtual bool testLocked() const override { return popup->isVisibled(); }
-    // уведомление владельца
-    virtual void notifyOwner(int what, zView *view, int arg) override;
     // вернуть имя типа
     virtual cstr typeName() const override { return "zViewSelect"; }
     // установка адаптера
-    void setAdapter(zAdapterList* _adapter);
+    virtual zViewSelect* setAdapter(zAdapterList* _adapter);
     // установка выбранного элемента
     void setItemSelected(int item);
     // выбранный
     int getSelectedItem() const { return selectItem; }
     // установка события выделения
-    void setOnChangeSelected(std::function<void(zView*, int)> _select) { onChangeSelected = _select; }
+    zViewSelect* setOnChangeSelected(std::function<void(zView*, int)> _select) { onChangeSelected = _select; return this; }
 protected:
     class zAdapterSelect : public zAdapterList {
     public:
@@ -233,73 +228,3 @@ protected:
     // событие выделения
     std::function<void(zView*, int)> onChangeSelected;
 };
-
-/*
-class zActionBar : public zLinearLayout {
-public:
-    enum { ACTION_DELAY = 300 };
-    // конструктор
-    zActionBar(zStyle* _styles, zStyle* _styles_buttons, zStyle* _styles_popup);
-    // деструктор
-    virtual ~zActionBar();
-    // отобразить/скрыть
-    virtual void show(bool _show);
-    // проверка на режим блокировки
-    virtual bool testLocked() const override;
-    // уведомление владельца
-    virtual void notifyOwner(int what, zView *view, int arg) override;
-    // установка содержимого
-    virtual void setContent(zView* _view);
-    // вернуть имя типа
-    virtual cstr typeName() const override { return "zActionBar"; }
-    // формирователь
-    bool setMenu(int iconApp, zMenuItem* _menu);
-    // установка адаптера
-    void setAdapter(zAdapterList* _adapter);
-protected:
-    class zAdapterMenu : public zAdapterArray<MENUITEM> {
-    public:
-        zAdapterMenu(zActionBar* _bar, zAdapterList* _list) : zAdapterArray<MENUITEM>(), list(_list), bar(_bar) {}
-        void setPopup(POPUPMENU* _popup) { popupmenu = _popup; notifyOwners(); }
-        virtual int getCount() const override { return popupmenu ? popupmenu->size() : 0; }
-        virtual const MENUITEM& getItem(int position) const override { return *popupmenu->getItem(position); }
-        virtual zView* getView(int position, zView *convert, zViewGroup *parent) override;
-    protected:
-        zActionBar* bar{nullptr};
-        zAdapterList* list{nullptr};
-        POPUPMENU* popupmenu{nullptr};
-    };
-    // вычисление габаритов
-    virtual void onMeasure(int widthSpec, int heightSpec) override;
-    // анимация появления
-    virtual bool onRedraw() override;
-    // вычисление кнопок действий
-    int measureButton(int _id, int _image, int widthSize, int heightSize, POPUPMENU* _pop, bool isMeasure);
-    // формирование меню
-    void recursiveMenu(POPUPMENU* pop);
-    // сброс кнопки overflow
-    void resetOverflow();
-    // клик
-    void clickPopup(zView* view, POPUPMENU* pop);
-    // корень меню
-    POPUPMENU* root{nullptr};
-    // кнопка вызова страндартного меню
-    POPUPMENU overflow{};
-    // адаптер
-    zAdapterMenu* adapter{nullptr};
-    // стили кнопок
-    zStyle* styles_buttons{nullptr};
-    // содержимое
-    zFrameLayout* content{nullptr};
-    // окно
-    zViewPopup* popup{nullptr};
-    // список
-    zViewDropdown* dropdown{nullptr};
-    // ожидание анимации/текущий фрейм
-    int delay{ACTION_DELAY}, frame{8};
-    // объект для рекурсии
-    zMenuItem* _menu{nullptr};
-    // нажатая кнопка
-    zView* buttonView{nullptr};
-};
-*/

@@ -315,8 +315,9 @@ bool zScrollLayout::scrolling(int _delta) {
         if(upd) {
             child->requestPosition();
             // отправляем событие скролла
-            if(onChangeScroll) onChangeScroll(this, _delta);
+            if(onChangeScroll) onChangeScroll(this, child->scroll[vert]);
             awakenScroll();
+            zViewGroup::scrolling(_delta);
         } else if(glow) {
             updateGlow(_delta);
         }

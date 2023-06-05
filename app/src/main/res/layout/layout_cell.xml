@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:z="http://schemas.android.com/apk/res-auto"
-    tools:ignore="ObsoleteLayoutParam"
     z:layout_cells="2,8" z:layout_space="1dp"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:gravity="start" z:pad="1dp">
@@ -12,8 +11,7 @@
         android:layout_x="0px" android:layout_y="0px" android:layout_width="2px" android:layout_height="3px"
         z:styles="@style/ribbon"
         z:orientation="vertical"
-        z:bkTiles="@integer/selectDrop"
-        tools:ignore="ObsoleteLayoutParam" />
+        z:bkTiles="@integer/selectDrop" />
     <EditText
         android:id="@+id/edit1" z:inputMode="text"
         android:layout_x="0px" android:layout_y="3px" android:layout_width="2px" android:layout_height="1px"

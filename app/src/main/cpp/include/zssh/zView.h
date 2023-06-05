@@ -188,7 +188,7 @@ public:
         }
     }
     // установка клика
-    zView* setOnClick(std::function<void(zView*, bool)> _click) { onClick = std::move(_click); return this; }
+    zView* setOnClick(std::function<void(zView*, int)> _click) { onClick = std::move(_click); return this; }
     // установка касания
     zView* setOnTouch(std::function<int(zView*, zTouch*)> _touch) { onTouch = std::move(_touch); return this; }
     // установка анимации
@@ -248,12 +248,6 @@ public:
     zDrawable* drw[5]{};
     // стили
     zStyle* styles{nullptr};
-    // событие клика
-    std::function<void(zView*, bool)> onClick;
-    // событие касания
-    std::function<int(zView*, zTouch*)> onTouch;
-    // событие анимации
-    std::function<int(zView*, int)> onAnimation;
 protected:
     // установка гравитации
     void _setGravity(u32 _g, u8* p) { if(_g != (*p & ZS_GRAVITY_MASK)) { *p &= ~ZS_GRAVITY_MASK; *p |= (u8)_g; requestLayout(); } }
@@ -302,6 +296,12 @@ protected:
     // предыдущая позиция
     rti oldPos{INT_MAX, INT_MAX};
     // фейковый отображатель
+    // событие клика
+    std::function<void(zView*, int)> onClick;
+    // событие касания
+    std::function<int(zView*, zTouch*)> onTouch;
+    // событие анимации
+    std::function<int(zView*, int)> onAnimation;
     static zDrawableFake fake;
     // текущая FBO
     static zView* fbo;

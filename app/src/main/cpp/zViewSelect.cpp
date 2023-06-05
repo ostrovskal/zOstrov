@@ -5,44 +5,60 @@
 #include "zssh/zCommon.h"
 #include "zssh/zViewRibbons.h"
 
-/*
+szi zViewDropdown::measureChildrenSize(cszm& spec) {
+    szi size(0, div ? div->resolve(countItem, false) : 0);
+    for(int i = 0 ; i < countItem; i++) {
+        auto child(obtainView(i));
+        if(!child) continue;
+        // расчитать размер
+        measureChild(child, spec);
+        // добавить в кэш
+        addViewCache(child);
+        // определить макс. габариты
+        size.w = z_max(size.w, child->rview.w);
+        size.h += child->rview.h;
+    }
+    return size;
+}
+
 zViewSelect::zViewSelect(zStyle* _styles, i32 _id) : zViewGroup(_styles, _id) {
-    SAFE_DELETE(drs[DR_IDX_FK]);
-    dropdown = new zViewDropdown(this, _styles);
+    dropdown = new zViewDropdown(_styles);
     popup    = new zViewPopup(styles_default, this, dropdown);
-    minSize.set(z_dp(z.R.dimen.selectMinWidth), z_dp(z.R.dimen.selectMinHeight));
+    dropdown->setOnClick([this](zView* v, int sel) { setItemSelected(sel); });
+    minMaxSize.set(z_dp(z.R.dimen.selectMinWidth), 0, z_dp(z.R.dimen.selectMinHeight), 0);
 }
 
 zViewSelect::~zViewSelect() {
-    vmanager->getCommonView()->detach(popup);
     SAFE_DELETE(popup);
+    SAFE_DELETE(dropdown);
     if(adapter) {
-        adapter->unregisterOwner(this);
+        adapter->unregistration(this);
         SAFE_DELETE(adapter);
     }
 }
 
-i32 zViewSelect::onTouch(zTouch *touch) {
+i32 zViewSelect::onTouchEvent(zTouch *touch) {
     if(touch->click()) {
         // показать попап
-        popup->show(0, 0);
+        popup->show(pti());
     }
     return TOUCH_STOP;
 }
 
-void zViewSelect::setAdapter(zAdapterList *_adapter) {
+zViewSelect* zViewSelect::setAdapter(zAdapterList *_adapter) {
     if(adapter) {
-        adapter->unregisterOwner(this);
+        adapter->unregistration(this);
         SAFE_DELETE(adapter);
     }
     if(_adapter) {
         adapter = new zAdapterSelect(this, _adapter);
         dropdown->setAdapter(adapter);
-        adapter->registerOwner(this);
+        adapter->registration(this);
     }
+    return this;
 }
 
-void zViewSelect::stateView(VIEW_STATE &state, bool save, int &index) {
+void zViewSelect::stateView(STATE &state, bool save, int &index) {
     if(save) {
         state.data += selectItem;
     } else {
@@ -60,47 +76,38 @@ void zViewSelect::setItemSelected(int item) {
     popup->dismiss();
     // вызов события
     if(onChangeSelected) onChangeSelected(this, selectItem);
+    invalidate();
 }
 
-void zViewSelect::onMeasure(int widthSpec, int heightSpec) {
+void zViewSelect::onMeasure(cszm& spec) {
     // габариты по умолчанию
-    int height(minSize.h), width(minSize.w);
+    int width(minMaxSize.x), height(minMaxSize.w);
     // подсчитать габариты списка
     // ширина - как у селекта, высота - неизвестно
     if(!countChildren()) setItemSelected(selectItem);
-    dropdown->measure(makeChildMeasureSpec(0, 0, VIEW_WRAP),
-                      makeChildMeasureSpec(0, 0, VIEW_WRAP));
+    dropdown->measure({makeChildMeasureSpec(0, 0, VIEW_WRAP), makeChildMeasureSpec(0, 0, VIEW_WRAP)});
     auto view(atView(0));
     if(view) {
-        view->measure(makeChildMeasureSpec(widthSpec, padMargin(false), lytParams.w),
-                                makeChildMeasureSpec(heightSpec, padMargin(true), VIEW_WRAP));
+        view->measure({makeChildMeasureSpec(spec.w, padMargin(false), lps.w), makeChildMeasureSpec(spec.h, padMargin(true), VIEW_WRAP)});
         // подсчитать габариты селекта
-        auto hspec(MODE_MEASURE_SPEC(heightSpec)), heightSize(SIZE_MEASURE_SPEC(heightSpec));
-        if(heightSize && hspec == MEASURE_EXACT) {
+        auto widthSize(spec.w.size()), heightSize(spec.h.size());
+        if(spec.h.isExact()) {
             height = heightSize;
         } else {
-            height = z_max(minSize.h, view->rfull.h);
-            if(heightSize && hspec == MEASURE_MOST) {
-                height = z_min(height, heightSize);
-            }
+            height = z_max(minMaxSize.w, view->rview.h);
+            if(heightSize && spec.h.mode() == MEASURE_MOST) height = z_min(height, heightSize);
         }
-        auto wspec(MODE_MEASURE_SPEC(widthSpec)), widthSize(SIZE_MEASURE_SPEC(widthSpec));
-        if(widthSize && wspec == MEASURE_EXACT) {
+        if(spec.w.isExact()) {
             width = widthSize;
         } else {
-            width = view->rfull.w;
-            width = z_max(width, dropdown->rfull.w);
-            width = z_max(minSize.w, width);
-            if(widthSize && wspec == MEASURE_MOST) {
-                width = z_min(width, widthSize);
-            }
+            width = z_max(minMaxSize.x, z_max(view->rview.w, dropdown->rview.w));
+            if(widthSize && spec.w.mode() == MEASURE_MOST) width = z_min(width, widthSize);
         }
-        view->measure(makeChildMeasureSpec(MAKE_MEASURE_SPEC(MEASURE_EXACT, width), padMargin(false), VIEW_MATCH),
-                      makeChildMeasureSpec(MAKE_MEASURE_SPEC(MEASURE_EXACT, height), padMargin(true), VIEW_MATCH));
+        view->measure({makeChildMeasureSpec(zMeasure(MEASURE_EXACT, width), padMargin(false), VIEW_MATCH),
+                      makeChildMeasureSpec(zMeasure(MEASURE_EXACT, height), padMargin(true), VIEW_MATCH)});
         // если селект стал больше по ширине, пересчитать ширину списка
-        if(width > dropdown->rfull.w) {
-            dropdown->measure(makeChildMeasureSpec(MAKE_MEASURE_SPEC(MEASURE_EXACT, width), 0, VIEW_MATCH),
-                              makeChildMeasureSpec(0, 0, VIEW_WRAP));
+        if(width > dropdown->rview.w) {
+            dropdown->measure({makeChildMeasureSpec(zMeasure(MEASURE_EXACT, width), 0, VIEW_MATCH), makeChildMeasureSpec(0, 0, VIEW_WRAP)});
         }
     }
     setMeasuredDimension(width, height);
@@ -117,10 +124,3 @@ void zViewSelect::changeTheme() {
     popup->changeTheme();
     zViewGroup::changeTheme();
 }
-
-void zViewSelect::notifyOwner(int what, zView *view, int arg) {
-    if(what == MSG_CLICK) {
-        setItemSelected(arg);
-    }
-}
-*/

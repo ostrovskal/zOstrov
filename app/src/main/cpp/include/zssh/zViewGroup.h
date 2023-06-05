@@ -36,7 +36,7 @@ public:
     // смена темы оформления
     virtual void changeTheme() override;
     // прокрутка содержимого
-    virtual bool scrolling(int _delta) { return false; }
+    virtual bool scrolling(int _delta);
     // проверка на пересечение с дочерними
     virtual bool intersectChildren(int x, int y) const;
     // отрисовка
@@ -94,7 +94,7 @@ public:
     // создание параметров для вычисления дочерних
     static zMeasure makeChildMeasureSpec(const zMeasure& spec, int padding, zMeasure childDimension);
     // установка события прокрутки
-    void setOnChangeScrolling(std::function<void(zView*, int)> _scroll) { onChangeScroll = _scroll; }
+    zViewGroup* setOnChangeScrolling(std::function<void(zView*, int)> _scroll) { onChangeScroll = _scroll; return this; }
 protected:
     // отсоединение
     virtual void _detach() override;

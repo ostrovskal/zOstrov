@@ -83,13 +83,22 @@ void sshApp::setContent() {
     idView(z.R.id.radioDark)->setOnClick([this](zView*, int) {
         setTheme(themeDark, nullptr, nullptr);
     });
-    auto grd(idView<zViewGrid>(z.R.id.grid1));
     zArray<zStringUTF8> objects(theme->findArray(z.R.array.spinArray));
-    for(int i = 0 ; i < 1000; i++) {
+    idView<zViewSelect>(z.R.id.select)->
+            setAdapter(new zAdapterList(objects, new zFabricSelectItem(styles_z_spin_capt),
+                                        new zFabricSelectItem(styles_z_spin_item)))->
+                                        setOnChangeSelected([](zView*, int s) {
+                                            DLOG("select sel %i", s);
+                                        });
+    auto grd(idView<zViewGrid>(z.R.id.grid1));
+    for(int i = 0 ; i < 100; i++) {
         objects += zStringUTF8(z_ntos(&i, RADIX_DEC, false));
     }
     auto adapter(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
-    grd->setAdapter(adapter);
+    grd->setAdapter(adapter)->setOnChangeSelected([](zView*, int sel) {
+        DLOG("grid sel %i", sel);
+    })->setOnClick([grd](zView*, int) {
+    });
     auto lst(idView<zViewRibbon>(z.R.id.list1));
     auto adapter1(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
     lst->setAdapter(adapter1);
