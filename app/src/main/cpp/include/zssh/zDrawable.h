@@ -133,6 +133,8 @@ public:
     void make(int extra, int count, int idx);
     // определение размера всех разделителей
     int resolve(int count, bool _visible) const;
+    // вернуть полный размер по типу разделителя
+    int getSize(int flags) const;
     // тип отображения/размер
     int type{0}, size{1}, padBegin{0}, padEnd{0};
 protected:

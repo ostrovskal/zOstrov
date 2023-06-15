@@ -67,7 +67,7 @@ void zTexture::makeTexture(u8* ptr, u32 size) {
         _tga = new zTga(ptr, size);
         ww = _tga->getWidth(); hh = _tga->getHeight();  image = _tga->getImage();
         type = _tga->getComponent() == 3 ? GL_RGB : GL_RGBA;
-    } else {
+    } else if(*(u32*)ptr == '2LTT') {
         // из активов
         auto head((HEAD_TTL*)ptr); ptr += sizeof(HEAD_TTL);
         ww = head->width; hh = head->height;
@@ -104,6 +104,10 @@ void zTexture::makeTexture(u8* ptr, u32 size) {
             }
             type = GL_LUMINANCE_ALPHA;
         }
+    } else {
+        ILOG("Unknown format texture!");
+        release();
+        return;
     }
     glTexImage2D(GL_TEXTURE_2D, 0, type, ww, hh, 0, type, GL_UNSIGNED_BYTE, image);
     if(_jpg || _png || _tga) {

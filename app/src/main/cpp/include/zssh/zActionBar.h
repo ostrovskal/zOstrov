@@ -7,11 +7,6 @@
 #include "zCommonLayout.h"
 #include "zViewRibbons.h"
 
-enum MenuAction { actNever = 0, actAlways = 1, actIfRoom = 2 };
-enum MenuFlags { menuItemText = 4, menuItemRadio = 8, menuItemCheck = 16,
-                 menuItemGroup = 32, menuItemCollapse = 64, menuItemEnabled = 128,
-                 menuItemChecked = 256, menuItemVisibled = 512 };
-
 class zMenuGroup;
 // класс элемента меню
 class zMenuItem {
@@ -99,18 +94,6 @@ protected:
 
 class zActionBar : public zLinearLayout {
 public:
-    enum MenuItem { menuEnd, menuPopupBegin, menuPopupEnd, menuItem };
-    // структура меню из ресурсов
-    struct MENUITEM {
-        // тип - группа/элемент
-        u32 type;
-        // идентификатор элемента/идентификатор текста
-        i32 id, title;
-        // идентификатор изображения
-        i32 image;
-        // тип(текст/радио/флажок)|размещение(никогда/всегда/если есть место)
-        u32 action;
-    };
     enum { ACTION_DELAY = 300 };
     // конструктор
     zActionBar(zStyle* _styles, zStyle* _styles_buttons, zStyle* _styles_popup);

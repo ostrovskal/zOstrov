@@ -41,22 +41,27 @@ void zViewBaseRibbon::reset() {
 void zViewBaseRibbon::correctBegin(int used) {
     auto v(atView(0));
     if(v) {
+        auto _div(div ? div->getSize(ZS_DIVIDER_BEGIN) : 0);
         auto _delta(v->edges(vert, false) - edge.w);
-        if(firstItem) _delta -= used;
-        if(_delta > 0) offsetChildren(-_delta, vert);
+        if(firstItem) _delta -= used; else _delta -= _div;
+        if(_delta > 0) {
+            offsetChildren(-_delta);
+            //DLOG("%i", _delta);
+        }
     }
 }
 
 void zViewBaseRibbon::correctFinish(int used) {
     auto count(children.size() - 1);
     if(count >= 0 && (firstItem + count) == (countItem - 1)) {
-        auto _div(div && (div->type & ZS_DIVIDER_END) ? div->size + div->padBegin : 0);
+        auto _div(div ? div->getSize(ZS_DIVIDER_END) : 0);
         auto pos(atView(count)->edges(vert, true) + _div);
         auto offset(edge.h - pos);
         auto first(atView(0)); auto start(first->edges(vert, false));
         if(offset > 0 && (firstItem > 0 || start < edge.w)) {
             if(firstItem == 0) offset = z_min(offset, (edge.w - start));
-            offsetChildren(offset, vert);
+            offsetChildren(offset);
+            //DLOG("offs %i", offset);
             if(firstItem > 0) fillReverse(firstItem - linesGrid, first->edges(vert, false) - used);
         }
     }
@@ -145,8 +150,8 @@ bool zViewBaseRibbon::scrolling(int _delta) {
                         posView--;
                     }
                 }
-                offsetChildren(_delta, vert);
-                /*if(_delta > 0) */fill(deltaItem - _delta);
+                offsetChildren(_delta);
+                fill(0);
                 auto v(atView(0));
                 deltaItem = (v ? v->edges(vert, false) - edge.w : 0);
                 requestPosition();
@@ -244,6 +249,8 @@ void zViewBaseRibbon::onLayout(crti &position, bool changed) {
     // заполнить
     if(countItem > 0) fill(deltaItem);
     awakenScroll();
+    // отображаем/скрываем выделение
+    showSelector(clickItem != -1);
 }
 
 szi zViewBaseRibbon::measureChildrenSize(cszm& spec) {
@@ -342,16 +349,18 @@ void zViewRibbon::fill(int _edge) {
     int count(children.size());
     view = atView( count - 1);
     count += firstItem;
-    if(firstItem == 0 && div && div->type & ZS_DIVIDER_BEGIN) _edge += div->size + div->padEnd;
+    if(firstItem == 0 && div) {
+        auto begin(div->getSize(ZS_DIVIDER_BEGIN));
+        if(_edge < begin && _edge >= 0) _edge -= begin;
+    }
     fillForward(count, (view ? view->edges(vert, true) : edge.w) + _edge);
 }
 
 // заполнять от конца к началу
 void zViewRibbon::fillReverse(int pos, int next) {
-    auto _div(div && (div->type & ZS_DIVIDER_MIDDLE) ? div->size + div->padBegin + div->padEnd : 0);
+    auto _div(div ? div->getSize(ZS_DIVIDER_MIDDLE) : 0);
     while(next > edge.w && pos >= 0) {
-        next = addView(next, pos, false, false)->edges(vert, false);
-        next -= _div; pos--;
+        next = addView(next - _div, pos--, false, false)->edges(vert, false) - _div;
     }
     firstItem = pos + 1;
     correctBegin(_div);
@@ -359,10 +368,9 @@ void zViewRibbon::fillReverse(int pos, int next) {
 
 // заполнять с начала до конца
 void zViewRibbon::fillForward(int pos, int next) {
-    auto _div(div && (div->type & ZS_DIVIDER_MIDDLE) ? div->size + div->padBegin + div->padEnd : 0);
+    auto _div(div ? div->getSize(ZS_DIVIDER_MIDDLE) : 0);
     while(next < edge.h && pos < countItem && pos >= 0) {
-        next = addView(next, pos, true, true)->edges(vert, true);
-        next += _div; pos++;
+        next = addView(next, pos++, true, true)->edges(vert, true) + _div;
     }
     correctFinish(_div);
 }

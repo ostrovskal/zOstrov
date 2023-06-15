@@ -450,10 +450,10 @@ bool zFlyng::start(zTouch* touch, int delta) {
     auto t((int)((touch->ctm - touch->btm) / 2000000));
     // если отпустили и время < 15(выбрано экспериментально)
     if(t < 15) {
-        delta *= (15 - t) / 2;
+        delta *= (15 - t) / 4;
 //        DLOG("fling %i", delta);
         animator.init(delta, false);
-        animator.add(0, zInterpolator::EASEOUTCUBIC, abs(delta / 3));
+        animator.add(0, zInterpolator::EASEOUTQUAD, abs(delta));
         post(MSG_ANIM, duration, 0);
     }
     return t < 15;
@@ -504,7 +504,6 @@ zViewCaret::zViewCaret() : zView(styles_z_caret, 0) {
 
 void zViewCaret::update(zView* own, int x, int y, int h) {
     parent = own; updateStatus(ZS_VISIBLED, own != nullptr);
-    DLOG("caret %x", own);
     if(own) {
         auto _own(dynamic_cast<zViewEdit*>(own));
         if(_own) setRotation(0, 0, (_own->getTextStyle() & ZS_TEXT_ITALIC) * 8);

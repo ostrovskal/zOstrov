@@ -484,6 +484,7 @@ zTexture* zImageCache::get(cstr _name, zTexture* t) {
         auto _tx(&tex[idx]);
         _tx->millis = z_timeMillis();
         use++; _tx->tex->ref++;
+//        DLOG("ref cache: use: %i name: %s ref: %i", use, _name, _tx->tex->ref);
         return _tx->tex;
     }
     // 2. создать новую
@@ -515,7 +516,7 @@ zTexture* zImageCache::get(cstr _name, zTexture* t) {
         maxSize += szTmp;
         curSize += szTmp;
     }
-    DLOG("place %i-%i use:%i %s", maxSize, curSize, use, _name);
+    DLOG("add cache: %i-%i use: %i name: %s count: %i", maxSize, curSize, use, _name, tex.size());
     return tx;
 }
 

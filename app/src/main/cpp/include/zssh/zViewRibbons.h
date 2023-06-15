@@ -121,6 +121,8 @@ protected:
     virtual void childMeasure(zView *child, zLayoutParams *lps) override;
     // вычисление размера
     virtual void onMeasure(cszm& spec) override;
+    // отрисовка
+    virtual void onDraw() override;
     // Заполнение таблицы
     virtual void fill(int edgePos) override;
     virtual void fillReverse(int pos, int start) override;
@@ -131,20 +133,21 @@ protected:
     zView* makeLine(int position, int coord, bool flow);
     // установленные параметры
     i32 _params[GRID_LINES + 1]{};
-    // Простанство между линиями/Пространство между ячейками/Размер ячейки
-    i32 params[GRID_MODE + 1]{};
+    // текущие параметры
+    i32 params[GRID_LINES + 1]{};
 };
 
 class zViewPopup : public zViewGroup {
 public:
     // конструктор
 	zViewPopup(zStyle* _styles, zView* _owner, zView* _content);
+    virtual ~zViewPopup() { dismiss(); }
     // отобразить
     virtual void show(cpti& _offs);
     // обработка касания
     virtual i32 touchEvent(AInputEvent *event) override;
     // отставка
-    virtual void dismiss() { }
+    virtual void dismiss();
     // нажатие клавиши
     virtual i32 keyEvent(int key, bool sysKey) override;
     // вернуть имя типа

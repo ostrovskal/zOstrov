@@ -15,9 +15,14 @@ void zViewGrid::setParameters(i32 param, i32 value) {
 
 i32 zViewGrid::getParameters(i32 param) const {
     if(param >= GRID_CELLS_SPACE && param <= GRID_LINES) {
-        return _params[param];
+        return params[param];
     }
     return -1;
+}
+
+void zViewGrid::onDraw() {
+    zViewGroup::onDraw();
+    if(div) div->make((params[GRID_LINES_SPACE] * 2 - div->getSize(ZS_DIVIDER_MIDDLE)) / 2 - div->size / 2, countItem, firstItem);
 }
 
 void zViewGrid::fill(int _edge) {
@@ -26,26 +31,31 @@ void zViewGrid::fill(int _edge) {
     if(view) fillReverse(firstItem - linesGrid, view->edges(vert, false));
     auto count(children.size());
     view = atView(count - 1);
-    if(firstItem == 0 && div && div->type & ZS_DIVIDER_BEGIN) _edge += div->size + div->padEnd;
+    if(firstItem == 0 && div) {
+        auto begin(div->getSize(ZS_DIVIDER_BEGIN));
+        if(_edge < begin && _edge >= 0) _edge -= begin;
+    }
     fillForward(firstItem + count, (view ? view->edges(vert, true) + params[GRID_LINES_SPACE] : edge.w) + _edge);
 }
 
 void zViewGrid::fillReverse(int pos, int next) {
-    auto _div(div && (div->type & ZS_DIVIDER_MIDDLE) ? div->size + div->padBegin + div->padEnd : 0);
+    auto _div(div ? div->getSize(ZS_DIVIDER_MIDDLE) : 0);
+    _div += params[GRID_LINES_SPACE];
     while(next > edge.w && pos >= 0) {
-        next = makeLine(pos, next, false)->edges(vert, false) - params[GRID_LINES_SPACE];
-        firstItem = pos; pos -= linesGrid; next -= _div;
+        next = makeLine(pos, next - _div, false)->edges(vert, false) - _div;
+        firstItem = pos; pos -= linesGrid;
     }
-    correctBegin(params[GRID_LINES_SPACE] + _div);
+    correctBegin(_div);
 }
 
 void zViewGrid::fillForward(int pos, int next) {
-    auto _div(div && (div->type & ZS_DIVIDER_MIDDLE) ? div->size + div->padBegin + div->padEnd : 0);
+    auto _div(div ? div->getSize(ZS_DIVIDER_MIDDLE) : 0);
+    _div += params[GRID_LINES_SPACE];
     while(next < edge.h&& pos < countItem) {
-        next = makeLine(pos, next, true)->edges(vert, true) + params[GRID_LINES_SPACE];
-        next += _div; pos += linesGrid;
+        next = makeLine(pos, next, true)->edges(vert, true) + _div;
+        pos += linesGrid;
     }
-    correctFinish(params[GRID_LINES_SPACE] + _div);
+    correctFinish(_div);
 }
 
 zView* zViewGrid::makeLine(int position, int coord1, bool flow) {
@@ -75,11 +85,16 @@ void zViewGrid::onInit(bool _theme) {
 }
 
 void zViewGrid::onMeasure(cszm& spec) {
-    zViewBaseRibbon::onMeasure(spec);
     // Вычисление параметров ячеек
-    auto cell(_params[GRID_CELL_SIZE]), space(_params[GRID_CELLS_SPACE]);
-    if(cell <= 0) return;
+    auto limC(spec[!vert].size());
+    auto cell(params[GRID_CELL_SIZE]), space(_params[GRID_CELLS_SPACE]);
+    if(!limC) { if(cell <= 0) cell = 100_dp; limC = cell * 5; }
+    if(!linesGrid) linesGrid = (limC - pad.extent(vert)) / (cell + space * 2);
+    params[GRID_LINES] = linesGrid;
+    RTI_LOG("client", rclient);
+    zViewBaseRibbon::onMeasure(spec);
     auto wh(rclient[3 - vert]), ln(z_max(1, linesGrid - 1));
+    RTI_LOG("client", rclient);
     switch(_params[GRID_MODE]) {
         case ZS_GRID_CELL:
             ln = z_max(1, linesGrid - 2);
@@ -94,16 +109,11 @@ void zViewGrid::onMeasure(cszm& spec) {
             params[GRID_CELLS_SPACE] = space + (int)round((float)wh / (float)(linesGrid + 1));
             break;
     }
-//    DLOG("cell:%i space:%i cellSize:%i cellSpacing:%i", cell, space, cellSize, cellSpacing);
 }
 
 szi zViewGrid::measureChildrenSize(cszm& spec) {
     int i; szi _max;
     auto limC(spec[!vert].size()), limL(spec[vert].size());
-    auto cell(params[GRID_CELL_SIZE]);
-    if(!limC) { if(cell <= 0) cell = 100_dp; limC = cell * 5; }
-    if(!linesGrid) linesGrid = (limC - pad.extent(vert)) / (cell + params[GRID_CELLS_SPACE] * 2);
-    _params[GRID_LINES] = linesGrid;
     for(i = 0 ; i < countItem; i++) {
         auto child(obtainView(i));
         if(!child) continue;
@@ -121,6 +131,8 @@ szi zViewGrid::measureChildrenSize(cszm& spec) {
         _max[vert] = val;
     }
     _max[vert] += (div && div->resolve(i / linesGrid, false));
+//    SZI_LOG("max", _max);
+//    DLOG("2 lines: %i - %i %i %i %i %i", linesGrid, params[0], params[1], params[2], params[3], params[4]);
     return _max;
 }
 

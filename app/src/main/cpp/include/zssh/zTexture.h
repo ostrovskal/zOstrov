@@ -9,6 +9,8 @@ class zTexture final {
 public:
 #pragma pack(push, 1)
     struct HEAD_TTL {
+        // сигнатура
+        u32 sign;
         // габариты изображения
         u16 width, height;
         // кол-во тайлов

@@ -37,7 +37,6 @@ zViewSelect::zViewSelect(zStyle* _styles, i32 _id) : zViewGroup(_styles, _id) {
 }
 
 zViewSelect::~zViewSelect() {
-    manager->getSystemView(false)->detach(popup);
     SAFE_DELETE(popup);
     SAFE_DELETE(dropdown);
     if(adapter) {
@@ -192,4 +191,8 @@ void zViewPopup::onLayout(crti &position, bool changed) {
 i32 zViewPopup::keyEvent(int key, bool sysKey) {
     if(sysKey && key == AKEYCODE_BACK) { dismiss(); return 1; }
     return 0;
+}
+
+void zViewPopup::dismiss() {
+    manager->getSystemView(false)->detach(this);
 }

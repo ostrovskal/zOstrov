@@ -66,11 +66,11 @@ void zActionBar::recursiveMenu(zMenuGroup* grp) {
     zMenuGroup* _grp;
     while(_menu->type != menuEnd) {
         switch(_menu->type) {
-            case menuPopupBegin:
+            case menuGroupBegin:
                 grp->add(new zMenuItem(_menu->id, _menu->image, theme->findString(_menu->title), _menu->action | menuItemGroup, _grp = new zMenuGroup(_menu->id)));
                 _menu++; recursiveMenu(_grp);
                 break;
-            case menuPopupEnd: return;
+            case menuGroupEnd: return;
             default:
                 grp->add(new zMenuItem(_menu->id, _menu->image, theme->findString(_menu->title), _menu->action, nullptr));
                 break;
@@ -194,7 +194,7 @@ zView* zActionBar::zAdapterMenu::getView(int position, zView *convert, zViewGrou
     // текст/check/radio
     auto tv(nv->atView<zViewText>(1));
     if(tv) {
-        int tl1(z.R.integer.iconPopup), tl2(z.R.integer.iconPopup), _gravity(ZS_GRAVITY_END);
+        int tl1(z.R.integer.iconGroup), tl2(z.R.integer.iconGroup), _gravity(ZS_GRAVITY_END);
         if(!item->isGroup()) {
             if(item->isText()) _gravity = ZS_GRAVITY_CENTER;
             else {

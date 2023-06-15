@@ -41,7 +41,7 @@ static zStyle themeDark[] = {
         { Z_PROGRESS_CIRCULAR,            0x00000c15 },
         { Z_PROGRESS_TILES,               0x00001515 },
         { Z_SLIDER_TILES,                 0x00002c2e },
-        { Z_FORM_TILE,                    z.R.integer.formDark },
+        { Z_FORM_TILE,                    z.R.integer.formBackground },
         { Z_SLIDER_MODE | ZT_END,         ZS_SLIDER_SCALE }
 };
 
@@ -76,7 +76,7 @@ static zStyle themeLight[] = {
         { Z_PROGRESS_CIRCULAR,         0x00000c14 },
         { Z_PROGRESS_TILES,            0x00001414 },
         { Z_SLIDER_TILES,              0x00002d2f },
-        { Z_FORM_TILE,                 z.R.integer.formLight },
+        { Z_FORM_TILE,                 z.R.integer.formBackground },
         //{ Z_FORM_TILE,                 z.R.integer.rectRound },
         { Z_SLIDER_MODE | ZT_END,      ZS_SLIDER_ROTATE }
 };

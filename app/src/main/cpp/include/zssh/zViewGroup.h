@@ -42,7 +42,7 @@ public:
     // отрисовка
     virtual void draw() override;
     // сдвинуть дочерние
-    void offsetChildren(int delta, bool vert);
+    void offsetChildren(int delta);
     // вернуть системное представление
     zView* sysView() const;
     // привязка дочернего

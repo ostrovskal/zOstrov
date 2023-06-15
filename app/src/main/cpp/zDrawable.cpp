@@ -388,6 +388,17 @@ szi zDrawable::resolveSize(int wmax, int hmax, u32 gravity) const {
 //                                                        DIVIDER                                                                         //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+int zDrawableDivider::getSize(int flags) const {
+    int ret(size);
+    switch(type & flags) {
+        case ZS_DIVIDER_MIDDLE: ret += padBegin + padEnd; break;
+        case ZS_DIVIDER_END: ret += padBegin; break;
+        case ZS_DIVIDER_BEGIN: ret += padEnd; break;
+        default: ret = 0; break;
+    }
+    return ret;
+}
+
 int zDrawableDivider::resolve(int count, bool _visible) const {
     int _size(0), middle(0); count--;
     if(type & ZS_DIVIDER_BEGIN) _size += size + padEnd;

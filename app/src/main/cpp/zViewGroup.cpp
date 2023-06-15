@@ -11,12 +11,13 @@ zViewGroup::zViewGroup(zStyle* _styles, i32 _id): zView(_styles, _id) {
     sizeTouch.set(5_dp, 5_dp);
 }
 
-void zViewGroup::offsetChildren(int delta, bool _vert) {
+void zViewGroup::offsetChildren(int delta) {
     for(auto& child : children) {
         auto pos(child->oldPos);
-        pos.offset(!_vert * delta, _vert * delta);
+        pos.offset(!vert * delta, vert * delta);
         child->layout(pos);
     }
+//    invalidate();
 }
 
 zView* zViewGroup::attachInLayout(zView *v, int width, int height, int where) {
@@ -306,9 +307,7 @@ bool zViewGroup::scrolling(int _delta) {
 }
 
 void zViewGroup::changeTheme() {
-    for(auto& child : children) {
-        child->changeTheme();
-    }
+    for(auto& child : children) child->changeTheme();
     zView::changeTheme();
 }
 

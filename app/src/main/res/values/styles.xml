@@ -2,7 +2,7 @@
 <resources>
     <style name="keyboardBase">
         <item name="foreground">@drawable/zssh</item>
-        <item name="fkTiles">@integer/keybButSmall</item>
+        <item name="fkTiles">@integer/butKeyboardSmall</item>
         <item name="fkGravity">center</item>
         <item name="font">@drawable/font1</item>
         <item name="textColor">#ffffffff</item>
@@ -301,8 +301,8 @@
         <item name="background">@drawable/zssh</item>
         <item name="bkTiles">@integer/selectDrop</item>
         <item name="pad">5dp</item>
-        <item name="spacingLine">0dp</item>
-        <item name="spacingCell">0dp</item>
+        <item name="spacingLine">10dp</item>
+        <item name="spacingCell">10dp</item>
         <item name="cellSize">90dp</item>
         <item name="gridMode">uniform</item>
         <item name="lines">0</item>

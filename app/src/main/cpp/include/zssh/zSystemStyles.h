@@ -5,7 +5,7 @@ static zStyle styles_default[] = { { Z_PADDING | ZT_END, 0 } };
 
 static zStyle styles_z_keyboardbase[] = {
 	{ Z_FOREGROUND, z.R.drawable.zssh },
-	{ Z_FOREGROUND_TILES, z.R.integer.keybButSmall },
+	{ Z_FOREGROUND_TILES, z.R.integer.butKeyboardSmall },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_TEXT_FOREGROUND_COLOR, 0xffffffff },
@@ -321,8 +321,8 @@ static zStyle styles_z_grid[] = {
 	{ Z_BACKGROUND, z.R.drawable.zssh },
 	{ Z_BACKGROUND_TILES, z.R.integer.selectDrop },
 	{ Z_PADDING, 0x05050505 },
-	{ Z_SPACING_LINE, 0 },
-	{ Z_SPACING_CELL, 0 },
+	{ Z_SPACING_LINE, 10 },
+	{ Z_SPACING_CELL, 10 },
 	{ Z_CELL_SIZE, 90 },
 	{ Z_MODE, ZS_GRID_UNIFORM },
 	{ Z_LINES, 0 },
@@ -452,7 +452,7 @@ static zStyle styles_z_ccontroller[] = {
 	{ Z_FBO, true },
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_GRAVITY, ZS_GRAVITY_START | ZS_GRAVITY_BOTTOM },
-	{ Z_FOREGROUND_TILES, 0x04030102 },
+	{ Z_FOREGROUND_TILES, 0x09080607 },
 	{ Z_FOREGROUND_COLOR | ZT_END, 0xffffffff }
 };
 
@@ -460,7 +460,7 @@ static zStyle styles_z_acontroller[] = {
 	{ Z_FBO, true },
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_GRAVITY, ZS_GRAVITY_END | ZS_GRAVITY_BOTTOM },
-	{ Z_FOREGROUND_TILES, 0x09070806 },
+	{ Z_FOREGROUND_TILES, 0x0E0C0D0B },
 	{ Z_FOREGROUND_COLOR | ZT_END, 0xffffffff }
 };
 
@@ -556,7 +556,7 @@ static zStyle styles_z_seek[] = {
 	{ Z_TEXT_FONT | ZT_THEME, Z_FONT2 },
 	{ Z_TEXT_SIZE, 50 },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_SLIDER_TEXT },
-	{ Z_FOREGROUND_TILES, 0x00002C2E },
+	{ Z_FOREGROUND_TILES, 0x00002D2F },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_MODE | ZT_THEME, Z_SLIDER_MODE },
 	{ Z_DURATION, 40 },
@@ -566,7 +566,7 @@ static zStyle styles_z_seek[] = {
 
 static zStyle styles_z_progress1[] = {
 	{ Z_FOREGROUND, z.R.drawable.zssh },
-	{ Z_FOREGROUND_TILES, 0x00001414 },
+	{ Z_FOREGROUND_TILES, 0x00001515 },
 	{ Z_FOREGROUND_COLOR, 0x7fffffff },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_PRIMARY | ZT_THEME, Z_COLOR_PROGRESS_PRIMARY },
@@ -686,7 +686,7 @@ static zStyle styles_z_zviewslider1[] = {
 	{ Z_TEXT_FONT | ZT_THEME, Z_FONT2 },
 	{ Z_TEXT_SIZE, 20 },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_SLIDER_TEXT },
-	{ Z_FOREGROUND_TILES, 0x00002D2F },
+	{ Z_FOREGROUND_TILES, 0x00002C2E },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_MODE | ZT_THEME, Z_SLIDER_MODE },
 	{ Z_DURATION, 40 },
@@ -701,7 +701,7 @@ static zStyle styles_z_seek1[] = {
 	{ Z_TEXT_FONT | ZT_THEME, Z_FONT1 },
 	{ Z_TEXT_SIZE, 20 },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_SLIDER_TEXT },
-	{ Z_FOREGROUND_TILES, 0x00002D2F },
+	{ Z_FOREGROUND_TILES, 0x00002C2E },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_MODE | ZT_THEME, Z_SLIDER_MODE },
 	{ Z_DURATION, 40 },
@@ -735,7 +735,7 @@ static zStyle styles_z_seek2[] = {
 	{ Z_TEXT_FONT | ZT_THEME, Z_FONT2 },
 	{ Z_TEXT_SIZE, 20 },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_SLIDER_TEXT },
-	{ Z_FOREGROUND_TILES, 0x00002C2E },
+	{ Z_FOREGROUND_TILES, 0x00002D2F },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_DURATION, 40 },
 	{ Z_MODE, ZS_SLIDER_SCALE },
@@ -796,7 +796,7 @@ static zStyle styles_z_zviewslider2[] = {
 	{ Z_TEXT_FONT | ZT_THEME, Z_FONT2 },
 	{ Z_TEXT_SIZE, 20 },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_SLIDER_TEXT },
-	{ Z_FOREGROUND_TILES, 0x00002D2F },
+	{ Z_FOREGROUND_TILES, 0x00002C2E },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_MODE | ZT_THEME, Z_SLIDER_MODE },
 	{ Z_DURATION, 40 },
@@ -813,7 +813,7 @@ static zStyle styles_z_zviewslider3[] = {
 	{ Z_TEXT_FONT | ZT_THEME, Z_FONT1 },
 	{ Z_TEXT_SIZE, 20 },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_SLIDER_TEXT },
-	{ Z_FOREGROUND_TILES, 0x00002D2F },
+	{ Z_FOREGROUND_TILES, 0x00002C2E },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_MODE | ZT_THEME, Z_SLIDER_MODE },
 	{ Z_DURATION, 40 },
@@ -830,7 +830,7 @@ static zStyle styles_z_zviewslider4[] = {
 	{ Z_TEXT_FONT | ZT_THEME, Z_FONT2 },
 	{ Z_TEXT_SIZE, 20 },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_SLIDER_TEXT },
-	{ Z_FOREGROUND_TILES, 0x00002C2E },
+	{ Z_FOREGROUND_TILES, 0x00002D2F },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_MODE | ZT_THEME, Z_SLIDER_MODE },
 	{ Z_DURATION, 40 },
@@ -856,7 +856,7 @@ static zStyle styles_z_zviewslider5[] = {
 	{ Z_TEXT_FONT | ZT_THEME, Z_FONT2 },
 	{ Z_TEXT_SIZE, 20 },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_SLIDER_TEXT },
-	{ Z_FOREGROUND_TILES, 0x00002D2F },
+	{ Z_FOREGROUND_TILES, 0x00002C2E },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_MODE | ZT_THEME, Z_SLIDER_MODE },
 	{ Z_DURATION | ZT_END, 40 }
@@ -870,7 +870,7 @@ static zStyle styles_z_zviewslider6[] = {
 	{ Z_TEXT_FONT | ZT_THEME, Z_FONT1 },
 	{ Z_TEXT_SIZE, 20 },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_SLIDER_TEXT },
-	{ Z_FOREGROUND_TILES, 0x00002D2F },
+	{ Z_FOREGROUND_TILES, 0x00002C2E },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_MODE | ZT_THEME, Z_SLIDER_MODE },
 	{ Z_DURATION, 40 },

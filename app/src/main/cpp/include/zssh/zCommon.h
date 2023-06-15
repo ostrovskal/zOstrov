@@ -168,6 +168,23 @@ enum { TOUCH_CONTINUE, TOUCH_FINISH, TOUCH_ACTION, TOUCH_STOP };
 #define ZS_MODE_TEXT_MASK               (ZS_TEXT_STRIKE | ZS_TEXT_UNDERLINE | ZS_TEXT_NORMAL | ZS_TEXT_BOLD | ZS_TEXT_ITALIC | ZS_TEXT_BOLD_ITALIC)
 #define ZS_MODE_TEXT_FLAGS_MASK         (0)
 
+enum MenuAction { actNever = 0, actAlways = 1, actIfRoom = 2 };
+enum MenuFlags { menuItemText = 4, menuItemRadio = 8, menuItemCheck = 16,
+                 menuItemGroup = 32, menuItemCollapse = 64, menuItemEnabled = 128,
+                 menuItemChecked = 256, menuItemVisibled = 512 };
+enum MenuItem { menuEnd, menuGroupBegin, menuGroupEnd, menuItem };
+// структура меню из ресурсов
+struct MENUITEM {
+    // тип - группа/элемент
+    u32 type;
+    // идентификатор элемента/идентификатор текста
+    i32 id, title;
+    // идентификатор изображения
+    i32 image;
+    // тип(текст/радио/флажок)|размещение(никогда/всегда/если есть место)
+    u32 action;
+};
+
 // основные компоненты
 #include "zstandard/zGL.h"
 #include "zstandard/zJniHelper.h"
