@@ -47,8 +47,15 @@ zViewKeyboard::zViewKeyboard(cstr nameLayouts) : zViewGroup(styles_default, z.R.
             while((nodeBut = nodeLyt->getTag(_idx++))) {
                 static cstr _coords[] = { "x", "y", "width", "height" };
                 for(int i = 0 ; i < 4; i++) but.rview[i] = z_ston(nodeBut->getAttrVal(_coords[i], "0"), RADIX_DEC);
-                but.name = nodeBut->getAttrVal("com", "");
+                but.icon = z_ston(nodeBut->getAttrVal("icon", "-1"), RADIX_DEC);
+                but.color= z_ston(nodeBut->getAttrVal("color", "ffffffff"), RADIX_HEX);
+                but.size = z_dp(z_ston(nodeBut->getAttrVal("size", "23"), RADIX_DEC));
                 but.spec = nodeBut->getAttrVal("spec", "");
+                but.name[0] = nodeBut->getAttrVal("com", "");
+                if(but.spec.isEmpty()) {
+                    but.name[1] = but.name[0].substr(1, 1);
+                    but.name[0] = but.name[0].substr(0, 1);
+                }
                 lyt.buttons += but;
             }
             layouts += lyt;
@@ -69,9 +76,9 @@ void zViewKeyboard::onInit(bool _theme) {
     zViewGroup::onInit(_theme);
     if(countChildren()) removeAllViews(false);
     // основной текст
-    attach(new zViewText(styles_z_keyboardbase, 0, 0), 100, 100);
+    attach(new zViewButton(styles_z_keyboardbase, 0, 0), 100, 100);
     // альтернативный текст
-    attach(new zViewText(styles_z_keyboardalt, 0, 0), 100, 100);
+    attach(new zViewButton(styles_z_keyboardalt, 0, 0), 100, 100);
     // для нажатия кнопки
     zParamDrawable kp(0x90000000, 0, -1, 0, 1.0f);
     setDrawable(&kp, DRW_FK);
@@ -102,9 +109,7 @@ i32 zViewKeyboard::onTouchEvent(zTouch *touch) {
                     drw[DRW_FK]->measure(r.w, r.h, 0, false);
                     drw[DRW_FK]->bound = r;
                     butIdx = i;
-                    if(but->spec == "DELETE"/* || but->spec == "SHIFT"*/) {
-                        nPressSpec = 1; post(MSG_ANIM, duration, 0);
-                    }
+                    if(but->spec == "DELETE") { nPressSpec = 1; post(MSG_ANIM, duration, 0); }
                 }
                 return TOUCH_STOP;
             }
@@ -133,7 +138,7 @@ i32 zViewKeyboard::onTouchEvent(zTouch *touch) {
                 }
                 else if(but->spec == "LANG") _switch = &current->names[KEYBOARD_LANG];
                 else if(but->spec == "SPEC") _switch = &current->names[KEYBOARD_DIGIT];
-                else keyCode = but->name[touch->isLongClick()];
+                else keyCode = but->name[touch->isLongClick()][0];
                 if(!_switch && keyCode) {
                     if(owner) owner->keyEvent(keyCode, false);
                     if(owner && owner->edges(true, true) != yEdge) show(owner->id, true);
@@ -190,25 +195,25 @@ void zViewKeyboard::onDrawFBO() {
 void zViewKeyboard::onDraw() {
     // сформировать клавиатуру
     if(!current || !isDrawing) return;
-    zStringUTF8 n1, n2; u32 color;
-    auto baseTxt(atView<zViewText>(0)), altTxt(atView<zViewText>(1));
+    zStringUTF8 n1, n2; u32 bkColor;
+    auto baseTxt(atView<zViewButton>(0)), altTxt(atView<zViewButton>(1));
     baseTxt->updateStatus(ZS_VISIBLED, true); altTxt->updateStatus(ZS_VISIBLED, true);
     for(auto& b : current->buttons) {
-        auto& nm(b.name); auto isHighlight(false);
         if(b.spec.isNotEmpty()) {
-            n1 = nm; n2.empty();
-            color = 0xff808080;
-            isHighlight = (b.spec == "SHIFT" && activeShift);
+            n1 = b.name[0]; n2.empty();
+            baseTxt->setIcon(b.spec == "SHIFT" && activeShift ? z.R.integer.iconShiftFix : b.icon);
+            bkColor = 0xff808080;
+
         } else {
-            n1 = nm.substr(0, 1);
-            n2 = nm.substr(1, 1);
-            color = theme->themeColor;
+            n1 = b.name[0]; n2 = b.name[1];
+            bkColor = theme->themeColor;
+            baseTxt->setIcon(-1);
         }
-        auto r(b.rview); baseTxt->drw[DRW_FK]->color = color;
+        auto r(b.rview); baseTxt->drw[DRW_FK]->color = bkColor;
         r.x = rview.x + r.x * deltaWidth; r.w *= deltaWidth;
         r.y = rview.y + r.y * deltaHeight; r.h *= deltaHeight;
         szm spec(zMeasure(MEASURE_EXACT, r.w), zMeasure(MEASURE_EXACT, r.h));
-        baseTxt->setTextColorForeground(isHighlight ? 0xff0000ff : 0xffffffff);
+        baseTxt->setTextSize(b.size); baseTxt->setTextColorForeground(b.color);
         baseTxt->setTextSpecial(n1, spec); baseTxt->layout(r); baseTxt->draw();
         if(n2.isNotEmpty() && n1 != n2) { altTxt->setTextSpecial(n2, spec); altTxt->layout(r); altTxt->draw(); }
     }

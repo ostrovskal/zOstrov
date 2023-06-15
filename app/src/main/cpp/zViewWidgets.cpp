@@ -14,8 +14,9 @@ zViewButton::zViewButton(zStyle *_styles, i32 _id, u32 _text, i32 _icon) : zView
 
 void zViewButton::onInit(bool _theme) {
     zViewText::onInit(_theme);
-    drw[DRW_ICON]->tile = icon;
+    //drw[DRW_ICON]->tile = icon;
     fkGravity = (fkGravity & ZS_SCALE_MASK) | ZS_GRAVITY_CENTER;
+    setIcon(icon);
 }
 
 void zViewButton::onLayout(crti &position, bool changed) {
@@ -157,7 +158,7 @@ zViewSlider::zViewSlider(zStyle* _styles, i32 _id, u32 _text, cszi& _range, int 
                    z_dp(z.R.dimen.sliderMinHeight), z_dp(z.R.dimen.sliderMaxHeight));
     if(_text > 0) tips = theme->findString(_text) + " ";
     setOnAnimation([this](zView*, int) {
-        if(isDraw) {
+        if(parent->isVisibled()) {
             float value; zMatrix rot;
             animator.update(value);
             if(mode & ZS_SLIDER_ROTATE) rot.rotate(0, 0, deg2rad(value * 360.0f));

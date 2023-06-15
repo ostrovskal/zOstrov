@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Thu Jun 15 15:03:18 2023
+// Thu Jun 15 20:26:39 2023
 
 #pragma once
 
@@ -117,38 +117,39 @@ struct _z {
 				icon8	= 88, 	iconYes	= 89, 	iconSound	= 90, 	iconBps	= 91, 
 				iconProps	= 92, 	iconGamepad	= 93, 	iconOpen	= 94, 	iconRom	= 95, 
 				iconCasette	= 96, 	iconDisplay	= 97, 	iconNote	= 98, 	iconModel	= 99, 
-				iconTurbo	= 100, 	iconCloud	= 101, 	iconWeb	= 102, 	iconPoke	= 103, 
-				iconTools	= 104, 	iconSettings	= 105, 	iconExit	= 106, 	iconReset	= 107, 
-				iconDec	= 108, 			};
+				iconTurbo	= 100, 	iconCloud	= 101, 	iconWeb	= 102, 	iconLang	= 103, 
+				iconPoke	= 104, 	iconTools	= 105, 	iconSettings	= 106, 	iconExit	= 107, 
+				iconReset	= 108, 	iconDec	= 109, 	iconDelete	= 110, 	iconShiftFix	= 111, 
+				iconShift	= 112, 	iconShiftPress	= 113, 			};
 		}; 
 		_integer integer;
 		struct _string {
 			enum { 
-				acontrollerMap	= 0x00100007, 	ccontrollerMap	= 0x00100008, 
-				themeDark	= 0x00100009, 	themeLight	= 0x0010000A, 	textSpan	= 0x0010000B, 
-				first_form	= 0x0010000C, 	enter_family	= 0x0010000D, 	menuOpenSave	= 0x0010000E, 
-				menuSettings	= 0x0010000F, 	menuProperties	= 0x00100010, 
-				menuSound	= 0x00100011, 	menuPokes	= 0x00100012, 	menuMru	= 0x00100013, 
-				menuOperations	= 0x00100014, 	menuReset	= 0x00100015, 	menuRestore	= 0x00100016, 
-				menuExecute	= 0x00100017, 	menuExit	= 0x00100018, 	menuModel	= 0x00100019, 
-				menuTurbo	= 0x0010001A, 	menuFilter	= 0x0010001B, 	menuTape	= 0x0010001C, 
-				menuDebugger	= 0x0010001D, 	menuExeDebugger	= 0x0010001E, 
-				menuMagic	= 0x0010001F, 	menuDisk1	= 0x00100020, 	menuDisk2	= 0x00100021, 
-				menuDisk3	= 0x00100022, 	menuDisk4	= 0x00100023, 	menuSinclair48	= 0x00100024, 
-				menuSinclair128	= 0x00100025, 	menuPentagon	= 0x00100026, 
-				menuScorpion	= 0x00100027, 	menuMruEmpty	= 0x00100028, 	menuKeyJoy	= 0x00100029, 
-				menuLabel	= 0x0010002A, 	menuCode	= 0x0010002B, 	menuValue	= 0x0010002C, 
-				menuQuickSave	= 0x0010002D, 	menuAsm	= 0x0010002E, 	menuTzx	= 0x0010002F, 
-				podskazka	= 0x00100030, 	Perekljuchatelw	= 0x00100031, 	Temnaja	= 0x00100032, 
-				Svetlaja	= 0x00100033, 	Flagzok	= 0x00100034, 	Nagzmi_na_menja__	= 0x00100035, 
-				Regzim_gotovnosti	= 0x00100036, 	Aktivacija	= 0x00100037, 
-				slayder	= 0x00100038, 	Tekst_na_knopke	= 0x00100039, 	Sergey	= 0x0010003A, 
-				Progress	= 0x0010003B, 			};
+				app_name	= 0x00100007, 	acontrollerMap	= 0x00100008, 	ccontrollerMap	= 0x00100009, 
+				themeDark	= 0x0010000A, 	themeLight	= 0x0010000B, 	textSpan	= 0x0010000C, 
+				first_form	= 0x0010000D, 	enter_family	= 0x0010000E, 	menuOpenSave	= 0x0010000F, 
+				menuSettings	= 0x00100010, 	menuProperties	= 0x00100011, 
+				menuSound	= 0x00100012, 	menuPokes	= 0x00100013, 	menuMru	= 0x00100014, 
+				menuOperations	= 0x00100015, 	menuReset	= 0x00100016, 	menuRestore	= 0x00100017, 
+				menuExecute	= 0x00100018, 	menuExit	= 0x00100019, 	menuModel	= 0x0010001A, 
+				menuTurbo	= 0x0010001B, 	menuFilter	= 0x0010001C, 	menuTape	= 0x0010001D, 
+				menuDebugger	= 0x0010001E, 	menuExeDebugger	= 0x0010001F, 
+				menuMagic	= 0x00100020, 	menuDisk1	= 0x00100021, 	menuDisk2	= 0x00100022, 
+				menuDisk3	= 0x00100023, 	menuDisk4	= 0x00100024, 	menuSinclair48	= 0x00100025, 
+				menuSinclair128	= 0x00100026, 	menuPentagon	= 0x00100027, 
+				menuScorpion	= 0x00100028, 	menuMruEmpty	= 0x00100029, 	menuKeyJoy	= 0x0010002A, 
+				menuLabel	= 0x0010002B, 	menuCode	= 0x0010002C, 	menuValue	= 0x0010002D, 
+				menuQuickSave	= 0x0010002E, 	menuAsm	= 0x0010002F, 	menuTzx	= 0x00100030, 
+				podskazka	= 0x00100031, 	Perekljuchatelw	= 0x00100032, 	Podskazka	= 0x00100033, 
+				Temnaja	= 0x00100034, 	Svetlaja	= 0x00100035, 	Flagzok	= 0x00100036, 
+				Nagzmi_na_menja__	= 0x00100037, 	Regzim_gotovnosti	= 0x00100038, 
+				Aktivacija	= 0x00100039, 	slayder	= 0x0010003A, 	Tekst_na_knopke	= 0x0010003B, 
+				Sergey	= 0x0010003C, 	Progress	= 0x0010003D, 			};
 		}; 
 		_string string;
 		struct _array {
 			enum { 
-				spinArray	= 0x0010003C, 			};
+				spinArray	= 0x0010003E, 			};
 		}; 
 		_array array;
 		struct _style {
@@ -281,6 +282,7 @@ static zResource z_resources[] = {
 		{ _z::_R::_drawable::znull, "znull" },
 		{ _z::_R::_drawable::zssh, "zssh" },
 		/* string */
+		{ _z::_R::_string::app_name, "Programm" },
 		{ _z::_R::_string::acontrollerMap, "acontrollerMap.xml" },
 		{ _z::_R::_string::ccontrollerMap, "ccontrollerMap.xml" },
 		{ _z::_R::_string::themeDark, "_dark" },
@@ -324,6 +326,7 @@ static zResource z_resources[] = {
 		{ _z::_R::_string::menuTzx, "Editor TZX" },
 		{ _z::_R::_string::podskazka, "подсказка" },
 		{ _z::_R::_string::Perekljuchatelw, "Переключатель" },
+		{ _z::_R::_string::Podskazka, "Подсказка" },
 		{ _z::_R::_string::Temnaja, "Темная" },
 		{ _z::_R::_string::Svetlaja, "Светлая" },
 		{ _z::_R::_string::Flagzok, "Флажок" },
@@ -342,6 +345,7 @@ static zResource z_resources[] = {
 static zResource z_resources_ru[] = {
 		{ 0, "ru" },
 		/* string */
+		{ _z::_R::_string::app_name, "Программа" },
 		{ _z::_R::_string::textSpan, "Завершение работы фоновых приложений после блокировки экрана помогает экономить заряд. С другой стороны, в этом случае вы не будете получать новые сообщения (электронные, текстовые, из соцсетей и т.д.)." },
 		{ _z::_R::_string::first_form, "Первая форма!!!" },
 		{ _z::_R::_string::enter_family, "Введите фамилию и отчество" },

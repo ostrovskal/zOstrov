@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Programm</string>
     <string name="acontrollerMap" translatable="false">acontrollerMap.xml</string>
     <string name="ccontrollerMap" translatable="false">ccontrollerMap.xml</string>
     <string name="themeDark" translatable="false">_dark</string>

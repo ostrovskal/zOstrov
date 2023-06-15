@@ -190,6 +190,8 @@ void zDrawable::measure(int width, int height, int pivot, bool isSave) {
             // формирование квада
             makeQuad(bound, tex, vertices);
         }
+    } else {
+        clear();
     }
 }
 

@@ -9,7 +9,7 @@
 			VIEW_WRAP, VIEW_WRAP);
 	auto grp20((zEditLayout*)grp10->attach(new zEditLayout(styles_default, 0), 
 			VIEW_MATCH, VIEW_WRAP)); 
-	grp20->attach(new zViewEdit(styles_z_zviewedit1, z.R.id.edit1, z.R.string.podskazka), 
+	grp20->attach(new zViewEdit(styles_z_zviewedit1, z.R.id.edit1, z.R.string.Podskazka), 
 			VIEW_MATCH, VIEW_WRAP);
 	auto grp21((zLinearLayout*)grp10->attach(new zLinearLayout(styles_z_zlinearlayout1, 0, false), 
 			VIEW_MATCH, VIEW_WRAP)); 

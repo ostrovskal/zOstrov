@@ -27,11 +27,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
-                android:id="@+id/edit1" z:inputMode="text"
-                z:fbo="true" z:text="Пример текста"
+                android:id="@+id/edit1" z:fbo="true"
                 android:layout_width="match_parent" android:layout_height="wrap_content"
-                z:textColor="%color/color_text_text" z:textSize="20sp" z:hint="подсказка" z:fkGravity="center"
-                z:icon="@drawable/zssh" z:icGravity="end" z:icColor="#ffffffff" z:icTiles="@integer/iconEdit"
+                z:textColor="%color/color_text_text" z:textSize="20sp" z:hint="Подсказка" z:fkGravity="center"
+                z:icon="@drawable/zssh" z:icGravity="end" z:icColor="#ffffffff" z:icTiles="@integer/iconEditEx" z:inputMode="zx"
                 z:pad="1dp" android:gravity="center_vertical" z:foreground="%drawable/bitmap_common" z:fkTiles="@integer/edit"
                 z:font="%drawable/font1" z:textWrap="true" z:textStyle="italic" />
         </EditLayout>

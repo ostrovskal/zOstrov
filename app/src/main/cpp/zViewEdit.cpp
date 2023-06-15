@@ -148,7 +148,6 @@ void zViewEdit::onDraw() {
 
 i32 zViewEdit::keyEvent(int key, bool sysKey) {
     if(testFlags(ZS_READ_ONLY)) return 0;
-    if(realText.count() >= maxLength) return 0;
     // применить фильтр
     if(filter && key >= ' ') {
         if(!(key = filter->convertChar(realText, key, caretIndex)))
@@ -162,7 +161,9 @@ i32 zViewEdit::keyEvent(int key, bool sysKey) {
         auto caretPos(caretIndex);
         if(key == '\b') {
             if(caretPos > 0) removeText(--caretPos, 1);
-        } else insertText(caretPos++, (char *) &key);
+        } else if(realText.count() < maxLength) {
+            insertText(caretPos++, (char*)&key);
+        }
         if(caretPos != caretIndex) {
             updateText(MSG_EDIT);
             caretIndex = correct(caretPos);
@@ -189,7 +190,7 @@ i32 zViewEdit::onTouchEvent(zTouch *touch) {
         }
         correctCaretPosition(caretIndex);
         // обновить каретку
-        updateCaret();
+        if(manager->isCheckFocus(this)) updateCaret();
     } else isButton = true;
     if(isButton && but) {
         but->updateStatus(ZS_TAP, result == TOUCH_FINISH);

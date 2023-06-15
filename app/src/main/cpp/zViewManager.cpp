@@ -400,7 +400,7 @@ void zViewManager::updateNativeWindow(AConfiguration* config, zStyle* _styles, z
             // добавить корневую группу
             common->attach(root = new zFrameLayout(styles_default, z.R.id.root), VIEW_MATCH, VIEW_MATCH);
             // добавить панель действий
-//        common->attach(actionBar = new zActionBar(styles_z_bar, styles_z_barbutton, styles_z_barpopup), VIEW_MATCH, VIEW_WRAP);
+            common->attach(actionBar = new zActionBar(styles_z_bar, styles_z_barbutton, styles_z_barpopup), VIEW_MATCH, VIEW_WRAP);
             // добавить клаву
             common->attach(keyboard = new zViewKeyboard("keyboardDefault.xml"), 0, sz.h, VIEW_MATCH, VIEW_WRAP);
             setContent();

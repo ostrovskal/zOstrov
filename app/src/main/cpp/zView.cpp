@@ -400,10 +400,10 @@ zViewGlow::zViewGlow(zView* group) : zView(styles_z_glow, 0) {
             // посчитать размер
             mtxScale.scale(vert ? 1 : v, vert ? v : 1, 1);
             mtx = mtxScale * mtxRot;
-            invalidate();
         } else {
-            updateStatus(ZS_VISIBLED, false);
         }
+        invalidate();
+        updateStatus(ZS_VISIBLED, cont);
         return cont;
     });
 }
@@ -422,12 +422,12 @@ void zViewGlow::start(float _delta, bool _vert, bool _flow) {
     rview[_vert]  = parent->edges(_vert, _flow);
     mtx = mtxScale * mtxRot;
     // анимация
-    _delta = z_min(2.0f, fabs(_delta * 50.0f));
+    _delta = z_min(2.2f, fabs(_delta * 50.0f));
     animator.init(0.0f, false);
-    animator.add(_delta, zInterpolator::LINEAR, 8);
-    animator.add(0.0f, zInterpolator::EASEINCUBIC, 10);
+    animator.add(_delta, zInterpolator::LINEAR, 6);
+    animator.add(0.0f, zInterpolator::EASEINCUBIC, 8);
     // запуск анимации
-    post(MSG_ANIM, duration, 0);
+    post(MSG_ANIM, duration / 2, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

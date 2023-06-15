@@ -238,7 +238,7 @@ void zViewBaseRibbon::onLayout(crti &position, bool changed) {
     zView::onLayout(position, changed);
     edge.set(rclient[vert], rclient.extent(vert));
     // скорректировать первый видимый
-    auto pos(firstItem), _count(countChildren());
+    auto pos(firstItem), _count(countChildren() - 1);
     if(_count == 0) _count = countItem;
     if(pos + _count >= countItem) pos = countItem - _count;
     if(pos < 0) pos = 0;
@@ -376,7 +376,7 @@ void zViewRibbon::fillForward(int pos, int next) {
 
 zView* zViewRibbon::addView(int coord, int pos, bool flow, bool end) {
     auto x(vert ? rclient.x : coord), y(vert ? coord: rclient.y);
-    return zViewBaseRibbon::addView(x, y, pos, flow, end ? -1 : 0);
+    return zViewBaseRibbon::addView(x, y, pos, flow, !end - 1);
 }
 
 void zViewRibbon::childMeasure(zView* child, zLayoutParams* lps) {

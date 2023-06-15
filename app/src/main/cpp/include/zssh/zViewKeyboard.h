@@ -28,8 +28,9 @@ public:
 protected:
     struct BUTTON {
         rti rview{};
-        zStringUTF8 name{};
+        zStringUTF8 name[2]{};
         zStringUTF8 spec{};
+        int icon{-1}, color{0}, size{0};
     };
     struct LAYOUT {
         LAYOUT() { }

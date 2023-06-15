@@ -17,7 +17,6 @@ void zViewGroup::offsetChildren(int delta) {
         pos.offset(!vert * delta, vert * delta);
         child->layout(pos);
     }
-//    invalidate();
 }
 
 zView* zViewGroup::attachInLayout(zView *v, int width, int height, int where) {

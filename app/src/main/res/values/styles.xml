@@ -7,13 +7,17 @@
         <item name="font">@drawable/font1</item>
         <item name="textColor">#ffffffff</item>
         <item name="textStyle">bold</item>
-        <item name="textSize">17sp</item>
+        <item name="textSize">23sp</item>
         <item name="textWrap">true</item>
         <item name="padEnd">1dp</item>
         <item name="padBottom">1dp</item>
         <item name="ipad">2dp</item>
         <item name="visibled">false</item>
         <item name="gravity">center</item>
+        <item name="icon">@drawable/zssh</item>
+        <item name="icGravity">center</item>
+        <item name="icColor">#ffffff</item>
+        <item name="icScale">0.4</item>
     </style>
     <style name="keyboardAlt">
         <item name="visibled">false</item>
@@ -44,7 +48,7 @@
     <style name="editButClear">
         <item name="foreground">@drawable/zssh</item>
         <item name="fkGravity">center</item>
-        <item name="fkTiles">@integer/iconEdit</item>
+        <item name="fkTiles">@integer/iconEditEx</item>
         <item name="tap">hovered</item>
         <item name="gravity">center</item>
     </style>
@@ -267,7 +271,7 @@
         <item name="fkScale">0.75</item>
         <item name="icGravity">end|center_vertical</item>
         <item name="icon">@drawable/zssh</item>
-        <item name="icTiles">@integer/iconEdit</item>
+        <item name="icTiles">@integer/iconEditEx</item>
         <item name="icScale">0.75</item>
         <item name="textDistance">2dp</item>
         <item name="fkGravity">center</item>
