@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Thu Jun 15 01:50:00 2023
+// Thu Jun 15 15:03:18 2023
 
 #pragma once
 
@@ -24,7 +24,7 @@ struct _z {
 				teal	= 0xFF808000, 	aqua	= 0xFFFFFF00, 	gray	= 0xFF808080, 
 				white	= 0xFFFFFFFF, 	themeDark	= 0xFFED2E4A, 	themeLight	= 0xFF2376B8, 
 				selectorDark	= 0xFFA000A0, 	selectorLight	= 0xFFA0A000, 	dividerDark	= 0xFF755C5C, 
-				dividerLight	= 0xFF4F4F4F, 	highlightTextDark	= 0xFFBC5A4D, 
+				dividerLight	= 0xFF4F4F4F, 	highlightTextDark	= 0xFFF17056, 
 				highlightTextLight	= 0xFF5670F1, 	messageTextDark	= 0xFFD2FA64, 
 				messageTextLight	= 0xFFD2FA64, 	headerTextDark	= 0xFFCFBA41, 
 				headerTextLight	= 0xFF45F1A9, 	linkTextDark	= 0xFFB8FA01, 

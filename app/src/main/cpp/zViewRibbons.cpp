@@ -282,13 +282,12 @@ szi zViewBaseRibbon::measureChildrenSize(cszm& spec) {
 }
 
 void zViewBaseRibbon::onMeasure(cszm& spec) {
-    if(!adapter) ILOG("Не установлен адаптер в ленте!!!");
+    if(!adapter) ILOG("Не установлен адаптер в %s !!!", typeName());
     // расчитать габариты всех дочерних
-    auto size(measureChildrenSize(spec));
-    cacheViews.clear();
-    defaultOnMeasure(spec, size);
+    defaultOnMeasure(spec, measureChildrenSize(spec));
     // дивидер
     if(div) div->measure(0, 0, 0, false);
+    cacheViews.clear();
 }
 
 i32 zViewBaseRibbon::onTouchEvent(zTouch *touch) {
@@ -351,7 +350,7 @@ void zViewRibbon::fill(int _edge) {
     count += firstItem;
     if(firstItem == 0 && div) {
         auto begin(div->getSize(ZS_DIVIDER_BEGIN));
-        if(_edge < begin && _edge >= 0) _edge -= begin;
+        if(_edge < begin && _edge >= 0) _edge += begin;
     }
     fillForward(count, (view ? view->edges(vert, true) : edge.w) + _edge);
 }

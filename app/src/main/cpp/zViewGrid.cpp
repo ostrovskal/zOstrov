@@ -22,7 +22,9 @@ i32 zViewGrid::getParameters(i32 param) const {
 
 void zViewGrid::onDraw() {
     zViewGroup::onDraw();
-    if(div) div->make((params[GRID_LINES_SPACE] * 2 - div->getSize(ZS_DIVIDER_MIDDLE)) / 2 - div->size / 2, countItem, firstItem);
+    if(div) {
+        div->make(((div->size + div->padBegin + div->padEnd) - params[GRID_LINES_SPACE]) / 2, countItem, firstItem);
+    }
 }
 
 void zViewGrid::fill(int _edge) {
@@ -33,9 +35,9 @@ void zViewGrid::fill(int _edge) {
     view = atView(count - 1);
     if(firstItem == 0 && div) {
         auto begin(div->getSize(ZS_DIVIDER_BEGIN));
-        if(_edge < begin && _edge >= 0) _edge -= begin;
+        if(_edge < begin && _edge >= 0) _edge += begin;
     }
-    fillForward(firstItem + count, (view ? view->edges(vert, true) + params[GRID_LINES_SPACE] : edge.w) + _edge);
+    fillForward(firstItem + count, (view ? view->edges(vert, true) : edge.w) + _edge);
 }
 
 void zViewGrid::fillReverse(int pos, int next) {
@@ -86,15 +88,9 @@ void zViewGrid::onInit(bool _theme) {
 
 void zViewGrid::onMeasure(cszm& spec) {
     // Вычисление параметров ячеек
-    auto limC(spec[!vert].size());
-    auto cell(params[GRID_CELL_SIZE]), space(_params[GRID_CELLS_SPACE]);
-    if(!limC) { if(cell <= 0) cell = 100_dp; limC = cell * 5; }
-    if(!linesGrid) linesGrid = (limC - pad.extent(vert)) / (cell + space * 2);
-    params[GRID_LINES] = linesGrid;
-    RTI_LOG("client", rclient);
     zViewBaseRibbon::onMeasure(spec);
+    auto cell(_params[GRID_CELL_SIZE]), space(_params[GRID_CELLS_SPACE]);
     auto wh(rclient[3 - vert]), ln(z_max(1, linesGrid - 1));
-    RTI_LOG("client", rclient);
     switch(_params[GRID_MODE]) {
         case ZS_GRID_CELL:
             ln = z_max(1, linesGrid - 2);
@@ -113,7 +109,12 @@ void zViewGrid::onMeasure(cszm& spec) {
 
 szi zViewGrid::measureChildrenSize(cszm& spec) {
     int i; szi _max;
-    auto limC(spec[!vert].size()), limL(spec[vert].size());
+    auto cells(spec[!vert].size()), lines(spec[vert].size());
+    auto cell(_params[GRID_CELL_SIZE]), cellSpace(_params[GRID_CELLS_SPACE]), lineSpace(_params[GRID_LINES_SPACE]);
+    if(cell <= 0) cell = 100_dp;
+    if(!cells) { cells = (cell + cellSpace) * 5; }
+    if(!linesGrid) linesGrid = (cells - pad.extent(!vert)) / (cell + cellSpace);
+    _params[GRID_LINES] = linesGrid; _params[GRID_CELL_SIZE] = cell;
     for(i = 0 ; i < countItem; i++) {
         auto child(obtainView(i));
         if(!child) continue;
@@ -122,18 +123,65 @@ szi zViewGrid::measureChildrenSize(cszm& spec) {
         // добавить в кэш
         addViewCache(child);
         auto rv(child->rview);
-        rv[3 - vert] += params[GRID_CELLS_SPACE]; rv[vert + 2] += params[GRID_LINES_SPACE];
-        if(_max.isEmpty()) { if(spec[!vert].isNotExact()) limL = rv[3 - vert] * (linesGrid + 1); }
+        rv[3 - vert] += cellSpace; rv[vert + 2] += lineSpace;
+        if(_max.isEmpty()) { if(spec[!vert].isNotExact()) lines = rv[3 - vert] * (linesGrid + 1); }
         auto val(_max[!vert] + rv[3 - vert]);
-        if(val < limL) { _max[!vert] = val; continue; }
+        if(val < cells) { _max[!vert] = val; continue; }
         val = _max[vert] + rv[vert + 2];
-        if(val >= limC) break;
+        if(val >= lines) break;
         _max[vert] = val;
     }
     _max[vert] += (div && div->resolve(i / linesGrid, false));
 //    SZI_LOG("max", _max);
 //    DLOG("2 lines: %i - %i %i %i %i %i", linesGrid, params[0], params[1], params[2], params[3], params[4]);
     return _max;
+    /*
+    int hmax(0), wmax(0), i;
+    int limitCells(SIZE_MEASURE_SPEC(widthSpec));
+    int limitLines(SIZE_MEASURE_SPEC(heightSpec));
+    auto limC(vert ? &limitCells : &limitLines);
+    auto limL(vert ? &limitLines : &limitCells);
+    if(!lines) lines = (*limC - pad.extent(vert)) / (params[TABLE_CELL_SIZE] + params[TABLE_CELLS_SPACE] * 2);
+    for(i = 0 ; i < countItem; i++) {
+        auto child(obtainView(i));
+        if(!child) continue;
+        // расчитать размер
+        measureChild(child, widthSpec, heightSpec);
+        // добавить в кэш
+        addViewCache(child);
+        auto wc(child->rfull.w), hc(child->rfull.h);
+        if(vert) {
+            wc += cellSpacing; hc += lineSpacing;
+        } else {
+            wc += lineSpacing; hc += cellSpacing;
+        }
+        if(wmax == 0 && hmax == 0) {
+            auto mode(MODE_MEASURE_SPEC((vert ? widthSpec : heightSpec)));
+            if(mode != MEASURE_EXACT) {
+                *limL = (vert ? wc : hc) * (lines + 1);
+            }
+        }
+        if(vert) {
+            // right, down
+            auto _wmax(wmax + wc);
+            if(_wmax < *limL) { wmax = _wmax; continue; }
+            auto _hmax(hmax + hc);
+            if(_hmax >= *limC) break;
+            hmax = _hmax;
+        } else {
+            // down, right
+            auto _hmax(hmax + hc);
+            if(_hmax < *limL) { hmax = _hmax; continue; }
+            auto _wmax(wmax + wc);
+            if(_wmax >= *limC) break;
+            wmax = _wmax;
+        }
+    }
+    auto _size(resolveDivider(i / lines));
+    if(vert) hmax += _size; else wmax += _size;
+    return {wmax, hmax};
+     *
+     */
 }
 
 void zViewGrid::childMeasure(zView *child, zLayoutParams *lps) {

@@ -27,7 +27,7 @@
     <color name="dividerDark">#5c5c75</color>
     <color name="dividerLight">#4f4f4f</color>
     <!-- цвет подсветки текста -->
-    <color name="highlightTextDark">#4d5abc</color>
+    <color name="highlightTextDark">#5670f1</color>
     <color name="highlightTextLight">#f17056</color>
     <!-- цвет информационных сообщений в форме -->
     <color name="messageTextDark">#64fad2</color>

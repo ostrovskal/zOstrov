@@ -84,6 +84,9 @@ void sshApp::setContent() {
         setTheme(themeDark, nullptr, nullptr);
     });
     zArray<zStringUTF8> objects(theme->findArray(z.R.array.spinArray));
+    for(int i = 0 ; i < 100; i++) {
+        objects += zStringUTF8(z_ntos(&i, RADIX_DEC, false));
+    }
     idView<zViewSelect>(z.R.id.select)->
             setAdapter(new zAdapterList(objects, new zFabricSelectItem(styles_z_spin_capt),
                                         new zFabricSelectItem(styles_z_spin_item)))->
@@ -91,9 +94,6 @@ void sshApp::setContent() {
                                             DLOG("select sel %i", s);
                                         });
     auto grd(idView<zViewGrid>(z.R.id.grid1));
-    for(int i = 0 ; i < 100; i++) {
-        objects += zStringUTF8(z_ntos(&i, RADIX_DEC, false));
-    }
     auto adapter(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
     grd->setAdapter(adapter)->setOnChangeSelected([](zView*, int sel) {
 //        DLOG("grid sel %i", sel);

@@ -14,7 +14,6 @@ zViewText::zViewText(zStyle *_styles, i32 _id, u32 _text) : zView(_styles, _id) 
     // значения по умолчанию
     setShadowOffset(2, 2);
     setTextColorShadow(0xff000000);
-    setTextColorHighlight(0xffa0a0a0);
 }
 
 zViewText::~zViewText() {
@@ -171,9 +170,9 @@ void zViewText::drawText() {
         auto tbound(&drw[DRW_TXT]->bound);
         auto screenX(manager->screen.x), screenY(manager->screen.y);
         // длина текста в символах
-        int countChars(0); for(auto &t: textCache) countChars += t->text.count();
+        int countChars(2); for(auto &t: textCache) countChars += t->text.count();
         // создать буферы вершин(с учетом strike|underline)
-        drw[DRW_TXT]->make((countChars + 2) * 5);
+        drw[DRW_TXT]->make(countChars * 6);
         // высота текстуры
         auto htex(drw[DRW_TXT]->texture->getSize().h / 2);
         // отрисовка
@@ -302,6 +301,7 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
 
 void zViewText::onInit(bool _theme) {
     zView::onInit(_theme);
+    setTextColorHighlight(theme->styles->_int(Z_COLOR_HIGHLIGHT_TEXT, 0xffa0a0a0));
     zParamDrawable txt, tbk, ic; tbk.texture = 0x01000000; txt.texture = z.R.drawable.fontDefault;
     styles->enumerate([this, &ic, &txt, &tbk, _theme](u32 attr) {
         auto v(&zTheme::value); auto val(v->u);
@@ -333,6 +333,7 @@ void zViewText::onInit(bool _theme) {
     clearCacheSpans(false);
     // шрифт
     setDrawable(&txt, DRW_TXT);
+    drw[DRW_TXT]->typeTri = GL_TRIANGLES;
     // фон шрифта
     if(!dr) dr = new zDrawable(this, DRW_BK);
     dr->init(tbk); defPaint->bkColor = dr->color.toARGB();

@@ -77,7 +77,7 @@
             z:foreground="%drawable/bitmap_common"
             z:fkGravity="end|center_vertical"
             z:fkTile1="@integer/switchTrack" z:fkTile2="@integer/switchTrumb"
-            z:font="%drawable/font4"
+            z:font="%drawable/font3"
             z:text="Режим готовности" z:textSize="20sp" z:textColor="%color/color_text_text"
             z:gravity="start|center_vertical"
             z:pad="5dp" z:duration="30" />

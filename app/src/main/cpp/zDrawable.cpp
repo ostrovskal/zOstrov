@@ -246,7 +246,7 @@ int zDrawable::makeText(cstr text, int len, zTextPaint* paint) {
         if(ch == ' ') cw = 10.0f;
         _pos.set(stx, sty + (int)round((float)(glyph[1] - offsetY) * factor), cw, (int)round((float)glyph[3] * factor));
         // нарисовать
-        idx += makeQuad(_pos, tex, &vertices[idx], paint->italic, true);
+        idx += makeTriangle(_pos, tex, &vertices[idx], paint->italic);
         stx += cw;
     }
     auto glyph(texture->paramGlyph('_' + offsetBold));
@@ -256,13 +256,13 @@ int zDrawable::makeText(cstr text, int len, zTextPaint* paint) {
     // strike
     if(style & ZS_TEXT_STRIKE) {
         _pos.set(0, 1 + ht / 2, stx - 2, (int)round(2.0f * factor));
-        idx += makeQuad(_pos, tex, &vertices[idx], 0, true);
+        idx += makeTriangle(_pos, tex, &vertices[idx], 0);
     }
     // underline
     if(style & ZS_TEXT_UNDERLINE) {
         auto bs((int)round((float)texture->descent * factor + 0.5f));
         _pos.set(0, ht - bs, stx - 2, (int)round(2.0f * factor));
-        idx += makeQuad(_pos, tex, &vertices[idx], 0, true);
+        idx += makeTriangle(_pos, tex, &vertices[idx], 0);
     }
     count = idx;
     return stx;

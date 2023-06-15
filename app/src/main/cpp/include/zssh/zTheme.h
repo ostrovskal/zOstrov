@@ -212,8 +212,7 @@ enum ThemeStyles {
     Z_SLIDER_MODE                   = (154 | ZTT_INT),
     Z_FONT1                         = (155 | ZTT_INT),
     Z_FONT2                         = (156 | ZTT_INT),
-    Z_FONT3                         = (157 | ZTT_INT),
-    Z_FONT4                         = (158 | ZTT_INT)
+    Z_FONT3                         = (157 | ZTT_INT)
 };
 
 #include "zR.h"
