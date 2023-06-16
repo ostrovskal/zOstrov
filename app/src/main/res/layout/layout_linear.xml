@@ -173,14 +173,14 @@
         <ProgressBar
             android:id="@+id/progress1" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:text="Sergey" z:layout_gravity="center"  z:styles="@style/linearProgress"
-            z:range="0,170" z:progress="250" z:orientation="horizontal" />
+            z:range="0,70" z:progress="10" z:orientation="horizontal" />
     <EditText
         android:id="@+id/edit2" android:layout_width="match_parent" android:layout_height="wrap_content"
         z:styles="@style/edittext" z:inputMode="text" z:hint="@string/enter_family" z:textStyle="bold_italic|strike"/>
         <ProgressBar
             android:id="@+id/progress2" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:text="Прогресс" z:layout_gravity="center"  z:styles="@style/linearProgress"
-            z:range="0,170" z:progress="250" z:orientation="horizontal" />
+            z:range="0,170" z:progress="150" z:orientation="horizontal" />
     <!--
             <EditLayout android:id="@+id/editlyt1" android:layout_width="wrap_content" android:layout_height="wrap_content">
             </EditLayout>

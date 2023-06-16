@@ -128,11 +128,11 @@ void zViewText::onLayout(crti &position, bool changed) {
         if((fkGravity & ZS_GRAVITY_HORZ) == ZS_GRAVITY_HCENTER) {
             // габариты иконки
             if((icGravity & ZS_GRAVITY_HORZ) != ZS_GRAVITY_HCENTER) {
-                _width = icSize.w + distance; _grav = icGravity;
+                _width = icSize.w + distance * (icSize.w != 0); _grav = icGravity;
             }
         } else {
             // габариты картинки
-            _width = fkW + distance; _grav = fkGravity;
+            _width = fkW + distance * (fkW != 0); _grav = fkGravity;
         }
         drw[DRW_FK]->measure(fkW, fkH, 3, false);
         *bound = applyGravity(rclient, *bound, fkGravity); *bound += rclient;
@@ -244,11 +244,15 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
         for(auto& cache : textCache) maxHeight += cache->size;
         return { widthRectCache, maxHeight };
     }
+    // разбить текст по спец. символам по ширине ректа
+    auto tex(drw[DRW_TXT]->texture);
+    if(!tex) {
+        DLOG("no texture %s", typeName());
+        return { maxWidth, maxHeight };
+    }
     if(widthRect <= 0 || isWrap()) widthRect = INT_MAX;
     textCache.clear();
     auto isEdit(dynamic_cast<zViewEdit*>(this));
-    // разбить текст по спец. символам по ширине ректа
-    auto tex(drw[DRW_TXT]->texture);
     // адрес последнего разделителя/начало подстроки/текущий символ
     cstr separator(nullptr), _stext(_text); int ch;
     // массив спанов

@@ -201,10 +201,10 @@ public:
     // установка текстуры/номера тайла
     void setTexture(zTexture* tex, int _image);
     // вернуть изображение
-    i32 getImage() const { return drw[DRW_FK]->tile; }
+    i32 getImage() const { return image; }
 protected:
     // изображение
-    int image{0};
+    int image{-1};
 };
 
 class zViewVideo : public zView {

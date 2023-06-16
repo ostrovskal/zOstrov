@@ -15,15 +15,15 @@ public:
     // конструкторы
     zMenuItem() { }
     zMenuItem(i32 _id, i32 _img, czs& _txt, u32 _flg, zMenuGroup* _grp) : id(_id), img(_img), txt(_txt), flags(_flg), grp(_grp) { }
-    ~zMenuItem();
+    virtual ~zMenuItem();
     // оператор сравнения
     bool operator == (int _id) const { return id == _id; }
     // сброс
-    void reset() { id = img = flags = 0; txt.empty(); }
+    virtual void reset() { id = img = flags = 0; txt.empty(); }
     // установить текст
-    void setText(czs& _text) { txt = _text; }
+    void setText(czs& _txt);
     // установить картинку
-    void setImage(int _img) { img = _img; }
+    void setImage(int _img);
     // установить доступность
     void setEnabled(bool _set) { updateStatus(menuItemEnabled, _set); }
     // установить видимость
@@ -58,9 +58,9 @@ public:
     czs& getText() const { return txt; }
 protected:
     // обновление статуса
-    void updateStatus(int status, bool _set) { flags &= ~status; flags |= (status * _set); }
+    void updateStatus(int status, bool _set);
     // идентификатор/изображение
-    i32 id{0}, img{0};
+    i32 id{0}, img{-1};
     // флаги
     u32 flags{0};
     // заголовок
@@ -70,25 +70,23 @@ protected:
 };
 
 // класс группы элементов меню
-class zMenuGroup {
+class zMenuGroup : public zMenuItem {
     friend class zActionBar;
 public:
     // конструкторы
     zMenuGroup() { }
-    zMenuGroup(int _id) : id(_id) { }
-    ~zMenuGroup() { reset(); }
+    zMenuGroup(int _id) : zMenuItem(_id, -1, "", menuItemGroup, nullptr) { }
+    virtual ~zMenuGroup() { reset(); }
     // сброс
-    void reset() { children.clear(); }
-    // вернуть идентификатор
-    int getId() const { return id; }
+    virtual void reset() override { zMenuItem::reset(); children.clear(); }
     // признак наличия элементов
     bool isNotEmpty() const { return children.size() > 1; }
+    bool isEmpty() const { return children.size() == 0; }
     int count() const { return children.size(); }
     zMenuItem* add(zMenuItem* item) { children += item; return item; }
     zMenuItem* idFind(int _id) const { return atFind(children.indexOf(_id)); }
     zMenuItem* atFind(int _idx) const { return ((_idx >= 0 && _idx < count()) ? children[_idx] : nullptr); }
 protected:
-    int id{0};
     zArray<zMenuItem*> children{};
 };
 
@@ -99,6 +97,8 @@ public:
     zActionBar(zStyle* _styles, zStyle* _styles_buttons, zStyle* _styles_popup);
     // деструктор
     virtual ~zActionBar();
+    // изменение темы
+    virtual void changeTheme() override { popup->changeTheme(); zViewGroup::changeTheme(); }
     // отобразить/скрыть
     virtual void show(bool _show);
     // проверка на режим блокировки
@@ -131,7 +131,7 @@ protected:
     // вычисление габаритов
     virtual void onMeasure(cszm& spec) override;
     // вычисление кнопок действий
-    int measureButton(int _id, int _image, int widthSize, int heightSize, zMenuGroup* _pop, bool isMeasure);
+    int measureButton(int _id, int _image, int _flags, czs& _txt, int widthSize, int heightSize, zMenuGroup* _grp);
     // формирование меню
     void recursiveMenu(zMenuGroup* pop);
     // сброс кнопки overflow

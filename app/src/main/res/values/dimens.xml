@@ -39,7 +39,7 @@
     <dimen name="editMinWidth">110dp</dimen>
     <dimen name="editMinHeight">30dp</dimen>
     <dimen name="divider">2dp</dimen>
-    <dimen name="menuText">18sp</dimen>
+    <dimen name="menuText">15sp</dimen>
     <dimen name="hintText">14sp</dimen>
     <dimen name="textText">16sp</dimen>
     <dimen name="messageText">22sp</dimen>

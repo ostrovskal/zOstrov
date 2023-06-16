@@ -75,8 +75,22 @@ void sshApp::run() {
 #include "zssh/zViewRibbons.h"
 
 void sshApp::setContent() {
-    //debug = true;
+    debug = true;
     #include "zssh/layout_linear.h"
+    getActionBar()->setOnClickMenuGroup([](zView* v, zMenuGroup* g) {
+        DLOG("click group %i %i", v->id, g->count());
+    })->setOnClickMenuItem([](zView* v, zMenuItem* i) {
+        if(i->getId() == z.R.integer.MENU_KEYBOARD) {
+            auto ic(i->getImage());
+            i->setImage(ic == z.R.integer.iconKeyb ? z.R.integer.iconGamepad : (ic == z.R.integer.iconGamepad
+                                                                                ? z.R.integer.iconDisplay
+                                                                                : z.R.integer.iconKeyb));
+        } else {
+            //i->setEnabled(false);
+            i->setVisibled(i->getId() & 1);
+        }
+       DLOG("click item %i %s", v->id, i->getText().str());
+    });
     idView(z.R.id.radioLight)->setOnClick([this](zView*, int) {
         setTheme(themeLight, nullptr, nullptr);
     });

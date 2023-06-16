@@ -174,7 +174,7 @@ public:
     // проверка статуса на флаг
     bool testFlags(int flags) const { return (status & flags) != 0; }
     // установить тэг
-    void setTag(const TAG& _tag) { tag = _tag; }
+    void setTag(const TAG& _tag) { tag = std::move(_tag); }
     // установить отображатель
     template<typename T = zDrawable> void setDrawable(zParamDrawable* params, int index, T** var = nullptr) {
         if(var) *var = nullptr;

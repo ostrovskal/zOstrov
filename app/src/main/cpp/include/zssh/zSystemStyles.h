@@ -92,26 +92,31 @@ static zStyle styles_z_toast[] = {
 
 static zStyle styles_z_bar[] = {
 	{ Z_BACKGROUND | ZT_THEME, Z_COLOR_MENU },
-	{ Z_GRAVITY, ZS_GRAVITY_START | ZS_GRAVITY_TOP },
+	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_DURATION, 20 },
-	{ Z_PADDING | ZT_END, 0x02020202 }
+	{ Z_PADDING | ZT_END, 0x01010101 }
 };
 
 static zStyle styles_z_barbutton[] = {
-	{ Z_SIZE, 0x00200020 },
+	{ Z_SIZE, 0x00100010 },
 	{ Z_FOREGROUND | ZT_THEME, Z_BITMAP_COMMON },
 	{ Z_FOREGROUND_COLOR, 0xffffffff },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
+	{ Z_TEXT_SIZE, 15 },
+	{ Z_TEXT_STYLE, ZS_TEXT_NORMAL },
+	{ Z_TEXT_FOREGROUND_COLOR, 0xffffffff },
+	{ Z_FOREGROUND_SCALE, 32767 },
 	{ Z_PADDING | ZT_END, 0x02020202 }
 };
 
 static zStyle styles_z_baroverflow[] = {
-	{ Z_SIZE, 0x00200020 },
+	{ Z_SIZE, 0x00100010 },
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_FOREGROUND_COLOR, 0xffffffff },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
+	{ Z_FOREGROUND_SCALE, 32767 },
 	{ Z_PADDING | ZT_END, 0x02020202 }
 };
 
@@ -121,6 +126,7 @@ static zStyle styles_z_menuimage[] = {
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_BEHAVIOR, 0 },
+	{ Z_FOREGROUND_SCALE, 32767 },
 	{ Z_PADDING | ZT_END, 0x02020202 }
 };
 
@@ -133,7 +139,7 @@ static zStyle styles_z_barpopup[] = {
 	{ Z_SCROLLBAR_FADE, true },
 	{ Z_DECORATE, ZS_VSCROLLBAR },
 	{ Z_SELECTOR | ZT_THEME, Z_COLOR_SELECTOR },
-	{ Z_PADDING | ZT_END, 0x04020402 }
+	{ Z_PADDING | ZT_END, 0x02020202 }
 };
 
 static zStyle styles_z_formcaption[] = {
@@ -196,8 +202,9 @@ static zStyle styles_z_menu_item[] = {
 	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_FOREGROUND_TILES, 0x00002B2A },
 	{ Z_TEXT_NOWRAP, true },
-	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_END },
-	{ Z_TEXT_DISTANCE, 8 },
+	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_END | ZS_GRAVITY_VCENTER },
+	{ Z_FOREGROUND_SCALE, 32767 },
+	{ Z_TEXT_DISTANCE, 7 },
 	{ Z_PADDING | ZT_END, 0x02020202 }
 };
 

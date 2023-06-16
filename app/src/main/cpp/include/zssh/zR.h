@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Thu Jun 15 20:26:39 2023
+// Fri Jun 16 07:25:13 2023
 
 #pragma once
 
@@ -11,8 +11,8 @@ struct _z {
 		struct _drawable {
 			enum { 
 				font1	= 0x00100000, 	font2	= 0x00100001, 	font3	= 0x00100002, 
-				font4	= 0x00100003, 	fontDefault	= 0x00100004, 	znull	= 0x00100005, 
-				zssh	= 0x00100006, 			};
+				fontDefault	= 0x00100003, 	znull	= 0x00100004, 	zssh	= 0x00100005, 
+			};
 		}; 
 		_drawable drawable;
 		struct _color {
@@ -54,7 +54,7 @@ struct _z {
 				progressMaxHeight	= 22, 	sliderMinWidth	= 90, 	sliderMinHeight	= 25, 
 				sliderMaxWidth	= 150, 	sliderMaxHeight	= 35, 	selectMinWidth	= 60, 
 				selectMinHeight	= 30, 	chartMinWidth	= 12, 	chartMinHeight	= 5, 
-				editMinWidth	= 110, 	editMinHeight	= 30, 	divider	= 2, 	menuText	= 18, 
+				editMinWidth	= 110, 	editMinHeight	= 30, 	divider	= 2, 	menuText	= 15, 
 				hintText	= 14, 	textText	= 16, 	messageText	= 22, 	headerText	= 17, 
 			};
 		}; 
@@ -125,31 +125,31 @@ struct _z {
 		_integer integer;
 		struct _string {
 			enum { 
-				app_name	= 0x00100007, 	acontrollerMap	= 0x00100008, 	ccontrollerMap	= 0x00100009, 
-				themeDark	= 0x0010000A, 	themeLight	= 0x0010000B, 	textSpan	= 0x0010000C, 
-				first_form	= 0x0010000D, 	enter_family	= 0x0010000E, 	menuOpenSave	= 0x0010000F, 
-				menuSettings	= 0x00100010, 	menuProperties	= 0x00100011, 
-				menuSound	= 0x00100012, 	menuPokes	= 0x00100013, 	menuMru	= 0x00100014, 
-				menuOperations	= 0x00100015, 	menuReset	= 0x00100016, 	menuRestore	= 0x00100017, 
-				menuExecute	= 0x00100018, 	menuExit	= 0x00100019, 	menuModel	= 0x0010001A, 
-				menuTurbo	= 0x0010001B, 	menuFilter	= 0x0010001C, 	menuTape	= 0x0010001D, 
-				menuDebugger	= 0x0010001E, 	menuExeDebugger	= 0x0010001F, 
-				menuMagic	= 0x00100020, 	menuDisk1	= 0x00100021, 	menuDisk2	= 0x00100022, 
-				menuDisk3	= 0x00100023, 	menuDisk4	= 0x00100024, 	menuSinclair48	= 0x00100025, 
-				menuSinclair128	= 0x00100026, 	menuPentagon	= 0x00100027, 
-				menuScorpion	= 0x00100028, 	menuMruEmpty	= 0x00100029, 	menuKeyJoy	= 0x0010002A, 
-				menuLabel	= 0x0010002B, 	menuCode	= 0x0010002C, 	menuValue	= 0x0010002D, 
-				menuQuickSave	= 0x0010002E, 	menuAsm	= 0x0010002F, 	menuTzx	= 0x00100030, 
-				podskazka	= 0x00100031, 	Perekljuchatelw	= 0x00100032, 	Podskazka	= 0x00100033, 
-				Temnaja	= 0x00100034, 	Svetlaja	= 0x00100035, 	Flagzok	= 0x00100036, 
-				Nagzmi_na_menja__	= 0x00100037, 	Regzim_gotovnosti	= 0x00100038, 
-				Aktivacija	= 0x00100039, 	slayder	= 0x0010003A, 	Tekst_na_knopke	= 0x0010003B, 
-				Sergey	= 0x0010003C, 	Progress	= 0x0010003D, 			};
+				app_name	= 0x00100006, 	acontrollerMap	= 0x00100007, 	ccontrollerMap	= 0x00100008, 
+				themeDark	= 0x00100009, 	themeLight	= 0x0010000A, 	textSpan	= 0x0010000B, 
+				first_form	= 0x0010000C, 	enter_family	= 0x0010000D, 	menuOpenSave	= 0x0010000E, 
+				menuSettings	= 0x0010000F, 	menuProperties	= 0x00100010, 
+				menuSound	= 0x00100011, 	menuPokes	= 0x00100012, 	menuMru	= 0x00100013, 
+				menuOperations	= 0x00100014, 	menuReset	= 0x00100015, 	menuRestore	= 0x00100016, 
+				menuExecute	= 0x00100017, 	menuExit	= 0x00100018, 	menuModel	= 0x00100019, 
+				menuTurbo	= 0x0010001A, 	menuFilter	= 0x0010001B, 	menuTape	= 0x0010001C, 
+				menuDebugger	= 0x0010001D, 	menuExeDebugger	= 0x0010001E, 
+				menuMagic	= 0x0010001F, 	menuDisk1	= 0x00100020, 	menuDisk2	= 0x00100021, 
+				menuDisk3	= 0x00100022, 	menuDisk4	= 0x00100023, 	menuSinclair48	= 0x00100024, 
+				menuSinclair128	= 0x00100025, 	menuPentagon	= 0x00100026, 
+				menuScorpion	= 0x00100027, 	menuMruEmpty	= 0x00100028, 	menuKeyJoy	= 0x00100029, 
+				menuLabel	= 0x0010002A, 	menuCode	= 0x0010002B, 	menuValue	= 0x0010002C, 
+				menuQuickSave	= 0x0010002D, 	menuAsm	= 0x0010002E, 	menuTzx	= 0x0010002F, 
+				podskazka	= 0x00100030, 	Perekljuchatelw	= 0x00100031, 	Podskazka	= 0x00100032, 
+				Temnaja	= 0x00100033, 	Svetlaja	= 0x00100034, 	Flagzok	= 0x00100035, 
+				Nagzmi_na_menja__	= 0x00100036, 	Regzim_gotovnosti	= 0x00100037, 
+				Aktivacija	= 0x00100038, 	slayder	= 0x00100039, 	Tekst_na_knopke	= 0x0010003A, 
+				Sergey	= 0x0010003B, 	Progress	= 0x0010003C, 			};
 		}; 
 		_string string;
 		struct _array {
 			enum { 
-				spinArray	= 0x0010003E, 			};
+				spinArray	= 0x0010003D, 			};
 		}; 
 		_array array;
 		struct _style {
@@ -277,7 +277,6 @@ static zResource z_resources[] = {
 		{ _z::_R::_drawable::font1, "font1" },
 		{ _z::_R::_drawable::font2, "font2" },
 		{ _z::_R::_drawable::font3, "font3" },
-		{ _z::_R::_drawable::font4, "font4" },
 		{ _z::_R::_drawable::fontDefault, "fontDefault" },
 		{ _z::_R::_drawable::znull, "znull" },
 		{ _z::_R::_drawable::zssh, "zssh" },
@@ -295,7 +294,7 @@ static zResource z_resources[] = {
 		{ _z::_R::_string::menuProperties, "Properties..." },
 		{ _z::_R::_string::menuSound, "Sound" },
 		{ _z::_R::_string::menuPokes, "Pokes..." },
-		{ _z::_R::_string::menuMru, "Last…" },
+		{ _z::_R::_string::menuMru, "Last..." },
 		{ _z::_R::_string::menuOperations, "Operations..." },
 		{ _z::_R::_string::menuReset, "Reset" },
 		{ _z::_R::_string::menuRestore, "Restore" },
@@ -306,7 +305,7 @@ static zResource z_resources[] = {
 		{ _z::_R::_string::menuFilter, "Filtered" },
 		{ _z::_R::_string::menuTape, "Tape" },
 		{ _z::_R::_string::menuDebugger, "Debugging" },
-		{ _z::_R::_string::menuExeDebugger, "Debugger…" },
+		{ _z::_R::_string::menuExeDebugger, "Debugger..." },
 		{ _z::_R::_string::menuMagic, "MAGIC" },
 		{ _z::_R::_string::menuDisk1, "A:" },
 		{ _z::_R::_string::menuDisk2, "B:" },
@@ -386,7 +385,7 @@ static zResource* z_resources_ptr_arrays[] = { z_resources, z_resources_ru, null
 
 // menu
 static MENUITEM main_menu[] = {
-	{ menuItem, z.R.integer.MENU_KEYBOARD, z.R.string.menuKeyJoy, z.R.integer.iconGamepad, menuItemText | actAlways },
+	{ menuItem, z.R.integer.MENU_KEYBOARD, z.R.string.menuKeyJoy, z.R.integer.iconKeyb, menuItemText | actAlways },
 	{ menuGroupBegin, z.R.integer.MENU_DEBUGGER1, z.R.string.menuDebugger, z.R.integer.iconDebug, menuItemText | actAlways },
 		{ menuItem, z.R.integer.MENU_DEBUGGER_LABEL, z.R.string.menuLabel, z.R.integer.iconDebug, menuItemCheck },
 		{ menuItem, z.R.integer.MENU_DEBUGGER_CODE, z.R.string.menuCode, z.R.integer.iconCode, menuItemCheck },

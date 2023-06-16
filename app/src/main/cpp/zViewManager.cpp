@@ -401,6 +401,8 @@ void zViewManager::updateNativeWindow(AConfiguration* config, zStyle* _styles, z
             common->attach(root = new zFrameLayout(styles_default, z.R.id.root), VIEW_MATCH, VIEW_MATCH);
             // добавить панель действий
             common->attach(actionBar = new zActionBar(styles_z_bar, styles_z_barbutton, styles_z_barpopup), VIEW_MATCH, VIEW_WRAP);
+            actionBar->setMenu(z.R.integer.iconAppZx, main_menu);
+            actionBar->setAdapter(new zAdapterList({}, new zFabricMenuItem(styles_z_menu_item)));
             // добавить клаву
             common->attach(keyboard = new zViewKeyboard("keyboardDefault.xml"), 0, sz.h, VIEW_MATCH, VIEW_WRAP);
             setContent();

@@ -32,7 +32,7 @@ void zViewButton::onLayout(crti &position, bool changed) {
 void zViewButton::setIcon(i32 _icon) {
     if(drw[DRW_ICON]->tile != _icon) {
         drw[DRW_ICON]->tile = _icon;
-        invalidate();
+        requestLayout();
     }
 }
 
@@ -432,7 +432,6 @@ void zViewController::onLayout(crti &position, bool changed) {
 
 zViewImage::zViewImage(zStyle* _styles, i32 _id, i32 _image) : zViewText(_styles, _id, 0), image(_image) {
     minMaxSize.set(z_dp(z.R.dimen.imageMinWidth), 0, z_dp(z.R.dimen.imageMinHeight), 0);
-    delete drw[DRW_FBO]; drw[DRW_FBO] = &fake;
 }
 
 void zViewImage::setTexture(zTexture* tex, int _image) {
@@ -441,7 +440,7 @@ void zViewImage::setTexture(zTexture* tex, int _image) {
 }
 
 void zViewImage::setImage(i32 _image) {
-    if(image != _image && _image >= 0) {
+    if(image != _image) {
         image = _image; drw[DRW_FK]->tile = _image;
         requestLayout();
     }

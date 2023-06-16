@@ -4,7 +4,7 @@
     <string name="menuProperties">Properties...</string>
     <string name="menuSound">Sound</string>
     <string name="menuPokes" translatable="false">Pokes...</string>
-    <string name="menuMru">Last…</string>
+    <string name="menuMru">Last...</string>
     <string name="menuOperations">Operations...</string>
     <string name="menuReset">Reset</string>
     <string name="menuRestore">Restore</string>
@@ -15,7 +15,7 @@
     <string name="menuFilter">Filtered</string>
     <string name="menuTape">Tape</string>
     <string name="menuDebugger">Debugging</string>
-    <string name="menuExeDebugger">Debugger…</string>
+    <string name="menuExeDebugger">Debugger...</string>
     <string name="menuMagic" translatable="false">MAGIC</string>
     <string name="menuDisk1" translatable="false">A:</string>
     <string name="menuDisk2" translatable="false">B:</string>

@@ -192,9 +192,8 @@ void zView::checked(bool _check) {
 }
 
 i32 zView::onTouchEvent(zTouch *touch) {
-    if(!isTouchable()) {
-        return TOUCH_CONTINUE;
-    }
+    if(!isEnabled()) return TOUCH_STOP;
+    if(!isTouchable()) return TOUCH_CONTINUE;
     if(onTouch) {
         auto ret(onTouch(this, touch));
         if(ret != TOUCH_CONTINUE) return ret;
