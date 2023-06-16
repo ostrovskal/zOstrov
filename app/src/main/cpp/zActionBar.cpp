@@ -41,7 +41,6 @@ zActionBar::zActionBar(zStyle* _styles, zStyle* _styles_buttons, zStyle* _styles
         }
     });
     setOnAnimation([this](zView*, int) {
-        //if(!rview.h) return true;
         if(isChecked()) {
             // блокировка? - ждем
             if(testLocked()) return true;

@@ -91,10 +91,11 @@ static zStyle styles_z_toast[] = {
 };
 
 static zStyle styles_z_bar[] = {
+	{ Z_FBO, true },
 	{ Z_BACKGROUND | ZT_THEME, Z_COLOR_MENU },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
-	{ Z_DURATION, 20 },
-	{ Z_PADDING | ZT_END, 0x01010101 }
+	{ Z_DURATION, 40 },
+	{ Z_PADDING | ZT_END, 0x02020202 }
 };
 
 static zStyle styles_z_barbutton[] = {
@@ -121,6 +122,7 @@ static zStyle styles_z_menuimage[] = {
 };
 
 static zStyle styles_z_barpopup[] = {
+	{ Z_FBO, true },
 	{ Z_DIVIDER | ZT_THEME, Z_COLOR_DIVIDER },
 	{ Z_DIVIDER_SIZE, 0x00000002 },
 	{ Z_DIVIDER_TYPE, ZS_DIVIDER_MIDDLE },

@@ -99,8 +99,8 @@ void sshApp::setContent() {
         setTheme(themeDark, nullptr, nullptr);
     });
     zArray<zStringUTF8> objects(theme->findArray(z.R.array.spinArray));
-    for(int i = 0 ; i < 100; i++) {
-        objects += zStringUTF8(z_ntos(&i, RADIX_DEC, false));
+    for(int i = 0 ; i < 1000; i += 7) {
+        objects += zStringUTF8(z_ntos(&i, RADIX_HEX, false));
     }
     auto sel(idView<zViewSelect>(z.R.id.select));
     grp10->detach(sel); getActionBar()->setContent(sel);

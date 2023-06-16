@@ -79,10 +79,11 @@
         <item name="marginBottom">3dp</item>
     </style>
     <style name="bar">
+        <item name="fbo">true</item>
         <item name="background">%color/color_menu</item>
         <item name="gravity">center</item>
-        <item name="duration">20</item>
-        <item name="pad">1dp</item>
+        <item name="duration">40</item>
+        <item name="pad">2dp</item>
     </style>
     <style name="barButton">
         <item name="sizeMinW">24dp</item>
@@ -107,6 +108,7 @@
         <item name="pad">2dp</item>
     </style>
     <style name="barPopup">
+        <item name="fbo">true</item>
         <item name="divider">%color/color_divider</item>
         <item name="divSize">@dimen/divider</item>
         <item name="divType">middle</item>
