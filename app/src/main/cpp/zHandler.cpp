@@ -40,7 +40,7 @@ void zHandler::erase(zView* view, int what) {
 			if(!msg.millis) continue;
 			if(msg.view != view) continue;
 			// если what == 0 - тогда удаляем все
-			if(what) { if(what != msg.what) continue; }
+			if(what && what != msg.what) continue;
 			msg.millis = 0; if(!--use) break;
 		}
 	}

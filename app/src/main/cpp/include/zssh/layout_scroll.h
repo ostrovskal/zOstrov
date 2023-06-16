@@ -1,5 +1,5 @@
 // Автоматическая генерация кода для макета
-	auto grp00((zScrollLayout*)root->attach(new zScrollLayout(styles_z_zscrolllayout2, 0, false), 
+	auto grp00((zScrollLayout*)root->attach(new zScrollLayout(styles_z_zscrolllayout1, 0, false), 
 			VIEW_MATCH, VIEW_MATCH)); 
 	auto grp10((zLinearLayout*)grp00->attach(new zLinearLayout(styles_z_zlinearlayout3, 0, false), 
 			VIEW_MATCH, VIEW_WRAP)); 

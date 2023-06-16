@@ -9,6 +9,8 @@
 zDrawableFake zView::fake;
 zView* zView::fbo(nullptr);
 
+static zMatrix mtxTmp{};
+
 zView::zView(zStyle* _styles, i32 _id) : styles(_styles), id(_id) {
     for(auto& d : drw) d = &fake;
 }
@@ -46,8 +48,8 @@ void zView::onInit(bool _theme) {
         switch(attr) {
             case Z_SHAPE:               shape       = val; break;
             case Z_DURATION:			duration    = (u64)val; break;
-            case Z_SCALE_X:				scale.w     = v->f; break;
-            case Z_SCALE_Y:				scale.h     = v->f; break;
+            case Z_SCALE_X:				scale.x     = v->f; break;
+            case Z_SCALE_Y:				scale.y     = v->f; break;
             case Z_ROTATE:				rot.z       = v->f; break;
             case Z_ROTATE_X:			rot.x       = v->f; break;
             case Z_ROTATE_Y:			rot.y       = v->f; break;
@@ -80,7 +82,8 @@ void zView::onInit(bool _theme) {
     setDrawable(&bk, DRW_BK);
     setDrawable(&fk, DRW_FK);
     // ротация/масштаб
-    setRotation(rot.x, rot.y, rot.z); setScale(scale.w, scale.h);
+    setScale(scale.x, scale.y);
+    setRotation(rot.x, rot.y, rot.z);
 }
 
 void zView::drawDebug() {
@@ -319,8 +322,8 @@ void zView::stateView(STATE &state, bool save, int &index) {
         state.data += (u32)(trans.x * 65535.0f);
         state.data += (u32)(trans.y * 65535.0f);
         state.data += (u32)(alpha * 65535.0f);
-        state.data += (u32)(scale.w * 65535.0f);
-        state.data += (u32)(scale.h * 65535.0f);
+        state.data += (u32)(scale.x * 65535.0f);
+        state.data += (u32)(scale.y * 65535.0f);
         state.data += (u32)(rot.x * 65535.0f);
         state.data += (u32)(rot.y * 65535.0f);
         state.data += (u32)(rot.z * 65535.0f);
@@ -355,17 +358,16 @@ void zView::setAlpha(float _alpha) {
 
 void zView::setScale(float _x, float _y) {
     // установка масштаба
-    mtxScale.scale2(_x, _y, 1);
-    mtx = mtxScale * mtxRot;
-    scale.set(_x, _y);
+    scale.set(_x, _y, 1);
+    mtx.scale(scale) *= mtxTmp.rotate(rot);
+    //mtx = mtxScale * mtxRot;
     invalidate();
 }
 
 void zView::setRotation(float _x, float _y, float _z) {
     // установка угла
-    rot.set(_x, _y, _z);
-    mtx = mtxScale * mtxRot.rotate(deg2rad(_x), deg2rad(_y), deg2rad(_z));
-    invalidate();
+    rot.set(deg2rad(_x), deg2rad(_y), deg2rad(_z));
+    setScale(scale.x, scale.y);
 }
 
 void zView::setTranslation(float _x, float _y) {
@@ -397,9 +399,7 @@ zViewGlow::zViewGlow(zView* group) : zView(styles_z_glow, 0) {
             // посчитать альфу
             alpha = v / 2.0f;
             // посчитать размер
-            mtxScale.scale(vert ? 1 : v, vert ? v : 1, 1);
-            mtx = mtxScale * mtxRot;
-        } else {
+            setScale(vert ? 1 : v, vert ? v : 1);
         }
         invalidate();
         updateStatus(ZS_VISIBLED, cont);
@@ -411,7 +411,7 @@ void zViewGlow::start(float _delta, bool _vert, bool _flow) {
     // параметры отображения
     if(isVisibled()) return;
     updateStatus(ZS_VISIBLED, true); vert = _vert;
-    alpha = 0.0f; mtxRot.rotate(0, 0, _flow * deg2rad(180.0f)); mtxScale.identity();
+    alpha = 0.0f; setRotation(0, 0, _flow * 180);
     // базовый тайл
     drw[DRW_BK]->tile = _vert ? z.R.integer.horzGlow : z.R.integer.vertGlow;
     drw[DRW_BK]->measure(_vert * parent->rclient.w, !_vert * parent->rclient.h, !_vert + 1, false);
@@ -419,7 +419,6 @@ void zViewGlow::start(float _delta, bool _vert, bool _flow) {
     rview.w = drw[DRW_BK]->bound.w; rview.h = drw[DRW_BK]->bound.h;
     rview[!_vert] = parent->rclient[!_vert];
     rview[_vert]  = parent->edges(_vert, _flow);
-    mtx = mtxScale * mtxRot;
     // анимация
     _delta = z_min(2.2f, fabs(_delta * 50.0f));
     animator.init(0.0f, false);

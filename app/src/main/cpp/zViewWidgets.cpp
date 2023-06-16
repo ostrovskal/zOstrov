@@ -158,11 +158,11 @@ zViewSlider::zViewSlider(zStyle* _styles, i32 _id, u32 _text, cszi& _range, int 
                    z_dp(z.R.dimen.sliderMinHeight), z_dp(z.R.dimen.sliderMaxHeight));
     if(_text > 0) tips = theme->findString(_text) + " ";
     setOnAnimation([this](zView*, int) {
-        if(parent->isVisibled()) {
-            float value; zMatrix rot;
+        if(isDraw) {
+            float value; static zMatrix rot;
             animator.update(value);
-            if(mode & ZS_SLIDER_ROTATE) rot.rotate(0, 0, deg2rad(value * 360.0f));
-            int v(-(int) roundf((value * speedTrack) * drw[DRW_FK]->bound[vert + 2]));
+            if(mode & ZS_SLIDER_ROTATE) rot.rotate(0, 0, deg2rad(value * 360.0f)); else rot.identity();
+            int v(-(int)trunc(value * drw[DRW_FK]->bound[vert + 2]));
             drw[DRW_FK]->bound[vert] = posTrack + (v % drw[DRW_FK]->bound[vert + 2]);
             if(value >= 0.5f) value = 1.0f - value; value += 0.5f;
             if(mode & ZS_SLIDER_SCALE) mtxTrumb.scale(value, value, 0.0f); else mtxTrumb.identity();
@@ -190,7 +190,8 @@ void zViewSlider::onInit(bool _theme) {
     // инициализировать ползунок
     trumb->init(drw[DRW_FK], drw[DRW_FK]->getTileNum(1));
     animator.init(0.0f, true);
-    animator.add(1.0f, zInterpolator::LINEAR, 12);
+    animator.add(1.0f, zInterpolator::LINEAR, (int)roundf(12 * speedTrack));
+    if(speedTrack || mode) post(MSG_ANIM, duration, 0);
 }
 
 void zViewSlider::showTips() {
@@ -232,26 +233,28 @@ void zViewSlider::onMeasure(cszm& spec) {
 }
 
 void zViewSlider::onLayout(crti &position, bool changed) {
+    auto xy(drw[DRW_FK]->bound[vert]);
     zViewText::onLayout(position, changed);
     updateLayout(changed);
+    drw[DRW_FK]->bound[vert] = xy;
 }
 
 void zViewSlider::updateLayout(bool changed) {
-    if(speedTrack || mode) post(MSG_ANIM, duration, 0);
     if(changed) {
         // размер ползунка
         sizeTrumb = z_min(z_min(minMaxSize[1 + vert * 2], rclient.w), z_min(minMaxSize[3 - vert * 2], rclient.h)); sizeTrumb2 = sizeTrumb / 2;
-        // пересоздать трек
-        drw[DRW_FK]->measure(sizeTrumb, sizeTrumb, 3, false);
-        auto bound(&drw[DRW_FK]->bound); *bound = rclient.xy();
-        (*bound)[1 - vert] += applyGravity(rclient, szi(sizeTrumb, sizeTrumb), fkGravity)[!vert];
-        posTrack = (*bound)[vert];
         // длина трэка(в зависимости от ориентации)
         auto lenTrack(rclient[vert + 2]);
         // количество сегментов трека
         segments = (int)roundf((float)lenTrack / (float)sizeTrumb) + 2;
+        // пересоздать трек
+        drw[DRW_FK]->measure(sizeTrumb, sizeTrumb, 3, false);
+        auto bound(&drw[DRW_FK]->bound);
+        *bound = rclient.xy();
+        (*bound)[1 - vert] += applyGravity(rclient, szi(sizeTrumb, sizeTrumb), fkGravity)[!vert];
+        posTrack = (*bound)[vert];
         // дельта ползунка
-        delta = (float)(lenTrack - sizeTrumb) / (float)range.interval();
+        delta = (float) (lenTrack - sizeTrumb) / (float) range.interval();
         // cформировать ползунок
         trumb->measure(sizeTrumb, sizeTrumb, 3, false);
     }

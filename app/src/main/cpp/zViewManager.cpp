@@ -224,14 +224,14 @@ void zViewManager::drawViews() {
     static int oldVideoMem(0);
     countVertices = 0; countLn = 0; countObjs = 0;
 #endif
-    rti rcommon(zGL::instance()->getSizeScreen());
-    screen.set(0, 0, rcommon.w, rcommon.h);
-    glScissor(rcommon.x, rcommon.y, rcommon.w, rcommon.h);
+//    auto b(z_timeMillis());
+    screen = zGL::instance()->getSizeScreen();
+    glScissor(0, 0, screen.w, screen.h);
     glClear(GL_COLOR_BUFFER_BIT);
     // 1. выполнить подсчет габаритов всех представлений
     common->measure(measureCommon);
     // 2. выполнить позиционирование всех представлений
-    common->layout(rcommon);
+    common->layout(screen);
     // 3. состояния представлений
     if(bufViewStates) stateAllViews(Z_LOAD, nullptr, nullptr);
     // 4. отрисовка всех представлений
@@ -250,6 +250,8 @@ void zViewManager::drawViews() {
             }
         }
     }
+//    auto kadr(z_timeMillis() - b);
+//    z_logBuffer("kadr", 1000 / kadr, 32);
 #ifndef NDEBUG
     if(debug && showTri) {
         if(oldTri != countVertices) {

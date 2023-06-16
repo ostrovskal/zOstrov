@@ -37,7 +37,7 @@ zActionBar::zActionBar(zStyle* _styles, zStyle* _styles_buttons, zStyle* _styles
         if(item->isEnabled()) {
             if(onClickMenuItem) onClickMenuItem(v, item);
             popup->dismiss();
-            if(item->grp) clickGroup(grpView, item->grp);
+            auto grp(item->getGroup()); if(grp) clickGroup(grpView, grp);
         }
     });
     setOnAnimation([this](zView*, int) {
@@ -113,7 +113,7 @@ bool zActionBar::setMenu(int iconApp, MENUITEM* menu) {
     // отсортировать первый уровень по actAlways
     for(int i = 1 ; i < root->count(); i++) {
         auto item(root->atFind(i));
-        if(item->isAlways()) root->children.swap(i, ii++);
+        if(item->isAlways()) root->swap(i, ii++);
     }
     return true;
 }
@@ -133,11 +133,9 @@ int zActionBar::measureButton(int _id, int _image, int _flags, czs& _txt, int wi
 
 void zActionBar::clickGroup(zView *view, zMenuGroup *grp) {
     if(grp && grp->isNotEmpty()) {
-        if(grp->getId() != z.R.id.menuOverflow) {
-            currentGrp.reset();
-            for(auto& i : grp->children) { if(i->isVisibled()) currentGrp.add(i); }
-            grp = &currentGrp;
-        }
+        currentGrp.reset(grp->getId());
+        for(auto& i : *grp) { if(i->isVisibled()) currentGrp.add(i); }
+        grp = &currentGrp;
         if(adapter) adapter->setGroup(grp);
         dropdown->measure( { zMeasure(MEASURE_UNDEF, 0), zMeasure(MEASURE_UNDEF, 0) } );
         popup->show(pti(view->rview.x, rview.h));
@@ -154,13 +152,13 @@ void zActionBar::onMeasure(cszm& spec) {
     auto widthSize(spec.w.size()), heightSize(spec.h.size());
     int wContent(z_percent(widthSize, 33));
     int width(wContent), i, count(root ? root->count() : 0);
-    detach(content); overflow.reset(); removeAllViews(false);
+    detach(content); overflow.reset(z.R.id.menuOverflow); removeAllViews(false);
     for(i = 0 ; i < count; ) {
         auto item(root->atFind(i++));
         if(item->isVisibled()) {
             if(item->isNever()) overflow.add(item);
             else {
-                auto w(measureButton(item->id, item->img, item->flags, item->txt, widthSize, heightSize, item->grp));
+                auto w(measureButton(item->getId(), item->getImage(), item->getFlags(), item->getText(), widthSize, heightSize, item->getGroup()));
                 width += w; if((width + w * 2) >= widthSize) break;
             }
         }
@@ -225,14 +223,13 @@ zView* zActionBar::zAdapterMenu::getView(int position, zView *convert, zViewGrou
     tv->checked(item->isChecked());
     // показывать ли?
     tv->drw[DRW_FK]->visible = grav != ZS_GRAVITY_CENTER;
-    //v->requestLayout();
     return v;
 }
 
 // сброс переключателей
 void zActionBar::resetRadio() {
     if(cgrp) {
-        for(auto& i : cgrp->children) {
+        for(auto& i : *cgrp) {
             if(i->isRadioButton()) i->setChecked(false);
         }
     }

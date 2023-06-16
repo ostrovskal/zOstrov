@@ -212,10 +212,10 @@ public:
     // альфа
     float alpha{1.0f};
     // ротация/масштаб/смещение
-    zVec3 rot{}, trans{};
-    szf   scale{1, 1};
+    zVec3 scale{1, 1, 1}, rot{}, trans{};
     // матрицы
-    zMatrix mtxScale{}, mtxRot{}, mtx{};
+//    zMatrix mtxScale{}, mtxRot{}, mtx{};
+    zMatrix mtx{};
     // задержка анимации
     u64 duration{50L};
     // форма обрезки

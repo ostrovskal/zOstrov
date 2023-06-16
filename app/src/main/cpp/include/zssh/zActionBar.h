@@ -10,7 +10,7 @@
 class zMenuGroup;
 // класс элемента меню
 class zMenuItem {
-    friend class zActionBar;
+//    friend class zActionBar;
 public:
     // конструкторы
     zMenuItem() { }
@@ -55,7 +55,11 @@ public:
     // вернуть картинку
     int getImage() const { return img; }
     // вернуть текст
-    czs& getText() const { return txt; }
+    auto getText() const { return txt; }
+    // вернуть группу
+    auto getGroup() const { return grp; }
+    // вернуть флаги
+    auto getFlags() const { return flags; }
 protected:
     // обновление статуса
     void updateStatus(int status, bool _set);
@@ -71,14 +75,16 @@ protected:
 
 // класс группы элементов меню
 class zMenuGroup : public zMenuItem {
-    friend class zActionBar;
 public:
     // конструкторы
     zMenuGroup() { }
     zMenuGroup(int _id) : zMenuItem(_id, -1, "", menuItemGroup, nullptr) { }
-    virtual ~zMenuGroup() { reset(); }
+    virtual ~zMenuGroup() { reset(0); }
     // сброс
-    void reset() { children.free(); }
+    void reset(int _id) { children.free(); id = _id; }
+    void swap(int _1, int _2) { children.swap(_1, _2); }
+    zMenuItem** begin() const { return &children[0]; }
+    zMenuItem** end() const { return &children[count()]; }
     // признак наличия элементов
     bool isNotEmpty() const { return children.size() > 1; }
     bool isEmpty() const { return children.size() == 0; }

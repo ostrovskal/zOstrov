@@ -78,7 +78,7 @@ void sshApp::setContent() {
     //debug = true;
     #include "zssh/layout_linear.h"
     getActionBar()->setOnClickMenuGroup([](zView* v, zMenuGroup* g) {
-        DLOG("click group %i %i", v->id, g->count());
+        DLOG("click group %i %i", g->getId(), g->count());
     })->setOnClickMenuItem([](zView* v, zMenuItem* i) {
         if(i->getId() == z.R.integer.MENU_KEYBOARD) {
             auto ic(i->getImage());

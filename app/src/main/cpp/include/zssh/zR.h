@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Fri Jun 16 17:57:19 2023
+// Sat Jun 17 00:45:55 2023
 
 #pragma once
 
@@ -178,8 +178,7 @@ struct _z {
 				seek2	= 0x0010003F, 	edit2	= 0x00100040, 	zlinearlayout3	= 0x00100041, 
 				zviewedit2	= 0x00100042, 	zviewbutton2	= 0x00100043, 	zviewslider2	= 0x00100044, 
 				zviewslider3	= 0x00100045, 	zviewslider4	= 0x00100046, 	zviewedit3	= 0x00100047, 
-				zscrolllayout2	= 0x00100048, 	zviewslider5	= 0x00100049, 
-				zviewslider6	= 0x0010004A, 	};
+				zviewslider5	= 0x00100048, 	zviewslider6	= 0x00100049, 	};
 		};
 		_style style;
 	};
@@ -264,7 +263,6 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::zviewslider3, styles_z_zviewslider3 },
 		{ _z::_R::_style::zviewslider4, styles_z_zviewslider4 },
 		{ _z::_R::_style::zviewedit3, styles_z_zviewedit3 },
-		{ _z::_R::_style::zscrolllayout2, styles_z_zscrolllayout2 },
 		{ _z::_R::_style::zviewslider5, styles_z_zviewslider5 },
 		{ _z::_R::_style::zviewslider6, styles_z_zviewslider6 }
 };
