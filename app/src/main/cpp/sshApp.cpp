@@ -75,7 +75,7 @@ void sshApp::run() {
 #include "zssh/zViewRibbons.h"
 
 void sshApp::setContent() {
-    debug = true;
+    //debug = true;
     #include "zssh/layout_linear.h"
     getActionBar()->setOnClickMenuGroup([](zView* v, zMenuGroup* g) {
         DLOG("click group %i %i", v->id, g->count());
@@ -87,7 +87,8 @@ void sshApp::setContent() {
                                                                                 : z.R.integer.iconKeyb));
         } else {
             //i->setEnabled(false);
-            i->setVisibled(i->getId() & 1);
+            //i->setVisibled(i->getId() & 1);
+            i->setChecked(true);
         }
        DLOG("click item %i %s", v->id, i->getText().str());
     });
@@ -101,8 +102,9 @@ void sshApp::setContent() {
     for(int i = 0 ; i < 100; i++) {
         objects += zStringUTF8(z_ntos(&i, RADIX_DEC, false));
     }
-    idView<zViewSelect>(z.R.id.select)->
-            setAdapter(new zAdapterList(objects, new zFabricSelectItem(styles_z_spin_capt),
+    auto sel(idView<zViewSelect>(z.R.id.select));
+    grp10->detach(sel); getActionBar()->setContent(sel);
+    sel->setAdapter(new zAdapterList(objects, new zFabricSelectItem(styles_z_spin_capt),
                                         new zFabricSelectItem(styles_z_spin_item)))->
                                         setOnChangeSelected([](zView*, int s) {
                                             DLOG("select sel %i", s);
@@ -111,7 +113,8 @@ void sshApp::setContent() {
     auto adapter(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
     grd->setAdapter(adapter)->setOnChangeSelected([](zView*, int sel) {
 //        DLOG("grid sel %i", sel);
-    })->setOnClick([](zView*, int) {
+    })->setOnClick([this](zView*, int) {
+        getActionBar()->show(true);
     });
     auto lst(idView<zViewRibbon>(z.R.id.list1));
     auto adapter1(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));

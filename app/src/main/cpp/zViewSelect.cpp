@@ -195,4 +195,5 @@ i32 zViewPopup::keyEvent(int key, bool sysKey) {
 
 void zViewPopup::dismiss() {
     manager->getSystemView(false)->detach(this);
+    updateStatus(ZS_VISIBLED, false);
 }

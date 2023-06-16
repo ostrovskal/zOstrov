@@ -85,8 +85,8 @@
         <item name="pad">1dp</item>
     </style>
     <style name="barButton">
-        <item name="sizeMinW">16dp</item>
-        <item name="sizeMinH">16dp</item>
+        <item name="sizeMinW">24dp</item>
+        <item name="sizeMinH">24dp</item>
         <item name="foreground">%drawable/bitmap_common</item>
         <item name="fkColor">#ffffff</item>
         <item name="gravity">center</item>
@@ -95,17 +95,7 @@
         <item name="textStyle">normal</item>
         <item name="textColor">#ffffff</item>
         <item name="fkScale">0.5</item>
-        <item name="pad">2dp</item>
-    </style>
-    <style name="barOverflow">
-        <item name="sizeMinW">16dp</item>
-        <item name="sizeMinH">16dp</item>
-        <item name="foreground">@drawable/zssh</item>
-        <item name="fkColor">#ffffff</item>
-        <item name="gravity">center</item>
-        <item name="fkGravity">center</item>
-        <item name="fkScale">0.5</item>
-        <item name="pad">2dp</item>
+        <item name="pad">1dp</item>
     </style>
     <style name="menuImage">
         <item name="foreground">%drawable/bitmap_common</item>
@@ -185,13 +175,14 @@
         <item name="gravity">start|center_vertical</item>
         <item name="foreground">@drawable/zssh</item>
         <item name="font">@drawable/font1</item>
-        <item name="fkTile1">@integer/checkOff</item>
-        <item name="fkTile2">@integer/checkOn</item>
+        <item name="textStyle">bold</item>
+        <item name="fkTile1">@integer/iconGroup</item>
+        <item name="fkTile2">@integer/iconGroup</item>
         <item name="textWrap">true</item>
         <item name="fkGravity">end|center_vertical</item>
         <item name="fkScale">0.5</item>
         <item name="textDistance">7dp</item>
-        <item name="pad">2dp</item>
+        <item name="pad">1dp</item>
     </style>
     <style name="spin_capt">
         <item name="textWrap">true</item>

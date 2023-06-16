@@ -18,8 +18,6 @@ public:
     virtual ~zMenuItem();
     // оператор сравнения
     bool operator == (int _id) const { return id == _id; }
-    // сброс
-    virtual void reset() { id = img = flags = 0; txt.empty(); }
     // установить текст
     void setText(czs& _txt);
     // установить картинку
@@ -29,7 +27,9 @@ public:
     // установить видимость
     void setVisibled(bool _set) { updateStatus(menuItemVisibled, _set); }
     // установить выделение
-    void setChecked(bool _set) { updateStatus(menuItemChecked, _set); }
+    void setChecked(bool _set);
+    // возможно чекить
+    bool isCheckable() const { return isCheckBox() || isRadioButton(); }
     // признак одиночного выбора
     bool isCheckBox() const { return flags & menuItemCheck; }
     // признак множественного выбора
@@ -65,7 +65,7 @@ protected:
     u32 flags{0};
     // заголовок
     zStringUTF8 txt{};
-    // указатель на группу, на которую указывает
+    // указатель на группу
     zMenuGroup* grp{nullptr};
 };
 
@@ -78,7 +78,7 @@ public:
     zMenuGroup(int _id) : zMenuItem(_id, -1, "", menuItemGroup, nullptr) { }
     virtual ~zMenuGroup() { reset(); }
     // сброс
-    virtual void reset() override { zMenuItem::reset(); children.clear(); }
+    void reset() { children.free(); }
     // признак наличия элементов
     bool isNotEmpty() const { return children.size() > 1; }
     bool isEmpty() const { return children.size() == 0; }
@@ -92,23 +92,24 @@ protected:
 
 class zActionBar : public zLinearLayout {
 public:
-    enum { ACTION_DELAY = 300 };
     // конструктор
     zActionBar(zStyle* _styles, zStyle* _styles_buttons, zStyle* _styles_popup);
     // деструктор
     virtual ~zActionBar();
     // изменение темы
     virtual void changeTheme() override { popup->changeTheme(); zViewGroup::changeTheme(); }
-    // отобразить/скрыть
-    virtual void show(bool _show);
     // проверка на режим блокировки
     virtual bool testLocked() const override;
     // установка содержимого
     virtual void setContent(zView* _view);
     // вернуть имя типа
     virtual cstr typeName() const override { return "zActionBar"; }
+    // отобразить/скрыть
+    void show(bool _show);
     // формирователь
     bool setMenu(int iconApp, MENUITEM* _menu);
+    // сброс переключателей
+    void resetRadio();
     // установка адаптера
     zActionBar* setAdapter(zAdapterList* _adapter);
     // установка клика по элементу
@@ -118,13 +119,12 @@ public:
 protected:
     class zAdapterMenu : public zAdapterArray<zMenuItem> {
     public:
-        zAdapterMenu(zActionBar* _bar, zAdapterList* _list) : zAdapterArray<zMenuItem>(), list(_list), bar(_bar) {}
+        zAdapterMenu(zAdapterList* _list) : zAdapterArray<zMenuItem>(), list(_list) {}
         void setGroup(zMenuGroup* _popup) { group = _popup; notify(); }
         virtual int getCount() const override { return group ? group->count() : 0; }
         virtual const zMenuItem& getItem(int position) const override { return *group->atFind(position); }
         virtual zView* getView(int position, zView *convert, zViewGroup *parent) override;
     protected:
-        zActionBar* bar{nullptr};
         zAdapterList* list{nullptr};
         zMenuGroup* group{nullptr};
     };
@@ -134,14 +134,14 @@ protected:
     int measureButton(int _id, int _image, int _flags, czs& _txt, int widthSize, int heightSize, zMenuGroup* _grp);
     // формирование меню
     void recursiveMenu(zMenuGroup* pop);
-    // сброс кнопки overflow
-    void resetOverflow();
     // клик
     void clickGroup(zView* view, zMenuGroup* pop);
     // корень меню
     zMenuGroup* root{nullptr};
     // кнопка вызова страндартного меню
     zMenuGroup overflow{};
+    zMenuGroup currentGrp{};
+    zMenuGroup* cgrp{nullptr};
     // адаптер
     zAdapterMenu* adapter{nullptr};
     // стили кнопок
@@ -152,11 +152,9 @@ protected:
     zViewPopup* popup{nullptr};
     // список
     zViewDropdown* dropdown{nullptr};
-    // ожидание анимации
-    int delay{ACTION_DELAY};
     // объект для рекурсии
     MENUITEM* _menu{nullptr};
-    // нажатая кнопка
+    // кнопка группы
     zView* grpView{nullptr};
     // событие клика по элементу меню
     std::function<void(zView*, zMenuItem*)> onClickMenuItem;

@@ -9,6 +9,7 @@ public:
 	zBaseFabric(zStyle* _styles) : styles(_styles) { }
 	virtual ~zBaseFabric() { }
 	virtual zView* make(zViewGroup* parent) = 0;
+	zStyle* getStyles() const { return styles; }
 protected:
 	zStyle* styles{nullptr};
 };

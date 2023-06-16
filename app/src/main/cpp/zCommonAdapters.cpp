@@ -11,7 +11,7 @@
 
 zView* zFabricMenuItem::make(zViewGroup* parent) {
     auto v(new zLinearLayout(styles_default, 0, false));
-    v->attach(new zViewImage(styles_z_menuimage, 0, 1), VIEW_WRAP, VIEW_MATCH);
+    v->attach(new zViewImage(styles_z_menuimage, 0, -1), VIEW_WRAP, VIEW_MATCH);
     v->attach(new zViewCheck(styles, 0, 0), VIEW_MATCH, VIEW_MATCH);
     v->lps.set(0, 0, VIEW_MATCH, VIEW_WRAP);
     v->onInit(false);
