@@ -286,16 +286,15 @@ void zViewManager::saveStateView(zViewGroup *view, zView::STATE &state, int &ind
     int count(view->countChildren());
     for(int i = 0 ; i < count; i++) {
         auto child(view->atView(i));
-        auto group(dynamic_cast<zViewGroup*>(child));
-        if(group) {
-            saveStateView(group, state, index);
-        } else if(child->id) {
+        if(child->id) {
             state.reset();
             state.id   = child->id;
             state.type = child->crcType();
             child->stateView(state, true, index);
             viewStates += state;
         }
+        auto group(dynamic_cast<zViewGroup*>(child));
+        if(group) saveStateView(group, state, index);
     }
 }
 

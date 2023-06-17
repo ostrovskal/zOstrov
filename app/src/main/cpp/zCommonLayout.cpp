@@ -77,13 +77,13 @@ void zLinearLayout::onMeasure(cszm& spec) {
     auto divSize(div ? div->resolve(countChildren(), true) : 0);
     _max[vert] = divSize + padMargin(vert);
     // определяем габариты и веса дочерних
-    auto _undef(spec[vert].mode() != MEASURE_UNDEF);
+    auto _undef(spec[vert].mode() == MEASURE_UNDEF);
     for(auto child : children) {
         if(child->isVisibled()) {
             measureChild(child, spec);
             marginsChild += child->margin.extent(vert);
             // определение количества дочерних с VIEW_MATCH
-            if(!_undef || child->lps[vert + 2] != VIEW_MATCH)
+            if(_undef || child->lps[vert + 2] != VIEW_MATCH)
                 _max[vert] += child->sizes(vert); else countMatch++;
             _max[!vert] = z_max(_max[!vert], child->sizes(!vert));
 //            DLOG("child %i %i %s", child->sizes(false), child->sizes(true), child->typeName());
@@ -104,22 +104,22 @@ void zLinearLayout::onMeasure(cszm& spec) {
     if(spec[vert].isExact()) _max[vert] = spec[vert].size() - padMargin(vert);
     _wh = _max; _wh[vert] -= (marginsChild + divSize);
     // снова определяем размеры дочерних с учетом веса
+//    DLOG("");
     for(auto child: children) {
         if(child->isVisibled()) {
             auto& lps(child->lps);
             auto weight(z_max<float>(1.0f, (float)child->lps.weight));
             if(isWeights) weight /= (float)allWeight;
             auto oldSize(child->rview[vert + 2]);
-            //auto _size(lps[vert + 2] == VIEW_MATCH ? sizeMatch : oldSize);
             auto _size(lps[vert + 2] == VIEW_MATCH ? sizeMatch : (int)lps[vert + 2]);
             auto size(isWeights ? (int)roundf((float)_wh[vert] * weight) : _size), wh((int)lps[3 - vert]);
             childSpec.set(makeChildMeasureSpec(zMeasure(MEASURE_EXACT, _wh.w), child->margin.extent(false), vert ? wh : size),
                           makeChildMeasureSpec(zMeasure(MEASURE_EXACT, _wh.h), child->margin.extent(true), vert ? size : wh));
             child->measure(childSpec);
-//            DLOG("_size %i %i %i %s", _undef, child->rview.w, child->rview.h, child->typeName());
             if(!isWeights) {
                 _wh[vert] -= child->sizes(vert);
-                _wh[vert] += (child->rview[vert + 2] - oldSize);
+                auto subSize(child->rview[vert + 2] - oldSize);
+                _wh[vert] += subSize; _max[vert] += subSize;
             }
         }
     }
@@ -271,9 +271,7 @@ void zScrollLayout::onMeasure(cszm& spec) {
         size.set(child->sizes(false), child->sizes(true));
     }
     defaultOnMeasure(spec, size);
-    size.w    = z_max(rclient.w, size.w);
-    size.h    = z_max(rclient.h, size.h);
-    childSize = size[vert];
+    childSize = z_max(size[vert], rclient[vert + 2]);
 }
 
 void zScrollLayout::onLayout(crti &position, bool changed) {
@@ -281,14 +279,10 @@ void zScrollLayout::onLayout(crti &position, bool changed) {
     auto child(atView(0));
     // если он сам сдвинут
     if(child) child->layout(rclient - scroll);
-//    RTI_LOG("scrLyt1", rview);
-  //  RTI_LOG("scrLyt2", rclip);
 }
 
 zView *zScrollLayout::attach(zView *v, int width, int height, int where) {
-    if(countChildren() == 0) {
-        return zViewGroup::attach(v, width, height, where);
-    }
+    if(!countChildren()) return zViewGroup::attach(v, width, height, where);
     return nullptr;
 }
 
@@ -325,7 +319,6 @@ bool zScrollLayout::scrolling(int _delta) {
             // отправляем событие скролла
             if(onChangeScroll) onChangeScroll(this, child->scroll[vert]);
             awakenScroll();
-            zViewGroup::scrolling(_delta);
         } else if(glow) {
             updateGlow(_delta);
         }
@@ -375,6 +368,7 @@ zView *zEditLayout::attach(zView *v, int width, int height, int where) {
         hint->setText(_edit->getHint(), true);
         hint->setTextColorForeground(edit->getTextHintColor());
         hint->setGravity(edit->gravity);
+        delete v;
         return edit;
     }
     return nullptr;
@@ -488,7 +482,7 @@ void zTabLayout::stateView(STATE &state, bool save, int &index) {
     if(save) {
         state.data += activePage;
     } else {
-        activePage = (int)state.data[index++];
+        setActivePage((int)state.data[index++]);
     }
 }
 

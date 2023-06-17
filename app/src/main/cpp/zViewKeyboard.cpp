@@ -17,7 +17,7 @@ zViewKeyboard::zViewKeyboard(cstr nameLayouts) : zViewGroup(styles_default, z.R.
         auto heightScreen(zGL::instance()->getSizeScreen(true));
         parent->scroll.y = scrollY + ((int)round((float)offsetY / 6.0f) * v);
         lps.y = heightScreen - ((int)round((float)rview.h / 6.0f) * v);
-        parent->requestLayout();
+        parent->requestPosition();
         updateStatus(ZS_VISIBLED, lps.y < heightScreen);
         return visible;
     });
@@ -123,6 +123,7 @@ i32 zViewKeyboard::onTouchEvent(zTouch *touch) {
                 }
                 if(but->spec == "DELETE") keyCode = '\b';
                 else if(but->spec == "ENTER") keyCode = '\n';
+                else if(but->spec == "SPACE") keyCode = ' ';
                 else if(but->spec == "SHIFT") {
                     if(!(activeShift = touch->isDblClicked())) {
                         _switch = &current->names[KEYBOARD_SHIFT];
@@ -255,13 +256,12 @@ void zViewKeyboard::show(u32 _id, bool set) {
             }
             if(_id <= 0 || isChecked()) {
                 // ставим объект в область экрана
-                scrollY = parent->scroll.y;
                 auto y(owner->rview.y - owner->rview.h / 2);
                 if(y > 0) {
                     y = ((owner->edges(true, true) + owner->rview.h / 2) - rview.y);
                     if(y < 0) return;
                 }
-                parent->scroll.y += y; offsetY = y;
+                parent->scroll.y += y;
                 owner->requestPosition();
                 return;
             }

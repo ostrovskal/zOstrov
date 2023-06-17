@@ -25,7 +25,7 @@ void sshApp::processEvents(i32 event) {
         case APP_CMD_RESUME:
             DLOG("APP_CMD_RESUME");
             stateAllViews(Z_RESUME, (u8**)&android->savedState, (u32*)&android->savedStateSize);
-            zJniHelper::instance()->hideNavigationPanel();
+//            zJniHelper::instance()->hideNavigationPanel();
             break;
         case APP_CMD_WINDOW_REDRAW_NEEDED:
             redrawNativeWindow();
@@ -56,7 +56,7 @@ sshApp::sshApp(android_app* _android) : zViewManager(_android->activity, 8) {
     android->userData     = this;
     android->onAppCmd     = callback_appEvent;
     android->onInputEvent = callback_inputEvent;
-    zJniHelper::init(android->activity, nullptr);
+//    zJniHelper::init(android->activity, nullptr);
 }
 
 void sshApp::run() {

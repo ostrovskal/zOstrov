@@ -26,21 +26,45 @@
 class zViewText;
 class zTextPaint {
 public:
-    zTextPaint() { }
+    zTextPaint();
     zTextPaint(zViewText* _tv) { reset(_tv); }
     zTextPaint(zTextPaint* _paint) { init(_paint); }
+    ~zTextPaint();
     void reset(zViewText* _tv);
     void init(zTextPaint* _paint);
     void setStyle(u32 _style);
-    u32 getStyle() const { return style; }
+    void setSize(i32 _size);
+    auto getBold() const { return bold; }
+    auto getItalic() const { return italic * factor; }
+    auto getSize() const { return size; }
+    auto getStyle() const { return style; }
+    auto getBaseline() const { return baseLine; }
+    auto getMargin() const { return margin; }
+    auto getWidthChar(int ch) const { return font->widthGlyph(ch + bold, factor); }
+    auto getFactor(float _mul) const { return (int)round(_mul * factor); }
+    bool getBoundChar(int ch, rti& tex, rti& bound) const;
+    bool isUnderline() const { return style & ZS_TEXT_UNDERLINE; }
+    bool isStrike() const { return style & ZS_TEXT_STRIKE; }
+    // вернуть ширину текста в пикселях
+    int widthText(cstr _text, int length) const;
+    // вернуть ближайщую позицию в тексте(screenLimit - предел/screenX - начальная коор. текста)
+    int indexOf(cstr _text, int length, int screenLimit, int screenX, bool exact) const;
+    int indexReverseOf(cstr _text, int length, int screenLimit) const;
     // цвет текста/фона
     u32 fkColor{0}, bkColor{0};
-    // размер
-    i32 size{0}, preWidth{0};
-    i32 italic{0}, baseLine{0};
-    zTexture* texture{nullptr};
 protected:
+    // фактор масштабирования
+    float factor{1.0f};
+    i32 yBold{0};
+    // размер/отступ
+    i32 size{20}, margin{0};
+    //
+    i32 italic{0}, bold{0}, baseLine{0};
+    // стиль
     u32 style{ZS_TEXT_NORMAL};
+    // шрифт
+    zTexture* font{nullptr};
+    int idx{0};
 };
 
 class zTextSpan {

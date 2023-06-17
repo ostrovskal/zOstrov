@@ -14,7 +14,6 @@ zViewButton::zViewButton(zStyle *_styles, i32 _id, u32 _text, i32 _icon) : zView
 
 void zViewButton::onInit(bool _theme) {
     zViewText::onInit(_theme);
-    //drw[DRW_ICON]->tile = icon;
     fkGravity = (fkGravity & ZS_SCALE_MASK) | ZS_GRAVITY_CENTER;
     setIcon(icon);
 }

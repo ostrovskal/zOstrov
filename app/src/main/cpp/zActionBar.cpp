@@ -49,7 +49,11 @@ zActionBar::zActionBar(zStyle* _styles, zStyle* _styles_buttons, zStyle* _styles
         float v; auto cont(animator.update(v));
         lps.y = -rview.h + (int)roundf(v * ((float)rview.h / 8.0f));
         requestPosition();
-        if(!cont) { if(isChecked()) show(!isChecked()); return false; }
+        if(!cont) {
+            auto pop(manager->tpView<zViewPopup>(nullptr));
+            if(pop) pop->dismiss();
+            if(isChecked()) { show(!isChecked()); return false; }
+        }
         updateStatus(ZS_VISIBLED, cont);
         return cont;
     });
@@ -71,8 +75,6 @@ void zActionBar::show(bool _show) {
 
 zActionBar::~zActionBar() {
     SAFE_DELETE(popup);
-    SAFE_DELETE(dropdown);
-    SAFE_DELETE(content);
     if(adapter) {
         adapter->unregistration(this);
         SAFE_DELETE(adapter);
@@ -119,7 +121,7 @@ bool zActionBar::setMenu(int iconApp, MENUITEM* menu) {
 }
 
 int zActionBar::measureButton(int _id, int _image, int _flags, czs& _txt, int widthSize, int heightSize, zMenuGroup* grp) {
-    auto but(new zViewImage(styles_buttons, _id, _image));
+    auto but(new zViewImage(_id == z.R.id.menuOverflow ? styles_z_baroverflow : styles_buttons, _id, _image));
     if(_image == -1) { if(_txt.isNotEmpty()) but->setText(_txt, true); }
     but->disable(!(_flags & menuItemEnabled));
     but->tag = TAG{(char*)grp};
@@ -233,4 +235,28 @@ void zActionBar::resetRadio() {
             if(i->isRadioButton()) i->setChecked(false);
         }
     }
+}
+
+void zActionBar::_stateView(zMenuGroup* grp, zView::STATE &state, bool save, int &index) {
+    if(save) {
+        state.data += grp->getId();
+    } else {
+        auto _id(state.data[index++]);
+        if(grp->getId() != _id) return;
+    }
+    for(auto& i : *grp) {
+        if(save) {
+            state.data += i->getFlags();
+            state.data += i->getImage();
+        } else {
+            i->setFlags(state.data[index++]);
+            i->setImage(state.data[index++]);
+        }
+        if(i->getGroup()) _stateView(i->getGroup(), state, save, index);
+    }
+}
+
+void zActionBar::stateView(STATE &state, bool save, int &index) {
+    zView::stateView(state, save, index);
+    _stateView(root, state, save, index);
 }

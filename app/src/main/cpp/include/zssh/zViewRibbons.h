@@ -6,7 +6,7 @@
 class zViewBaseRibbon : public zViewGroup {
 public:
     // конструктор
-    zViewBaseRibbon(zStyle* _styles, i32 _id, bool _vert) : zViewGroup(_styles, _id) { vert = _vert; flyng = new zFlyng(this); }
+    zViewBaseRibbon(zStyle* _styles, i32 _id, bool _vert);
     // деструктор
     virtual ~zViewBaseRibbon();
     // уведомление адаптера
@@ -21,10 +21,12 @@ public:
     virtual int computeScrollOffset(bool _vert) const override;
     virtual int computeScrollRange(bool _vert) const override;
     virtual int computeScrollExtent(bool _vert) const override;
+    // отключить обновление размера
+    virtual void requestLayout() override;
     // вернуть имя типа
     virtual cstr typeName() const override { return "zViewBaseRibbon"; }
     // установка адаптера
-    virtual zViewBaseRibbon* setAdapter(zBaseAdapter* _adapter);
+    zViewBaseRibbon* setAdapter(zBaseAdapter* _adapter);
     // установка выделенного элемента
     void setItemSelected(int item);
     // вернуть выделенный элемент
@@ -67,19 +69,19 @@ protected:
     // добавить в кэш
     void addViewCache(zView* view);
     // количество линий(для сетки)
-    int linesGrid{1};
+    i32 linesGrid{1};
     // количество элементов в адаптере
-    int countItem{0};
+    i32 countItem{0};
     // выделенный элемент
-    int selectItem{-1};
+    i32 selectItem{-1};
     // элемент на котором кликнули
-    int clickItem{-1};
+    i32 clickItem{-1};
     // дельта элемента
-    int deltaItem{0};
-    // начальная/конечная грань
-    szi edge{};
+    i32 deltaItem{0};
     // индекс первого видимого элемента
     i32 firstItem{0};
+    // начальная/конечная грань
+    szi edge{};
     // адаптер
     zBaseAdapter* adapter{nullptr};
     // кэш представлений
@@ -147,7 +149,7 @@ public:
     // обработка касания
     virtual i32 touchEvent(AInputEvent *event) override;
     // отставка
-    virtual void dismiss();
+    void dismiss();
     // нажатие клавиши
     virtual i32 keyEvent(int key, bool sysKey) override;
     // вернуть имя типа
@@ -175,7 +177,7 @@ public:
     virtual cstr typeName() const override { return "zViewDropdown"; }
 protected:
     // рассчитать габариты всех дочерних
-    virtual szi measureChildrenSize(cszm& spec);
+    virtual szi measureChildrenSize(cszm& spec) override;
 };
 
 class zViewSelect : public zViewGroup {
@@ -193,7 +195,7 @@ public:
     // вернуть имя типа
     virtual cstr typeName() const override { return "zViewSelect"; }
     // установка адаптера
-    virtual zViewSelect* setAdapter(zAdapterList* _adapter);
+    zViewSelect* setAdapter(zAdapterList* _adapter);
     // установка выбранного элемента
     void setItemSelected(int item);
     // выбранный

@@ -17,8 +17,7 @@ zView::zView(zStyle* _styles, i32 _id) : styles(_styles), id(_id) {
 
 zView::~zView() {
     for(auto& dr : drw) { if(dr->isValid()) SAFE_DELETE(dr); }
-    // удалить из событий
-    manager->eraseAllEventsView(this);
+    _detach();
 }
 
 pti zView::applyGravity(crti& sizeParent, crti& sizeChild, u32 _gravity) {
@@ -327,7 +326,8 @@ void zView::stateView(STATE &state, bool save, int &index) {
         state.data += (u32)(rot.x * 65535.0f);
         state.data += (u32)(rot.y * 65535.0f);
         state.data += (u32)(rot.z * 65535.0f);
-        state.data += scroll.x; state.data += scroll.y;
+        state.data += scroll.x;
+        state.data += scroll.y;
     } else {
         status  &= ~ZS_STATES; status |= (state.data[index++] & ZS_STATES);
         animator.frame = state.data[index++];
@@ -505,7 +505,7 @@ void zViewCaret::update(zView* own, int x, int y, int h) {
     if(own) {
         auto _own(dynamic_cast<zViewEdit*>(own));
         if(_own) setRotation(0, 0, (_own->getTextStyle() & ZS_TEXT_ITALIC) * 8);
-        rview.set(x + own->rclient.x + 2, y + own->rclient.y, 4, h);
+        rview.set(x + own->rclient.x, y + own->rclient.y, 4, h);
         drw[DRW_BK]->measure(4, h, PIVOT_ALL, false);
         animator.frame = 0;
         post(MSG_ANIM, duration, 0);

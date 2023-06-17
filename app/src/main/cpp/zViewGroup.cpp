@@ -11,6 +11,12 @@ zViewGroup::zViewGroup(zStyle* _styles, i32 _id): zView(_styles, _id) {
     sizeTouch.set(5_dp, 5_dp);
 }
 
+zViewGroup::~zViewGroup() {
+    SAFE_DELETE(flyng);
+    SAFE_DELETE(glow);
+    SAFE_DELETE(scrollBar);
+}
+
 void zViewGroup::offsetChildren(int delta) {
     for(auto& child : children) {
         auto pos(child->oldPos);
@@ -174,7 +180,8 @@ void zViewGroup::onInit(bool _theme) {
         }
     });
     // глоу
-    SAFE_DELETE(glow); if(decor & ZS_GLOW) glow = new zViewGlow(this);
+    SAFE_DELETE(glow);
+    if(decor & ZS_GLOW) glow = new zViewGlow(this);
     // прокрутка
     SAFE_DELETE(scrollBar);
     if(decor & ZS_SCROLLBAR) {
@@ -297,12 +304,6 @@ void zViewGroup::awakenScroll() {
             scrollBar->awaken();
         }
     }
-}
-
-bool zViewGroup::scrolling(int _delta) {
-    // убрать клаву
-//    manager->changeFocus(nullptr);
-    return false;
 }
 
 void zViewGroup::changeTheme() {

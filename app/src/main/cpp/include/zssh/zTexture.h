@@ -45,7 +45,7 @@ public:
     // создание "пустой" текстуры с параметрами
     static u32 makeEmpty(int internalFormat, int format, int width, int height);
     // диагностика
-    zString info() { return z_fmt("ids:%i(%i) - name:(%s(%i)) size:%ix%i", id, idFBO, name.str(), ref, tiles[2], tiles[3]); }
+    zString info() { return z_fmt("ids: %i(%i) - name: %s(%i) size: %ix%i", id, idFBO, name.str(), ref, _size.w, _size.h); }
     // вернуть габариты тайла
     u16* getTile(u32 tile) const { return (tile < count ? &tiles[tile * 6] : nullptr); }
     // вернуть обратную величину габаритов

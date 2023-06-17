@@ -59,7 +59,7 @@ public:
     // вернуть макс. линий
     bool isWrap() const { return testFlags(ZS_NOWRAP); }
     // установка размера шрифта
-    void setTextSize(int _size) { if(defPaint->size != _size) { defPaint->size = _size; requestLayout(); } }
+    void setTextSize(int _size) { if(defPaint->getSize() != _size) { defPaint->setSize(_size); requestLayout(); } }
     // установка цветов
     void setTextColorDefault(u32 _value) { colors[TEXT_COLOR_DEFAULT] = _value; }
     void setTextColorForeground(u32 _value) { if(defPaint->fkColor != _value) { defPaint->fkColor = _value; invalidate(); } }
@@ -73,7 +73,7 @@ public:
     u32 getTextColorHighlight() const { return colors[TEXT_COLOR_HIGHLIGHT]; }
     u32 getTextColorShadow() const { return colors[TEXT_COLOR_SHADOW]; }
     // вернуть размер шрифта
-    int getTextSize() { return defPaint->size; }
+    int getTextSize() { return defPaint->getSize(); }
     // установить стиль текста
     void setTextStyle(int _style) { if(defPaint->getStyle() != _style) { defPaint->setStyle(_style); requestLayout(); } }
     // вернуть текст
@@ -83,7 +83,7 @@ public:
     // вернуть верхнее смещение шрифта
     int getAscent() const { return drw[DRW_TXT]->texture->ascent; }
     // вернуть базовую линию шрифта
-    int getDescent() const { return drw[DRW_TXT]->texture->descent; }
+    int getBaseline() const { return drw[DRW_TXT]->texture->descent; }
     // установка спана
     void setSpan(zTextSpan* _span, int start, int end, int flags = 0);
     // удаление спана
@@ -210,7 +210,9 @@ protected:
     // касание
     virtual i32 onTouchEvent(zTouch *touch) override;
     // вернуть текст для отображения
-    virtual cstr getDrawText(bool _real) override { return (_real || realText.isNotEmpty()) ? z_ptrUTF8(filter->getText(realText), visibleIndex) : hintText.str(); }
+    virtual cstr getDrawText(bool _real) override {
+        return (_real || realText.isNotEmpty()) ? z_ptrUTF8(filter->getText(realText), visibleIndex) : hintText.str();
+    }
     // вернуть цвет текста для отображения
     virtual u32 getDrawColorText(u32 color) override { return (realText.isNotEmpty() ? color : colorHint); }
     // вставка текста в некоторую позицию

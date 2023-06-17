@@ -13,7 +13,7 @@ public:
     // конструкторы
     zViewGroup() { }
     zViewGroup(zStyle* _styles, i32 _id = 0);
-    virtual ~zViewGroup() { delete flyng; }
+    virtual ~zViewGroup();
     // блокировка/разблокировка
     virtual void disable(bool set) override;
     // касание
@@ -36,7 +36,7 @@ public:
     // смена темы оформления
     virtual void changeTheme() override;
     // прокрутка содержимого
-    virtual bool scrolling(int _delta);
+    virtual bool scrolling(int _delta) { return false; }
     // проверка на пересечение с дочерними
     virtual bool intersectChildren(int x, int y) const;
     // отрисовка

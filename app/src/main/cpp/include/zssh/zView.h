@@ -213,8 +213,7 @@ public:
     float alpha{1.0f};
     // ротация/масштаб/смещение
     zVec3 scale{1, 1, 1}, rot{}, trans{};
-    // матрицы
-//    zMatrix mtxScale{}, mtxRot{}, mtx{};
+    // матрица
     zMatrix mtx{};
     // задержка анимации
     u64 duration{50L};

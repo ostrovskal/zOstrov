@@ -4,7 +4,6 @@
     xmlns:z="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     z:decorate="scrollbar|glow"
-    z:pad="5dp"
     android:layout_width="match_parent" android:layout_height="match_parent">
     <LinearLayout
         android:orientation="vertical"
@@ -33,11 +32,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 z:layout_group="1" z:text="@string/radio_dark"
-                z:styles="@style/radiobutton" />
+                z:styles="@style/radiobutton"
+                z:textWrap="true" />
             <CheckBox
-                android:layout_width="wrap_content" android:layout_weight="3"
+                android:layout_width="wrap_content" android:layout_weight="2"
                 android:layout_height="match_parent"
                 z:decorate="checked"
+                android:id="@+id/chkbox"
                 z:text="@string/checkbox_text" z:styles="@style/checkbox" />
             <RadioButton
                 android:id="@+id/radioLight" android:layout_weight="1"
@@ -54,9 +55,9 @@
                 android:id="@+id/edit1" z:fbo="true"
                 android:layout_width="match_parent" android:layout_height="wrap_content"
                 z:textColor="%color/color_text_text" z:textSize="20sp" z:hint="@string/prompt" z:fkGravity="center"
-                z:icon="@drawable/zssh" z:icGravity="end" z:icColor="#ffffffff" z:icTiles="@integer/iconEditEx" z:inputMode="zx"
-                z:pad="1dp" android:gravity="center_vertical" z:foreground="%drawable/bitmap_common" z:fkTiles="@integer/edit"
-                z:font="%drawable/font1" z:textWrap="true" z:textStyle="bold" />
+                z:icon="@drawable/zssh" z:icGravity="end" z:icColor="#ffffffff" z:icTiles="@integer/iconEditEx" z:inputMode="phone"
+                z:pad="1dp" android:gravity="center_vertical|end" z:foreground="%drawable/bitmap_common" z:fkTiles="@integer/edit"
+                z:font="%drawable/font1" z:textWrap="true" z:textStyle="bold|underline" />
         </EditLayout>
         <ListView
             android:id="@+id/list1"

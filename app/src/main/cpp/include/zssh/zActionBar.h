@@ -28,6 +28,7 @@ public:
     void setVisibled(bool _set) { updateStatus(menuItemVisibled, _set); }
     // установить выделение
     void setChecked(bool _set);
+    void setFlags(int _flags) { flags = _flags; }
     // возможно чекить
     bool isCheckable() const { return isCheckBox() || isRadioButton(); }
     // признак одиночного выбора
@@ -108,6 +109,8 @@ public:
     virtual bool testLocked() const override;
     // установка содержимого
     virtual void setContent(zView* _view);
+    // сохранение/загрузка
+    virtual void stateView(STATE &state, bool save, int &index) override;
     // вернуть имя типа
     virtual cstr typeName() const override { return "zActionBar"; }
     // отобразить/скрыть
@@ -142,6 +145,8 @@ protected:
     void recursiveMenu(zMenuGroup* pop);
     // клик
     void clickGroup(zView* view, zMenuGroup* pop);
+    // рекурсивное сохранение/восстановление
+    void _stateView(zMenuGroup* grp, STATE &state, bool save, int &index);
     // корень меню
     zMenuGroup* root{nullptr};
     // кнопка вызова страндартного меню

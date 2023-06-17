@@ -38,7 +38,6 @@ zViewSelect::zViewSelect(zStyle* _styles, i32 _id) : zViewGroup(_styles, _id) {
 
 zViewSelect::~zViewSelect() {
     SAFE_DELETE(popup);
-    SAFE_DELETE(dropdown);
     if(adapter) {
         adapter->unregistration(this);
         SAFE_DELETE(adapter);
@@ -70,7 +69,7 @@ void zViewSelect::stateView(STATE &state, bool save, int &index) {
     if(save) {
         state.data += selectItem;
     } else {
-        selectItem = (int)state.data[index++];
+        setItemSelected((int)state.data[index++]);
     }
 }
 
@@ -167,10 +166,10 @@ void zViewPopup::onLayout(crti &position, bool changed) {
     rview.x = owner->rview.x + offs.x;
     rview.y = owner->edges(true, false) + offs.y;
     // проверка по гор.
-    auto wScreen(zGL::instance()->getSizeScreen(false));
+    auto wScreen(zGL::instance()->getSizeScreen(false) - 5_dp);
     if(rview.extent(false) > wScreen) rview.x = wScreen - rview.w;
     // проверка по верт.
-    auto hScreen(zGL::instance()->getSizeScreen(true));
+    auto hScreen(zGL::instance()->getSizeScreen(true) - 5_dp);
     if(rview.extent(true) > hScreen) {
         auto sub(rview.extent(true) - hScreen);
         // вниз - за пределы экрана

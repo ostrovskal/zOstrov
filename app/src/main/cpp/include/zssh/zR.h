@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Sat Jun 17 07:37:07 2023
+// Sun Jun 18 01:23:27 2023
 
 #pragma once
 
@@ -68,11 +68,12 @@ struct _z {
 				common	= 0x0010100C, 	keyboard	= 0x0010100D, 	list1	= 0x0010100E, 
 				edit1	= 0x0010100F, 	button1	= 0x00101010, 	switch1	= 0x00101011, 
 				seek	= 0x00101012, 	progress1	= 0x00101013, 	select	= 0x00101014, 
-				grid1	= 0x00101015, 	radioDark	= 0x00101016, 	radioLight	= 0x00101017, 
-				button2	= 0x00101018, 	switch2	= 0x00101019, 	switch3	= 0x0010101A, 
-				button3	= 0x0010101B, 	seek1	= 0x0010101C, 	button11	= 0x0010101D, 
-				seek2	= 0x0010101E, 	button4	= 0x0010101F, 	edit2	= 0x00101020, 
-				progress2	= 0x00101021, 	form	= 0x00101022, 			};
+				grid1	= 0x00101015, 	radioDark	= 0x00101016, 	chkbox	= 0x00101017, 
+				radioLight	= 0x00101018, 	button2	= 0x00101019, 	switch2	= 0x0010101A, 
+				switch3	= 0x0010101B, 	button3	= 0x0010101C, 	seek1	= 0x0010101D, 
+				button11	= 0x0010101E, 	seek2	= 0x0010101F, 	button4	= 0x00101020, 
+				edit2	= 0x00101021, 	progress2	= 0x00101022, 	form	= 0x00101023, 
+			};
 		}; 
 		_id id;
 		struct _integer {
@@ -159,27 +160,28 @@ struct _z {
 				glow	= 0x00100003, 	caret	= 0x00100004, 	editButClear	= 0x00100005, 
 				tabs	= 0x00100006, 	tabContent	= 0x00100007, 	formFooterLyt	= 0x00100008, 
 				formContentLyt	= 0x00100009, 	toast	= 0x0010000A, 	bar	= 0x0010000B, 
-				barButton	= 0x0010000C, 	menuImage	= 0x0010000D, 	barPopup	= 0x0010000E, 
-				formCaption	= 0x0010000F, 	formFooter	= 0x00100010, 	spin_item	= 0x00100011, 
-				list_item	= 0x00100012, 	menu_item	= 0x00100013, 	spin_capt	= 0x00100014, 
-				button	= 0x00100015, 	tools	= 0x00100016, 	checkbox	= 0x00100017, 
-				radiobutton	= 0x00100018, 	edittext	= 0x00100019, 	ribbon	= 0x0010001A, 
-				grid	= 0x0010001B, 	select	= 0x0010001C, 	msgForm	= 0x0010001D, 
-				slider	= 0x0010001E, 	linearProgress	= 0x0010001F, 	circularProgress	= 0x00100020, 
-				switchButton	= 0x00100021, 	llinear	= 0x00100022, 	tabWidget	= 0x00100023, 
-				tabHost	= 0x00100024, 	ccontroller	= 0x00100025, 	acontroller	= 0x00100026, 
-				form	= 0x00100027, 	chart	= 0x00100028, 	chartDiagramm	= 0x00100029, 
-				chartGraph	= 0x0010002A, 	zcelllayout1	= 0x0010002B, 	list1	= 0x0010002C, 
-				edit1	= 0x0010002D, 	button1	= 0x0010002E, 	switch1	= 0x0010002F, 
-				seek	= 0x00100030, 	progress1	= 0x00100031, 	zscrolllayout1	= 0x00100032, 
-				grid1	= 0x00100033, 	zlinearlayout1	= 0x00100034, 	zviewcheck1	= 0x00100035, 
-				radiolight	= 0x00100036, 	zviewedit1	= 0x00100037, 	zviewbutton1	= 0x00100038, 
-				zviewswitch1	= 0x00100039, 	switch2	= 0x0010003A, 	switch3	= 0x0010003B, 
-				zviewslider1	= 0x0010003C, 	seek1	= 0x0010003D, 	button11	= 0x0010003E, 
-				seek2	= 0x0010003F, 	edit2	= 0x00100040, 	zlinearlayout2	= 0x00100041, 
-				zlinearlayout3	= 0x00100042, 	zviewedit2	= 0x00100043, 	zviewbutton2	= 0x00100044, 
-				zviewslider2	= 0x00100045, 	zviewslider3	= 0x00100046, 	zviewslider4	= 0x00100047, 
-				zviewedit3	= 0x00100048, 	zviewslider5	= 0x00100049, 	zviewslider6	= 0x0010004A, 
+				barButton	= 0x0010000C, 	barOverflow	= 0x0010000D, 	menuImage	= 0x0010000E, 
+				barPopup	= 0x0010000F, 	formCaption	= 0x00100010, 	formFooter	= 0x00100011, 
+				spin_item	= 0x00100012, 	list_item	= 0x00100013, 	menu_item	= 0x00100014, 
+				spin_capt	= 0x00100015, 	button	= 0x00100016, 	tools	= 0x00100017, 
+				checkbox	= 0x00100018, 	radiobutton	= 0x00100019, 	edittext	= 0x0010001A, 
+				ribbon	= 0x0010001B, 	grid	= 0x0010001C, 	select	= 0x0010001D, 
+				msgForm	= 0x0010001E, 	slider	= 0x0010001F, 	linearProgress	= 0x00100020, 
+				circularProgress	= 0x00100021, 	switchButton	= 0x00100022, 
+				llinear	= 0x00100023, 	tabWidget	= 0x00100024, 	tabHost	= 0x00100025, 
+				ccontroller	= 0x00100026, 	acontroller	= 0x00100027, 	form	= 0x00100028, 
+				chart	= 0x00100029, 	chartDiagramm	= 0x0010002A, 	chartGraph	= 0x0010002B, 
+				zcelllayout1	= 0x0010002C, 	list1	= 0x0010002D, 	edit1	= 0x0010002E, 
+				button1	= 0x0010002F, 	switch1	= 0x00100030, 	seek	= 0x00100031, 
+				progress1	= 0x00100032, 	zscrolllayout1	= 0x00100033, 	grid1	= 0x00100034, 
+				zlinearlayout1	= 0x00100035, 	radiodark	= 0x00100036, 	chkbox	= 0x00100037, 
+				radiolight	= 0x00100038, 	zviewedit1	= 0x00100039, 	zviewbutton1	= 0x0010003A, 
+				zviewswitch1	= 0x0010003B, 	switch2	= 0x0010003C, 	switch3	= 0x0010003D, 
+				zviewslider1	= 0x0010003E, 	seek1	= 0x0010003F, 	button11	= 0x00100040, 
+				seek2	= 0x00100041, 	edit2	= 0x00100042, 	zlinearlayout2	= 0x00100043, 
+				zlinearlayout3	= 0x00100044, 	zviewedit2	= 0x00100045, 	zviewbutton2	= 0x00100046, 
+				zviewslider2	= 0x00100047, 	zviewslider3	= 0x00100048, 	zviewslider4	= 0x00100049, 
+				zviewedit3	= 0x0010004A, 	zviewslider5	= 0x0010004B, 	zviewslider6	= 0x0010004C, 
 	};
 		};
 		_style style;
@@ -206,6 +208,7 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::toast, styles_z_toast },
 		{ _z::_R::_style::bar, styles_z_bar },
 		{ _z::_R::_style::barButton, styles_z_barbutton },
+		{ _z::_R::_style::barOverflow, styles_z_baroverflow },
 		{ _z::_R::_style::menuImage, styles_z_menuimage },
 		{ _z::_R::_style::barPopup, styles_z_barpopup },
 		{ _z::_R::_style::formCaption, styles_z_formcaption },
@@ -246,7 +249,8 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::zscrolllayout1, styles_z_zscrolllayout1 },
 		{ _z::_R::_style::grid1, styles_z_grid1 },
 		{ _z::_R::_style::zlinearlayout1, styles_z_zlinearlayout1 },
-		{ _z::_R::_style::zviewcheck1, styles_z_zviewcheck1 },
+		{ _z::_R::_style::radiodark, styles_z_radiodark },
+		{ _z::_R::_style::chkbox, styles_z_chkbox },
 		{ _z::_R::_style::radiolight, styles_z_radiolight },
 		{ _z::_R::_style::zviewedit1, styles_z_zviewedit1 },
 		{ _z::_R::_style::zviewbutton1, styles_z_zviewbutton1 },
@@ -340,7 +344,7 @@ static zResource z_resources[] = {
 		{ _z::_R::_string::slayder, "слайдер" },
 		{ _z::_R::_string::Sergey, "Sergey" },
 		/* array */
-		{ _z::_R::_array::spinArray | ZT_END, "Ivan|Irina|Sergey Shatalov|Maxim|Vladislav|06.06.1979|Shatalov Sergey|Olga|Viktor Alexeevish|Cat|Maria|Nina Shatalova|Alex|Alexandr" }
+		{ _z::_R::_array::spinArray | ZT_END, "Ivan|Irina|Sergey Shatalov|Maxim|Vladislav|06.06.1979|Shatalov Sergey|Olga|Viktor Alexeevich|Cat|Maria|Nina Shatalova|Alex|Alexandr" }
 };
 
 /* string resources [values_ru] */

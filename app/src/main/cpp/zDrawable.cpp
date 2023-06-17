@@ -235,38 +235,28 @@ void zDrawable::makeDebug(cszi &cell) {
 }
 
 int zDrawable::makeText(cstr text, int len, zTextPaint* paint) {
-    auto ht(paint->size), idx(0), stx(0), sty(0), style((int)paint->getStyle());
-    auto offsetBold(224 * ((style & ZS_TEXT_BOLD) != 0)), offsetY(((texture->getSize().h / 2) * (offsetBold != 0)));
-    auto factor(scaleFactor(ht, true)); rti _pos, tex;
-    while(len-- > 0) {
-        auto ch(z_decodeUTF8(z_charUTF8(text))); text += z_charLengthUTF8(text);
-        if(ch < '!') ch = ' ';
-        auto glyph(texture->paramGlyph(ch + offsetBold));
-        if(!glyph) continue;
-        tex.set(glyph); tex.w += tex.x; tex.h += tex.y;
-        auto cw((int)round((float)glyph[2] * factor));
-        if(ch == ' ') cw = 10.0f;
-        _pos.set(stx, sty + (int)round((float)(glyph[1] - offsetY) * factor), cw, (int)round((float)glyph[3] * factor));
-        // нарисовать
-        idx += makeTriangle(_pos, tex, &vertices[idx], paint->italic);
-        stx += cw;
+    auto tmp(0), stx(0); rti _pos, tex; count = 0;
+    while(len-- > 0 && z_isUTF8(text)) {
+        if(paint->getBoundChar(z_decodeUTF8(z_charUTF8(text, &tmp)), tex, _pos)) {
+            _pos.x += stx;
+            // нарисовать
+            count += makeTriangle(_pos, tex, &vertices[count], paint->getItalic());
+            stx += _pos.w; text += tmp;
+        }
     }
-    auto glyph(texture->paramGlyph('_' + offsetBold));
-    tex.set(glyph);
-    tex = tex.padding(4, 0); tex.w += tex.x; tex.h += tex.y;
-    stx += paint->preWidth + paint->italic * factor;
+    paint->getBoundChar('_', tex, _pos); tex = tex.padding(4, 0);
+    stx += paint->getMargin() + paint->getItalic();
     // strike
-    if(style & ZS_TEXT_STRIKE) {
-        _pos.set(0, 1 + ht / 2, stx - 2, (int)round(2.0f * factor));
-        idx += makeTriangle(_pos, tex, &vertices[idx], 0);
+    if(paint->isStrike()) {
+        _pos.set(0, paint->getSize() / 2 + 1, stx - 2, paint->getFactor(2.0f));
+        count += makeTriangle(_pos, tex, &vertices[count], 0);
     }
     // underline
-    if(style & ZS_TEXT_UNDERLINE) {
-        auto bs((int)round((float)texture->descent * factor + 0.5f));
-        _pos.set(0, ht - bs, stx - 2, (int)round(2.0f * factor));
-        idx += makeTriangle(_pos, tex, &vertices[idx], 0);
+    if(paint->isUnderline()) {
+        auto bs(paint->getFactor(texture->descent) + 0.5f);
+        _pos.set(0, paint->getSize() - bs, stx - 2, paint->getFactor(2.0f));
+        count += makeTriangle(_pos, tex, &vertices[count], 0);
     }
-    count = idx;
     return stx;
 }
 
@@ -275,51 +265,9 @@ ptf zDrawable::offsetBound() const {
     return { (float)(bound.x - rv->x) - vertices->x, (float)(bound.y - rv->y) - vertices->y };
 }
 
-int zDrawable::sizeText(cstr _text, u32 heightText, int lengthText, bool _bold) const {
-    int len, width(0); auto factor(scaleFactor(heightText, true));
-    auto offsetBold(224 * _bold);
-    while (lengthText-- > 0 && z_isUTF8(_text)) {
-        // определить ширину символа
-        width += texture->widthGlyph(offsetBold + z_decodeUTF8(z_charUTF8(_text, &len)), factor);
-        _text += len;
-    }
-    return width;
-}
-
-int zDrawable::indexOf(cstr _text, u32 heightText, int screenLimit, int screenX, bool _bold, bool exact, int *posScreen) const {
-    int wGlyph(0), _count(0), len; auto factor(scaleFactor(heightText, true));
-    auto offsetBold(224 * _bold);
-    while(z_isUTF8(_text)) {
-        // определить ширину символа
-        wGlyph = texture->widthGlyph(offsetBold + z_decodeUTF8(z_charUTF8(_text, &len)), factor);
-        // проверить на лимит
-        if((screenX + wGlyph) >= screenLimit) break;
-        screenX += wGlyph; _text += len; _count++;
-    }
-    // определить по ширине символа куда мы ближе
-    int delta(0);
-    if(z_isUTF8(_text)) delta = (exact ? ((screenX + (wGlyph / 2)) < screenLimit) : 1);
-    screenX += wGlyph * delta;
-    if(posScreen) *posScreen = screenX;
-    return _count + delta;
-}
-
 float zDrawable::scaleFactor(u32 value, bool text) const {
     auto h((float)(texture ? texture->getSize().h / (text + 1) : 1));
     return ((float)value / h);
-}
-
-int zDrawable::indexReverseOf(cstr _text, u32 heightText, int limitPix, int lengthText, bool _bold) const {
-    int posPix(0), _count(0); auto offsetBold(224 * _bold);
-    auto factor(scaleFactor(heightText, true));
-    while(z_isUTF8(_text) && lengthText-- > 0) {
-        // определить ширину символа
-        auto wGlyph(texture->widthGlyph(offsetBold + z_decodeUTF8(z_charUTF8(z_ptrUTF8(_text, lengthText))), factor));
-        // проверить на лимит
-        if((posPix + wGlyph) >= limitPix) break;
-        posPix += wGlyph; _count++;
-    }
-    return _count;
 }
 
 void zDrawable::info() const {
@@ -438,6 +386,7 @@ void zDrawableDivider::make(int extra, int countItems, int idx) {
     auto _parent((zViewGroup*)view); auto vert(view->isVertical());
     auto childCount(_parent->countChildren());
     auto alles(childCount && (idx + childCount) == countItems);
+    if(!childCount) return;
     // если первый и нужен первый
     if(idx == 0 && (type & ZS_DIVIDER_BEGIN)) {
         auto v(_parent->atView(0)); auto p(-(padEnd + size)); if(!v->isVisibled()) v = view, p = 0;

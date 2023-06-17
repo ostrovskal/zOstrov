@@ -28,7 +28,7 @@ public:
 class zFilterPhone : public zFilterEdit {
 public:
     int convertChar(czs& t, int ch, int pos) override {
-        return ch * (pos ? isdigit(ch) : (ch != '+'));
+        return ch * (pos ? isdigit(ch) : (ch == '+'));
     }
     [[nodiscard]] cstr getKeboardLayer() const override { return "digit123"; }
 };
@@ -97,13 +97,12 @@ void zViewEdit::setFilter(u32 inputMode, zFilterEdit* _filter) {
 pti zViewEdit::positionFromIndex(int _indexText) {
     auto bound(&drw[DRW_TXT]->bound); pti pos;
     auto x(bound->x), y(bound->y), i(0); _indexText -= visibleIndex;
-    auto bold(defPaint->getStyle() & ZS_TEXT_BOLD);
     // определить вертикальную позицию
     for(auto& c : textCache) {
         auto idx(_indexText - c->text.count());
         if(idx <= 0) {
             getStringFromCache(i, bound, pos);
-            x = pos.x + drw[DRW_TXT]->sizeText(c->text, c->size, _indexText, bold);
+            x = pos.x + defPaint->widthText(c->text.str(), _indexText);
             break;
         }
         _indexText = idx; y += c->size; i++;
@@ -113,12 +112,11 @@ pti zViewEdit::positionFromIndex(int _indexText) {
 
 int zViewEdit::indexFromPosition(cpti& screen, bool exact) {
     auto bound(&drw[DRW_TXT]->bound); pti pos(0, bound->y);
-    auto bold(defPaint->getStyle() & ZS_TEXT_BOLD);
     auto idx(0), i(0);
     for(auto& c : textCache) {
         if(screen.y < (pos.y + c->size)) {
             getStringFromCache(i, bound, pos);
-            idx += visibleIndex + drw[DRW_TXT]->indexOf(c->text, c->size, screen.x, pos.x, bold, exact, &pos.x);
+            idx += visibleIndex + defPaint->indexOf(c->text.str(), INT_MAX, screen.x, pos.x, exact);
             break;
         }
         pos.y += c->size; idx += c->text.count(); i++;
@@ -129,7 +127,7 @@ int zViewEdit::indexFromPosition(cpti& screen, bool exact) {
 void zViewEdit::onInit(bool _theme) {
     zViewText::onInit(_theme);
     status          |= ZS_FOCUSABLE_IN_TOUCHABLE;
-    colorHint       = styles->_int(Z_COLOR_HINT_TEXT, 0xff505050);
+    colorHint       = theme->styles->_int(Z_COLOR_HINT_TEXT, 0xff505050);
     setFilter(styles->_int(Z_MODE, ZS_EDIT_TEXT));
     // создать кнопку, если есть иконка
     if(drw[DRW_ICON]->isValid()) {
@@ -231,17 +229,17 @@ void zViewEdit::updateCaret() {
 }
 
 int zViewEdit::correct(int _index) {
-    bool update(!isWrap()); auto bold(defPaint->getStyle() & ZS_TEXT_BOLD);
+    bool update(!isWrap());
     if(!update) {
-        int idx(0), size(getTextSize());
+        int idx(0);
         // длина видимого текста в пикселях
-        auto widthText(drw[DRW_TXT]->sizeText(getDrawText(true), size, INT_MAX, bold));
+        auto widthText(defPaint->widthText(getDrawText(true), INT_MAX));
         if(widthText >= wmax) {
             // сдвинуть текст вперед на величину, которая больше макс. ширины текста
-            idx = drw[DRW_TXT]->indexOf(getDrawText(true), size, widthText, wmax, bold);
+            idx = defPaint->indexOf(getDrawText(true), INT_MAX, widthText, wmax, false);
         } else if(visibleIndex > 0) {
             // сдвинуть текст назад на величину разницы макс. ширины текста и реальной ширины
-            idx = -drw[DRW_TXT]->indexReverseOf(filter->getText(realText), size, wmax - widthText, visibleIndex, bold);
+            idx = -defPaint->indexReverseOf(filter->getText(realText), visibleIndex, wmax - widthText);
         }
         if(idx) {
             // корректировать начальный индекс текста/позицию каретки
@@ -270,7 +268,7 @@ void zViewEdit::changeTheme() {
 
 void zViewEdit::onLayout(crti &position, bool changed) {
     zViewText::onLayout(position, changed);
-    if(but) but->layout(rti(rclient.x + wmax + distance + ipad.x, rclient.y + (rclient.h - but->rview.h) / 2, but->rview.w, but->rview.h));
+    if(but) but->layout(rti(rclient.x + wmax + 8 + distance + ipad.x, rclient.y + (rclient.h - but->rview.h) / 2, but->rview.w, but->rview.h));
     if(isFocus()) {
         correctCaretPosition(caretIndex);
         updateCaret();
@@ -281,7 +279,7 @@ void zViewEdit::onMeasure(cszm& spec) {
     zViewText::onMeasure(spec);
     auto butW(icSize.w);
     if(but) but->measure({zMeasure(MEASURE_EXACT, butW), zMeasure(MEASURE_EXACT, icSize.h)}); else butW = 0;
-    wmax = rclient.w - distance - butW - ipad.extent(false);
+    wmax = rclient.w - distance - (butW + 4) - ipad.extent(false);
 }
 
 void zViewEdit::clearText() {

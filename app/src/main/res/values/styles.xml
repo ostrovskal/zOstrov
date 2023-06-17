@@ -29,7 +29,7 @@
         <item name="textSize">14sp</item>
         <item name="padEnd">1dp</item>
         <item name="padBottom">1dp</item>
-        <item name="ipad">3dp</item>
+        <item name="ipad">1dp</item>
         <item name="gravity">end|bottom</item>
     </style>
     <style name="scrollbar">
@@ -48,9 +48,7 @@
     <style name="editButClear">
         <item name="foreground">@drawable/zssh</item>
         <item name="fkGravity">center</item>
-        <item name="fkTiles">@integer/iconEditEx</item>
         <item name="tap">hovered</item>
-        <item name="gravity">center</item>
     </style>
     <style name="tabs">
         <item name="pad">2dp</item>
@@ -82,7 +80,7 @@
         <item name="fbo">true</item>
         <item name="background">%color/color_menu</item>
         <item name="gravity">center</item>
-        <item name="duration">40</item>
+        <item name="duration">60</item>
         <item name="pad">2dp</item>
     </style>
     <style name="barButton">
@@ -92,11 +90,16 @@
         <item name="fkColor">#ffffff</item>
         <item name="gravity">center</item>
         <item name="fkGravity">center</item>
+        <item name="font">@drawable/font1</item>
         <item name="textSize">15sp</item>
         <item name="textStyle">normal</item>
         <item name="textColor">#ffffff</item>
         <item name="fkScale">0.5</item>
         <item name="pad">1dp</item>
+    </style>
+    <style name="barOverflow">
+        <item name="styles">@style/barButton</item>
+        <item name="foreground">@drawable/zssh</item>
     </style>
     <style name="menuImage">
         <item name="foreground">%drawable/bitmap_common</item>
@@ -111,7 +114,7 @@
         <item name="fbo">true</item>
         <item name="divider">%color/color_divider</item>
         <item name="divSize">@dimen/divider</item>
-        <item name="divType">middle</item>
+        <item name="divType">begin|middle|end</item>
         <item name="background">%color/color_menu</item>
         <item name="gravity">center</item>
         <item name="fadeScrollBars">true</item>
@@ -169,6 +172,8 @@
         <item name="gravity">center</item>
         <item name="foreground">@drawable/zssh</item>
         <item name="fkGravity">center</item>
+        <item name="textWrap">true</item>
+        <item name="decorate">ellipsis</item>
         <item name="fkTiles">@integer/selectItem</item>
     </style>
     <style name="menu_item">

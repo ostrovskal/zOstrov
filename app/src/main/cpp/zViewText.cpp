@@ -7,7 +7,7 @@
 
 zViewText::zViewText(zStyle *_styles, i32 _id, u32 _text) : zView(_styles, _id) {
     defSpan         = new zTextSpan();
-    defPaint        = new zTextPaint(this);
+    defPaint        = new zTextPaint();
     minMaxSize.x    = z_dp(z.R.dimen.textMinWidth);
     minMaxSize.w    = z_dp(z.R.dimen.textMinHeight);
     setText(_text);
@@ -40,10 +40,7 @@ void zViewText::setText(czs& _text, bool force) {
             onMeasure(spec);
             changed = (rv != rview);
         }
-        if(changed) {
-//            z_logBuffer("text update", z_timeMillis(), 32); DLOG("text update");
-            requestLayout();
-        }
+        if(changed) requestLayout();
     }
 }
 
@@ -183,18 +180,18 @@ void zViewText::drawText() {
         auto cacheStr(getStringFromCache(indexCache++, tbound, coord));
         for(auto &sp: cacheSpans) {
             auto posSpan(sp->s); auto paint(sp->paint);
-            auto baseLine((int) round((float) paint->baseLine * ((float) cacheStr->size / (float) htex) + 0.5f));
-            coord.x += paint->preWidth;
-            auto _subH(cacheStr->size - paint->size);
+            auto baseLine((int)round((float)paint->getBaseline() * ((float)cacheStr->size / (float)htex) + 0.5f));
+            coord.x += paint->getMargin();
+            auto _subH(cacheStr->size - paint->getSize());
             // проверка - если спан сам себя рисует
 //            if(sp->span->draw(coord.x, coord.y, cacheStr->size, paint))
             //              coord.x += paint->width;
             while(posSpan < sp->e) {
                 // корректировать вертикальную позицию, относительно базовой линии шрифта
                 if(_subH) {
-                    auto scaleSize((float) paint->size / (float) htex);
-                    auto _baseLine((int) round((float) paint->baseLine * scaleSize + 0.5f));
-                    subH = ((cacheStr->size - baseLine) - (paint->size - _baseLine));
+                    auto scaleSize((float)paint->getSize() / (float)htex);
+                    auto _baseLine((int)round((float)paint->getBaseline() * scaleSize + 0.5f));
+                    subH = ((cacheStr->size - baseLine) - (paint->getSize() - _baseLine));
                 } else subH = 0;
                 // сдвинуть по верт. относительно общей высоты строки
                 coord.y += subH;
@@ -227,7 +224,7 @@ void zViewText::drawText() {
                     // корректировать позицию для следующей подстроки
                     coord.x = tbound->x; coord.y += cacheStr->size;
                     if(!(cacheStr = getStringFromCache(indexCache++, tbound, coord))) break;
-                    baseLine = (int) round((float) paint->baseLine * ((float) cacheStr->size / (float) htex) + 0.5f);
+                    baseLine = (int)round((float)paint->getBaseline() * ((float)cacheStr->size / (float)htex) + 0.5f);
                     indexText = 0;
                 }
             }
@@ -236,8 +233,8 @@ void zViewText::drawText() {
 }
 
 szi zViewText::textWrap(cstr _text, int widthRect) {
-    static CACHE tcache;
-    int width(0), maxHeight(0), maxWidth(0), sepPos(0), sepWidth(0), height(0), _count;
+    static CACHE tcache; static zStringUTF8 ellText;
+    int _ellipsis(INT_MAX), pt3(0), width(0), maxHeight(0), maxWidth(0), sepPos(0), sepWidth(0), height(0), _count;
     // проверить на кэшированные значения
     if(textCache.isNotEmpty() && widthRect >= widthRectCache) {
 //        DLOG("from cache %s", textCache[0]->text.str());
@@ -246,6 +243,10 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
     }
     // разбить текст по спец. символам по ширине ректа
     auto tex(drw[DRW_TXT]->texture);
+    if(testFlags(ZS_ELLIPSIS)) {
+        _ellipsis = widthRect;
+        ellText = _text; _text = ellText.str();
+    }
     if(widthRect <= 0 || isWrap()) widthRect = INT_MAX;
     textCache.clear();
     auto isEdit(dynamic_cast<zViewEdit*>(this));
@@ -256,38 +257,38 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
     // идти по всем спанам
     for(auto& sp : cacheSpans) {
         auto paint(sp->paint); auto _pos(sp->s), _end(sp->e);
-        // фактор масштабирования
-        auto factor(drw[DRW_TXT]->scaleFactor(paint->size, true));
-        auto offsetBold(224 * ((paint->getStyle() & ZS_TEXT_BOLD) != 0));
-        height = z_max(height, paint->size);
-        width += paint->preWidth + paint->italic * factor;
+        if(testFlags(ZS_ELLIPSIS)) pt3 = paint->getWidthChar('.') * 3;
+        height = z_max(height, paint->getSize());
+        width += paint->getMargin() + paint->getItalic();
         // корректировать длину в пикселях, если длина нулевая
         _end += (_pos == _end);
         while(_pos < _end) {
-            if(!(ch = z_decodeUTF8(z_charUTF8(_text)))) break;
+            if(!(ch = z_decodeUTF8(z_charUTF8(_text, &_count)))) break;
             // если это не начало подстроки и есть разделитель - запоминаем его
             if(_stext != _text && z_delimiter(ch)) separator = _text, sepWidth = width, sepPos = _pos;
-            if(ch != '\n') {
+            if(isWrap() || ch != '\n') {
                 // определить новую ширину строки
-                auto ln(tex->widthGlyph(ch + offsetBold, factor) + width);
-                // если длина подстроки меньше ширины ректа и символ не "новая строка" = дальше
-                if(_stext == _text || ln < widthRect) {
-                    width = ln; _text += z_charLengthUTF8(_text); _pos++;
-                    continue;
+                auto ln(paint->getWidthChar(ch) + width);
+                // проверка на многоточие
+                if((ln + pt3) >= _ellipsis) {
+                    width += pt3; ellText = ellText.left(z_sizeCountUTF8(_stext, _text)) + "...";
+                    _stext = ellText.str(); _text = ellText.ptr();
+//                    DLOG("ellipsis %i %i %i %s", _ellipsis, width, sz, ellText.str());
+                    break;
                 }
-            } else {
-                separator = nullptr;
-            }
+                // если длина подстроки меньше ширины ректа и символ не "новая строка" = дальше
+                if(_stext == _text || ln < widthRect) { width = ln; _text += _count; _pos++; continue; }
+            } else { separator = nullptr; }
             // добавить подстроку в массив
             if(separator) _text = separator, width = sepWidth, _pos = sepPos, separator = nullptr;
             // убрать конечные пробелы
             _count = z_sizeCountUTF8(_stext, _text);
-            if(!isEdit) { zStringUTF8 u8(_stext, _count); while(z_isspace(u8[_count - 1])) _count--, width -= 10; }
+            if(!isEdit) while(z_isspace(z_charUTF8(z_ptrUTF8(_stext, _count - 1)))) _count--, width -= 10;
             if(width) textCache += new CACHE(width, height, _stext, _count);
             maxWidth = z_max(width, maxWidth); maxHeight += height;
             // пропустить начальные пробелы
-            if(!isEdit) { while(z_isspace(z_charUTF8(_text))) _text += z_charLengthUTF8(_text); }
-            _stext = _text; width = paint->italic * factor;
+            if(!isEdit) { while(z_isspace(z_charUTF8(_text, &_count))) _text += _count; }
+            _stext = _text; width = paint->getItalic();
         }
     }
     // последняя подстрока
@@ -327,10 +328,6 @@ void zViewText::onInit(bool _theme) {
             case Z_ICON_GRAVITY:            setIconGravity(v->u); icGravity &= ~ZS_SCALE_MASK; icGravity |= (v->u & ZS_SCALE_MASK); break;
         }
     });
-    // сброс краски
-    defPaint->reset(this);
-    // сброс кэша спанов
-    clearCacheSpans(false);
     // шрифт
     setDrawable(&txt, DRW_TXT);
     drw[DRW_TXT]->typeTri = GL_TRIANGLES;
@@ -339,6 +336,10 @@ void zViewText::onInit(bool _theme) {
     dr->init(tbk); defPaint->bkColor = dr->color.toARGB();
     // иконка
     setDrawable(&ic, DRW_ICON);
+    // сброс краски
+    defPaint->reset(this);
+    // сброс кэша спанов
+    clearCacheSpans(false);
 }
 
 void zViewText::mergeSpans(czs& _text) {

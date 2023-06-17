@@ -10,12 +10,23 @@
 //                                                       БАЗОВАЯ ЛЕНТА                                                                    //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+zViewBaseRibbon::zViewBaseRibbon(zStyle* _styles, i32 _id, bool _vert) : zViewGroup(_styles, _id) {
+    vert = _vert;
+    flyng = new zFlyng(this);
+    setAdapter(new zAdapterList({ "adapter default" }, new zFabricListItem(styles_z_list_item)));
+}
+
 zViewBaseRibbon::~zViewBaseRibbon() {
     cacheViews.clear();
     if(adapter) {
         adapter->unregistration(this);
         adapter = nullptr;
     }
+}
+
+void zViewBaseRibbon::requestLayout() {
+    auto drop(dynamic_cast<zViewDropdown*>(this));
+    if(drop) zViewGroup::requestLayout();
 }
 
 zViewBaseRibbon* zViewBaseRibbon::setAdapter(zBaseAdapter* _adapter) {
@@ -44,10 +55,7 @@ void zViewBaseRibbon::correctBegin(int used) {
         auto _div(div ? div->getSize(ZS_DIVIDER_BEGIN) : 0);
         auto _delta(v->edges(vert, false) - edge.w);
         if(firstItem) _delta -= used; else _delta -= _div;
-        if(_delta > 0) {
-            offsetChildren(-_delta);
-            //DLOG("%i", _delta);
-        }
+        if(_delta > 0) offsetChildren(-_delta);
     }
 }
 
@@ -61,7 +69,6 @@ void zViewBaseRibbon::correctFinish(int used) {
         if(offset > 0 && (firstItem > 0 || start < edge.w)) {
             if(firstItem == 0) offset = z_min(offset, (edge.w - start));
             offsetChildren(offset);
-            //DLOG("offs %i", offset);
             if(firstItem > 0) fillReverse(firstItem - linesGrid, first->edges(vert, false) - used);
         }
     }
@@ -76,9 +83,7 @@ zView *zViewBaseRibbon::getViewCache(int pos) {
     // брать представление по его позиции(чтобы минимизировать обновление)
     zView* view(nullptr); int ii(-1);
     for(int i = 0 ; i < cacheViews.size(); i++) {
-        if((view = cacheViews[i])) {
-            ii = i; if(view->id == pos) break;
-        }
+        if((view = cacheViews[i])) { ii = i; if(view->id == pos) break; }
     }
     if(ii >= 0) view = cacheViews[ii], cacheViews[ii] = nullptr;
     return view;
@@ -113,8 +118,7 @@ zView* zViewBaseRibbon::addView(int x, int y, int pos, bool flow, int where) {
 int zViewBaseRibbon::itemFromPoint(cptf& p) const {
     auto x((int)p.x), y((int)p.y);
     for(int i = children.size() - 1; i >= 0; i--) {
-        if(children[i]->rview.contains(x, y))
-            return i + firstItem;
+        if(children[i]->rview.contains(x, y)) return i + firstItem;
     }
     return -1;
 }
@@ -145,8 +149,7 @@ bool zViewBaseRibbon::scrolling(int _delta) {
                     auto isStart((child->edges(vert, true) + _delta) <= edge.w);
                     if(isStart || isEnd) {
                         if(isStart) firstItem++;
-                        detach(child);
-                        addViewCache(child);
+                        detach(child); addViewCache(child);
                         posView--;
                     }
                 }
@@ -157,7 +160,7 @@ bool zViewBaseRibbon::scrolling(int _delta) {
                 requestPosition();
                 // отправляем событие скролла
                 if(onChangeScroll) onChangeScroll(this, firstItem);
-                return zViewGroup::scrolling(_delta);
+                return false;
             }
             // Предел прокрутки. Запуск эффекта
             updateGlow(_delta);
@@ -203,9 +206,12 @@ void zViewBaseRibbon::stateView(STATE &state, bool save, int &index) {
     if(save) {
         state.data += firstItem;
         state.data += deltaItem;
+        state.data += selectItem;
     } else {
         firstItem = (int)state.data[index++];
         deltaItem = (int)state.data[index++];
+        selectItem= (int)state.data[index++];
+        requestPosition();
     }
 }
 
@@ -282,7 +288,6 @@ szi zViewBaseRibbon::measureChildrenSize(cszm& spec) {
 }
 
 void zViewBaseRibbon::onMeasure(cszm& spec) {
-    if(!adapter) ILOG("Не установлен адаптер в %s !!!", typeName());
     // расчитать габариты всех дочерних
     defaultOnMeasure(spec, measureChildrenSize(spec));
     // дивидер
@@ -384,4 +389,3 @@ void zViewRibbon::childMeasure(zView* child, zLayoutParams* lps) {
     auto hSpec(makeChildMeasureSpec((vert ? measureSpec.h : zMeasure(MEASURE_EXACT, rclient.h)), child->margin.extent(true), lps->h));
     child->measure({ wSpec, hSpec });
 }
-
