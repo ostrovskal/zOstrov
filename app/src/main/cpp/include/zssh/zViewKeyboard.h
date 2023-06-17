@@ -66,6 +66,8 @@ protected:
     LAYOUT* current{nullptr};
     // владелец
     zView* owner{nullptr};
+    // родитель владельца
+    zView* parent{nullptr};
     // признак обновления макета
     bool isUpdate{false};
     // текущая кнопка
@@ -77,5 +79,5 @@ protected:
     // признак рисования
     bool isDrawing{true};
     // нижняя граница владельца
-    int yEdge{0};
+    int scrollY{0};
 };

@@ -113,7 +113,7 @@ enum ViewStyles {
     Z_VISIBLED					= (10 | ZTT_INT), // отображение
     Z_BEHAVIOR					= (11 | ZTT_INT), // поведение
     Z_TAP					    = (12 | ZTT_INT), // тип тапа
-    Z_DECORATE                  = (13 | ZTT_INT | ZTT_THM), // декорации
+    Z_DECORATE                  = (13 | ZTT_INT), // декорации
     Z_SIZE_TOUCH				= (14 | ZTT_VEC), // чувствительность касания
     Z_MODE						= (15 | ZTT_INT | ZTT_THM), // режим для слайдера/прогресса/формы/чарта/сетки/редактора
     Z_SIZE                      = (16 | ZTT_DMN), // минимальный/максимальный размер представления

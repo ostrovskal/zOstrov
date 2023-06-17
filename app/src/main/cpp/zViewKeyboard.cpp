@@ -15,10 +15,9 @@ zViewKeyboard::zViewKeyboard(cstr nameLayouts) : zViewGroup(styles_default, z.R.
         // сдвигаем родительский
         float v; auto visible(animator.update(v));
         auto heightScreen(zGL::instance()->getSizeScreen(true));
-        auto root(manager->getSystemView(true));
-        root->scroll.y = ((int)round((float)offsetY / 6.0f) * v);
+        parent->scroll.y = scrollY + ((int)round((float)offsetY / 6.0f) * v);
         lps.y = heightScreen - ((int)round((float)rview.h / 6.0f) * v);
-        root->requestLayout();
+        parent->requestLayout();
         updateStatus(ZS_VISIBLED, lps.y < heightScreen);
         return visible;
     });
@@ -141,7 +140,7 @@ i32 zViewKeyboard::onTouchEvent(zTouch *touch) {
                 else keyCode = but->name[touch->isLongClick()][0];
                 if(!_switch && keyCode) {
                     if(owner) owner->keyEvent(keyCode, false);
-                    if(owner && owner->edges(true, true) != yEdge) show(owner->id, true);
+                    if(owner) show(owner->id, true);
                     if(current->names[KEYBOARD_INPUT].isNotEmpty() && !activeShift) {
                         _switch = &current->names[KEYBOARD_INPUT];
                     }
@@ -173,11 +172,11 @@ void zViewKeyboard::onLayout(crti &position, bool changed) {
         auto checked(updateStatus(ZS_CHECKED, owner != nullptr) != 0);
         if(owner) {
             auto hScreen(zGL::instance()->getSizeScreen(true));
-            yEdge = owner->edges(true, true);
-            auto delta(hScreen - yEdge);
+            auto y(owner->edges(true, true) + owner->rview.h / 2);
+            auto delta(hScreen - y);
             // проверить если нижняя граница вида меньше высоты клавы, то:
             offsetY = (delta < rview.h ? rview.h - delta : 0);
-            yEdge -= offsetY;
+            scrollY = parent->scroll.y;
             owner->requestFocus();
         }
         animator.init(!checked * 6.0f - !checked, false);
@@ -230,12 +229,22 @@ i32 zViewKeyboard::keyEvent(int key, bool sysKey) {
     return 0;
 }
 
+static zView* getParentOwner(zView* o) {
+    if(o) {
+        if(o == manager->getSystemView(true)) return o;
+        auto sl(dynamic_cast<zScrollLayout*>(o));
+        if(sl) { if(sl->isVertical()) return sl->atView(0); }
+        return getParentOwner(o->getParent());
+    }
+    return nullptr;
+}
+
 void zViewKeyboard::show(u32 _id, bool set) {
     if(current) {
-        auto root(manager->getSystemView(true));
         if(set) {
             auto isOwner(owner != nullptr);
             owner = manager->idView(_id);
+            parent = getParentOwner(owner);
             if(!isOwner) {
                 cstr _defName(defName);
                 if(owner) {
@@ -245,13 +254,15 @@ void zViewKeyboard::show(u32 _id, bool set) {
                 setLayout(_defName);
             }
             if(_id <= 0 || isChecked()) {
-                // берем нижнюю координату владельца
-                yEdge = owner->edges(true, true);
-                auto y(yEdge - rview.y);
+                // ставим объект в область экрана
+                scrollY = parent->scroll.y;
+                auto y(owner->rview.y - owner->rview.h / 2);
                 if(y > 0) {
-                    root->scroll.y += y, offsetY = y;
-                    owner->requestPosition();
+                    y = ((owner->edges(true, true) + owner->rview.h / 2) - rview.y);
+                    if(y < 0) return;
                 }
+                parent->scroll.y += y; offsetY = y;
+                owner->requestPosition();
                 return;
             }
             updateStatus(ZS_VISIBLED, true);

@@ -624,7 +624,7 @@ static zStyle styles_z_zviewedit1[] = {
 	{ Z_FOREGROUND_TILES, z.R.integer.edit },
 	{ Z_TEXT_FONT | ZT_THEME, Z_FONT1 },
 	{ Z_TEXT_NOWRAP, true },
-	{ Z_TEXT_STYLE | ZT_END, ZS_TEXT_ITALIC }
+	{ Z_TEXT_STYLE | ZT_END, ZS_TEXT_BOLD }
 };
 
 static zStyle styles_z_zviewbutton1[] = {
@@ -750,7 +750,7 @@ static zStyle styles_z_seek2[] = {
 static zStyle styles_z_edit2[] = {
 	{ Z_STYLES, z.R.style.edittext },
 	{ Z_MODE, ZS_EDIT_TEXT },
-	{ Z_TEXT_STYLE | ZT_END, ZS_TEXT_BOLD_ITALIC | ZS_TEXT_STRIKE }
+	{ Z_TEXT_STYLE | ZT_END, ZS_TEXT_NORMAL }
 };
 
 static zStyle styles_z_zlinearlayout2[] = {

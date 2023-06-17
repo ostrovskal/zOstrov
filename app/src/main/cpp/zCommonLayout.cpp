@@ -136,14 +136,14 @@ pti zLinearLayout::applyGravity(crti& sizeParent, crti& sizeChild, u32 _gravity)
 
 void zLinearLayout::onLayout(crti &position, bool changed) {
     zView::onLayout(position, changed);
-    auto r(rclient); auto pt(&r[vert]);
+    auto r(rclient);
     // размер разделителя
-    auto divSize((div && (div->type & ZS_DIVIDER_MIDDLE)) ? (div->size + div->padEnd + div->padBegin) : 0);
+    auto divSize(div ? div->getSize(ZS_DIVIDER_MIDDLE) : 0);
     // начальная координата с учетом разделителя
-    if(div && div->type & ZS_DIVIDER_BEGIN) *pt += div->size + div->padEnd;
+    r[vert] += (div ? div->getSize(ZS_DIVIDER_BEGIN) : 0);
     // позиционировать дочерние
     for(auto& child : children) {
-        if(child->isVisibled()) { child->layout(r); *pt += child->sizes(vert) + divSize; }
+        if(child->isVisibled()) { child->layout(r); r[vert] += child->sizes(vert) + divSize; }
     }
 }
 
@@ -281,6 +281,8 @@ void zScrollLayout::onLayout(crti &position, bool changed) {
     auto child(atView(0));
     // если он сам сдвинут
     if(child) child->layout(rclient - scroll);
+//    RTI_LOG("scrLyt1", rview);
+  //  RTI_LOG("scrLyt2", rclip);
 }
 
 zView *zScrollLayout::attach(zView *v, int width, int height, int where) {
@@ -311,7 +313,8 @@ i32 zScrollLayout::onTouchEvent(zTouch *touch) {
 bool zScrollLayout::scrolling(int _delta) {
     auto child(atView(0));
     if(child) {
-        auto vEnd(rclient[vert + 2]);
+        auto vEnd(z_min(manager->getKeyboard()->lps.y, rclient[vert + 2]));
+        auto delta(child->scroll[vert]);
         auto delta1(delta); delta -= _delta;
         if(_delta < 0 && (delta + vEnd) >= childSize) delta = childSize - vEnd;
         if(_delta >= 0 && delta < 0) delta = 0;

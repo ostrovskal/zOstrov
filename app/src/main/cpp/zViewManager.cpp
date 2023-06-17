@@ -173,7 +173,7 @@ void zViewManager::refreshConfig(AConfiguration* config) {
 void zViewManager::focusNativeWindow(bool _focus) {
     DLOG("%s", _focus ? "APP_CMD_SET_FOCUS" : "APP_CMD_LOST_FOCUS");
     status &= ~Z_ACTIVE; status |= Z_ACTIVE * _focus;
-//    sound.actionAll(_focus ? SL_PLAYSTATE_PAUSED : SL_PLAYSTATE_PLAYING, _focus ? SL_PLAYSTATE_PLAYING : SL_PLAYSTATE_PAUSED);
+    sound.actionAll(_focus ? SL_PLAYSTATE_PAUSED : SL_PLAYSTATE_PLAYING, _focus ? SL_PLAYSTATE_PLAYING : SL_PLAYSTATE_PAUSED);
 }
 
 void zViewManager::redrawNativeWindow() {

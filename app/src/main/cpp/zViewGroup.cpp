@@ -301,7 +301,7 @@ void zViewGroup::awakenScroll() {
 
 bool zViewGroup::scrolling(int _delta) {
     // убрать клаву
-    manager->changeFocus(nullptr);
+//    manager->changeFocus(nullptr);
     return false;
 }
 

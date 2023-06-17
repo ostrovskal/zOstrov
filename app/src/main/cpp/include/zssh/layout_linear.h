@@ -6,15 +6,15 @@
 	grp10->attach(new zViewSelect(styles_z_select, z.R.id.select), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp10->attach(new zViewGrid(styles_z_grid1, z.R.id.grid1, false), 
-			VIEW_MATCH, VIEW_WRAP);
+			VIEW_WRAP, VIEW_WRAP);
 	auto grp20((zLinearLayout*)grp10->attach(new zLinearLayout(styles_z_zlinearlayout1, 0, false), 
 			VIEW_MATCH, VIEW_MATCH)); 
 	grp20->attach(new zViewRadio(styles_z_radiobutton, z.R.id.radioDark, z.R.string.radio_dark, 1), 
-			VIEW_WRAP, VIEW_MATCH);
+			0, 1, VIEW_WRAP, VIEW_MATCH);
 	grp20->attach(new zViewCheck(styles_z_zviewcheck1, 0, z.R.string.checkbox_text), 
-			VIEW_MATCH, VIEW_MATCH);
+			0, 3, VIEW_WRAP, VIEW_MATCH);
 	grp20->attach(new zViewRadio(styles_z_radiolight, z.R.id.radioLight, z.R.string.radio_light, 1), 
-			VIEW_WRAP, VIEW_MATCH);
+			0, 1, VIEW_WRAP, VIEW_MATCH);
 	auto grp21((zEditLayout*)grp10->attach(new zEditLayout(styles_default, 0), 
 			VIEW_MATCH, VIEW_WRAP)); 
 	grp21->attach(new zViewEdit(styles_z_zviewedit1, z.R.id.edit1, z.R.string.prompt), 

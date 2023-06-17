@@ -56,7 +56,7 @@ public:
     // прокрутка на дельту
     virtual bool scrolling(int _delta) override;
     // параметры прокруток
-    virtual int computeScrollOffset(bool _vert) const override { return delta; }
+    virtual int computeScrollOffset(bool _vert) const override { auto v(atView(0)); return v ? v->scroll[vert] : 0; }
     virtual int computeScrollRange(bool _vert) const override { return childSize; }
     virtual int computeScrollExtent(bool _vert) const override { return sizes(_vert) - pad.extent(_vert); }
     virtual cstr typeName() const override { return "zScrollLayout"; }
@@ -64,7 +64,7 @@ protected:
     virtual void onMeasure(cszm& spec) override;
     virtual void onLayout(crti &position, bool changed) override;
     virtual i32 onTouchEvent(zTouch *touch) override;
-    int childSize{0}, delta{0};
+    int childSize{0};
 };
 
 class zEditLayout : public zViewGroup {
