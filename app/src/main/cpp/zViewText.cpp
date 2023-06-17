@@ -246,10 +246,6 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
     }
     // разбить текст по спец. символам по ширине ректа
     auto tex(drw[DRW_TXT]->texture);
-    if(!tex) {
-        DLOG("no texture %s", typeName());
-        return { maxWidth, maxHeight };
-    }
     if(widthRect <= 0 || isWrap()) widthRect = INT_MAX;
     textCache.clear();
     auto isEdit(dynamic_cast<zViewEdit*>(this));

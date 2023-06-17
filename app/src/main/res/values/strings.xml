@@ -8,6 +8,18 @@
     <string name="textSpan">Finish work background application after blocked screen helps saved battery.</string>
     <string name="first_form">First form!!!</string>
     <string name="enter_family">Entering family</string>
+    <string name="press_me">Press me:)</string>
+    <string name="sergey">Sergey</string>
+    <string name="progress">Progress</string>
+    <string name="text_on_button">Text on the button</string>
+    <string name="mode_already">Mode of the already</string>
+    <string name="switcher">Switcher</string>
+    <string name="activate">Activate</string>
+    <string name="slider_text">Slider</string>
+    <string name="prompt">Prompt</string>
+    <string name="radio_dark">Dark theme</string>
+    <string name="radio_light">Light theme</string>
+    <string name="checkbox_text">Checkbox flags</string>
     <string-array name="spinArray">
         <item>Ivan</item>
         <item>Irina</item>

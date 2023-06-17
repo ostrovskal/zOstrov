@@ -109,13 +109,18 @@ void zLinearLayout::onMeasure(cszm& spec) {
             auto& lps(child->lps);
             auto weight(z_max<float>(1.0f, (float)child->lps.weight));
             if(isWeights) weight /= (float)allWeight;
-            auto _size(_undef && lps[vert + 2] == VIEW_MATCH ? sizeMatch : child->rview[vert + 2]);
-            //DLOG("_size %i %i", _size, _wh.h);
+            auto oldSize(child->rview[vert + 2]);
+            //auto _size(lps[vert + 2] == VIEW_MATCH ? sizeMatch : oldSize);
+            auto _size(lps[vert + 2] == VIEW_MATCH ? sizeMatch : (int)lps[vert + 2]);
             auto size(isWeights ? (int)roundf((float)_wh[vert] * weight) : _size), wh((int)lps[3 - vert]);
             childSpec.set(makeChildMeasureSpec(zMeasure(MEASURE_EXACT, _wh.w), child->margin.extent(false), vert ? wh : size),
                           makeChildMeasureSpec(zMeasure(MEASURE_EXACT, _wh.h), child->margin.extent(true), vert ? size : wh));
             child->measure(childSpec);
-            //_wh[vert] -= child->sizes(vert);
+//            DLOG("_size %i %i %i %s", _undef, child->rview.w, child->rview.h, child->typeName());
+            if(!isWeights) {
+                _wh[vert] -= child->sizes(vert);
+                _wh[vert] += (child->rview[vert + 2] - oldSize);
+            }
         }
     }
     defaultOnMeasure(spec, _max);

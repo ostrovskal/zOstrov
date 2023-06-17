@@ -257,7 +257,7 @@
         <item name="font">@drawable/font1</item>
         <item name="fkScale">0.5</item>
         <item name="textDistance">5dp</item>
-        <item name="fkGravity">end</item>
+        <item name="fkGravity">end|center_vertical</item>
         <item name="gravity">center_vertical|end</item>
         <item name="pad">3dp</item>
         <item name="textColor">%color/color_text_text</item>

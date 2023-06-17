@@ -358,8 +358,8 @@ void zView::setAlpha(float _alpha) {
 
 void zView::setScale(float _x, float _y) {
     // установка масштаба
-    scale.set(_x, _y, 1);
-    mtx.scale(scale) *= mtxTmp.rotate(rot);
+    scale.set(_x, _y, 0); mtx.scale(scale);
+    mtx *= mtxTmp.rotate(rot);
     //mtx = mtxScale * mtxRot;
     invalidate();
 }

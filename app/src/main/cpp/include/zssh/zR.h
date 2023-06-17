@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Sat Jun 17 00:45:55 2023
+// Sat Jun 17 03:37:45 2023
 
 #pragma once
 
@@ -127,29 +127,30 @@ struct _z {
 			enum { 
 				app_name	= 0x00100006, 	acontrollerMap	= 0x00100007, 	ccontrollerMap	= 0x00100008, 
 				themeDark	= 0x00100009, 	themeLight	= 0x0010000A, 	textSpan	= 0x0010000B, 
-				first_form	= 0x0010000C, 	enter_family	= 0x0010000D, 	menuOpenSave	= 0x0010000E, 
-				menuSettings	= 0x0010000F, 	menuProperties	= 0x00100010, 
-				menuSound	= 0x00100011, 	menuPokes	= 0x00100012, 	menuMru	= 0x00100013, 
-				menuOperations	= 0x00100014, 	menuReset	= 0x00100015, 	menuRestore	= 0x00100016, 
-				menuExecute	= 0x00100017, 	menuExit	= 0x00100018, 	menuModel	= 0x00100019, 
-				menuTurbo	= 0x0010001A, 	menuFilter	= 0x0010001B, 	menuTape	= 0x0010001C, 
-				menuDebugger	= 0x0010001D, 	menuExeDebugger	= 0x0010001E, 
-				menuMagic	= 0x0010001F, 	menuDisk1	= 0x00100020, 	menuDisk2	= 0x00100021, 
-				menuDisk3	= 0x00100022, 	menuDisk4	= 0x00100023, 	menuSinclair48	= 0x00100024, 
-				menuSinclair128	= 0x00100025, 	menuPentagon	= 0x00100026, 
-				menuScorpion	= 0x00100027, 	menuMruEmpty	= 0x00100028, 	menuKeyJoy	= 0x00100029, 
-				menuLabel	= 0x0010002A, 	menuCode	= 0x0010002B, 	menuValue	= 0x0010002C, 
-				menuQuickSave	= 0x0010002D, 	menuAsm	= 0x0010002E, 	menuTzx	= 0x0010002F, 
-				podskazka	= 0x00100030, 	Perekljuchatelw	= 0x00100031, 	Podskazka	= 0x00100032, 
-				Temnaja	= 0x00100033, 	Svetlaja	= 0x00100034, 	Flagzok	= 0x00100035, 
-				Nagzmi_na_menja__	= 0x00100036, 	Regzim_gotovnosti	= 0x00100037, 
-				Aktivacija	= 0x00100038, 	slayder	= 0x00100039, 	Tekst_na_knopke	= 0x0010003A, 
-				Sergey	= 0x0010003B, 	Progress	= 0x0010003C, 			};
+				first_form	= 0x0010000C, 	enter_family	= 0x0010000D, 	press_me	= 0x0010000E, 
+				sergey	= 0x0010000F, 	progress	= 0x00100010, 	text_on_button	= 0x00100011, 
+				mode_already	= 0x00100012, 	switcher	= 0x00100013, 	activate	= 0x00100014, 
+				slider_text	= 0x00100015, 	prompt	= 0x00100016, 	radio_dark	= 0x00100017, 
+				radio_light	= 0x00100018, 	checkbox_text	= 0x00100019, 	menuOpenSave	= 0x0010001A, 
+				menuSettings	= 0x0010001B, 	menuProperties	= 0x0010001C, 
+				menuSound	= 0x0010001D, 	menuPokes	= 0x0010001E, 	menuMru	= 0x0010001F, 
+				menuOperations	= 0x00100020, 	menuReset	= 0x00100021, 	menuRestore	= 0x00100022, 
+				menuExecute	= 0x00100023, 	menuExit	= 0x00100024, 	menuModel	= 0x00100025, 
+				menuTurbo	= 0x00100026, 	menuFilter	= 0x00100027, 	menuTape	= 0x00100028, 
+				menuDebugger	= 0x00100029, 	menuExeDebugger	= 0x0010002A, 
+				menuMagic	= 0x0010002B, 	menuDisk1	= 0x0010002C, 	menuDisk2	= 0x0010002D, 
+				menuDisk3	= 0x0010002E, 	menuDisk4	= 0x0010002F, 	menuSinclair48	= 0x00100030, 
+				menuSinclair128	= 0x00100031, 	menuPentagon	= 0x00100032, 
+				menuScorpion	= 0x00100033, 	menuMruEmpty	= 0x00100034, 	menuKeyJoy	= 0x00100035, 
+				menuLabel	= 0x00100036, 	menuCode	= 0x00100037, 	menuValue	= 0x00100038, 
+				menuQuickSave	= 0x00100039, 	menuAsm	= 0x0010003A, 	menuTzx	= 0x0010003B, 
+				podskazka	= 0x0010003C, 	Perekljuchatelw	= 0x0010003D, 	slayder	= 0x0010003E, 
+				Sergey	= 0x0010003F, 			};
 		}; 
 		_string string;
 		struct _array {
 			enum { 
-				spinArray	= 0x0010003D, 			};
+				spinArray	= 0x00100040, 			};
 		}; 
 		_array array;
 		struct _style {
@@ -171,14 +172,15 @@ struct _z {
 				chartGraph	= 0x0010002A, 	zcelllayout1	= 0x0010002B, 	list1	= 0x0010002C, 
 				edit1	= 0x0010002D, 	button1	= 0x0010002E, 	switch1	= 0x0010002F, 
 				seek	= 0x00100030, 	progress1	= 0x00100031, 	zscrolllayout1	= 0x00100032, 
-				grid1	= 0x00100033, 	zviewedit1	= 0x00100034, 	zlinearlayout1	= 0x00100035, 
-				radiolight	= 0x00100036, 	zviewcheck1	= 0x00100037, 	zviewbutton1	= 0x00100038, 
+				grid1	= 0x00100033, 	zlinearlayout1	= 0x00100034, 	zviewcheck1	= 0x00100035, 
+				radiolight	= 0x00100036, 	zviewedit1	= 0x00100037, 	zviewbutton1	= 0x00100038, 
 				zviewswitch1	= 0x00100039, 	switch2	= 0x0010003A, 	switch3	= 0x0010003B, 
 				zviewslider1	= 0x0010003C, 	seek1	= 0x0010003D, 	button11	= 0x0010003E, 
-				seek2	= 0x0010003F, 	edit2	= 0x00100040, 	zlinearlayout3	= 0x00100041, 
-				zviewedit2	= 0x00100042, 	zviewbutton2	= 0x00100043, 	zviewslider2	= 0x00100044, 
-				zviewslider3	= 0x00100045, 	zviewslider4	= 0x00100046, 	zviewedit3	= 0x00100047, 
-				zviewslider5	= 0x00100048, 	zviewslider6	= 0x00100049, 	};
+				seek2	= 0x0010003F, 	edit2	= 0x00100040, 	zlinearlayout2	= 0x00100041, 
+				zlinearlayout3	= 0x00100042, 	zviewedit2	= 0x00100043, 	zviewbutton2	= 0x00100044, 
+				zviewslider2	= 0x00100045, 	zviewslider3	= 0x00100046, 	zviewslider4	= 0x00100047, 
+				zviewedit3	= 0x00100048, 	zviewslider5	= 0x00100049, 	zviewslider6	= 0x0010004A, 
+	};
 		};
 		_style style;
 	};
@@ -243,10 +245,10 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::progress1, styles_z_progress1 },
 		{ _z::_R::_style::zscrolllayout1, styles_z_zscrolllayout1 },
 		{ _z::_R::_style::grid1, styles_z_grid1 },
-		{ _z::_R::_style::zviewedit1, styles_z_zviewedit1 },
 		{ _z::_R::_style::zlinearlayout1, styles_z_zlinearlayout1 },
-		{ _z::_R::_style::radiolight, styles_z_radiolight },
 		{ _z::_R::_style::zviewcheck1, styles_z_zviewcheck1 },
+		{ _z::_R::_style::radiolight, styles_z_radiolight },
+		{ _z::_R::_style::zviewedit1, styles_z_zviewedit1 },
 		{ _z::_R::_style::zviewbutton1, styles_z_zviewbutton1 },
 		{ _z::_R::_style::zviewswitch1, styles_z_zviewswitch1 },
 		{ _z::_R::_style::switch2, styles_z_switch2 },
@@ -256,6 +258,7 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::button11, styles_z_button11 },
 		{ _z::_R::_style::seek2, styles_z_seek2 },
 		{ _z::_R::_style::edit2, styles_z_edit2 },
+		{ _z::_R::_style::zlinearlayout2, styles_z_zlinearlayout2 },
 		{ _z::_R::_style::zlinearlayout3, styles_z_zlinearlayout3 },
 		{ _z::_R::_style::zviewedit2, styles_z_zviewedit2 },
 		{ _z::_R::_style::zviewbutton2, styles_z_zviewbutton2 },
@@ -286,6 +289,18 @@ static zResource z_resources[] = {
 		{ _z::_R::_string::textSpan, "Finish work background application after blocked screen helps saved battery." },
 		{ _z::_R::_string::first_form, "First form!!!" },
 		{ _z::_R::_string::enter_family, "Entering family" },
+		{ _z::_R::_string::press_me, "Press me:)" },
+		{ _z::_R::_string::sergey, "Sergey" },
+		{ _z::_R::_string::progress, "Progress" },
+		{ _z::_R::_string::text_on_button, "Text on the button" },
+		{ _z::_R::_string::mode_already, "Mode of the already" },
+		{ _z::_R::_string::switcher, "Switcher" },
+		{ _z::_R::_string::activate, "Activate" },
+		{ _z::_R::_string::slider_text, "Slider" },
+		{ _z::_R::_string::prompt, "Prompt" },
+		{ _z::_R::_string::radio_dark, "Dark theme" },
+		{ _z::_R::_string::radio_light, "Light theme" },
+		{ _z::_R::_string::checkbox_text, "Checkbox flags" },
 		{ _z::_R::_string::menuOpenSave, "Browse..." },
 		{ _z::_R::_string::menuSettings, "Settings..." },
 		{ _z::_R::_string::menuProperties, "Properties..." },
@@ -322,17 +337,8 @@ static zResource z_resources[] = {
 		{ _z::_R::_string::menuTzx, "Editor TZX" },
 		{ _z::_R::_string::podskazka, "подсказка" },
 		{ _z::_R::_string::Perekljuchatelw, "Переключатель" },
-		{ _z::_R::_string::Podskazka, "Подсказка" },
-		{ _z::_R::_string::Temnaja, "Темная" },
-		{ _z::_R::_string::Svetlaja, "Светлая" },
-		{ _z::_R::_string::Flagzok, "Флажок" },
-		{ _z::_R::_string::Nagzmi_na_menja__, "Нажми на меня:)" },
-		{ _z::_R::_string::Regzim_gotovnosti, "Режим готовности" },
-		{ _z::_R::_string::Aktivacija, "Активация" },
 		{ _z::_R::_string::slayder, "слайдер" },
-		{ _z::_R::_string::Tekst_na_knopke, "Текст на кнопке" },
 		{ _z::_R::_string::Sergey, "Sergey" },
-		{ _z::_R::_string::Progress, "Прогресс" },
 		/* array */
 		{ _z::_R::_array::spinArray | ZT_END, "Ivan|Irina|Sergey Shatalov|Maxim|Vladislav|06.06.1979|Shatalov Sergey|Olga|Viktor Alexeevish|Cat|Maria|Nina Shatalova|Alex|Alexandr" }
 };
@@ -345,6 +351,18 @@ static zResource z_resources_ru[] = {
 		{ _z::_R::_string::textSpan, "Завершение работы фоновых приложений после блокировки экрана помогает экономить заряд. С другой стороны, в этом случае вы не будете получать новые сообщения (электронные, текстовые, из соцсетей и т.д.)." },
 		{ _z::_R::_string::first_form, "Первая форма!!!" },
 		{ _z::_R::_string::enter_family, "Введите фамилию и отчество" },
+		{ _z::_R::_string::press_me, "Нажми на меня:)" },
+		{ _z::_R::_string::sergey, "Сергей" },
+		{ _z::_R::_string::progress, "Прогресс" },
+		{ _z::_R::_string::text_on_button, "Текст на кнопке" },
+		{ _z::_R::_string::mode_already, "Режим готовности" },
+		{ _z::_R::_string::switcher, "Переключатель" },
+		{ _z::_R::_string::activate, "Активация" },
+		{ _z::_R::_string::slider_text, "слайдер" },
+		{ _z::_R::_string::prompt, "Подсказка" },
+		{ _z::_R::_string::radio_dark, "Темная" },
+		{ _z::_R::_string::radio_light, "Светлая" },
+		{ _z::_R::_string::checkbox_text, "Флажок" },
 		{ _z::_R::_string::menuOpenSave, "Менеджер..." },
 		{ _z::_R::_string::menuSettings, "Установки..." },
 		{ _z::_R::_string::menuProperties, "Свойства..." },

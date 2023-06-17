@@ -120,11 +120,15 @@ szi zViewGrid::measureChildrenSize(cszm& spec) {
         measureChild(child, spec);
         // добавить в кэш
         addViewCache(child);
-        auto rv(child->rview); rv[3 - vert] += cellSpace; rv[vert + 2] += lineSpace;
-        if(_max.isEmpty()) { if(spec[!vert].isNotExact()) lines = rv[3 - vert] * (linesGrid + 1); }
-        auto val(_max[!vert] + rv[3 - vert]);
+        auto& rv(child->rview);
+        //auto rv(child->rview); rv[3 - vert] += cellSpace; rv[vert + 2] += lineSpace;
+        if(_max.isEmpty()) {
+            if(spec[!vert].isNotExact()) cells = (rv[3 - vert] + cellSpace) * (linesGrid + 1);
+            if(spec[vert].isNotExact()) lines = (rv[vert + 2] + lineSpace) * (linesGrid + 1);
+        }
+        auto val(_max[!vert] + rv[3 - vert] + cellSpace);
         if(val < cells) { _max[!vert] = val; continue; }
-        val = _max[vert] + rv[vert + 2];
+        val = _max[vert] + rv[vert + 2] + lineSpace;
         if(val >= lines) break;
         _max[vert] = val;
     }

@@ -112,7 +112,7 @@ public:
     // загрузка стилей
     virtual void onInit(bool _theme) override;
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zViewTable"; }
+    virtual cstr typeName() const override { return "zViewGrid"; }
     // установка параметра
     void setParameters(i32 param, i32 value);
     // возврат параметра
@@ -171,6 +171,8 @@ class zViewDropdown : public zViewRibbon {
 public:
     // конструктор
     zViewDropdown(zStyle* styles) : zViewRibbon(styles, 0, true) { }
+    // вернуть имя типа
+    virtual cstr typeName() const override { return "zViewDropdown"; }
 protected:
     // рассчитать габариты всех дочерних
     virtual szi measureChildrenSize(cszm& spec);

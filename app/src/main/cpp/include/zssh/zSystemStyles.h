@@ -273,7 +273,7 @@ static zStyle styles_z_radiobutton[] = {
 	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_FOREGROUND_SCALE, 32767 },
 	{ Z_TEXT_DISTANCE, 5 },
-	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_END },
+	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_END | ZS_GRAVITY_VCENTER },
 	{ Z_GRAVITY, ZS_GRAVITY_VCENTER | ZS_GRAVITY_END },
 	{ Z_PADDING, 0x03030303 },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_TEXT_TEXT },
@@ -585,12 +585,27 @@ static zStyle styles_z_progress1[] = {
 };
 
 static zStyle styles_z_zscrolllayout1[] = {
+	{ Z_DECORATE, ZS_SCROLLBAR | ZS_GLOW },
 	{ Z_PADDING | ZT_END, 0x05050505 }
 };
 
 static zStyle styles_z_grid1[] = {
 	{ Z_STYLES, z.R.style.grid },
 	{ Z_BACKGROUND_TILES | ZT_END, z.R.integer.selectDrop }
+};
+
+static zStyle styles_z_zlinearlayout1[] = {
+	{ Z_PADDING | ZT_END, 0x05050505 }
+};
+
+static zStyle styles_z_zviewcheck1[] = {
+	{ Z_DECORATE, ZS_CHECKED },
+	{ Z_STYLES | ZT_END, z.R.style.checkbox }
+};
+
+static zStyle styles_z_radiolight[] = {
+	{ Z_DECORATE, ZS_CHECKED },
+	{ Z_STYLES | ZT_END, z.R.style.radiobutton }
 };
 
 static zStyle styles_z_zviewedit1[] = {
@@ -610,20 +625,6 @@ static zStyle styles_z_zviewedit1[] = {
 	{ Z_TEXT_FONT | ZT_THEME, Z_FONT1 },
 	{ Z_TEXT_NOWRAP, true },
 	{ Z_TEXT_STYLE | ZT_END, ZS_TEXT_ITALIC }
-};
-
-static zStyle styles_z_zlinearlayout1[] = {
-	{ Z_PADDING | ZT_END, 0x03030303 }
-};
-
-static zStyle styles_z_radiolight[] = {
-	{ Z_DECORATE, ZS_CHECKED },
-	{ Z_STYLES | ZT_END, z.R.style.radiobutton }
-};
-
-static zStyle styles_z_zviewcheck1[] = {
-	{ Z_DECORATE, ZS_CHECKED },
-	{ Z_STYLES | ZT_END, z.R.style.checkbox }
 };
 
 static zStyle styles_z_zviewbutton1[] = {
@@ -750,6 +751,10 @@ static zStyle styles_z_edit2[] = {
 	{ Z_STYLES, z.R.style.edittext },
 	{ Z_MODE, ZS_EDIT_TEXT },
 	{ Z_TEXT_STYLE | ZT_END, ZS_TEXT_BOLD_ITALIC | ZS_TEXT_STRIKE }
+};
+
+static zStyle styles_z_zlinearlayout2[] = {
+	{ Z_PADDING | ZT_END, 0x03030303 }
 };
 
 static zStyle styles_z_zlinearlayout3[] = {

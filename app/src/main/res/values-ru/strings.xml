@@ -4,6 +4,18 @@
     <string name="textSpan">Завершение работы фоновых приложений после блокировки экрана помогает экономить заряд. С другой стороны, в этом случае вы не будете получать новые сообщения (электронные, текстовые, из соцсетей и т.д.).</string>
     <string name="first_form">Первая форма!!!</string>
     <string name="enter_family">Введите фамилию и отчество</string>
+    <string name="press_me">Нажми на меня:)</string>
+    <string name="sergey">Сергей</string>
+    <string name="progress">Прогресс</string>
+    <string name="text_on_button">Текст на кнопке</string>
+    <string name="mode_already">Режим готовности</string>
+    <string name="switcher">Переключатель</string>
+    <string name="activate">Активация</string>
+    <string name="slider_text">слайдер</string>
+    <string name="prompt">Подсказка</string>
+    <string name="radio_dark">Темная</string>
+    <string name="radio_light">Светлая</string>
+    <string name="checkbox_text">Флажок</string>
     <string-array name="spinArray">
         <item>Иван</item>
         <item>Ирина</item>
