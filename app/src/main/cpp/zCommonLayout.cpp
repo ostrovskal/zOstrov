@@ -333,7 +333,7 @@ bool zScrollLayout::scrolling(int _delta) {
 
 class zLayoutEdit : public zViewEdit {
 public:
-    zLayoutEdit(zEditLayout* _lyt, zViewEdit* _edit) : zViewEdit(_edit->styles, _edit->id, 0), lyt(_lyt) {  }
+    zLayoutEdit(zEditLayout* _lyt, zViewEdit* _edit) : zViewEdit(_edit->styles, _edit->id, 0), lyt(_lyt) { setHint(_edit->getHint()); }
 protected:
     void updateText(int _what) override {
         if(_what == MSG_EDIT) lyt->childUpdateText(z_isempty(getText()));
@@ -353,11 +353,17 @@ static zStyle styles_z_hint[] = {
 
 zView *zEditLayout::attach(zView *v, int width, int height, int where) {
     auto _edit(dynamic_cast<zViewEdit*>(v));
-    if(countChildren() == 0 && _edit) {
+    if(!countChildren() && _edit) {
         setOnAnimation([this](zView*, int) {
             frame += !textEmpty * 2 - 1;
-            layoutChild();
-            return (frame > 0 && frame < 4);
+            auto cont(frame > 0 && frame < 4);
+            if(!cont && textEmpty) {
+                auto h(atView<zViewText>(1));
+                atView<zViewEdit>(0)->setHint(h->getText());
+                h->updateStatus(ZS_VISIBLED, false);
+            }
+            requestLayout();
+            return cont;
         });
         auto edit(new zLayoutEdit(this, _edit));
         auto hint(new zViewText(styles_z_hint, 0, 0));
@@ -366,10 +372,10 @@ zView *zEditLayout::attach(zView *v, int width, int height, int where) {
         hint->setTextSize(edit->getTextSize());
         hint->setTextStyle(edit->getTextStyle());
         hint->setText(_edit->getHint(), true);
-        hint->setTextColorForeground(edit->getTextHintColor());
+        hint->setTextColorForeground(0xffb8b8b8);//edit->getTextHintColor());
         hint->setGravity(edit->gravity);
-        delete v;
-        return edit;
+        hint->updateStatus(ZS_VISIBLED, false);
+        delete v; return edit;
     }
     return nullptr;
 }
@@ -404,7 +410,7 @@ void zEditLayout::layoutChild() {
         int x(edit->rclient.x + edit->ipad.x);
         switch(hint->gravity & ZS_GRAVITY_HORZ) {
             case ZS_GRAVITY_END:     x += (wmax - hint->rview.w - edit->ipad.extent(false)); break;
-            case ZS_GRAVITY_HCENTER: x += (wmax - hint->rview.w) / 2; break;
+            case ZS_GRAVITY_HCENTER: x += (wmax - hint->rview.w + 4) / 2; break;
         }
         hint->layout(rti(x, rclient.y + hsub, hint->rview.w, hint->rview.h));
     }
@@ -412,8 +418,11 @@ void zEditLayout::layoutChild() {
 
 void zEditLayout::childUpdateText(bool _empty) {
     textEmpty = _empty;
-    if((_empty && frame != 0) || (!_empty && frame != 4))
+    if((_empty && frame) || (!_empty && frame != 4)) {
+        atView<zViewEdit>(0)->setHint("");
+        atView(1)->updateStatus(ZS_VISIBLED, true);
         post(MSG_ANIM, duration, 0);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

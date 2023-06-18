@@ -224,6 +224,7 @@ zView* zActionBar::zAdapterMenu::getView(int position, zView *convert, zViewGrou
     tv->checked(item->isChecked());
     // показывать ли?
     tv->drw[DRW_FK]->visible = grav != ZS_GRAVITY_CENTER;
+    v->requestLayout();
     return v;
 }
 
@@ -253,9 +254,4 @@ void zActionBar::_stateView(zMenuGroup* grp, zView::STATE &state, bool save, int
         }
         if(i->getGroup()) _stateView(i->getGroup(), state, save, index);
     }
-}
-
-void zActionBar::stateView(STATE &state, bool save, int &index) {
-//    zView::stateView(state, save, index);
-    _stateView(root, state, save, index);
 }

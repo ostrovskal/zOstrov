@@ -34,7 +34,7 @@
     </style>
     <style name="scrollbar">
         <item name="background">#ffafafaf</item>
-        <item name="bkTiles">@integer/gradientRadial</item>
+        <item name="bkTiles">@integer/rect</item>
         <item name="sizeScrollBars">2dp</item>
         <item name="fadeScrollBars">true</item>
     </style>
@@ -150,9 +150,6 @@
     </style>
     <style name="spin_item">
         <item name="textColor">%color/color_text_text</item>
-<!--
-        <item name="textHighlightColor">%color/color_highlight_text</item>
--->
         <item name="textSize">@dimen/menuText</item>
         <item name="font">@drawable/font1</item>
         <item name="gravity">center</item>
@@ -165,6 +162,9 @@
     </style>
     <style name="list_item">
         <item name="fbo">true</item>
+        <item name="mask">@drawable/zssh</item>
+        <item name="mskColor">#909090</item>
+        <item name="mskTiles">@integer/rectRound</item>
         <item name="textColor">%color/color_text_text</item>
         <item name="textSize">@dimen/menuText</item>
         <item name="font">@drawable/font1</item>
@@ -334,7 +334,7 @@
         <item name="bkTiles">@integer/selectDrop</item>
         <item name="fadeScrollBars">false</item>
         <item name="decorate">vscrollbar|glow</item>
-        <item name="pad">1dp</item>
+        <item name="pad">2dp</item>
         <item name="selector">%color/color_selector</item>
     </style>
     <style name="msgForm">

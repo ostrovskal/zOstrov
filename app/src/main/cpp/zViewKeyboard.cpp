@@ -5,7 +5,6 @@
 
 zViewKeyboard::zViewKeyboard(cstr nameLayouts) : zViewGroup(styles_default, z.R.id.keyboard) {
     updateStatus(ZS_SYSTEM, true); updateStatus(ZS_VISIBLED, false);
-//    setGravity(ZS_GRAVITY_HCENTER);
     setDrawable(nullptr, DRW_FBO); duration = 20;
     setOnAnimation([this] (zView*, int) {
         if(current && owner && nPressSpec) {
@@ -200,12 +199,13 @@ void zViewKeyboard::onDraw() {
     zStringUTF8 n1, n2; u32 bkColor;
     auto baseTxt(atView<zViewButton>(0)), altTxt(atView<zViewButton>(1));
     baseTxt->updateStatus(ZS_VISIBLED, true); altTxt->updateStatus(ZS_VISIBLED, true);
+    drw[DRW_FK]->measure(rview.w, rview.h, 0, false);
+    drw[DRW_FK]->color.a = 0.9f; drw[DRW_FK]->draw(&rview); drw[DRW_FK]->color.a = 0.5f;
     for(auto& b : current->buttons) {
         if(b.spec.isNotEmpty()) {
             n1 = b.name[0]; n2.empty();
             baseTxt->setIcon(b.spec == "SHIFT" && activeShift ? z.R.integer.iconShiftFix : b.icon);
             bkColor = 0xff808080;
-
         } else {
             n1 = b.name[0]; n2 = b.name[1];
             bkColor = theme->themeColor;

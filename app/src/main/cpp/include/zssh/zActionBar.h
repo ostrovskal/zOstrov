@@ -110,7 +110,7 @@ public:
     // установка содержимого
     virtual void setContent(zView* _view);
     // сохранение/загрузка
-    virtual void stateView(STATE &state, bool save, int &index) override;
+    virtual void stateView(STATE &state, bool save, int &index) override { _stateView(root, state, save, index); }
     // вернуть имя типа
     virtual cstr typeName() const override { return "zActionBar"; }
     // отобразить/скрыть

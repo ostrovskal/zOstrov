@@ -133,11 +133,9 @@
 			<flag name="checked" value="128"/>
 			<flag name="disabled" value="256"/>
 		</attr>
-		<attr name="shape" format="enum|string">
-			<enum name="none" value="1"/>
-			<enum name="round" value="2"/>
-			<enum name="oval" value="4"/>
-		</attr>
+		<attr name="mask" format="reference|color|string"/>
+		<attr name="mskColor" format="color|string" />
+		<attr name="mskTiles" format="integer|string" />
 		<attr name="bkText" format="reference|color|string"/>
 		<attr name="bkTextColor" format="color|string"/>
 		<attr name="font" format="reference|color|string"/>

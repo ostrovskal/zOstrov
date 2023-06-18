@@ -93,6 +93,8 @@ public:
     // установка величины смещения тени текста
     void setShadowOffset(int x, int y) { shadow.set(x, y); invalidate(); }
 protected:
+    // вернуть спан по начальной/конечной позиции
+    SPAN* getSpan(int start, int end) const;
     // событие позиционирования
     virtual void onLayout(crti &position, bool changed) override;
     // событие определения габаритов

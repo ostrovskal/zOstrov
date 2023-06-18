@@ -179,7 +179,9 @@ enum ViewStyles {
     Z_ICON_TILES                = (67 | ZTT_INT | ZTT_THM),
     Z_PRIMARY                   = (68 | ZTT_INT | ZTT_THM),
     Z_TEXT_LENGTH               = (69 | ZTT_INT),
-    Z_SHAPE                     = (70 | ZTT_INT)
+    Z_MASK                      = (70 | ZTT_INT | ZTT_THM),
+    Z_MASK_COLOR                = (71 | ZTT_INT | ZTT_THM),
+    Z_MASK_TILES                = (72 | ZTT_INT | ZTT_THM)
 };
 
 // значения для темы

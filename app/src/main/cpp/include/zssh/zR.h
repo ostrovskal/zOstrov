@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Sun Jun 18 04:40:59 2023
+// Sun Jun 18 10:10:17 2023
 
 #pragma once
 
@@ -36,7 +36,7 @@ struct _z {
 				progressTextDark	= 0xFFB0B0B0, 	progressTextLight	= 0xFFFFFFFF, 
 				sliderTextDark	= 0xFFE0E0E0, 	sliderTextLight	= 0xFFE0E0E0, 
 				menuDark	= 0xFFAF4001, 	menuLight	= 0xFF00406F, 	menuTextDark	= 0xFFFFFFFF, 
-				menuTextLight	= 0xFFFFFFFF, 	hintTextDark	= 0xFF909090, 	hintTextLight	= 0xFF909090, 
+				menuTextLight	= 0xFFFFFFFF, 	hintTextDark	= 0xFF606060, 	hintTextLight	= 0xFF606060, 
 			};
 		}; 
 		_color color;

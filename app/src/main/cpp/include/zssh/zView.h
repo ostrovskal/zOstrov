@@ -56,7 +56,7 @@ class zView {
 public:
     union TAG {
         char* str{nullptr};
-        u32 u; float f;
+        u32 u; double f;
     };
     struct STATE {
         void reset() { data.free(); string.empty(); }
@@ -217,8 +217,6 @@ public:
     zMatrix mtx{};
     // задержка анимации
     u64 duration{50L};
-    // форма обрезки
-    u32 shape{0};
     // привязанное некое значение
     TAG tag{0};
     // идентификатор
@@ -290,6 +288,8 @@ protected:
     zView* parent{nullptr};
     // буфер отрисовки при отладке
     zDrawable drwDebug{this, -1};
+    // для наложения маски
+    zDrawable drwShape{this, -1};
     // спецификаторы габаритов
     szm measureSpec{};
     // предыдущая позиция
@@ -320,6 +320,7 @@ public:
 protected:
     // область обрезки
     virtual rti drawableClip() const override { return parent->rclip; }
+    bool flow{false};
 };
 
 // прокрутка

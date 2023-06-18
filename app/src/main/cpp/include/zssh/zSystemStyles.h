@@ -37,7 +37,7 @@ static zStyle styles_z_keyboardalt[] = {
 
 static zStyle styles_z_scrollbar[] = {
 	{ Z_BACKGROUND, 0xffafafaf },
-	{ Z_BACKGROUND_TILES, z.R.integer.gradientRadial },
+	{ Z_BACKGROUND_TILES, z.R.integer.rect },
 	{ Z_SCROLLBAR_SIZE, 2 },
 	{ Z_SCROLLBAR_FADE | ZT_END, true }
 };
@@ -180,6 +180,9 @@ static zStyle styles_z_spin_item[] = {
 
 static zStyle styles_z_list_item[] = {
 	{ Z_FBO, true },
+	{ Z_MASK, z.R.drawable.zssh },
+	{ Z_MASK_COLOR, 0xff909090 },
+	{ Z_MASK_TILES, z.R.integer.rectRound },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_COLOR_TEXT_TEXT },
 	{ Z_TEXT_SIZE, z.R.dimen.menuText },
 	{ Z_TEXT_FONT, z.R.drawable.font1 },
@@ -352,7 +355,7 @@ static zStyle styles_z_select[] = {
 	{ Z_BACKGROUND_TILES, z.R.integer.selectDrop },
 	{ Z_SCROLLBAR_FADE, false },
 	{ Z_DECORATE, ZS_VSCROLLBAR | ZS_GLOW },
-	{ Z_PADDING, 0x01010101 },
+	{ Z_PADDING, 0x02020202 },
 	{ Z_SELECTOR | ZT_THEME | ZT_END, Z_COLOR_SELECTOR }
 };
 
@@ -591,7 +594,8 @@ static zStyle styles_z_progress1[] = {
 };
 
 static zStyle styles_z_zscrolllayout1[] = {
-	{ Z_DECORATE | ZT_END, ZS_SCROLLBAR | ZS_GLOW }
+	{ Z_DECORATE, ZS_SCROLLBAR | ZS_GLOW },
+	{ Z_PADDING | ZT_END, 0x03030303 }
 };
 
 static zStyle styles_z_grid1[] = {
@@ -605,6 +609,7 @@ static zStyle styles_z_zlinearlayout1[] = {
 
 static zStyle styles_z_radiodark[] = {
 	{ Z_STYLES, z.R.style.radiobutton },
+	{ Z_DECORATE, ZS_CHECKED | ZS_ELLIPSIS },
 	{ Z_TEXT_NOWRAP | ZT_END, true }
 };
 
@@ -614,7 +619,7 @@ static zStyle styles_z_chkbox[] = {
 };
 
 static zStyle styles_z_radiolight[] = {
-	{ Z_DECORATE, ZS_CHECKED },
+	{ Z_DECORATE, ZS_CHECKED | ZS_ELLIPSIS },
 	{ Z_STYLES | ZT_END, z.R.style.radiobutton }
 };
 

@@ -720,8 +720,26 @@
 5. размер клавы(landscape)              +
 6. появление action                     +
 7. фокус по клику                       +
-8. переставлять фокус только для focus_in_touch
+8. переставлять фокус только            +
+    для focus_in_touch
 9. zEditLayout:
-    1. hint invisible, if text empty
-    2. hint visible, if text not empty
+    1. hint invisible, if text empty    +
+    2. hint visible, if text not empty  +
 
+8:00
+осталось:
+1. вставка/удаление символа
+2. выделение в редакторе
+3. наложение маски                      +
+4. доделать спаны
+5. resourceBuilder - темы
+6. glow - позиция на родителе           +
+
+10:30
+осталось на сегодня:
+1. вставка/удаление символа
+2. выделение в редакторе
+3. доделать спаны
+4. resourceBuilder - темы:
+    4.1. атрибуты
+    4.2. задать темы

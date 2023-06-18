@@ -4,6 +4,7 @@
     xmlns:z="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     z:decorate="scrollbar|glow"
+    z:pad="3dp"
     android:layout_width="match_parent" android:layout_height="match_parent">
     <LinearLayout
         android:orientation="vertical"
@@ -14,8 +15,7 @@
             android:id="@+id/select"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            z:styles="@style/select"
-            />
+            z:styles="@style/select" />
         <GridView
             android:id="@+id/grid1"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -33,6 +33,7 @@
                 android:layout_height="match_parent"
                 z:layout_group="1" z:text="@string/radio_dark"
                 z:styles="@style/radiobutton"
+                z:decorate="checked|ellipsis"
                 z:textWrap="true" />
             <CheckBox
                 android:layout_width="wrap_content" android:layout_weight="2"
@@ -45,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 z:layout_group="1" z:text="@string/radio_light"
-                z:decorate="checked"
+                z:decorate="checked|ellipsis"
                 z:styles="@style/radiobutton" />
         </LinearLayout>
         <EditLayout

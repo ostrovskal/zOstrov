@@ -428,6 +428,16 @@ void zViewText::mergeSpans(czs& _text) {
     if(len && pos < len) cacheSpans += new SPAN(defSpan, pos, len, defPaint);
 }
 
+zViewText::SPAN* zViewText::getSpan(int start, int end) const {
+/*
+    return std::any_of<zViewText::SPAN, zViewText::SPAN>(std::begin(spans), std::end(spans), [start, end](const auto &s) {
+        return ((s->s >= start && s->e <= end) ? s : nullptr);
+    });
+*/
+    for(auto& s : spans) { if(s->s >= start && s->e <= end) return s; }
+    return nullptr;
+}
+
 void zViewText::setSpan(zTextSpan* _span, int start, int end, int flags) {
     auto len(realText.count());
     start = z_max(0, start); end = z_min(len ? len : INT_MAX, end);

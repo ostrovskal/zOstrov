@@ -64,6 +64,6 @@
     <color name="menuTextDark">#ffffff</color>
     <color name="menuTextLight">#ffffff</color>
     <!-- цвет подсказки редактора -->
-    <color name="hintTextDark">#909090</color>
-    <color name="hintTextLight">#909090</color>
+    <color name="hintTextDark">#606060</color>
+    <color name="hintTextLight">#606060</color>
 </resources>

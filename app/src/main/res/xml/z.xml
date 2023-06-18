@@ -133,11 +133,9 @@
             <item name="checked" value="ZS_CHECKED" />
             <item name="disabled" value="ZS_DISABLED" />
         </attr>
-        <attr name="shape" translate="Z_SHAPE" format="enum">
-            <item name="none" value="0" />
-            <item name="round" value="ZS_ROUND" />
-            <item name="oval" value="ZS_OVAL" />
-        </attr>
+        <attr name="mask" translate="Z_MASK" format="drawable" />
+        <attr name="mskColor" translate="Z_MASK_COLOR" format="color" />
+        <attr name="mskTiles" translate="Z_MASK_TILES" format="integer" />
         <attr name="bkText" translate="Z_TEXT_BACKGROUND" format="drawable" />
         <attr name="bkTextColor" translate="Z_TEXT_BACKGROUND_COLOR" format="color" />
         <attr name="font" translate="Z_TEXT_FONT" format="drawable" />

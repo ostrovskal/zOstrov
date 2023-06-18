@@ -40,12 +40,11 @@ void zView::changeTheme() {
 }
 
 void zView::onInit(bool _theme) {
-    oldPos.set(INT_MAX, INT_MAX, 0, 0); zParamDrawable fk, bk;
-    styles->enumerate([this, &bk, &fk, _theme](u32 attr) {
+    oldPos.set(INT_MAX, INT_MAX, 0, 0); zParamDrawable fk, bk, sh;
+    styles->enumerate([this, &bk, &fk, &sh, _theme](u32 attr) {
         auto v(&zTheme::value); auto val((int)v->u);
         attr |= _theme * ZTT_THM;
         switch(attr) {
-            case Z_SHAPE:               shape       = val; break;
             case Z_DURATION:			duration    = (u64)val; break;
             case Z_SCALE_X:				scale.x     = v->f; break;
             case Z_SCALE_Y:				scale.y     = v->f; break;
@@ -64,6 +63,9 @@ void zView::onInit(bool _theme) {
             case Z_IPADDING:		    ipad.set(val); break;
             case Z_PADDING:			    pad.set(val); break;
             case Z_MARGINS:             margin.set(val); break;
+            case Z_MASK:                sh.texture  = val; break; //drwShape.init(z.R.drawable.zssh, 0xff7f7f7f, val, 0, 1.0f); break;
+            case Z_MASK_COLOR:          sh.color    = val; break; //drwShape.init(z.R.drawable.zssh, 0xff7f7f7f, val, 0, 1.0f); break;
+            case Z_MASK_TILES:          sh.tiles    = val; break;//drwShape.init(z.R.drawable.zssh, 0xff7f7f7f, val, 0, 1.0f); break;
             case Z_FOREGROUND:		    fk.texture  = val; break;
             case Z_FOREGROUND_COLOR:	fk.color    = val; break;
             case Z_FOREGROUND_TILES:	fk.tiles    = val; break;
@@ -78,6 +80,7 @@ void zView::onInit(bool _theme) {
         }
     });
     // базовые отображатели
+    if(sh.texture) drwShape.init(sh);
     setDrawable(&bk, DRW_BK);
     setDrawable(&fk, DRW_FK);
     // ротация/масштаб
@@ -119,12 +122,12 @@ void zView::draw() {
             drw[DRW_FBO]->drawFBO(fbo, [this] {
                 drw[DRW_BK]->draw(&rview);
                 onDraw();
+                // форма обрезки
+                if(drwShape.tile) drawShape();
             });
             updateStatus(ZS_DIRTY_LAYER, !isFBO());
         }
         onDrawFBO();
-        // форма обрезки
-        if(shape) drawShape();
         drawDebug();
         // каретка
         manager->drawCaret(this);
@@ -151,8 +154,6 @@ HANDLER_TOUCH_MESSAGE* zView::getTouchHandler(AInputEvent* event) {
         }
         // инициализируем
         touchObject->view = this;
-        // установка фокуса
-//        requestFocus();
     }
     return touchObject;
 }
@@ -286,7 +287,9 @@ void zView::defaultOnMeasure(cszm& spec, szi size) {
 }
 
 void zView::drawShape() {
-
+    glBlendFunc(GL_DST_COLOR, GL_SRC_COLOR);
+    drwShape.draw(&rview);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void zView::onLayout(crti &position, bool changed) {
@@ -302,6 +305,7 @@ void zView::onLayout(crti &position, bool changed) {
         // позиционирование базовых отображателей
         drw[DRW_BK]->measure(rview.w, rview.h, 3, false);
         drw[DRW_FBO]->measure(rview.w, rview.h, 3, false);
+        drwShape.measure(rview.w, rview.h, 3, false);
     }
 }
 
@@ -316,6 +320,7 @@ bool zView::isFocus() const {
 }
 
 void zView::stateView(STATE &state, bool save, int &index) {
+    auto dbl((u32*)&tag.f);
     if(save) {
         state.data += (status & ZS_STATES);
         state.data += (u32)animator.frame;
@@ -329,6 +334,8 @@ void zView::stateView(STATE &state, bool save, int &index) {
         state.data += (u32)(rot.z * 65535.0f);
         state.data += scroll.x;
         state.data += scroll.y;
+        state.data += dbl[0];
+        state.data += dbl[1];
     } else {
         status  &= ~ZS_STATES; status |= (state.data[index++] & ZS_STATES);
         animator.frame = state.data[index++];
@@ -347,7 +354,7 @@ void zView::post(int what, u64 millis, int arg) {
 }
 
 void zView::requestFocus() {
-    if(isFocusable()) {
+    if(isFocusableInTouch()) {
         manager->changeFocus(this);
     }
 }
@@ -401,6 +408,8 @@ zViewGlow::zViewGlow(zView* group) : zView(styles_z_glow, 0) {
             alpha = v / 2.0f;
             // посчитать размер
             setScale(vert ? 1 : v, vert ? v : 1);
+            rview[!vert] = parent->rclient[!vert];
+            rview[vert]  = parent->edges(vert, flow);
         }
         invalidate();
         updateStatus(ZS_VISIBLED, cont);
@@ -411,15 +420,13 @@ zViewGlow::zViewGlow(zView* group) : zView(styles_z_glow, 0) {
 void zViewGlow::start(float _delta, bool _vert, bool _flow) {
     // параметры отображения
     if(isVisibled()) return;
-    updateStatus(ZS_VISIBLED, true); vert = _vert;
+    updateStatus(ZS_VISIBLED, true); vert = _vert; flow = _flow;
     alpha = 0.0f; setRotation(0, 0, _flow * 180);
     // базовый тайл
     drw[DRW_BK]->tile = _vert ? z.R.integer.horzGlow : z.R.integer.vertGlow;
     drw[DRW_BK]->measure(_vert * parent->rclient.w, !_vert * parent->rclient.h, !_vert + 1, false);
     // габариты и позиция
     rview.w = drw[DRW_BK]->bound.w; rview.h = drw[DRW_BK]->bound.h;
-    rview[!_vert] = parent->rclient[!_vert];
-    rview[_vert]  = parent->edges(_vert, _flow);
     // анимация
     _delta = z_min(2.2f, fabs(_delta * 50.0f));
     animator.init(0.0f, false);
