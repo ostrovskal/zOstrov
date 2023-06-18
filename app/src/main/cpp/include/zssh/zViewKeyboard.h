@@ -19,6 +19,8 @@ public:
     virtual cstr typeName() const override { return "zViewKeyboard"; }
     // отобразить/скрыть
     virtual void show(u32 _id, bool set);
+    // пропускать
+    virtual void stateView(STATE& state, bool save, int& index) override { }
     // установка текущего макета
     void setLayout(czs& name);
     // не обновлять

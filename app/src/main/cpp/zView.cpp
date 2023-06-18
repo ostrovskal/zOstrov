@@ -152,7 +152,7 @@ HANDLER_TOUCH_MESSAGE* zView::getTouchHandler(AInputEvent* event) {
         // инициализируем
         touchObject->view = this;
         // установка фокуса
-        requestFocus();
+//        requestFocus();
     }
     return touchObject;
 }
@@ -202,6 +202,7 @@ i32 zView::onTouchEvent(zTouch *touch) {
     }
     if(isClickabled()) {
         if(touch->click()) {
+            requestFocus();
             if(onClick) onClick(this, isLongClickabled() && touch->isLongClick());
             return TOUCH_ACTION;
         }
@@ -503,9 +504,13 @@ zViewCaret::zViewCaret() : zView(styles_z_caret, 0) {
 void zViewCaret::update(zView* own, int x, int y, int h) {
     parent = own; updateStatus(ZS_VISIBLED, own != nullptr);
     if(own) {
+        int italic(0);
         auto _own(dynamic_cast<zViewEdit*>(own));
-        if(_own) setRotation(0, 0, (_own->getTextStyle() & ZS_TEXT_ITALIC) * 8);
-        rview.set(x + own->rclient.x, y + own->rclient.y, 4, h);
+        if(_own) {
+            italic = (_own->getTextStyle() & ZS_TEXT_ITALIC);
+            setRotation(0, 0, italic * 8);
+        }
+        rview.set(x + own->rclient.x + italic, y + own->rclient.y, 4, h);
         drw[DRW_BK]->measure(4, h, PIVOT_ALL, false);
         animator.frame = 0;
         post(MSG_ANIM, duration, 0);

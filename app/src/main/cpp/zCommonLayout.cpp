@@ -62,7 +62,7 @@ void zAbsoluteLayout::onLayout(crti &position, bool changed) {
     for(auto& child : children) {
         if(child->isVisibled()) {
             auto lps(&child->lps);
-            child->layout(rti(rclient.x + lps->x, rclient.y + lps->y, child->rview.w, child->rview.h));
+            child->layout(rti(rclient.x + lps->x, rclient.y + lps->y, rclient.w, rclient.h));
         }
     }
 }

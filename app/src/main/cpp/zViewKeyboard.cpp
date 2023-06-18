@@ -5,6 +5,7 @@
 
 zViewKeyboard::zViewKeyboard(cstr nameLayouts) : zViewGroup(styles_default, z.R.id.keyboard) {
     updateStatus(ZS_SYSTEM, true); updateStatus(ZS_VISIBLED, false);
+//    setGravity(ZS_GRAVITY_HCENTER);
     setDrawable(nullptr, DRW_FBO); duration = 20;
     setOnAnimation([this] (zView*, int) {
         if(current && owner && nPressSpec) {
@@ -157,10 +158,11 @@ i32 zViewKeyboard::onTouchEvent(zTouch *touch) {
 }
 
 void zViewKeyboard::onMeasure(cszm& spec) {
-    auto widthSize(spec.w.size()), heightSize(z_percent(zGL::instance()->getSizeScreen(true), minHeight));
+    auto heightSize(z_percent(zGL::instance()->getSizeScreen(true), minHeight + 10 * manager->isLandscape()));
+    auto widthSize(z_min(spec.w.size(), (int)roundf((float)heightSize * 2.5f)));
     auto sz(current ? current->size : szi(1, 1));
-    deltaWidth = ((float)widthSize / (float)sz.w);
     deltaHeight = ((float)heightSize / (float)sz.h);
+    deltaWidth = ((float)widthSize / (float)sz.w);
     setMeasuredDimension(widthSize, heightSize);
     isDrawing = true;
 }
@@ -261,7 +263,8 @@ void zViewKeyboard::show(u32 _id, bool set) {
                     y = ((owner->edges(true, true) + owner->rview.h / 2) - rview.y);
                     if(y < 0) return;
                 }
-                parent->scroll.y += y;
+                //scrollY = parent->scroll.y;
+                parent->scroll.y += y;// offsetY = y;
                 owner->requestPosition();
                 return;
             }

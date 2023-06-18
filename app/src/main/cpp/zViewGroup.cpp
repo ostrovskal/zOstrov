@@ -180,11 +180,13 @@ void zViewGroup::onInit(bool _theme) {
         }
     });
     // глоу
-    SAFE_DELETE(glow);
-    if(decor & ZS_GLOW) glow = new zViewGlow(this);
+    if(decor & ZS_GLOW) {
+        SAFE_DELETE(glow);
+        glow = new zViewGlow(this);
+    }
     // прокрутка
-    SAFE_DELETE(scrollBar);
     if(decor & ZS_SCROLLBAR) {
+        SAFE_DELETE(scrollBar);
         if((decor & ZS_SCROLLBAR) == ZS_SCROLLBAR) decor = vert * ZS_VSCROLLBAR;
         scrollBar = new zViewScrollBar(this, (decor & ZS_SCROLLBAR) == ZS_VSCROLLBAR);
         if(sc.type != -1) scrollBar->fade = sc.type;

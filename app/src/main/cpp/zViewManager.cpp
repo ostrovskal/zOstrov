@@ -405,7 +405,7 @@ void zViewManager::updateNativeWindow(AConfiguration* config, zStyle* _styles, z
             actionBar->setMenu(z.R.integer.iconAppZx, main_menu);
             actionBar->setAdapter(new zAdapterList({}, new zFabricMenuItem(styles_z_menu_item)));
             // добавить клаву
-            common->attach(keyboard = new zViewKeyboard("keyboardDefault.xml"), 0, sz.h, VIEW_MATCH, VIEW_WRAP);
+            common->attach(keyboard = new zViewKeyboard("keyboardDefault.xml"), ZS_GRAVITY_HCENTER, sz.h, VIEW_WRAP, VIEW_WRAP);
             setContent();
             status &= ~Z_CHANGE_THEME;
         }

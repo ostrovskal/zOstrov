@@ -184,8 +184,8 @@ void zViewText::drawText() {
             coord.x += paint->getMargin();
             auto _subH(cacheStr->size - paint->getSize());
             // проверка - если спан сам себя рисует
-//            if(sp->span->draw(coord.x, coord.y, cacheStr->size, paint))
-            //              coord.x += paint->width;
+            if(sp->span->draw(coord.x, coord.y, cacheStr->size, paint))
+                coord.x += 0;//paint->width;
             while(posSpan < sp->e) {
                 // корректировать вертикальную позицию, относительно базовой линии шрифта
                 if(_subH) {
@@ -242,7 +242,6 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
         return { widthRectCache, maxHeight };
     }
     // разбить текст по спец. символам по ширине ректа
-    auto tex(drw[DRW_TXT]->texture);
     if(testFlags(ZS_ELLIPSIS)) {
         _ellipsis = widthRect;
         ellText = _text; _text = ellText.str();
@@ -455,9 +454,8 @@ void zViewText::delSpan(zTextSpan* _span) {
     if(idx != -1) spans.erase(idx, 1, true);
 }
 
-bool zViewText::setHtmlText(czs& html, const std::function<bool(cstr tag, bool end, zHtml* html)>& parser) {
+bool zViewText::setHtmlText(czs& text, const std::function<bool(cstr tag, bool end, zHtml* html)>& parser) {
     clearCacheSpans(true);
-/*
     realText.empty(); bool listOrdered(true); int listNum(1), listRev(1);
     zHtml html(text.str(), [this, &parser, &listOrdered, &listNum, &listRev](cstr tag, bool end, zHtml* _html) {
         static float htmlHeaderSize[] = { 1.7f, 1.6f, 1.5f, 1.4f, 1.3f, 1.2f };
@@ -466,46 +464,46 @@ bool zViewText::setHtmlText(czs& html, const std::function<bool(cstr tag, bool e
             // идентификация спанов
             auto hash(z_hash(tag, z_strlen(tag)));
             auto flags(end ? SPAN_FLAGS_DEFAULT : SPAN_FLAGS_MARK);
-            auto pos(_html->text.length());
+            auto pos(_html->text.count());
             switch(hash) {
                 // big
-                case 0xb79e14f3: span = new zTextSpanRelativeHeightSize(1.5f); break;
-                    // small
-                case 0xbf4847de: span = new zTextSpanRelativeHeightSize(0.8f); break;
-                    // br
-                case 0x221bed08: _html->text += '\n'; break;
-                    // p div
+                case 0xb79e14f3: span = new zTextSpanRelativeSize(1.5f); break;
+                // small
+                case 0xbf4847de: span = new zTextSpanRelativeSize(0.8f); break;
+                // br
+                case 0x221bed08: _html->text += "\n"; break;
+                // p div
                 case 0x3ee0e:
                 case 0x79832919:
                     if(_html->text.isNotEmpty() && !end) {
-                        if(_html->text[pos] != '\n') { _html->text += '\n'; pos++; }
+                        if(_html->text[pos] != '\n') { _html->text += "\n"; pos++; }
                         span = new zTextSpanParagraph();
                         flags = SPAN_FLAGS_SPECIFIC;
                     }
                     break;
-                    // h1 - h6
+                // h1 - h6
                 case 0xc7ada38:
                 case 0xc7c22dd:
                 case 0xc7d9a75:
                 case 0xc7aa490:
                 case 0xc7cf97d:
                 case 0xc79a5b2:
-                    if(_html->text.isNotEmpty() && _html->text[pos] != '\n') { _html->text += '\n'; pos++; }
-                    _html->text += '\n'; pos++;
-                    span = new zTextSpanRelativeHeightSize(htmlHeaderSize[tag[1] - '1']);
+                    if(_html->text.isNotEmpty() && _html->text[pos] != '\n') { _html->text += "\n"; pos++; }
+                    _html->text += "\n"; pos++;
+                    span = new zTextSpanRelativeSize(htmlHeaderSize[tag[1] - '1']);
                     break;
-                    // b strong
+                // b strong
                 case 0x50e75:
-                case 0x8e4b388b:span = new zTextSpanStyle(ZS_TYPEFACE_BOLD); break;
-                    // i em
+                case 0x8e4b388b:span = new zTextSpanStyle(ZS_TEXT_BOLD); break;
+                // i em
                 case 0x6b5:
-                case 0xb073db:  span = new zTextSpanStyle(ZS_TYPEFACE_ITALIC); break;
-                    // u
+                case 0xb073db:  span = new zTextSpanStyle(ZS_TEXT_ITALIC); break;
+                // u
                 case 0x6ae4b:   span = new zTextSpanUnderline(); break;
-                    // s strike
+                // s strike
                 case 0x51bdf:
                 case 0xef748f41:span = new zTextSpanStrikeline(); break;
-                    // img
+                // img
                 case 0x9ae16064:
 //                    _html->text += '!';
                     span = new zTextSpanImage(_html->getStringAttr("src", "znull"),
@@ -514,37 +512,37 @@ bool zViewText::setHtmlText(czs& html, const std::function<bool(cstr tag, bool e
                                               _html->getIntegerAttr("pad", RADIX_DEC, 0));
                     flags = SPAN_FLAGS_SPECIFIC;
                     break;
-                    // a
+                // a
                 case 0x58de4:   span = new zTextSpanUrl(_html->getStringAttr("href", "self")); break;
-                    // title
-                case 0x6f58b184:span = new zTextSpanHeightSize(10); break;
-                    // sub
+                // title
+                case 0x6f58b184:span = new zTextSpanAbsoluteSize(10); break;
+                // sub
                 case 0x80391c79:span = new zTextSpanSubscript(); break;
-                    // sup
+                // sup
                 case 0x803c7044:span = new zTextSpanSuperscript(); break;
-                    // font
+                // font
                 case 0x89c2d575:
                     break;
-                    // ul ol
+                // ul ol
                 case 0x2c4b9944:
                 case 0x1466284c:
                     listOrdered = (hash == 0x1466284c);
                     listNum = _html->getIntegerAttr("start", RADIX_DEC, 1);
                     listRev = _html->getIntegerAttr("reversed", RADIX_DEC, 0);
                     break;
-                    // li
+                // li
                 case 0x13844afb:
                     if(!end) {
-                        if(_html->text.isNotEmpty() && _html->text[pos] != '\n') { _html->text += '\n'; pos++; }
+                        if(_html->text.isNotEmpty() && _html->text[pos] != '\n') { _html->text += "\n"; pos++; }
                         span = new zTextSpanBullet(listOrdered, listNum);
                         flags = SPAN_FLAGS_SPECIFIC;
                         listNum += !listRev * 2 - 1;
                     }
                     break;
-                    // bkg background
+                // bkg background
                 case 0xc9b77622:
                 case 0x1aaadb91: span = new zTextSpanBackgroundColor(_html->getColorAttr("value", -1)); break;
-                    // c color
+                // c color
                 case 0xdbf89687:
                 case 0x4595e:   span = new zTextSpanForegrounColor(_html->getColorAttr("value", -1)); break;
                 default: break;
@@ -560,6 +558,5 @@ bool zViewText::setHtmlText(czs& html, const std::function<bool(cstr tag, bool e
             spans.erase(i--, 1, true);
         }
     }
-*/
     return true;
 }

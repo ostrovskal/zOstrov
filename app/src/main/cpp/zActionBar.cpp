@@ -60,7 +60,6 @@ zActionBar::zActionBar(zStyle* _styles, zStyle* _styles_buttons, zStyle* _styles
     content  = new zFrameLayout(styles_default, 0);
     popup    = new zViewPopup(styles_default, this, dropdown);
     minMaxSize.set(z_dp(z.R.dimen.actionMinWidth), 0, z_dp(z.R.dimen.actionMinHeight), 0);
-    show(true);
 }
 
 void zActionBar::show(bool _show) {
@@ -257,6 +256,6 @@ void zActionBar::_stateView(zMenuGroup* grp, zView::STATE &state, bool save, int
 }
 
 void zActionBar::stateView(STATE &state, bool save, int &index) {
-    zView::stateView(state, save, index);
+//    zView::stateView(state, save, index);
     _stateView(root, state, save, index);
 }

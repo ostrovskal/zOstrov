@@ -701,4 +701,27 @@
 2:30
 сейчас:
 1. спаны:
-    1.1.
+    1.1. fkColor
+    1.2. bkColor
+    1.3. absSize
+    1.4. relSize
+    1.5. Style
+    1.6. Image
+    1.7. Paragraph
+    1.8. Bullet
+    1.9. Url
+    1.10.subScript
+    1.11.superScript
+    1.12.underline
+    1.13.strike
+2. вставка/удаление символа
+3. выделение в редакторе
+4. isWrap = true/false
+5. размер клавы(landscape)              +
+6. появление action                     +
+7. фокус по клику                       +
+8. переставлять фокус только для focus_in_touch
+9. zEditLayout:
+    1. hint invisible, if text empty
+    2. hint visible, if text not empty
+

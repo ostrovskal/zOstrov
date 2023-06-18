@@ -53,11 +53,24 @@
             android:layout_height="wrap_content">
             <EditText
                 android:id="@+id/edit1" z:fbo="true"
-                android:layout_width="match_parent" android:layout_height="wrap_content"
-                z:textColor="%color/color_text_text" z:textSize="20sp" z:hint="@string/prompt" z:fkGravity="center"
-                z:icon="@drawable/zssh" z:icGravity="end" z:icColor="#ffffffff" z:icTiles="@integer/iconEditEx" z:inputMode="phone"
-                z:pad="1dp" android:gravity="center_vertical|end" z:foreground="%drawable/bitmap_common" z:fkTiles="@integer/edit"
-                z:font="%drawable/font1" z:textWrap="true" z:textStyle="bold|underline" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                z:textColor="%color/color_text_text"
+                z:textSize="20sp"
+                z:hint="@string/prompt"
+                z:fkGravity="center"
+                z:icon="@drawable/zssh"
+                z:icGravity="end"
+                z:icColor="#ffffffff"
+                z:icTiles="@integer/iconEditEx"
+                z:inputMode="text"
+                z:pad="1dp"
+                android:gravity="center_vertical|center_horizontal"
+                z:foreground="%drawable/bitmap_common"
+                z:fkTiles="@integer/edit"
+                z:font="%drawable/font1"
+                z:textWrap="true"
+                z:textStyle="bold_italic" />
         </EditLayout>
         <ListView
             android:id="@+id/list1"

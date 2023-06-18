@@ -627,14 +627,14 @@ static zStyle styles_z_zviewedit1[] = {
 	{ Z_ICON_GRAVITY, ZS_GRAVITY_END },
 	{ Z_ICON_COLOR, 0xffffffff },
 	{ Z_ICON_TILES, z.R.integer.iconEditEx },
-	{ Z_MODE, ZS_EDIT_PHONE },
+	{ Z_MODE, ZS_EDIT_TEXT },
 	{ Z_PADDING, 0x01010101 },
-	{ Z_GRAVITY, ZS_GRAVITY_VCENTER | ZS_GRAVITY_END },
+	{ Z_GRAVITY, ZS_GRAVITY_VCENTER | ZS_GRAVITY_HCENTER },
 	{ Z_FOREGROUND | ZT_THEME, Z_BITMAP_COMMON },
 	{ Z_FOREGROUND_TILES, z.R.integer.edit },
 	{ Z_TEXT_FONT | ZT_THEME, Z_FONT1 },
 	{ Z_TEXT_NOWRAP, true },
-	{ Z_TEXT_STYLE | ZT_END, ZS_TEXT_BOLD | ZS_TEXT_UNDERLINE }
+	{ Z_TEXT_STYLE | ZT_END, ZS_TEXT_BOLD_ITALIC }
 };
 
 static zStyle styles_z_zviewbutton1[] = {

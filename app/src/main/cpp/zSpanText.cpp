@@ -95,3 +95,100 @@ int zTextPaint::indexReverseOf(cstr _text, int length, int screenLimit) const {
     }
     return _count;
 }
+
+class zViewImageSpan : public zViewImage {
+public:
+    zViewImageSpan(zTextSpanImage* _span, int tile) : zViewImage(styles_default, 0, tile), span(_span) {
+        minMaxSize.set(10_dp, 0, 10_dp, 0);
+    }
+protected:
+    zTextSpanImage* span{nullptr};
+};
+
+zTextSpanImage::zTextSpanImage(cstr nameImage, int tile, float factor, int pad) {
+/*
+    pad = z_dp(pad);
+    image = new zViewImageSpan(this, tile);
+    image->onInit(false);
+    image->setBitmapFactor(factor);
+    image->setPadding(rti(pad, pad, pad, pad));
+    image->drs[zView::DR_IDX_FK]->texture = vmanager->cache.get(nameImage, nullptr);
+    image->measure(MAKE_MEASURE_SPEC(MEASURE_UNDEF, 0), MAKE_MEASURE_SPEC(MEASURE_UNDEF, 0));
+*/
+}
+
+zTextSpanImage::~zTextSpanImage() { delete image; }
+
+bool zTextSpanImage::draw(int x, int y, int hmax, zTextPaint *paint) {
+/*
+    auto pad(image->pad);
+    rti r(x + pad.x, y + (hmax - paint->height) / 2 + pad.y, paint->width, paint->height);
+    image->drs[zView::DR_IDX_FK]->invalidate(paint->width, paint->height);
+    image->drs[zView::DR_IDX_FK]->layout(&r);
+    image->drs[zView::DR_IDX_FK]->specDraw(false);
+*/
+    return true;
+}
+
+void zTextSpanImage::updateState(zTextPaint *paint) {
+/*
+    auto pad(image->pad);
+    paint->width = image->rfull.w + pad.extent(false);
+    paint->height = image->rfull.h + pad.extent(true);
+*/
+}
+
+zTextSpanBullet::zTextSpanBullet(bool _ordered, int _index) : zTextSpanImage("zssh", z.R.integer.iconBullet, 0.33f, !_ordered * 2), ordered(_ordered) {
+/*
+    if(_ordered) {
+        strIdx = z_ntos(&_index, RADIX_DEC, true);
+        strIdx += ". ";
+    }
+*/
+}
+
+void zTextSpanBullet::updateState(zTextPaint *paint) {
+/*
+    if(!ordered) {
+        zTextSpanImage::updateState(paint);
+    } else {
+        // определить ширину
+        auto tex(paint->texture); auto _text(strIdx.str());
+        int width(0); auto factor((float)paint->height / (float)tex->getSize().h);
+        while(*_text) width += tex->widthGlyph((u8)*_text++, factor);
+        width = z_max(width, image->rfull.w);
+        paint->width = width;
+    }
+    paint->preWidth = 40;
+*/
+}
+
+bool zTextSpanBullet::draw(int x, int y, int hmax, zTextPaint *paint) {
+/*
+    if(!ordered) return zTextSpanImage::draw(x, y, hmax, paint);
+    auto htex(paint->texture->getSize().h);
+    // выровнять по базовой линии
+    auto sc1((float)paint->height / (float)htex), sc2((float)hmax / (float)htex);
+    auto bs1((int)round((float)paint->baseLine * sc2 + 0.5f));
+    auto bs2((int)round((float)paint->baseLine * sc1 + 0.5f));
+    auto subH((hmax - bs1) - (paint->height - bs2));
+    rti r(x, y + subH, paint->width, paint->height);
+    auto len(strIdx.length()), width(paint->width); paint->width = 0;
+    image->drs[zView::DR_IDX_FK]->make(len * 6);
+    image->drs[zView::DR_IDX_FK]->texture = vmanager->cache.get(paint->texture->name, image->drs[zView::DR_IDX_FK]->texture);
+    image->drs[zView::DR_IDX_FK]->clip = r;
+    image->drs[zView::DR_IDX_FK]->color = zColor::shadow;
+    image->drs[zView::DR_IDX_FK]->makeText(strIdx, len, r, paint, true);
+    image->drs[zView::DR_IDX_FK]->specDraw(false);
+    image->drs[zView::DR_IDX_FK]->color.set(paint->fkColor);
+    image->drs[zView::DR_IDX_FK]->makeText(strIdx, len, r, paint, false);
+    image->drs[zView::DR_IDX_FK]->specDraw(false);
+    paint->width = width;
+*/
+    return true;
+}
+
+zTextSpanUrl::zTextSpanUrl(cstr _url) {
+    color = theme->styles->_int(Z_COLOR_LINK_TEXT, 0xffff0000);
+    url = _url;
+}
