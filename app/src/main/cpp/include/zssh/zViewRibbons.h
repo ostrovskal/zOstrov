@@ -225,8 +225,8 @@ protected:
     virtual void onLayout(crti &position, bool changed) override;
     // вычисление размера
     virtual void onMeasure(cszm& spec) override;
-    // касание
-    virtual i32 onTouchEvent(zTouch *touch) override;
+    // уведомление о событии
+    virtual void notifyEvent(HANDLER_MESSAGE* msg) override;
     // адаптер
     zAdapterSelect* adapter{nullptr};
     // выпадающий список

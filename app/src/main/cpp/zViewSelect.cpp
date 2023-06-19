@@ -34,6 +34,7 @@ zViewSelect::zViewSelect(zStyle* _styles, i32 _id) : zViewGroup(_styles, _id) {
     popup    = new zViewPopup(styles_default, this, dropdown);
     dropdown->setOnClick([this](zView* v, int sel) { setItemSelected(sel); });
     minMaxSize.set(z_dp(z.R.dimen.selectMinWidth), 0, z_dp(z.R.dimen.selectMinHeight), 0);
+    updateStatus(ZS_CLICKABLE, true);
 }
 
 zViewSelect::~zViewSelect() {
@@ -42,14 +43,6 @@ zViewSelect::~zViewSelect() {
         adapter->unregistration(this);
         SAFE_DELETE(adapter);
     }
-}
-
-i32 zViewSelect::onTouchEvent(zTouch *touch) {
-    if(touch->click()) {
-        // показать попап
-        popup->show(pti(0, rview.h));
-    }
-    return TOUCH_STOP;
 }
 
 zViewSelect* zViewSelect::setAdapter(zAdapterList *_adapter) {
@@ -85,6 +78,11 @@ void zViewSelect::setItemSelected(int item) {
     post(MSG_SELECTED, duration, selectItem);
     // перерисовать
     invalidate();
+}
+
+void zViewSelect::notifyEvent(HANDLER_MESSAGE* msg) {
+    if(msg->what == MSG_CLICK) popup->show(pti(0, rview.h));
+    zViewGroup::notifyEvent(msg);
 }
 
 void zViewSelect::onMeasure(cszm& spec) {

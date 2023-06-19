@@ -6,7 +6,7 @@
 	grp10->attach(new zViewSelect(styles_z_select, z.R.id.select), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp10->attach(new zViewGrid(styles_z_grid1, z.R.id.grid1, false), 
-			VIEW_MATCH, VIEW_WRAP);
+			VIEW_WRAP, VIEW_WRAP);
 	auto grp20((zLinearLayout*)grp10->attach(new zLinearLayout(styles_z_zlinearlayout1, 0, false), 
 			VIEW_MATCH, VIEW_MATCH)); 
 	grp20->attach(new zViewRadio(styles_z_radiodark, z.R.id.radioDark, z.R.string.radio_dark, 1), 

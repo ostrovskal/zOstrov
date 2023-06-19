@@ -113,7 +113,7 @@ szi zViewGrid::measureChildrenSize(cszm& spec) {
     if(!cells) { cells = (cell + cellSpace) * 5; }
     if(!linesGrid) linesGrid = (cells - pad.extent(!vert)) / (cell + cellSpace);
     _params[GRID_LINES] = linesGrid; _params[GRID_CELL_SIZE] = cell;
-    auto _div((div ? div->resolve(i / linesGrid, false) : 0));
+    auto _div((div ? div->resolve(z_min(countItem, (linesGrid - 1)), false) : 0));
     for(i = 0 ; i < countItem; i++) {
         auto child(obtainView(i));
         if(!child) continue;
@@ -124,12 +124,12 @@ szi zViewGrid::measureChildrenSize(cszm& spec) {
         auto& rv(child->rview);
         if(_max.isEmpty()) {
             if(spec[!vert].isNotExact()) cells = (rv[3 - vert] + cellSpace) * (linesGrid + 1);
-            if(spec[vert].isNotExact()) lines = rv[vert + 2] * (linesGrid + 1);
+            if(spec[vert].isNotExact()) lines = (rv[vert + 2] + lineSpace + _div) * (linesGrid);
         }
         auto val(_max[!vert] + rv[3 - vert] + cellSpace);
         if(val < cells) { _max[!vert] = val; continue; }
         val = _max[vert] + rv[vert + 2] + lineSpace;
-        if(val > lines) break;
+        if(val >= lines) break;
         _max[vert] = val;
     }
     _max[vert] += _div;

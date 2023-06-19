@@ -628,7 +628,7 @@ static zStyle styles_z_grid1[] = {
 };
 
 static zStyle styles_z_zlinearlayout1[] = {
-	{ Z_PADDING | ZT_END, 0x05050505 }
+	{ Z_PADDING | ZT_END, 0x03030303 }
 };
 
 static zStyle styles_z_radiodark[] = {
