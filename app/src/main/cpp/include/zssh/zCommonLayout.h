@@ -67,11 +67,15 @@ protected:
     int childSize{0};
 };
 
+class zLayoutEdit;
 class zEditLayout : public zViewGroup {
     friend class zLayoutEdit;
 public:
     zEditLayout(zStyle* _styles, i32 _id) : zViewGroup(_styles, _id) { }
     virtual zView *attach(zView *v, int width, int height, int where = -1) override;
+    // смена темы
+    virtual void changeTheme() override;
+    // имя типа
     virtual cstr typeName() const override { return "zEditLayout"; }
 protected:
     virtual void onMeasure(cszm& spec) override;
@@ -80,6 +84,8 @@ protected:
     void layoutChild();
     int frame{0};
     bool textEmpty{false};
+    zViewText* hint{nullptr};
+    zLayoutEdit* edit{nullptr};
 };
 
 class zTabLayout : public zLinearLayout {

@@ -230,7 +230,7 @@ void zViewEdit::updateCaret() {
 }
 
 int zViewEdit::correct(int _index) {
-    bool update(!isWrap());
+    bool update(getLines() != 1);
     if(!update) {
         int idx(0);
         // длина видимого текста в пикселях

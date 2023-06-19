@@ -96,6 +96,8 @@ public:
     // установка события прокрутки
     zViewGroup* setOnChangeScrolling(std::function<void(zView*, int)> _scroll) { onChangeScroll = _scroll; return this; }
 protected:
+    // уведомление о событии
+    virtual void notifyEvent(HANDLER_MESSAGE* msg) override;
     // отсоединение
     virtual void _detach() override;
     // вычисление всех дочерних

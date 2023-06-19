@@ -36,6 +36,8 @@ public:
     // установка события выделения
     zViewBaseRibbon* setOnChangeSelected(std::function<void(zView*, int)> _selected) { onChangeSelected = _selected; return this; }
 protected:
+    // уведомление о событии
+    virtual void notifyEvent(HANDLER_MESSAGE* msg) override;
     // позиционирование
     virtual void onLayout(crti &position, bool changed) override;
     // размер
@@ -50,24 +52,24 @@ protected:
     virtual i32 onTouchEvent(zTouch *touch) override;
     // вычисление размеров дочернего
     virtual void childMeasure(zView* child, zLayoutParams* lps) = 0;
+    // рассчитать габариты всех дочерних
+    virtual szi measureChildrenSize(cszm& spec);
     // Ликвидация расстояния между началом списка и первым элементом
     void correctBegin(int used);
     // Ликвидация расстояния между концом списка и последним элементом
     void correctFinish(int used);
     // показать/спрятать выделение
     void showSelector(bool show);
-    // рассчитать габариты всех дочерних
-    virtual szi measureChildrenSize(cszm& spec);
-    // получить представление
-    zView* obtainView(int position, bool* needToMeasure = nullptr);
     // вернуть индекс представления по координатам
     int itemFromPoint(cptf& p) const;
+    // добавить в кэш
+    void addViewCache(zView* view);
+    // получить представление
+    zView* obtainView(int position, bool* needToMeasure = nullptr);
     // добавить представление из адаптера
     zView* addView(int x, int y, int pos, bool flow, int where);
     // получить представление из кэша
     zView* getViewCache(int pos);
-    // добавить в кэш
-    void addViewCache(zView* view);
     // количество линий(для сетки)
     i32 linesGrid{1};
     // количество элементов в адаптере

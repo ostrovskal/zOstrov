@@ -113,6 +113,7 @@ szi zViewGrid::measureChildrenSize(cszm& spec) {
     if(!cells) { cells = (cell + cellSpace) * 5; }
     if(!linesGrid) linesGrid = (cells - pad.extent(!vert)) / (cell + cellSpace);
     _params[GRID_LINES] = linesGrid; _params[GRID_CELL_SIZE] = cell;
+    auto _div((div ? div->resolve(i / linesGrid, false) : 0));
     for(i = 0 ; i < countItem; i++) {
         auto child(obtainView(i));
         if(!child) continue;
@@ -121,18 +122,17 @@ szi zViewGrid::measureChildrenSize(cszm& spec) {
         // добавить в кэш
         addViewCache(child);
         auto& rv(child->rview);
-        //auto rv(child->rview); rv[3 - vert] += cellSpace; rv[vert + 2] += lineSpace;
         if(_max.isEmpty()) {
             if(spec[!vert].isNotExact()) cells = (rv[3 - vert] + cellSpace) * (linesGrid + 1);
-            if(spec[vert].isNotExact()) lines = (rv[vert + 2] + lineSpace) * (linesGrid + 1);
+            if(spec[vert].isNotExact()) lines = rv[vert + 2] * (linesGrid + 1);
         }
         auto val(_max[!vert] + rv[3 - vert] + cellSpace);
         if(val < cells) { _max[!vert] = val; continue; }
         val = _max[vert] + rv[vert + 2] + lineSpace;
-        if(val >= lines) break;
+        if(val > lines) break;
         _max[vert] = val;
     }
-    _max[vert] += (div && div->resolve(i / linesGrid, false));
+    _max[vert] += _div;
     return _max;
 }
 

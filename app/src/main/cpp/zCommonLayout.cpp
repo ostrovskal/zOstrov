@@ -287,6 +287,7 @@ zView *zScrollLayout::attach(zView *v, int width, int height, int where) {
 }
 
 i32 zScrollLayout::onTouchEvent(zTouch *touch) {
+    zViewGroup::onTouchEvent(touch);
     bool drag(false);
     touch->drag(sizeTouch, [this, &drag, &touch](cszi& offs, bool event) {
         // если сдвинули - определяем дельту в зависимости от ориентации
@@ -317,7 +318,7 @@ bool zScrollLayout::scrolling(int _delta) {
         if(upd) {
             child->requestPosition();
             // отправляем событие скролла
-            if(onChangeScroll) onChangeScroll(this, child->scroll[vert]);
+            post(MSG_SCROLLING, duration, child->scroll[vert]);
             awakenScroll();
         } else if(glow) {
             updateGlow(_delta);
@@ -333,13 +334,12 @@ bool zScrollLayout::scrolling(int _delta) {
 
 class zLayoutEdit : public zViewEdit {
 public:
-    zLayoutEdit(zEditLayout* _lyt, zViewEdit* _edit) : zViewEdit(_edit->styles, _edit->id, 0), lyt(_lyt) { setHint(_edit->getHint()); }
+    explicit zLayoutEdit(zViewEdit* _edit) : zViewEdit(_edit->styles, _edit->id, 0) { setHint(_edit->getHint()); }
 protected:
     void updateText(int _what) override {
-        if(_what == MSG_EDIT) lyt->childUpdateText(z_isempty(getText()));
+        if(_what == MSG_EDIT) getParent<zEditLayout>()->childUpdateText(z_isempty(getText()));
         zViewEdit::updateText(_what);
     }
-    zEditLayout* lyt{nullptr};
 };
 
 static zStyle styles_z_hint[] = {
@@ -350,6 +350,11 @@ static zStyle styles_z_hint[] = {
         { Z_DURATION, 20},
         { Z_TEXT_FONT | ZT_END, z.R.drawable.font1 }
 };
+
+void zEditLayout::changeTheme() {
+    zViewGroup::changeTheme();
+    if(hint) hint->setTextColorForeground(theme->styles->_int(Z_THEME_COLOR_TEXT_HINT, 0x7f505050));
+}
 
 zView *zEditLayout::attach(zView *v, int width, int height, int where) {
     auto _edit(dynamic_cast<zViewEdit*>(v));
@@ -365,14 +370,14 @@ zView *zEditLayout::attach(zView *v, int width, int height, int where) {
             requestLayout();
             return cont;
         });
-        auto edit(new zLayoutEdit(this, _edit));
-        auto hint(new zViewText(styles_z_hint, 0, 0));
+        edit = new zLayoutEdit(_edit);
+        hint = new zViewText(styles_z_hint, 0, 0);
         zViewGroup::attach(edit, width, height, where);
         zViewGroup::attach(hint, VIEW_WRAP, VIEW_WRAP, where);
         hint->setTextSize(edit->getTextSize());
         hint->setTextStyle(edit->getTextStyle());
         hint->setText(_edit->getHint(), true);
-        hint->setTextColorForeground(0xffb8b8b8);//edit->getTextHintColor());
+        hint->setTextColorForeground(edit->getTextHintColor());
         hint->setGravity(edit->gravity);
         hint->updateStatus(ZS_VISIBLED, false);
         delete v; return edit;
@@ -382,10 +387,9 @@ zView *zEditLayout::attach(zView *v, int width, int height, int where) {
 
 void zEditLayout::onMeasure(cszm& spec) {
     szi size;
-    auto edit(atView<zViewEdit>(0));
-    if(edit) {
+    if(edit && hint) {
         measureChild(edit, spec);
-        auto hint(atView<zViewText>(1)); measureChild(hint, spec);
+        measureChild(hint, spec);
         // добавить высоту подсказки
         size.set(edit->rview.w, edit->rview.h + hint->rview.h);
     }
@@ -398,9 +402,7 @@ void zEditLayout::onLayout(crti &position, bool changed) {
 }
 
 void zEditLayout::layoutChild() {
-    auto edit(atView<zViewEdit>(0));
-    if(edit) {
-        auto hint(atView<zViewText>(1));
+    if(edit && hint) {
         auto esub((rview.h - edit->sizes(true)) / 2);
         auto hsub((rview.h - hint->sizes(true)) / 2);
         esub += (frame * esub / 4); hsub -= (frame * hsub / 4);
@@ -419,8 +421,8 @@ void zEditLayout::layoutChild() {
 void zEditLayout::childUpdateText(bool _empty) {
     textEmpty = _empty;
     if((_empty && frame) || (!_empty && frame != 4)) {
-        atView<zViewEdit>(0)->setHint("");
-        atView(1)->updateStatus(ZS_VISIBLED, true);
+        edit->setHint("");
+        hint->updateStatus(ZS_VISIBLED, true);
         post(MSG_ANIM, duration, 0);
     }
 }

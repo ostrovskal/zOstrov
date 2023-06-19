@@ -75,6 +75,12 @@ void zViewGroup::_remove(zView* v, bool _del) {
     }
 }
 
+void zViewGroup::notifyEvent(HANDLER_MESSAGE* msg) {
+    if(msg->what == MSG_SCROLLING && onChangeScroll)
+        onChangeScroll(this, msg->arg);
+    zView::notifyEvent(msg);
+}
+
 void zViewGroup::_detach() {
     for(auto& c : children) c->_detach();
     zView::_detach();

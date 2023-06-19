@@ -51,10 +51,7 @@ zViewKeyboard::zViewKeyboard(cstr nameLayouts) : zViewGroup(styles_default, z.R.
                 but.size = z_dp(z_ston(nodeBut->getAttrVal("size", "23"), RADIX_DEC));
                 but.spec = nodeBut->getAttrVal("spec", "");
                 but.name[0] = nodeBut->getAttrVal("com", "");
-                if(but.spec.isEmpty()) {
-                    but.name[1] = but.name[0].substr(1, 1);
-                    but.name[0] = but.name[0].substr(0, 1);
-                }
+                but.name[1] = nodeBut->getAttrVal("alt", "");
                 lyt.buttons += but;
             }
             layouts += lyt;
@@ -208,13 +205,12 @@ void zViewKeyboard::onDraw() {
         } else {
             n1 = b.name[0]; n2 = b.name[1];
             bkColor = theme->themeColor;
-            baseTxt->setIcon(-1);
         }
-        baseTxt->setIcon((b.spec == "SHIFT" && activeShift) ? z.R.integer.iconShiftFix : b.icon);
         auto r(b.rview); baseTxt->drw[DRW_FK]->color = bkColor;
         r.x = rview.x + r.x * deltaWidth; r.w *= deltaWidth;
         r.y = rview.y + r.y * deltaHeight; r.h *= deltaHeight;
         szm spec(zMeasure(MEASURE_EXACT, r.w), zMeasure(MEASURE_EXACT, r.h));
+        baseTxt->setIcon((b.spec == "SHIFT" && activeShift) ? z.R.integer.iconShiftFix : b.icon);
         baseTxt->setTextSize(b.size); baseTxt->setTextColorForeground(b.color);
         baseTxt->setTextSpecial(n1, spec); baseTxt->layout(r); baseTxt->draw();
         if(n2.isNotEmpty() && n1 != n2) { altTxt->setTextSpecial(n2, spec); altTxt->layout(r); altTxt->draw(); }

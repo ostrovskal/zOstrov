@@ -49,12 +49,12 @@
 	<integer name="formBackground">46</integer>
 	<integer name="butKeyboardSmall">47</integer>
 	<integer name="iconLang">48</integer>
-	<integer name="iconApp_round1">49</integer>
+	<integer name="iconSelf_round">49</integer>
 	<integer name="iconDelete">50</integer>
 	<integer name="iconShiftFix">51</integer>
 	<integer name="iconShift">52</integer>
 	<integer name="iconShiftPress">53</integer>
-	<integer name="iconApp">54</integer>
+	<integer name="iconSelf">54</integer>
 	<integer name="iconOk">55</integer>
 	<integer name="iconCancel">56</integer>
 	<integer name="iconNo">57</integer>

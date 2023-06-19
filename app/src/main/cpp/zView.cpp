@@ -213,7 +213,7 @@ i32 zView::onTouchEvent(zTouch *touch) {
     if(isClickabled()) {
         if(touch->click()) {
             requestFocus();
-            if(onClick) onClick(this, isLongClickabled() && touch->isLongClick());
+            post(MSG_CLICK, duration, isLongClickabled() && touch->isLongClick());
             return TOUCH_ACTION;
         }
     }
@@ -361,6 +361,17 @@ void zView::post(int what, u64 millis, int arg) {
     manager->event.send(this, what, millis, arg);
 }
 
+void zView::notifyEvent(HANDLER_MESSAGE* msg) {
+    switch(msg->what) {
+        case MSG_ANIM:
+            if(onAnimation) { if(onAnimation(this, msg->arg)) post(MSG_ANIM, duration, msg->arg); }
+            break;
+        case MSG_CLICK:
+            if(onClick) onClick(this, msg->arg);
+            break;
+    }
+}
+
 void zView::requestFocus() {
     if(isFocusableInTouch()) {
         manager->changeFocus(this);
@@ -501,12 +512,13 @@ zViewScrollBar::zViewScrollBar(zView* group, bool _vert) : zView(styles_z_scroll
 }
 
 void zViewScrollBar::awaken() {
-    updateStatus(ZS_VISIBLED, true);
+    updateStatus(ZS_VISIBLED, true); alpha = 1.0f;
     drw[DRW_BK]->measure(rview.w, rview.h, 0, false);
     animator.init(3.0f, false);
     animator.add(0.2f, zInterpolator::LINEAR, 20);
     // запустить фейдинг
     if(fade) post(MSG_ANIM, duration, 0);
+    invalidate();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

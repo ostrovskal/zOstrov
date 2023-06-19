@@ -112,8 +112,6 @@ public:
     virtual void post(int what, u64 millis, int arg);
     // требование фокуса
     virtual void requestFocus();
-    // уведомление владельца
-    virtual void notifyOwner(int what, zView *view, int arg) { }
     // фоновая обработка
     virtual bool backgroundProcess() { return false; }
     // уведомление об изменении параметров адаптера
@@ -250,6 +248,8 @@ public:
 protected:
     // установка гравитации
     void _setGravity(u32 _g, u8* p) { if(_g != (*p & ZS_GRAVITY_MASK)) { *p &= ~ZS_GRAVITY_MASK; *p |= (u8)_g; requestLayout(); } }
+    // уведомление о событии
+    virtual void notifyEvent(HANDLER_MESSAGE* msg);
     // отображение формы обрезки
     virtual void drawShape();
     // область обрезки
@@ -292,7 +292,6 @@ protected:
     szm measureSpec{};
     // предыдущая позиция
     rti oldPos{INT_MAX, INT_MAX};
-    // фейковый отображатель
     // событие клика
     std::function<void(zView*, int)> onClick;
     // событие касания

@@ -1,188 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
 <keyboards default="en_large_abc" minHeight="35">
 	<layout name="en_little_abc" shift="en_large_abc"  spec="digit123" lang="ru_little_abc" width="631" height="193">
-		<button x="1" y="1" width="62" height="47" com="q1" />
-		<button x="64" y="1" width="62" height="47" com="w2" />
-		<button x="127" y="1" width="62" height="47" com="e3" />
-		<button x="190" y="1" width="62" height="47" com="r4" />
-		<button x="253" y="1" width="62" height="47" com="t5" />
-		<button x="316" y="1" width="62" height="47" com="y6" />
-		<button x="379" y="1" width="62" height="47" com="u7" />
-		<button x="442" y="1" width="62" height="47" com="i8" />
-		<button x="505" y="1" width="62" height="47" com="o9" />
-		<button x="568" y="1" width="62" height="47" com="p0" />
-		<button x="32" y="49" width="62" height="47" com="a\" />
-		<button x="95" y="49" width="62" height="47" com="s_" />
-		<button x="158" y="49" width="62" height="47" com="d(" />
-		<button x="221" y="49" width="62" height="47" com="f:" />
-		<button x="284" y="49" width="62" height="47" com="g)" />
-		<button x="347" y="49" width="62" height="47" com="h%" />
-		<button x="410" y="49" width="62" height="47" com="j#" />
-		<button x="473" y="49" width="62" height="47" com="k;" />
-		<button x="536" y="49" width="62" height="47" com="l&quot;" />
-		<button x="1" y="97" width="92" height="47" icon="52" spec="SHIFT" />
-		<button x="535" y="97" width="94" height="47" icon="50" spec="DELETE" />
-		<button x="94" y="97" width="62" height="47" com="z@" />
-		<button x="157" y="97" width="62" height="47" com="x/" />
-		<button x="220" y="97" width="62" height="47" com="c-" />
-		<button x="283" y="97" width="62" height="47" com="v+" />
-		<button x="346" y="97" width="62" height="47" com="b!" />
-		<button x="409" y="97" width="62" height="47" com="n?" />
-		<button x="472" y="97" width="62" height="47" com="m," />
-		<button x="1" y="145" width="92" height="47" size="20" com="?123"  spec="SPEC" />
-		<button x="94" y="145" width="62" height="47" spec="LANG" icon="48" />
-		<button x="157" y="145" width="314" height="47" com="QWERTY" spec="SPACE" />
-		<button x="472" y="145" width="62" height="47" com=".." />
-		<button x="535" y="145" width="94" height="47" spec="ENTER" icon="55" /> 
+	<button x="1" y="145" width="92" height="47" spec="SPEC" com="?123" alt="?123"/>
+	<button x="94" y="145" width="62" height="47" spec="LANG" icon="48"/>
+	<button x="157" y="145" width="314" height="47" spec="SPACE" com="qwerty"/>
+	<button x="472" y="145" width="62" height="47" com="." alt="."/>
+	<button x="535" y="145" width="94" height="47" spec="ENTER" icon="55"/>
+	<button x="1" y="97" width="92" height="47" spec="SHIFT" icon="52"/>
+	<button x="535" y="97" width="94" height="47" spec="DELETE" icon="50"/>
+	<button x="94" y="97" width="62" height="47" com="z" alt="@"/>
+	<button x="157" y="97" width="62" height="47" com="x" alt="/"/>
+	<button x="220" y="97" width="62" height="47" com="c" alt="-"/>
+	<button x="283" y="97" width="62" height="47" com="v" alt="+"/>
+	<button x="346" y="97" width="62" height="47" com="b" alt="!"/>
+	<button x="409" y="97" width="62" height="47" com="n" alt="?"/>
+	<button x="472" y="97" width="62" height="47" com="m" alt=","/>
+	<button x="32" y="49" width="62" height="47" com="a" alt="\"/>
+	<button x="95" y="49" width="62" height="47" com="s" alt="_"/>
+	<button x="158" y="49" width="62" height="47" com="d" alt="("/>
+	<button x="221" y="49" width="62" height="47" com="f" alt=":"/>
+	<button x="284" y="49" width="62" height="47" com="g" alt=")"/>
+	<button x="347" y="49" width="62" height="47" com="h" alt="%"/>
+	<button x="410" y="49" width="62" height="47" com="j" alt="#"/>
+	<button x="473" y="49" width="62" height="47" com="k" alt=";"/>
+	<button x="536" y="49" width="62" height="47" com="l" alt="&quot;"/>
+	<button x="1" y="1" width="62" height="47" com="q" alt="1"/>
+	<button x="64" y="1" width="62" height="47" com="w" alt="2"/>
+	<button x="127" y="1" width="62" height="47" com="e" alt="3"/>
+	<button x="190" y="1" width="62" height="47" com="r" alt="4"/>
+	<button x="253" y="1" width="62" height="47" com="t" alt="5"/>
+	<button x="316" y="1" width="62" height="47" com="y" alt="6"/>
+	<button x="379" y="1" width="62" height="47" com="u" alt="7"/>
+	<button x="442" y="1" width="62" height="47" com="i" alt="8"/>
+	<button x="505" y="1" width="62" height="47" com="o" alt="9"/>
+	<button x="568" y="1" width="62" height="47" com="p" alt="0"/>
 	</layout>
 	<layout name="en_large_abc"  shift="en_little_abc" spec="digit123" lang="ru_large_abc"  input="en_little_abc" width="631" height="193">
-		<button x="568" y="1" width="62" height="47" com="P0" />
-		<button x="505" y="1" width="62" height="47" com="O9" />
-		<button x="442" y="1" width="62" height="47" com="I8" />
-		<button x="379" y="1" width="62" height="47" com="U7" />
-		<button x="316" y="1" width="62" height="47" com="Y6" />
-		<button x="253" y="1" width="62" height="47" com="T5" />
-		<button x="190" y="1" width="62" height="47" com="R4" />
-		<button x="127" y="1" width="62" height="47" com="E3" />
-		<button x="64" y="1" width="62" height="47" com="W2" />
-		<button x="1" y="1" width="62" height="47" com="Q1" />
-		<button x="536" y="49" width="62" height="47" com="L&quot;" />
-		<button x="473" y="49" width="62" height="47" com="K;" />
-		<button x="410" y="49" width="62" height="47" com="J#" />
-		<button x="347" y="49" width="62" height="47" com="H%" />
-		<button x="284" y="49" width="62" height="47" com="G)" />
-		<button x="221" y="49" width="62" height="47" com="F:" />
-		<button x="158" y="49" width="62" height="47" com="D(" />
-		<button x="95" y="49" width="62" height="47" com="S_" />
-		<button x="32" y="49" width="62" height="47" com="A\" />
-		<button x="472" y="97" width="62" height="47" com="M," />
-		<button x="409" y="97" width="62" height="47" com="N?" />
-		<button x="346" y="97" width="62" height="47" com="B!" />
-		<button x="283" y="97" width="62" height="47" com="V+" />
-		<button x="220" y="97" width="62" height="47" com="C-" />
-		<button x="157" y="97" width="62" height="47" com="X/" />
-		<button x="94" y="97" width="62" height="47" com="Z@" />
-		<button x="535" y="97" width="94" height="47" icon="50" spec="DELETE" />
-		<button x="1" y="97" width="92" height="47" icon="53" spec="SHIFT" />
-		<button x="1" y="145" width="92" height="47" size="20" com="?123" spec="SPEC" />
-		<button x="94" y="145" width="62" height="47" spec="LANG" icon="48" />
-		<button x="157" y="145" width="314" height="47" com="QWERTY" spec="SPACE" />
-		<button x="472" y="145" width="62" height="47" com=".." />
-		<button x="535" y="145" width="94" height="47" spec="ENTER" icon="55" /> 
+	<button x="535" y="145" width="94" height="47" spec="ENTER" icon="55"/>
+	<button x="472" y="145" width="62" height="47" com="." alt="."/>
+	<button x="157" y="145" width="314" height="47" spec="SPACE" com="QWERTY"/>
+	<button x="94" y="145" width="62" height="47" spec="LANG" icon="48"/>
+	<button x="1" y="145" width="92" height="47" spec="SPEC" com="?123" alt="?123"/>
+	<button x="1" y="97" width="92" height="47" spec="SHIFT" icon="53"/>
+	<button x="535" y="97" width="94" height="47" spec="DELETE" icon="50"/>
+	<button x="94" y="97" width="62" height="47" com="Z" alt="@"/>
+	<button x="157" y="97" width="62" height="47" com="X" alt="/"/>
+	<button x="220" y="97" width="62" height="47" com="C" alt="-"/>
+	<button x="283" y="97" width="62" height="47" com="V" alt="+"/>
+	<button x="346" y="97" width="62" height="47" com="B" alt="!"/>
+	<button x="409" y="97" width="62" height="47" com="N" alt="?"/>
+	<button x="472" y="97" width="62" height="47" com="M" alt=","/>
+	<button x="32" y="49" width="62" height="47" com="A" alt="\"/>
+	<button x="95" y="49" width="62" height="47" com="S" alt="_"/>
+	<button x="158" y="49" width="62" height="47" com="D" alt="("/>
+	<button x="221" y="49" width="62" height="47" com="F" alt=":"/>
+	<button x="284" y="49" width="62" height="47" com="G" alt=")"/>
+	<button x="347" y="49" width="62" height="47" com="H" alt="%"/>
+	<button x="410" y="49" width="62" height="47" com="J" alt="#"/>
+	<button x="473" y="49" width="62" height="47" com="K" alt=";"/>
+	<button x="536" y="49" width="62" height="47" com="L" alt="&quot;"/>
+	<button x="1" y="1" width="62" height="47" com="Q" alt="1"/>
+	<button x="64" y="1" width="62" height="47" com="W" alt="2"/>
+	<button x="127" y="1" width="62" height="47" com="E" alt="3"/>
+	<button x="190" y="1" width="62" height="47" com="R" alt="4"/>
+	<button x="253" y="1" width="62" height="47" com="T" alt="5"/>
+	<button x="316" y="1" width="62" height="47" com="Y" alt="6"/>
+	<button x="379" y="1" width="62" height="47" com="U" alt="7"/>
+	<button x="442" y="1" width="62" height="47" com="I" alt="8"/>
+	<button x="505" y="1" width="62" height="47" com="O" alt="9"/>
+	<button x="568" y="1" width="62" height="47" com="P" alt="0"/>
 	</layout>
 	<layout name="ru_little_abc" shift="ru_large_abc"  spec="digit123" lang="en_little_abc" width="631" height="193">
-		<button x="575" y="1" width="51" height="47" com="ъ)" />
-		<button x="523" y="1" width="51" height="47" com="х(" />
-		<button x="471" y="1" width="51" height="47" com="з0" />
-		<button x="419" y="1" width="51" height="47" com="щ9" />
-		<button x="367" y="1" width="51" height="47" com="ш8" />
-		<button x="315" y="1" width="51" height="47" com="г7" />
-		<button x="263" y="1" width="51" height="47" com="н6" />
-		<button x="211" y="1" width="51" height="47" com="е5" />
-		<button x="159" y="1" width="51" height="47" com="к4" />
-		<button x="107" y="1" width="51" height="47" com="у3" />
-		<button x="55" y="1" width="51" height="47" com="ц2" />
-		<button x="3" y="1" width="51" height="47" com="й1" />
-		<button x="549" y="49" width="51" height="47" com="э&quot;" />
-		<button x="497" y="49" width="51" height="47" com="ж^" />
-		<button x="445" y="49" width="51" height="47" com="д%" />
-		<button x="393" y="49" width="51" height="47" com="л*" />
-		<button x="341" y="49" width="51" height="47" com="о#" />
-		<button x="289" y="49" width="51" height="47" com="р&amp;" />
-		<button x="237" y="49" width="51" height="47" com="п$" />
-		<button x="185" y="49" width="51" height="47" com="а=" />
-		<button x="133" y="49" width="51" height="47" com="в+" />
-		<button x="81" y="49" width="51" height="47" com="ы_" />
-		<button x="29" y="49" width="51" height="47" com="ф\" />
-		<button x="497" y="97" width="51" height="47" com="ю:" />
-		<button x="445" y="97" width="51" height="47" com="б;" />
-		<button x="393" y="97" width="51" height="47" com="ь," />
-		<button x="341" y="97" width="51" height="47" com="т?" />
-		<button x="289" y="97" width="51" height="47" com="и!" />
-		<button x="237" y="97" width="51" height="47" com="м'" />
-		<button x="185" y="97" width="51" height="47" com="с-" />
-		<button x="133" y="97" width="51" height="47" com="ч/" />
-		<button x="81" y="97" width="51" height="47" com="я@" />
-		<button x="549" y="97" width="81" height="47" icon="50" spec="DELETE" />
-		<button x="1" y="97" width="79" height="47" icon="52" spec="SHIFT" />
-		<button x="94" y="145" width="62" height="47" icon="48" spec="LANG" />
-		<button x="1" y="145" width="92" height="47" size="20" com="?123" spec="SPEC" />
-		<button x="157" y="145" width="314" height="47" com="Русский" spec="SPACE" />
-		<button x="472" y="145" width="62" height="47" com=".." />
-		<button x="535" y="145" width="94" height="47" icon="55" spec="ENTER" />
+		<button x="535" y="145" width="94" height="47" spec="ENTER" icon="55"/>
+		<button x="472" y="145" width="62" height="47" com="." alt="."/>
+		<button x="157" y="145" width="314" height="47" spec="SPACE" com="русский"/>
+		<button x="1" y="145" width="92" height="47" spec="SPEC" com="?123" alt="?123"/>
+		<button x="94" y="145" width="62" height="47" spec="LANG" icon="48"/>
+		<button x="1" y="97" width="79" height="47" spec="SHIFT" icon="52"/>
+		<button x="549" y="97" width="81" height="47" spec="DELETE" icon="50"/>
+		<button x="81" y="97" width="51" height="47" com="я" alt="@"/>
+		<button x="133" y="97" width="51" height="47" com="ч" alt="/"/>
+		<button x="185" y="97" width="51" height="47" com="с" alt="-"/>
+		<button x="237" y="97" width="51" height="47" com="м" alt="'"/>
+		<button x="289" y="97" width="51" height="47" com="и" alt="!"/>
+		<button x="341" y="97" width="51" height="47" com="т" alt="?"/>
+		<button x="393" y="97" width="51" height="47" com="ь" alt=","/>
+		<button x="445" y="97" width="51" height="47" com="б" alt=";"/>
+		<button x="497" y="97" width="51" height="47" com="ю" alt=":"/>
+		<button x="29" y="49" width="51" height="47" com="ф" alt="\"/>
+		<button x="81" y="49" width="51" height="47" com="ы" alt="_"/>
+		<button x="133" y="49" width="51" height="47" com="в" alt="+"/>
+		<button x="185" y="49" width="51" height="47" com="а" alt="="/>
+		<button x="237" y="49" width="51" height="47" com="п" alt="$"/>
+		<button x="289" y="49" width="51" height="47" com="р" alt="&amp;"/>
+		<button x="341" y="49" width="51" height="47" com="о" alt="#"/>
+		<button x="393" y="49" width="51" height="47" com="л" alt="*"/>
+		<button x="445" y="49" width="51" height="47" com="д" alt="%"/>
+		<button x="497" y="49" width="51" height="47" com="ж" alt="^"/>
+		<button x="549" y="49" width="51" height="47" com="э" alt="&quot;"/>
+		<button x="3" y="1" width="51" height="47" com="й" alt="1"/>
+		<button x="55" y="1" width="51" height="47" com="ц" alt="2"/>
+		<button x="107" y="1" width="51" height="47" com="у" alt="3"/>
+		<button x="159" y="1" width="51" height="47" com="к" alt="4"/>
+		<button x="211" y="1" width="51" height="47" com="е" alt="5"/>
+		<button x="263" y="1" width="51" height="47" com="н" alt="6"/>
+		<button x="315" y="1" width="51" height="47" com="г" alt="7"/>
+		<button x="367" y="1" width="51" height="47" com="ш" alt="8"/>
+		<button x="419" y="1" width="51" height="47" com="щ" alt="9"/>
+		<button x="471" y="1" width="51" height="47" com="з" alt="0"/>
+		<button x="523" y="1" width="51" height="47" com="х" alt="("/>
+		<button x="575" y="1" width="51" height="47" com="ъ" alt=")"/>
 	</layout>
 	<layout name="ru_large_abc"  shift="ru_little_abc" spec="digit123" lang="en_large_abc"  input="ru_little_abc" width="631" height="193">
-		<button x="575" y="1" width="51" height="47" com="Ъ)" />
-		<button x="523" y="1" width="51" height="47" com="Х(" />
-		<button x="471" y="1" width="51" height="47" com="З0" />
-		<button x="419" y="1" width="51" height="47" com="Щ9" />
-		<button x="367" y="1" width="51" height="47" com="Ш8" />
-		<button x="315" y="1" width="51" height="47" com="Г7" />
-		<button x="263" y="1" width="51" height="47" com="Н6" />
-		<button x="211" y="1" width="51" height="47" com="Е5" />
-		<button x="159" y="1" width="51" height="47" com="К4" />
-		<button x="107" y="1" width="51" height="47" com="У3" />
-		<button x="55" y="1" width="51" height="47" com="Ц2" />
-		<button x="3" y="1" width="51" height="47" com="Й1" />
-		<button x="549" y="49" width="51" height="47" com="Э&quot;" />
-		<button x="497" y="49" width="51" height="47" com="Ж^" />
-		<button x="445" y="49" width="51" height="47" com="Д%" />
-		<button x="393" y="49" width="51" height="47" com="Л*" />
-		<button x="341" y="49" width="51" height="47" com="О#" />
-		<button x="289" y="49" width="51" height="47" com="Р&amp;" />
-		<button x="237" y="49" width="51" height="47" com="П$" />
-		<button x="185" y="49" width="51" height="47" com="А=" />
-		<button x="133" y="49" width="51" height="47" com="В+" />
-		<button x="81" y="49" width="51" height="47" com="Ы_" />
-		<button x="29" y="49" width="51" height="47" com="Ф\" />
-		<button x="497" y="97" width="51" height="47" com="Ю:" />
-		<button x="445" y="97" width="51" height="47" com="Б;" />
-		<button x="393" y="97" width="51" height="47" com="Ь," />
-		<button x="341" y="97" width="51" height="47" com="Т?" />
-		<button x="289" y="97" width="51" height="47" com="И!" />
-		<button x="237" y="97" width="51" height="47" com="М'" />
-		<button x="185" y="97" width="51" height="47" com="С-" />
-		<button x="133" y="97" width="51" height="47" com="Ч/" />
-		<button x="81" y="97" width="51" height="47" com="Я@" />
-		<button x="549" y="97" width="81" height="47" icon="50" spec="DELETE" />
-		<button x="1" y="97" width="79" height="47" icon="53" spec="SHIFT" />
-		<button x="94" y="145" width="62" height="47" icon="48" spec="LANG" />
-		<button x="1" y="145" width="92" height="47" size="20" com="?123" spec="SPEC" />
-		<button x="157" y="145" width="314" height="47" com="Русский" spec="SPACE" />
-		<button x="472" y="145" width="62" height="47" com=".." />
-		<button x="535" y="145" width="94" height="47" icon="55" spec="ENTER" />
+		<button x="535" y="145" width="94" height="47" spec="ENTER" icon="55"/>
+		<button x="472" y="145" width="62" height="47" com="." alt="."/>
+		<button x="157" y="145" width="314" height="47" spec="SPACE" com="РУССКИЙ"/>
+		<button x="1" y="145" width="92" height="47" spec="SPEC" com="?123" alt="?123"/>
+		<button x="94" y="145" width="62" height="47" spec="LANG" icon="48"/>
+		<button x="1" y="97" width="79" height="47" spec="SHIFT" icon="53"/>
+		<button x="549" y="97" width="81" height="47" spec="DELETE" icon="50"/>
+		<button x="81" y="97" width="51" height="47" com="Я" alt="@"/>
+		<button x="133" y="97" width="51" height="47" com="Ч" alt="/"/>
+		<button x="185" y="97" width="51" height="47" com="С" alt="-"/>
+		<button x="237" y="97" width="51" height="47" com="М" alt="'"/>
+		<button x="289" y="97" width="51" height="47" com="И" alt="!"/>
+		<button x="341" y="97" width="51" height="47" com="Т" alt="?"/>
+		<button x="393" y="97" width="51" height="47" com="Ь" alt=","/>
+		<button x="445" y="97" width="51" height="47" com="Б" alt=";"/>
+		<button x="497" y="97" width="51" height="47" com="Ю" alt=":"/>
+		<button x="29" y="49" width="51" height="47" com="Ф" alt="\"/>
+		<button x="81" y="49" width="51" height="47" com="Ы" alt="_"/>
+		<button x="133" y="49" width="51" height="47" com="В" alt="+"/>
+		<button x="185" y="49" width="51" height="47" com="А" alt="="/>
+		<button x="237" y="49" width="51" height="47" com="П" alt="$"/>
+		<button x="289" y="49" width="51" height="47" com="Р" alt="&amp;"/>
+		<button x="341" y="49" width="51" height="47" com="О" alt="#"/>
+		<button x="393" y="49" width="51" height="47" com="Л" alt="*"/>
+		<button x="445" y="49" width="51" height="47" com="Д" alt="%"/>
+		<button x="497" y="49" width="51" height="47" com="Ж" alt="^"/>
+		<button x="549" y="49" width="51" height="47" com="Э" alt="&quot;"/>
+		<button x="3" y="1" width="51" height="47" com="Й" alt="1"/>
+		<button x="55" y="1" width="51" height="47" com="Ц" alt="2"/>
+		<button x="107" y="1" width="51" height="47" com="У" alt="3"/>
+		<button x="159" y="1" width="51" height="47" com="К" alt="4"/>
+		<button x="211" y="1" width="51" height="47" com="Е" alt="5"/>
+		<button x="263" y="1" width="51" height="47" com="Н" alt="6"/>
+		<button x="315" y="1" width="51" height="47" com="Г" alt="7"/>
+		<button x="367" y="1" width="51" height="47" com="Ш" alt="8"/>
+		<button x="419" y="1" width="51" height="47" com="Щ" alt="9"/>
+		<button x="471" y="1" width="51" height="47" com="З" alt="0"/>
+		<button x="523" y="1" width="51" height="47" com="Х" alt="("/>
+		<button x="575" y="1" width="51" height="47" com="Ъ" alt=")"/>
 	</layout>
 	<layout name="digit123" spec="back" width="568" height="193">
-		<button x="379" y="1" width="62" height="47" com="-$" />
-		<button x="316" y="1" width="62" height="47" com="+@" />
-		<button x="505" y="1" width="62" height="47" com="))" />
-		<button x="442" y="1" width="62" height="47" com="((" />
-		<button x="253" y="1" width="62" height="47" com="BB" />
-		<button x="190" y="1" width="62" height="47" com="AA" />
-		<button x="127" y="1" width="62" height="47" com="33" />
-		<button x="64" y="1" width="62" height="47" com="22" />
-		<button x="1" y="1" width="62" height="47" com="11" />
-		<button x="379" y="49" width="62" height="47" com="/&gt;" />
-		<button x="316" y="49" width="62" height="47" com="*&lt;" />
-		<button x="505" y="49" width="62" height="47" com="##" />
-		<button x="442" y="49" width="62" height="47" com="%%" />
-		<button x="253" y="49" width="62" height="47" com="DD" />
-		<button x="190" y="49" width="62" height="47" com="CC" />
-		<button x="127" y="49" width="62" height="47" com="66" />
-		<button x="64" y="49" width="62" height="47" com="55" />
-		<button x="1" y="49" width="62" height="47" com="44" />
-		<button x="1" y="97" width="62" height="47" com="77" />
-		<button x="64" y="97" width="62" height="47" com="88" />
-		<button x="127" y="97" width="62" height="47" com="99" />
-		<button x="190" y="97" width="62" height="47" com="EE" />
-		<button x="253" y="97" width="62" height="47" com="FF" />
-		<button x="316" y="97" width="62" height="47" com=",!" />
-		<button x="379" y="97" width="62" height="47" com="=?" />
-		<button x="442" y="97" width="125" height="47" icon="50" spec="DELETE" />
-		<button x="1" y="145" width="92" height="47" size="20" com="ABC" spec="SPEC" />
-		<button x="94" y="145" width="62" height="47" com="00" />
-		<button x="409" y="145" width="62" height="47" com=".." />
-		<button x="157" y="145" width="251" height="47" com="  " spec="SPACE" />
-		<button x="472" y="145" width="95" height="47" icon="55" spec="ENTER" /> 	
+		<button x="472" y="145" width="95" height="47" spec="ENTER" icon="55"/>
+		<button x="157" y="145" width="251" height="47" spec="SPACE" com=""/>
+		<button x="409" y="145" width="62" height="47" com="." alt="."/>
+		<button x="94" y="145" width="62" height="47" com="0" alt="0"/>
+		<button x="1" y="145" width="92" height="47" spec="SPEC" com="?123" alt="?123"/>
+		<button x="442" y="97" width="125" height="47" spec="DELETE" icon="50"/>
+		<button x="379" y="97" width="62" height="47" com="=" alt="?"/>
+		<button x="316" y="97" width="62" height="47" com="," alt="!"/>
+		<button x="253" y="97" width="62" height="47" com="F" alt="F"/>
+		<button x="190" y="97" width="62" height="47" com="E" alt="E"/>
+		<button x="127" y="97" width="62" height="47" com="9" alt="9"/>
+		<button x="64" y="97" width="62" height="47" com="8" alt="8"/>
+		<button x="1" y="97" width="62" height="47" com="7" alt="7"/>
+		<button x="1" y="49" width="62" height="47" com="4" alt="4"/>
+		<button x="64" y="49" width="62" height="47" com="5" alt="5"/>
+		<button x="127" y="49" width="62" height="47" com="6" alt="6"/>
+		<button x="190" y="49" width="62" height="47" com="C" alt="C"/>
+		<button x="253" y="49" width="62" height="47" com="D" alt="D"/>
+		<button x="442" y="49" width="62" height="47" com="%" alt="%"/>
+		<button x="505" y="49" width="62" height="47" com="#" alt="#"/>
+		<button x="316" y="49" width="62" height="47" com="*" alt="&lt;"/>
+		<button x="379" y="49" width="62" height="47" com="/" alt="&gt;"/>
+		<button x="1" y="1" width="62" height="47" com="1" alt="1"/>
+		<button x="64" y="1" width="62" height="47" com="2" alt="2"/>
+		<button x="127" y="1" width="62" height="47" com="3" alt="3"/>
+		<button x="190" y="1" width="62" height="47" com="A" alt="A"/>
+		<button x="253" y="1" width="62" height="47" com="B" alt="B"/>
+		<button x="442" y="1" width="62" height="47" com="(" alt="("/>
+		<button x="505" y="1" width="62" height="47" com=")" alt=")"/>
+		<button x="316" y="1" width="62" height="47" com="+" alt="@"/>
+		<button x="379" y="1" width="62" height="47" com="-" alt="$"/>
 	</layout>
 </keyboards>

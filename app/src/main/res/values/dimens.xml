@@ -35,13 +35,13 @@
     <dimen name="selectMinWidth">60dp</dimen>
     <dimen name="selectMinHeight">30dp</dimen>
     <dimen name="chartMinWidth">12dp</dimen>
-    <dimen name="chartMinHeight">5px</dimen>
+    <dimen name="chartMinHeight">5dp</dimen>
     <dimen name="editMinWidth">110dp</dimen>
     <dimen name="editMinHeight">30dp</dimen>
     <dimen name="divider">2dp</dimen>
     <dimen name="menuText">15sp</dimen>
     <dimen name="hintText">12sp</dimen>
-    <dimen name="textText">14sp</dimen>
+    <dimen name="textText">16sp</dimen>
     <dimen name="messageText">22sp</dimen>
     <dimen name="headerText">17sp</dimen>
 </resources>

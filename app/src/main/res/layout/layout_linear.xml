@@ -4,6 +4,7 @@
     xmlns:z="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     z:decorate="scrollbar|glow"
+    z:behavior="clickable"
     z:pad="3dp"
     android:layout_width="match_parent" android:layout_height="match_parent">
     <LinearLayout
@@ -18,7 +19,7 @@
             z:styles="@style/select" />
         <GridView
             android:id="@+id/grid1"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
             z:styles="@style/grid"
             z:orientation="horizontal"
             z:bkTiles="@integer/selectDrop" />
@@ -70,7 +71,7 @@
         </EditLayout>
         <ListView
             android:id="@+id/list1"
-            android:layout_width="match_parent" android:layout_height="120dp"
+            android:layout_width="wrap_content" android:layout_height="120dp"
             z:styles="@style/ribbon"
             z:orientation="horizontal"
             z:bkTiles="@integer/selectDrop" />

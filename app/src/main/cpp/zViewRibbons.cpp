@@ -159,7 +159,7 @@ bool zViewBaseRibbon::scrolling(int _delta) {
                 deltaItem = (v ? v->edges(vert, false) - edge.w : 0);
                 requestPosition();
                 // отправляем событие скролла
-                if(onChangeScroll) onChangeScroll(this, firstItem);
+                post(MSG_SCROLLING, duration, firstItem);
                 return false;
             }
             // Предел прокрутки. Запуск эффекта
@@ -238,6 +238,12 @@ void zViewBaseRibbon::setItemSelected(int item) {
     firstItem = item - _count / 2;
     selectItem = item;
     requestPosition();
+}
+
+void zViewBaseRibbon::notifyEvent(HANDLER_MESSAGE* msg) {
+    if(msg->what == MSG_SELECTED && onChangeSelected)
+        onChangeSelected(this, msg->arg);
+    zViewGroup::notifyEvent(msg);
 }
 
 void zViewBaseRibbon::onLayout(crti &position, bool changed) {
@@ -320,7 +326,7 @@ i32 zViewBaseRibbon::onTouchEvent(zTouch *touch) {
                 // определяем индекс куда тапнули
                 if((clickItem = itemFromPoint(touch->cpt)) != -1) {
                     // вызов события
-                    if(onChangeSelected) onChangeSelected(this, clickItem);
+                    post(MSG_SELECTED, duration, clickItem);
                     // запоминаем выделенный
                     selectItem = clickItem;
                 }

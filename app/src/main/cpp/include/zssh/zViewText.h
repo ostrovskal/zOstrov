@@ -57,7 +57,7 @@ public:
     // установка макс. линий
     void setWrap(bool set) { if(testFlags(ZS_NOWRAP) != set) { updateStatus(ZS_NOWRAP, set); requestLayout(); } }
     // вернуть макс. линий
-    bool isWrap() const { return testFlags(ZS_NOWRAP); }
+    int getLines() const { return maxLines; }
     // установка размера шрифта
     void setTextSize(int _size) { if(defPaint->getSize() != _size) { defPaint->setSize(_size); requestLayout(); } }
     // установка цветов
@@ -123,6 +123,8 @@ protected:
     int fkW{0}, fkH{0};
     // максимальная длина текста(для редактора)
     int maxLength{32};
+    // максимальное количество линий текста
+    int maxLines{1};
     // кэш иконки
     szi icSize{};
     // кэшированное значение ширины wrap текста
@@ -199,7 +201,7 @@ public:
     // установить цвет подсказки
     void setTextHintColor(u32 _color) { colorHint = _color; setText(realText, true); }
     // обновление текста
-    virtual void updateText(int _what) { if(onChangeText) onChangeText(this, _what); notifyOwner(_what, this, caretIndex); }
+    virtual void updateText(int _what) { if(onChangeText) onChangeText(this, _what); }
 protected:
     // отрисовка
     virtual void onDraw() override;

@@ -82,7 +82,7 @@ void zViewSelect::setItemSelected(int item) {
     // скрыть окно
     popup->dismiss();
     // вызов события
-    if(onChangeSelected) onChangeSelected(this, selectItem);
+    post(MSG_SELECTED, duration, selectItem);
     // перерисовать
     invalidate();
 }

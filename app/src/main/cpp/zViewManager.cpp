@@ -242,12 +242,7 @@ void zViewManager::drawViews() {
     if(status & Z_ANIM) {
         while((msg = manager->event.obtain())) {
             // отправить на обработку в представление
-            if(msg->what == MSG_ANIM) {
-                auto view(msg->view);
-                if(view->onAnimation(view, msg->arg)) {
-                    manager->event.send(view, MSG_ANIM, view->duration, msg->arg);
-                }
-            }
+            msg->view->notifyEvent(msg);
         }
     }
 //    auto kadr(z_timeMillis() - b);
@@ -430,13 +425,9 @@ void zViewManager::setTheme(zStyle* _styles, zResource** _user, zStyles* _user_s
 void zViewManager::setColorFilter(zView* view, const zColor& _color) {
     u32 cf(ZCF_NORMAL);
     if(view) {
-        if(focus == view && view->isFocusableInTouch()) {
-            cf = ZCF_FOCUSED;
-        } else {
-            auto sts(view->status);
-            auto s(sts & (ZS_DISABLED | ZS_TAP));
-            if(s) cf = ((s & ZS_DISABLED) ? ZCF_DISABLED : ((sts & ZS_TAP_MASK) >> 8));
-        }
+        auto sts(view->status);
+        auto s(sts & (ZS_DISABLED | ZS_TAP));
+        if(s) cf = ((s & ZS_DISABLED) ? ZCF_DISABLED : ((sts & ZS_TAP_MASK) >> 8));
     }
     glUniformMatrix4fv(shaderVars[ZSH_UFLT], 1, false, filterMtxs[cf]);
     glUniform4fv(shaderVars[ZSH_UCOL], 1, _color);

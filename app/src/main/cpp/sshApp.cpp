@@ -92,11 +92,18 @@ void sshApp::setContent() {
         }
        DLOG("click item %i %s", v->id, i->getText().str());
     });
+    DLOG("clk %i %s", root->atView(0)->isClickabled(), root->atView(0)->typeName());
+    root->atView(0)->setOnClick([this](zView*, int) {
+        getActionBar()->show(!getActionBar()->isChecked());
+    });
     idView(z.R.id.radioLight)->setOnClick([this](zView*, int) {
         setTheme(styles_z_themelight, nullptr, nullptr);
     });
     idView(z.R.id.radioDark)->setOnClick([this](zView*, int) {
         setTheme(styles_z_themedark, nullptr, nullptr);
+    });
+    idView(z.R.id.chkbox)->setOnClick([this](zView* v, int) {
+//        getActionBar()->show(v->isChecked());
     });
     zArray<zStringUTF8> objects(theme->findArray(z.R.array.spinArray));
     for(int i = 0 ; i < 1000; i += 7) {
@@ -113,8 +120,6 @@ void sshApp::setContent() {
     auto adapter(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
     grd->setAdapter(adapter)->setOnChangeSelected([](zView*, int sel) {
 //        DLOG("grid sel %i", sel);
-    })->setOnClick([this](zView*, int) {
-        getActionBar()->show(true);
     });
     auto lst(idView<zViewRibbon>(z.R.id.list1));
     auto adapter1(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));

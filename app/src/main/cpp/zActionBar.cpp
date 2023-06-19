@@ -119,7 +119,7 @@ int zActionBar::measureButton(int _id, int _image, int _flags, czs& _txt, int wi
     if(_image == -1) { if(_txt.isNotEmpty()) but->setText(_txt, true); }
     but->disable(!(_flags & menuItemEnabled));
     but->tag = TAG{(char*)grp};
-    but->setOnClick([this, grp](zView* v, int) { if(lps.y >= 0) clickGroup(v, grp); });
+    but->setOnClick([this, grp](zView* v, int) { clickGroup(v, grp); });
     attach(but, VIEW_WRAP, VIEW_WRAP);
     auto ws(makeChildMeasureSpec(zMeasure(MEASURE_MOST, widthSize), but->pad.extent(false), VIEW_WRAP));
     auto hs(makeChildMeasureSpec(zMeasure(MEASURE_MOST, heightSize), but->pad.extent(true), VIEW_WRAP));
@@ -146,7 +146,7 @@ void zActionBar::clickGroup(zView *view, zMenuGroup *grp) {
 
 void zActionBar::onMeasure(cszm& spec) {
     auto widthSize(spec.w.size()), heightSize(spec.h.size());
-    int wContent(z_percent(widthSize, 33));
+    int wContent(z_percent(widthSize, 40));
     int width(wContent), i, count(root ? root->count() : 0);
     detach(content); overflow.reset(z.R.id.menuOverflow); removeAllViews(false);
     for(i = 0 ; i < count; ) {

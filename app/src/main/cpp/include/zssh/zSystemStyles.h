@@ -176,6 +176,7 @@ static zStyle styles_z_list_item[] = {
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_TEXT_NOWRAP, true },
 	{ Z_DECORATE, ZS_ELLIPSIS },
+	{ Z_IPADDING, 0x03030303 },
 	{ Z_FOREGROUND_TILES | ZT_END, z.R.integer.selectItem }
 };
 
@@ -617,6 +618,7 @@ static zStyle styles_z_progress1[] = {
 
 static zStyle styles_z_zscrolllayout1[] = {
 	{ Z_DECORATE, ZS_SCROLLBAR | ZS_GLOW },
+	{ Z_BEHAVIOR, ZS_CLICKABLE },
 	{ Z_PADDING | ZT_END, 0x03030303 }
 };
 

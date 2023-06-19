@@ -158,6 +158,7 @@
         <item name="fkGravity">center</item>
         <item name="textWrap">true</item>
         <item name="decorate">ellipsis</item>
+        <item name="ipad">3dp</item>
         <item name="fkTiles">@integer/selectItem</item>
     </style>
     <style name="menu_item">

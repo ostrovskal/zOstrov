@@ -32,7 +32,7 @@ void zViewText::setText(czs& _text, bool force) {
     if(force || realText != _text) {
         auto changed(rview.isNotEmpty());
         realText = _text;
-        clearCacheSpans(false);
+        clearCacheSpans(true);
         if(changed) {
             auto rv(rview);
             szm spec(zMeasure(lps.w == VIEW_WRAP ? MEASURE_UNDEF : MEASURE_EXACT, measureSpec.w.size()),
@@ -246,7 +246,7 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
         _ellipsis = widthRect;
         ellText = _text; _text = ellText.str();
     }
-    if(widthRect <= 0 || isWrap()) widthRect = INT_MAX;
+    if(widthRect <= 0 || getLines() == 1) widthRect = INT_MAX;
     textCache.clear();
     auto isEdit(dynamic_cast<zViewEdit*>(this));
     // адрес последнего разделителя/начало подстроки/текущий символ
@@ -265,7 +265,7 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
             if(!(ch = z_decodeUTF8(z_charUTF8(_text, &_count)))) break;
             // если это не начало подстроки и есть разделитель - запоминаем его
             if(_stext != _text && z_delimiter(ch)) separator = _text, sepWidth = width, sepPos = _pos;
-            if(isWrap() || ch != '\n') {
+            if(getLines() == 1 || ch != '\n') {
                 // определить новую ширину строки
                 auto ln(paint->getWidthChar(ch) + width);
                 // проверка на многоточие
@@ -565,7 +565,7 @@ bool zViewText::setHtmlText(czs& text, const std::function<bool(cstr tag, bool e
         }
         return span != nullptr;
     });
-    setText(html.text.str(), true);
+    setText(html.text, false);
     // убрать все спаны с пометной mark
     for(int i = 0; i < spans.size(); i++) {
         if(spans[i]->f == SPAN_FLAGS_MARK) {
