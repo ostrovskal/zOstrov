@@ -41,7 +41,7 @@
 			VIEW_MATCH, VIEW_WRAP);
 	grp10->attach(new zViewSlider(styles_z_seek2, z.R.id.seek2, 0, szi(0, 70), 30, false), 
 			VIEW_MATCH, VIEW_WRAP);
-	grp10->attach(new zViewButton(styles_z_button4, z.R.id.button4, z.R.string.press_me, z.R.integer.iconCancel), 
+	grp10->attach(new zViewButton(styles_z_button2, z.R.id.button4, z.R.string.press_me, z.R.integer.iconCancel), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp10->attach(new zViewProgress(styles_z_linearprogress, z.R.id.progress1, z.R.string.sergey, szi(0, 70), 10, false), 
 			ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP);

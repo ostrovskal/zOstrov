@@ -43,9 +43,8 @@ constexpr int PIVOT_ALL             = 3;
 #define DRW_SHADE                   3   // shade
 #define DRW_ICON                    4   // icon
 #define DRW_DIV                     4   // divider
-#define DRW_DBG                     5   // debugger
-#define DRW_FBO                     6   // fbo
-#define DRW_COUNT                   7
+#define DRW_FBO                     5   // fbo
+#define DRW_COUNT                   6
 // индексы параметров отрисовщиков
 #define DR_MSK                      0   // mask
 #define DR_BK                       1   // background

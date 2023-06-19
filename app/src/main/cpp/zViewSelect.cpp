@@ -109,8 +109,8 @@ void zViewSelect::onMeasure(cszm& spec) {
             height = z_max(minMaxSize.w, view->rview.h + pad.extent(true));
             if(heightSize && spec.h.mode() == MEASURE_MOST) height = z_min(height, heightSize);
         }
-        view->measure({zMeasure(MEASURE_EXACT, width - pad.extent(false)), zMeasure(MEASURE_EXACT, height - pad.extent(true))});
-        dropdown->measure({zMeasure(MEASURE_EXACT, width - pad.extent(false)), zMeasure(MEASURE_UNDEF, 0)});
+        view->measure({zMeasure(MEASURE_EXACT, width), zMeasure(MEASURE_EXACT, height)});
+        if(width > dropdown->rview.w) dropdown->measure({zMeasure(MEASURE_EXACT, width), zMeasure(MEASURE_UNDEF, 0)});
     }
     setMeasuredDimension(width, height);
 }
@@ -148,7 +148,7 @@ void zViewPopup::setContent(zView* _content) {
 void zViewPopup::show(cpti& _offs) {
     offs = _offs;
     manager->getSystemView(false)->attach(this, VIEW_WRAP, VIEW_WRAP);
-    updateStatus(ZS_VISIBLED, true);
+    updateVisible(true);
     if(content) content->requestLayout();
 }
 
@@ -194,5 +194,5 @@ i32 zViewPopup::keyEvent(int key, bool sysKey) {
 
 void zViewPopup::dismiss() {
     manager->getSystemView(false)->detach(this);
-    updateStatus(ZS_VISIBLED, false);
+    updateVisible(false);
 }

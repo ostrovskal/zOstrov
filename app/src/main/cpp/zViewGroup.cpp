@@ -283,7 +283,7 @@ void zViewGroup::awakenScroll() {
         auto offs((float)computeScrollOffset(vert)), ran((float)computeScrollRange(vert)), ext((float)computeScrollExtent(vert));
         auto showThumb(ext > 0 && ran > ext);
         auto ws(scrollBar->getSize());
-        scrollBar->visibility(showThumb);
+        scrollBar->updateStatus(ZS_VISIBLED, showThumb);
         if(showThumb) {
             auto sz(sizes(vert) - pad.extent(vert));
             auto length((int)roundf(sz * ext / ran)), offset((int)roundf((sz - length) * offs / (ran - ext)));
@@ -306,7 +306,8 @@ void zViewGroup::awakenScroll() {
 }
 
 void zViewGroup::changeTheme() {
-    for(auto& child : children) child->changeTheme();
+    for(auto& child : children)
+        child->changeTheme();
     zView::changeTheme();
 }
 

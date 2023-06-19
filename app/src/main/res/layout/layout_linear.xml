@@ -56,7 +56,6 @@
                 android:id="@+id/edit1" z:fbo="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                z:textColor="?attr/themeColorTextText"
                 z:textSize="20sp"
                 z:hint="@string/prompt"
                 z:fkGravity="center"
@@ -78,50 +77,47 @@
         <Button
             android:id="@+id/button1"
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:fkTiles="@integer/gradientRadial" z:foreground="@drawable/zssh" z:fkGravity="center" z:iconka="@integer/iconCancel"
-            android:gravity="center" z:fkScale="0.5" z:icon="@drawable/zssh" z:icScale="0.5"
-            android:text="@string/press_me" z:textColor="?attr/themeColorTextText" z:textSize="25sp" z:icGravity="end|center_vertical"
+            z:fkTiles="@integer/gradientRadial" z:fkGravity="center" z:iconka="@integer/iconCancel"
+            android:gravity="center" z:fkScale="0.5" z:icScale="0.5"
+            android:text="@string/press_me" z:textSize="25sp" z:icGravity="end|center_vertical"
             z:pad="5dp" z:tap="pressed" />
         <Switch
             android:id="@+id/switch1" android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:foreground="@drawable/zssh"
             z:fkGravity="end|center_vertical"
             z:fkTile1="@integer/switchTrack" z:fkTile2="@integer/switchTrumb"
-            z:text="@string/mode_already" z:textSize="20sp" z:textColor="?attr/themeColorTextText"
+            z:text="@string/mode_already"
             z:gravity="start|center_vertical"
             z:pad="5dp" z:duration="30" />
         <Button
             android:id="@+id/button2"
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:fkTiles="@integer/gradientRadial" z:foreground="@drawable/zssh" z:fkGravity="center" z:iconka="@integer/iconCancel"
-            z:font="@drawable/font3" android:gravity="center" z:fkScale="0.5" z:icon="@drawable/zssh" z:icScale="0.5"
-            android:text="@string/press_me" z:textColor="?attr/themeColorTextText" z:textSize="25sp" z:icGravity="end|center_vertical"
+            z:fkTiles="@integer/gradientRadial" z:fkGravity="center" z:iconka="@integer/iconCancel"
+            android:gravity="center" z:fkScale="0.5" z:icScale="0.5"
+            android:text="@string/press_me" z:icGravity="end|center_vertical"
             z:pad="5dp" z:tap="pressed" />
         <Switch
             android:id="@+id/switch2" android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:foreground="?attr/themeBitmap"
             z:fkGravity="end|center_vertical"
             z:fkTile1="@integer/switchTrack" z:fkTile2="@integer/switchTrumb"
-            z:font="@drawable/font1" z:textStyle="bold"
-            z:text="@string/switcher" z:textSize="20sp" z:textColor="?attr/themeColorTextText"
+            z:textStyle="bold"
+            z:text="@string/switcher"
             z:gravity="start|center_vertical"
             z:pad="5dp" z:duration="30" />
         <Switch
             android:id="@+id/switch3" android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:foreground="?attr/themeBitmap"
             z:fkGravity="end|center_vertical"
             z:fkTile1="@integer/switchTrack" z:fkTile2="@integer/switchTrumb"
-            z:font="@drawable/font3" z:textStyle="italic|strike|underline"
-            z:text="@string/activate" z:textSize="20sp" z:textColor="?attr/themeColorTextText"
+            z:textStyle="italic|strike|underline"
+            z:text="@string/activate"
             z:gravity="start|center_vertical"
             z:decorate="checked"
             z:pad="5dp" z:duration="30" />
         <Button
             android:id="@+id/button3"
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:fkTiles="@integer/gradientRadial" z:foreground="@drawable/zssh" z:fkGravity="center" z:iconka="@integer/iconCancel"
-            z:font="@drawable/font3" android:gravity="center" z:fkScale="0.5" z:icon="@drawable/zssh" z:icScale="0.5"
-            android:text="@string/press_me" z:textColor="?attr/themeColorTextText" z:textSize="25sp" z:icGravity="end|center_vertical"
+            z:fkTiles="@integer/gradientRadial" z:fkGravity="center" z:iconka="@integer/iconCancel"
+            android:gravity="center" z:fkScale="0.5" z:icScale="0.5"
+            android:text="@string/press_me" z:icGravity="end|center_vertical"
             z:pad="5dp" z:tap="pressed" />
         <SeekBar
             android:id="@+id/seek"
@@ -154,8 +150,8 @@
             android:id="@+id/button11"
             android:layout_width="match_parent" android:layout_height="wrap_content"
             z:fkTiles="@integer/gradientRadial" z:fkGravity="center" z:iconka="@integer/iconCancel"
-            android:gravity="center" z:fkScale="0.5" z:icon="@drawable/zssh" z:icScale="0.5"
-            android:text="@string/text_on_button" z:textSize="25sp" z:icGravity="start|center_vertical"
+            android:gravity="center" z:fkScale="0.5" z:icScale="0.5"
+            android:text="@string/text_on_button" z:icGravity="start|center_vertical"
             z:textStyle="underline|bold_italic"
             z:pad="5dp" z:tap="pressed" />
         <SeekBar
@@ -175,8 +171,8 @@
             android:id="@+id/button4"
             android:layout_width="match_parent" android:layout_height="wrap_content"
             z:fkTiles="@integer/gradientRadial" z:fkGravity="center" z:iconka="@integer/iconCancel"
-            android:gravity="center" z:fkScale="0.5" z:icon="@drawable/zssh" z:icScale="0.5"
-            android:text="@string/press_me" z:textSize="25sp" z:icGravity="end|center_vertical"
+            android:gravity="center" z:fkScale="0.5" z:icScale="0.5"
+            android:text="@string/press_me" z:icGravity="end|center_vertical"
             z:pad="5dp" z:tap="pressed" />
         <ProgressBar
             android:id="@+id/progress1" android:layout_width="match_parent" android:layout_height="wrap_content"

@@ -204,13 +204,13 @@ void zViewKeyboard::onDraw() {
     for(auto& b : current->buttons) {
         if(b.spec.isNotEmpty()) {
             n1 = b.name[0]; n2.empty();
-            baseTxt->setIcon(b.spec == "SHIFT" && activeShift ? z.R.integer.iconShiftFix : b.icon);
             bkColor = 0xff808080;
         } else {
             n1 = b.name[0]; n2 = b.name[1];
             bkColor = theme->themeColor;
             baseTxt->setIcon(-1);
         }
+        baseTxt->setIcon((b.spec == "SHIFT" && activeShift) ? z.R.integer.iconShiftFix : b.icon);
         auto r(b.rview); baseTxt->drw[DRW_FK]->color = bkColor;
         r.x = rview.x + r.x * deltaWidth; r.w *= deltaWidth;
         r.y = rview.y + r.y * deltaHeight; r.h *= deltaHeight;

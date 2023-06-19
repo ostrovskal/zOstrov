@@ -360,7 +360,7 @@ zView *zEditLayout::attach(zView *v, int width, int height, int where) {
             if(!cont && textEmpty) {
                 auto h(atView<zViewText>(1));
                 atView<zViewEdit>(0)->setHint(h->getText());
-                h->updateStatus(ZS_VISIBLED, false);
+                h->updateVisible(false);
             }
             requestLayout();
             return cont;
@@ -447,14 +447,13 @@ void zTabLayout::onInit(bool _theme) {
 void zTabLayout::showPage(int _page) {
     if(_page >= 0 && _page < caption->countChildren()) {
         // спрятать активную страницу
-        if(activePage != -1) content->atView(activePage)->updateStatus(ZS_VISIBLED, false);
+        if(activePage != -1) content->atView(activePage)->updateVisible(false);
         // активная страница
         activePage = _page;
         // показать новую страницу
-        content->atView(activePage)->updateStatus(ZS_VISIBLED, true);
+        content->atView(activePage)->updateVisible(true);
         // показать селектор
         showSelector();
-        requestLayout();
     }
 }
 
@@ -470,7 +469,7 @@ void zTabLayout::addPage(zViewGroup* group, u32 tabText, i32 tabIcon) {
     v->setOnClick([this](zView* v, int) { setActivePage(v->id); });
     caption->attach(v, VIEW_WRAP, VIEW_WRAP);
     content->attach(group, VIEW_MATCH, VIEW_MATCH);
-    if(countPages) group->updateStatus(ZS_VISIBLED, false);
+    if(countPages) group->updateVisible(false);
 }
 
 void zTabLayout::setActivePage(int _page) {

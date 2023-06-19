@@ -246,7 +246,7 @@
 		<attr name="themeTile2Slider" format="integer|string"/>
 		<attr name="themeTilesForm" format="integer|string"/>
 		<attr name="themeTilesWait" format="integer|string"/>
-		<attr name="themeSizeTextText" format="integer"/>
+		<attr name="themeSizeTextText" format="dimension"/>
 		<attr name="themeModeSlider" format="flags|string">
 			<flag name="none" value="1"/>
 			<flag name="rotate" value="2"/>

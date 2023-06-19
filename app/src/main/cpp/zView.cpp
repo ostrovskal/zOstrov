@@ -102,22 +102,22 @@ void zView::drawDebug() {
     // сетка элемента
     if(manager->isDebug()) {
         // создать сетку, если ее нет
-        if(!drw[DRW_DBG]->vertices) {
-            drw[DRW_DBG]->texture = manager->cache->get("znull", drw[DRW_DBG]->texture);
-            drw[DRW_DBG]->makeDebug(cellDebug);
+        if(!drwDebug.vertices) {
+            drwDebug.texture = manager->cache->get("znull", drwDebug.texture);
+            drwDebug.makeDebug(cellDebug);
         }
         // установить текстуру
-        glBindTexture(GL_TEXTURE_2D, drw[DRW_DBG]->texture->id);
+        glBindTexture(GL_TEXTURE_2D, drwDebug.texture->id);
         // параметры шейдера и обрезка
-        manager->prepareRender(drw[DRW_DBG]->vertices, manager->screen, zMatrix::_identity);
+        manager->prepareRender(drwDebug.vertices, manager->screen, zMatrix::_identity);
         // фильтр
         manager->setColorFilter(this, zColor::white);
         glDisable(GL_SCISSOR_TEST);
         // нарисовать линии
         glLineWidth(2);
-        glDrawArrays(GL_LINES, 0, drw[DRW_DBG]->count);
+        glDrawArrays(GL_LINES, 0, drwDebug.count);
         // подсчет кол-во линий в кадре
-        manager->countLn += drw[DRW_DBG]->count;
+        manager->countLn += drwDebug.count;
         glEnable(GL_SCISSOR_TEST);
     }
 #endif
@@ -266,7 +266,7 @@ void zView::layout(crti& position) {
         oldPos = position;
 #ifndef NDEBUG
         // убрать сетку
-        if(drw[DRW_DBG]->count) drw[DRW_DBG]->release();
+        if(drwDebug.count) drwDebug.release();
 #endif
     }
 }
@@ -353,6 +353,7 @@ void zView::stateView(STATE &state, bool save, int &index) {
         setRotation((float)state.data[index + 2] / 65535.0f, (float)state.data[index + 3] / 65535.0f, (float)state.data[index + 4] / 65535.0f);
         scroll.x = (int)state.data[index + 5]; scroll.y = (int)state.data[index + 6];
         if(drw[DRW_FBO]->isValid()) status |= ZS_DIRTY_LAYER; index += 7;
+        dbl[0] = state.data[index++]; dbl[1] = state.data[index++];
     }
 }
 
@@ -383,6 +384,14 @@ void zView::setRotation(float _x, float _y, float _z) {
     // установка угла
     rot.set(deg2rad(_x), deg2rad(_y), deg2rad(_z));
     setScale(scale.x, scale.y);
+}
+
+int zView::updateVisible(bool set) {
+    if(isVisibled() != set) {
+        updateStatus(ZS_VISIBLED, set);
+        requestLayout();
+    }
+    return set * ZS_VISIBLED;
 }
 
 void zView::setTranslation(float _x, float _y) {
@@ -419,8 +428,7 @@ zViewGlow::zViewGlow(zView* group) : zView(styles_z_glow, 0) {
             rview[vert]  = parent->edges(vert, flow);
         }
         invalidate();
-        updateStatus(ZS_VISIBLED, cont);
-        return cont;
+        return updateStatus(ZS_VISIBLED, cont);
     });
 }
 

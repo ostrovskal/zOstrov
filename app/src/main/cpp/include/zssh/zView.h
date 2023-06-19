@@ -88,8 +88,6 @@ public:
     virtual i32 touchEvent(AInputEvent* event);
     // выделить
     virtual void checked(bool set);
-    // спрятать/отобразить
-    virtual void visibility(bool _visible) { if(isVisibled() != _visible) { updateStatus(ZS_VISIBLED, _visible); requestLayout(); } }
     // блокировка/разблокировка
     virtual void disable(bool _disable) { updateStatus(ZS_DISABLED, _disable); }
     // запрос на полное обновление позиций представлений
@@ -133,6 +131,8 @@ public:
     // обновление статуса
     u32 updateStatus(u32 msk, u32 val, bool set) { status &= ~msk; val = (val & msk) * set; status |= val; return val; }
     u32 updateStatus(u32 val, bool set) { status &= ~val; val *= set; status |= val; return val; }
+    // обновление видимости
+    int updateVisible(bool set);
     // установка паддинга
     void setPadding(crti& r) { pad = r; requestLayout(); }
     // удаление отображателя
@@ -299,6 +299,9 @@ protected:
     std::function<int(zView*, zTouch*)> onTouch;
     // событие анимации
     std::function<int(zView*, int)> onAnimation;
+    // отрисовщик отладки
+    zDrawable drwDebug{this, -1};
+    // фейковый отрисовщик
     static zDrawableFake fake;
     // текущая FBO
     static zView* fbo;
@@ -314,7 +317,7 @@ public:
     // вернуть имя типа
     virtual cstr typeName() const override { return "zViewGlow"; }
     // остановка
-    void stop() { animator.clear(); updateStatus(ZS_VISIBLED, false); }
+    void stop() { animator.clear(); updateVisible(false); }
 protected:
     // область обрезки
     virtual rti drawableClip() const override { return parent->rclip; }

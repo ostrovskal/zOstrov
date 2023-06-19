@@ -141,7 +141,6 @@
     <style name="spin_item">
         <item name="textColor">?attr/themeColorTextText</item>
         <item name="gravity">center</item>
-        <item name="foreground">@drawable/zssh</item>
         <item name="textWrap">true</item>
         <item name="fkGravity">center</item>
         <item name="tap">hovered</item>
@@ -151,8 +150,8 @@
     <style name="list_item">
         <item name="fbo">true</item>
         <item name="mask">@drawable/zssh</item>
-        <item name="mskColor">#909090</item>
-        <item name="mskTiles">@integer/rectRound</item>
+        <item name="mskColor">#ffffff</item>
+        <item name="mskTiles">@integer/ellips</item>
         <item name="textStyle">bold_italic</item>
         <item name="gravity">center</item>
         <item name="foreground">@drawable/zssh</item>
@@ -326,7 +325,7 @@
         <item name="fkTile2">?attr/themeTile2Progress</item>
         <item name="fkColor">?attr/themeColorProgress</item>
         <item name="primary">?attr/themeColorPrimary</item>
-        <item name="pad">3dp</item>
+        <item name="pad">1dp</item>
         <item name="fkGravity">center</item>
         <item name="gravity">center</item>
         <item name="textColor">?attr/themeColorTextProgress</item>

@@ -9,6 +9,7 @@
         <item name="themeColorDivider">@color/dividerDark</item>
         <item name="themeColorSelector">@color/selectorDark</item>
         <item name="themeColorProgress">@color/progressDark</item>
+        <item name="themeColorPrimary">@color/primaryDark</item>
         <item name="themeColorMenu">@color/menuDark</item>
         <item name="themeColorTabbed">@color/tabbedDark</item>
         <item name="themeColorTextText">@color/textDark</item>
@@ -21,8 +22,8 @@
         <item name="themeColorTextTabbed">@color/textTabbedDark</item>
         <item name="themeColorTextProgress">@color/textProgressDark</item>
         <item name="themeColorTextMenu">@color/textMenuDark</item>
-        <item name="themeTile1Progress">@integer/rect</item>
-        <item name="themeTile2Progress">@integer/rect</item>
+        <item name="themeTile1Progress">@integer/rectRound</item>
+        <item name="themeTile2Progress">@integer/rectRound</item>
         <item name="themeTile1Slider">@integer/sliderTrack1</item>
         <item name="themeTile2Slider">@integer/sliderTrumb1</item>
         <item name="themeTilesForm">@integer/formBackground</item>
@@ -39,6 +40,7 @@
         <item name="themeColorDivider">@color/dividerLight</item>
         <item name="themeColorSelector">@color/selectorLight</item>
         <item name="themeColorProgress">@color/progressLight</item>
+        <item name="themeColorPrimary">@color/primaryLight</item>
         <item name="themeColorMenu">@color/menuLight</item>
         <item name="themeColorTabbed">@color/tabbedLight</item>
         <item name="themeColorTextText">@color/textLight</item>
@@ -51,8 +53,8 @@
         <item name="themeColorTextTabbed">@color/textTabbedLight</item>
         <item name="themeColorTextProgress">@color/textProgressLight</item>
         <item name="themeColorTextMenu">@color/textMenuLight</item>
-        <item name="themeTile1Progress">@integer/rect</item>
-        <item name="themeTile2Progress">@integer/rect</item>
+        <item name="themeTile1Progress">@integer/gradientRadial</item>
+        <item name="themeTile2Progress">@integer/gradientRadial</item>
         <item name="themeTile1Slider">@integer/sliderTrack2</item>
         <item name="themeTile2Slider">@integer/sliderTrumb2</item>
         <item name="themeTilesForm">@integer/formBackground</item>

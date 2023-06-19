@@ -332,7 +332,8 @@ void zViewText::onInit(bool _theme) {
     // шрифт
     setDrawable(&drParams[DR_TXT], DRW_TXT);
     drw[DRW_TXT]->typeTri = GL_TRIANGLES;
-    setTextColorDefault(drParams[DR_TXT].color); setTextColorForeground(drParams[DR_TXT].color);
+    setTextColorDefault(drParams[DR_TXT].color);
+    setTextColorForeground(drParams[DR_TXT].color);
     // фон шрифта
     dr->init(drParams[DR_BTXT]);
     defPaint->bkColor = dr->color.toARGB();

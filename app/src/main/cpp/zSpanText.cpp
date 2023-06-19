@@ -9,7 +9,7 @@
 zTextPaint::zTextPaint() {
     font = manager->loadResourceTexture(theme->styles->_int(Z_THEME_FONT, z.R.drawable.fontDefault), nullptr);
     setStyle(ZS_TEXT_NORMAL);
-    setSize(20_dp);
+    setSize(theme->styles->_int(Z_THEME_SIZE_TEXT_TEXT, 20_dp));
 }
 
 zTextPaint::~zTextPaint() {

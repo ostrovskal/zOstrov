@@ -110,7 +110,7 @@ zViewForm* zViewManager::attachForm(zViewForm* form, cszi& rect) {
     root->detach(form);
     root->attach(form, ZS_GRAVITY_CENTER, 0, rect.w, rect.h);
     // отобразить форму
-    form->visibility(true);
+    form->updateVisible(true);
     form->setGravity(ZS_GRAVITY_CENTER);
     return form;
 }
@@ -402,7 +402,7 @@ void zViewManager::updateNativeWindow(AConfiguration* config, zStyle* _styles, z
             common->attach(root = new zFrameLayout(styles_default, z.R.id.root), VIEW_MATCH, VIEW_MATCH);
             // добавить панель действий
             common->attach(actionBar = new zActionBar(styles_z_bar, styles_z_barbutton, styles_z_barpopup), 0, INT_MAX, VIEW_MATCH, VIEW_WRAP);
-            actionBar->setMenu(z.R.integer.iconZxAppZx, main_menu);
+            actionBar->setMenu(z.R.integer.iconApp_round, main_menu);
             actionBar->setAdapter(new zAdapterList({}, new zFabricMenuItem(styles_z_menu_item)));
             // добавить клаву
             common->attach(keyboard = new zViewKeyboard("keyboardDefault.xml"), ZS_GRAVITY_HCENTER, sz.h, VIEW_WRAP, VIEW_WRAP);

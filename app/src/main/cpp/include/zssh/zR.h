@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Mon Jun 19 04:48:31 2023
+// Mon Jun 19 08:22:16 2023
 
 #pragma once
 
@@ -12,7 +12,7 @@ struct _z {
 			enum { 
 				font1	= 0x00100000, 	font2	= 0x00100001, 	font3	= 0x00100002, 
 				fontDefault	= 0x00100003, 	znull	= 0x00100004, 	zssh	= 0x00100005, 
-				zx_icons	= 0x00100006, 			};
+				zxIcons	= 0x00100006, 	zx_icons	= 0x00100007, 			};
 		}; 
 		_drawable drawable;
 		struct _integer {
@@ -63,8 +63,8 @@ struct _z {
 				selectItem	= 36, 	selectCapt	= 37, 	radioOff	= 38, 	radioOn	= 39, 
 				checkOff	= 40, 	checkOn	= 41, 	sliderTrumb2	= 42, 	sliderTrumb1	= 43, 
 				sliderTrack2	= 44, 	sliderTrack1	= 45, 	formBackground	= 46, 
-				butKeyboardSmall	= 47, 	iconLang	= 48, 	iconDelete	= 50, 
-				iconShiftFix	= 51, 	iconShift	= 52, 	iconShiftPress	= 53, 
+				butKeyboardSmall	= 47, 	iconLang	= 48, 	iconApp_round1	= 49, 
+				iconDelete	= 50, 	iconShiftFix	= 51, 	iconShift	= 52, 	iconShiftPress	= 53, 
 				iconApp	= 54, 	iconOk	= 55, 	iconCancel	= 56, 	iconNo	= 57, 
 				iconYes	= 58, 	iconMenu	= 59, 	iconDef	= 60, 			};
 		}; 
@@ -85,8 +85,8 @@ struct _z {
 				textUrlLight	= 0xFFA0A0A0, 	textDark	= 0xFF9599F7, 	textLight	= 0xFFEA5191, 
 				textShadowDark	= 0xFF101010, 	textShadowLight	= 0xFF101010, 
 				tabbedDark	= 0xFFA0A000, 	tabbedLight	= 0xFF00A0A0, 	textTabbedDark	= 0xFFB0B000, 
-				textTabbedLight	= 0xFF007070, 	progressDark	= 0x80909090, 
-				progressLight	= 0x80505050, 	primaryDark	= 0xFFFF7000, 	primaryLight	= 0xFF00FF00, 
+				textTabbedLight	= 0xFF007070, 	progressDark	= 0xAF303030, 
+				progressLight	= 0xAF505050, 	primaryDark	= 0xFFFF7000, 	primaryLight	= 0xFF00FF00, 
 				textProgressDark	= 0xFFB0B0B0, 	textProgressLight	= 0xFFFFFFFF, 
 				menuDark	= 0xFFAF4001, 	menuLight	= 0xFF00406F, 	textMenuDark	= 0xFFFFFFFF, 
 				textMenuLight	= 0xFFFFFFFF, 	textHintDark	= 0xFF606060, 	textHintLight	= 0xFF606060, 
@@ -131,31 +131,31 @@ struct _z {
 		_id id;
 		struct _string {
 			enum { 
-				app_name	= 0x00100007, 	acontrollerMap	= 0x00100008, 	ccontrollerMap	= 0x00100009, 
-				themeDark	= 0x0010000A, 	themeLight	= 0x0010000B, 	textSpan	= 0x0010000C, 
-				first_form	= 0x0010000D, 	enter_family	= 0x0010000E, 	press_me	= 0x0010000F, 
-				sergey	= 0x00100010, 	progress	= 0x00100011, 	text_on_button	= 0x00100012, 
-				mode_already	= 0x00100013, 	switcher	= 0x00100014, 	activate	= 0x00100015, 
-				slider_text	= 0x00100016, 	prompt	= 0x00100017, 	radio_dark	= 0x00100018, 
-				radio_light	= 0x00100019, 	checkbox_text	= 0x0010001A, 	menuOpenSave	= 0x0010001B, 
-				menuSettings	= 0x0010001C, 	menuProperties	= 0x0010001D, 
-				menuSound	= 0x0010001E, 	menuPokes	= 0x0010001F, 	menuMru	= 0x00100020, 
-				menuOperations	= 0x00100021, 	menuReset	= 0x00100022, 	menuRestore	= 0x00100023, 
-				menuExecute	= 0x00100024, 	menuExit	= 0x00100025, 	menuModel	= 0x00100026, 
-				menuTurbo	= 0x00100027, 	menuFilter	= 0x00100028, 	menuTape	= 0x00100029, 
-				menuDebugger	= 0x0010002A, 	menuExeDebugger	= 0x0010002B, 
-				menuMagic	= 0x0010002C, 	menuDisk1	= 0x0010002D, 	menuDisk2	= 0x0010002E, 
-				menuDisk3	= 0x0010002F, 	menuDisk4	= 0x00100030, 	menuSinclair48	= 0x00100031, 
-				menuSinclair128	= 0x00100032, 	menuPentagon	= 0x00100033, 
-				menuScorpion	= 0x00100034, 	menuMruEmpty	= 0x00100035, 	menuKeyJoy	= 0x00100036, 
-				menuLabel	= 0x00100037, 	menuCode	= 0x00100038, 	menuValue	= 0x00100039, 
-				menuQuickSave	= 0x0010003A, 	menuAsm	= 0x0010003B, 	menuTzx	= 0x0010003C, 
-				podskazka	= 0x0010003D, 	Perekljuchatelw	= 0x0010003E, 			};
+				app_name	= 0x00100008, 	acontrollerMap	= 0x00100009, 	ccontrollerMap	= 0x0010000A, 
+				themeDark	= 0x0010000B, 	themeLight	= 0x0010000C, 	textSpan	= 0x0010000D, 
+				first_form	= 0x0010000E, 	enter_family	= 0x0010000F, 	press_me	= 0x00100010, 
+				sergey	= 0x00100011, 	progress	= 0x00100012, 	text_on_button	= 0x00100013, 
+				mode_already	= 0x00100014, 	switcher	= 0x00100015, 	activate	= 0x00100016, 
+				slider_text	= 0x00100017, 	prompt	= 0x00100018, 	radio_dark	= 0x00100019, 
+				radio_light	= 0x0010001A, 	checkbox_text	= 0x0010001B, 	menuOpenSave	= 0x0010001C, 
+				menuSettings	= 0x0010001D, 	menuProperties	= 0x0010001E, 
+				menuSound	= 0x0010001F, 	menuPokes	= 0x00100020, 	menuMru	= 0x00100021, 
+				menuOperations	= 0x00100022, 	menuReset	= 0x00100023, 	menuRestore	= 0x00100024, 
+				menuExecute	= 0x00100025, 	menuExit	= 0x00100026, 	menuModel	= 0x00100027, 
+				menuTurbo	= 0x00100028, 	menuFilter	= 0x00100029, 	menuTape	= 0x0010002A, 
+				menuDebugger	= 0x0010002B, 	menuExeDebugger	= 0x0010002C, 
+				menuMagic	= 0x0010002D, 	menuDisk1	= 0x0010002E, 	menuDisk2	= 0x0010002F, 
+				menuDisk3	= 0x00100030, 	menuDisk4	= 0x00100031, 	menuSinclair48	= 0x00100032, 
+				menuSinclair128	= 0x00100033, 	menuPentagon	= 0x00100034, 
+				menuScorpion	= 0x00100035, 	menuMruEmpty	= 0x00100036, 	menuKeyJoy	= 0x00100037, 
+				menuLabel	= 0x00100038, 	menuCode	= 0x00100039, 	menuValue	= 0x0010003A, 
+				menuQuickSave	= 0x0010003B, 	menuAsm	= 0x0010003C, 	menuTzx	= 0x0010003D, 
+				podskazka	= 0x0010003E, 	Perekljuchatelw	= 0x0010003F, 			};
 		}; 
 		_string string;
 		struct _array {
 			enum { 
-				spinArray	= 0x0010003F, 			};
+				spinArray	= 0x00100040, 			};
 		}; 
 		_array array;
 		struct _style {
@@ -183,8 +183,7 @@ struct _z {
 				zviewedit1	= 0x0010003B, 	zviewbutton1	= 0x0010003C, 	zviewswitch1	= 0x0010003D, 
 				button2	= 0x0010003E, 	switch2	= 0x0010003F, 	switch3	= 0x00100040, 
 				zviewslider1	= 0x00100041, 	seek1	= 0x00100042, 	button11	= 0x00100043, 
-				seek2	= 0x00100044, 	button4	= 0x00100045, 	edit2	= 0x00100046, 
-	};
+				seek2	= 0x00100044, 	edit2	= 0x00100045, 	};
 		};
 		_style style;
 	};
@@ -266,7 +265,6 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::seek1, styles_z_seek1 },
 		{ _z::_R::_style::button11, styles_z_button11 },
 		{ _z::_R::_style::seek2, styles_z_seek2 },
-		{ _z::_R::_style::button4, styles_z_button4 },
 		{ _z::_R::_style::edit2, styles_z_edit2 }
 };
 
@@ -280,6 +278,7 @@ static zResource z_resources[] = {
 		{ _z::_R::_drawable::fontDefault, "fontDefault" },
 		{ _z::_R::_drawable::znull, "znull" },
 		{ _z::_R::_drawable::zssh, "zssh" },
+		{ _z::_R::_drawable::zxIcons, "zxIcons" },
 		{ _z::_R::_drawable::zx_icons, "zx_icons" },
 		/* string */
 		{ _z::_R::_string::app_name, "Programm" },

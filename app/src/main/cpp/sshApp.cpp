@@ -75,7 +75,7 @@ void sshApp::run() {
 #include "zssh/zViewRibbons.h"
 
 void sshApp::setContent() {
-    //debug = true;
+//    debug = true;
     #include "zssh/layout_linear.h"
     getActionBar()->setOnClickMenuGroup([](zView* v, zMenuGroup* g) {
         DLOG("click group %i %i", g->getId(), g->count());

@@ -43,19 +43,14 @@ zActionBar::zActionBar(zStyle* _styles, zStyle* _styles_buttons, zStyle* _styles
     setOnAnimation([this](zView*, int) {
         if(isChecked()) {
             // блокировка? - ждем
-            if(testLocked()) return true;
+            if(testLocked()) { animator.frame = 0; return 1; }
         }
         // анимируем
         float v; auto cont(animator.update(v));
+        if(manager->tpView<zViewPopup>(nullptr)) { animator.frame--; return 1; }
+        if(!cont) { if(isChecked()) { show(!isChecked()); return 0; } }
         lps.y = -rview.h + (int)roundf(v * ((float)rview.h / 8.0f));
-        requestPosition();
-        if(!cont) {
-            auto pop(manager->tpView<zViewPopup>(nullptr));
-            if(pop) pop->dismiss();
-            if(isChecked()) { show(!isChecked()); return false; }
-        }
-        updateStatus(ZS_VISIBLED, cont);
-        return cont;
+        requestPosition(); return updateVisible(cont);
     });
     content  = new zFrameLayout(styles_default, 0);
     popup    = new zViewPopup(styles_default, this, dropdown);
@@ -124,7 +119,7 @@ int zActionBar::measureButton(int _id, int _image, int _flags, czs& _txt, int wi
     if(_image == -1) { if(_txt.isNotEmpty()) but->setText(_txt, true); }
     but->disable(!(_flags & menuItemEnabled));
     but->tag = TAG{(char*)grp};
-    but->setOnClick([this, grp](zView* v, int) { if(lps.y == 0) clickGroup(v, grp); });
+    but->setOnClick([this, grp](zView* v, int) { if(lps.y >= 0) clickGroup(v, grp); });
     attach(but, VIEW_WRAP, VIEW_WRAP);
     auto ws(makeChildMeasureSpec(zMeasure(MEASURE_MOST, widthSize), but->pad.extent(false), VIEW_WRAP));
     auto hs(makeChildMeasureSpec(zMeasure(MEASURE_MOST, heightSize), but->pad.extent(true), VIEW_WRAP));
