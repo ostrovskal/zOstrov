@@ -79,7 +79,7 @@ void zViewKeyboard::onInit(bool _theme) {
     // альтернативный текст
     attach(new zViewButton(styles_z_keyboardalt, 0, 0), 100, 100);
     // для нажатия кнопки
-    zParamDrawable kp(0x90000000, 0, -1, 0, 1.0f);
+    zParamDrawable kp{0x90000000, 0x0, 0, -1, 8, 0, 1.0f};
     setDrawable(&kp, DRW_FK);
     // установить раскладку по умолчанию
     if(!current) setLayout(defName);

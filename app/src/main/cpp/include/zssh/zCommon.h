@@ -34,18 +34,29 @@ constexpr int PIVOT_X               = 1;
 constexpr int PIVOT_Y               = 2;
 constexpr int PIVOT_ALL             = 3;
 
-/* background */
-#define DRW_BK                      0
-#define DRW_FK                      1
-#define DRW_TXT                     2
-#define DRW_ICON                    3
-#define DRW_SHADE                   2
-/* selector */
-#define DRW_SEL                     2
-/* divider */
-#define DRW_DIV                     3
-/* fbo */
-#define DRW_FBO                     4
+// индексы отрисовщиков
+#define DRW_MSK                     0   // mask
+#define DRW_BK                      1   // background
+#define DRW_FK                      2   // foreground
+#define DRW_SEL                     3   // selector
+#define DRW_TXT                     3   // text
+#define DRW_SHADE                   3   // shade
+#define DRW_ICON                    4   // icon
+#define DRW_DIV                     4   // divider
+#define DRW_DBG                     5   // debugger
+#define DRW_FBO                     6   // fbo
+#define DRW_COUNT                   7
+// индексы параметров отрисовщиков
+#define DR_MSK                      0   // mask
+#define DR_BK                       1   // background
+#define DR_FK                       2   // foreground
+#define DR_SEL                      3   // selector
+#define DR_TXT                      4   // text
+#define DR_ICON                     5   // icon
+#define DR_DIV                      6   // divider
+#define DR_SCL                      7   // scrollbar
+#define DR_BTXT                     8   // background text
+#define DR_COUNT                    9
 
 enum { TOUCH_CONTINUE, TOUCH_FINISH, TOUCH_ACTION, TOUCH_STOP };
 

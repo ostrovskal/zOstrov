@@ -54,7 +54,7 @@ public:
     int indexOf(cstr _text, int length, int screenLimit, int screenX, bool exact) const;
     int indexReverseOf(cstr _text, int length, int screenLimit) const;
     // цвет текста/фона
-    u32 fkColor{0}, bkColor{0};
+    u32 fkColor{0xffffffff}, bkColor{0};
 protected:
     // фактор масштабирования
     float factor{1.0f};

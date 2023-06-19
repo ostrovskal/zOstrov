@@ -127,7 +127,7 @@ int zViewEdit::indexFromPosition(cpti& screen, bool exact) {
 void zViewEdit::onInit(bool _theme) {
     zViewText::onInit(_theme);
     status          |= ZS_FOCUSABLE_IN_TOUCHABLE;
-    colorHint       = theme->styles->_int(Z_COLOR_HINT_TEXT, 0x7f505050);
+    colorHint       = theme->styles->_int(Z_THEME_COLOR_TEXT_HINT, 0x7f505050);
     setFilter(styles->_int(Z_MODE, ZS_EDIT_TEXT));
     // создать кнопку, если есть иконка
     if(drw[DRW_ICON]->isValid()) {

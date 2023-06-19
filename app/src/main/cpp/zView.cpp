@@ -8,7 +8,7 @@
 // фейковый отображатель
 zDrawableFake zView::fake;
 zView* zView::fbo(nullptr);
-
+zParamDrawable zView::drParams[DR_COUNT]{};
 static zMatrix mtxTmp{};
 
 zView::zView(zStyle* _styles, i32 _id) : styles(_styles), id(_id) {
@@ -40,8 +40,9 @@ void zView::changeTheme() {
 }
 
 void zView::onInit(bool _theme) {
-    oldPos.set(INT_MAX, INT_MAX, 0, 0); zParamDrawable fk, bk, sh;
-    styles->enumerate([this, &bk, &fk, &sh, _theme](u32 attr) {
+    oldPos.set(INT_MAX, INT_MAX, 0, 0);
+    zParamDrawable::setDefaults();
+    styles->enumerate([this, _theme](u32 attr) {
         auto v(&zTheme::value); auto val((int)v->u);
         attr |= _theme * ZTT_THM;
         switch(attr) {
@@ -63,26 +64,34 @@ void zView::onInit(bool _theme) {
             case Z_IPADDING:		    ipad.set(val); break;
             case Z_PADDING:			    pad.set(val); break;
             case Z_MARGINS:             margin.set(val); break;
-            case Z_MASK:                sh.texture  = val; break; //drwShape.init(z.R.drawable.zssh, 0xff7f7f7f, val, 0, 1.0f); break;
-            case Z_MASK_COLOR:          sh.color    = val; break; //drwShape.init(z.R.drawable.zssh, 0xff7f7f7f, val, 0, 1.0f); break;
-            case Z_MASK_TILES:          sh.tiles    = val; break;//drwShape.init(z.R.drawable.zssh, 0xff7f7f7f, val, 0, 1.0f); break;
-            case Z_FOREGROUND:		    fk.texture  = val; break;
-            case Z_FOREGROUND_COLOR:	fk.color    = val; break;
-            case Z_FOREGROUND_TILES:	fk.tiles    = val; break;
-            case Z_FOREGROUND_SCALE:	fk.scale    = v->f; break;
-            case Z_FOREGROUND_GRAVITY:  setForegroundGravity(val); fkGravity &= ~ZS_SCALE_MASK; fkGravity |= (val & ZS_SCALE_MASK); break;
-            case Z_FOREGROUND_PADDING:  fk.padding  = val; break;
-            case Z_BACKGROUND:		    bk.texture 	= val; break;
-            case Z_BACKGROUND_COLOR:	bk.color	= val; break;
-            case Z_BACKGROUND_TILES:	bk.tiles 	= val; break;
-            case Z_BACKGROUND_PADDING:  bk.padding	= val; break;
             case Z_DECORATE:            updateStatus(ZS_DECORATE_MASK, val, true); break;
+            case Z_FOREGROUND_GRAVITY:  setForegroundGravity(val); fkGravity &= ~ZS_SCALE_MASK; fkGravity |= (val & ZS_SCALE_MASK); break;
+            case Z_MASK:
+            case Z_MASK_COLOR:
+            case Z_MASK_TILES:
+            case Z_MASK_PADDING:
+            case Z_MASK_GRAVITY:        drParams[DR_MSK].set(Z_MASK, attr, val); break;
+            case Z_FOREGROUND_TILES:    attr = Z_FOREGROUND_TILE1;
+            case Z_FOREGROUND_TILE1:
+            case Z_FOREGROUND_TILE2:
+            case Z_FOREGROUND_TILE3:
+            case Z_FOREGROUND_TILE4:    ((u8*)&drParams[DR_FK].tiles)[(attr & ZTV_MASK) - (Z_FOREGROUND_TILE1 & ZTV_MASK)] = (val & 0xff);
+                                        val = drParams[DR_FK].tiles; attr = Z_FOREGROUND_TILES;
+            case Z_FOREGROUND:
+            case Z_FOREGROUND_COLOR:
+            case Z_FOREGROUND_PADDING:
+            case Z_FOREGROUND_SCALE:    drParams[DR_FK].set(Z_FOREGROUND, attr, val);
+                                        if(attr == Z_FOREGROUND_SCALE) drParams[DR_FK].scale = v->f; break;
+            case Z_BACKGROUND:
+            case Z_BACKGROUND_COLOR:
+            case Z_BACKGROUND_TILES:
+            case Z_BACKGROUND_PADDING:  drParams[DR_BK].set(Z_BACKGROUND, attr, val); break;
         }
     });
     // базовые отображатели
-    if(sh.texture) drwShape.init(sh);
-    setDrawable(&bk, DRW_BK);
-    setDrawable(&fk, DRW_FK);
+    setDrawable(&drParams[DR_MSK], DRW_MSK);
+    setDrawable(&drParams[DR_BK], DRW_BK);
+    setDrawable(&drParams[DR_FK], DRW_FK);
     // ротация/масштаб
     setScale(scale.x, scale.y);
     setRotation(rot.x, rot.y, rot.z);
@@ -93,22 +102,22 @@ void zView::drawDebug() {
     // сетка элемента
     if(manager->isDebug()) {
         // создать сетку, если ее нет
-        if(!drwDebug.vertices) {
-            drwDebug.texture = manager->cache->get("znull", drwDebug.texture);
-            drwDebug.makeDebug(cellDebug);
+        if(!drw[DRW_DBG]->vertices) {
+            drw[DRW_DBG]->texture = manager->cache->get("znull", drw[DRW_DBG]->texture);
+            drw[DRW_DBG]->makeDebug(cellDebug);
         }
         // установить текстуру
-        glBindTexture(GL_TEXTURE_2D, drwDebug.texture->id);
+        glBindTexture(GL_TEXTURE_2D, drw[DRW_DBG]->texture->id);
         // параметры шейдера и обрезка
-        manager->prepareRender(drwDebug.vertices, manager->screen, zMatrix::_identity);
+        manager->prepareRender(drw[DRW_DBG]->vertices, manager->screen, zMatrix::_identity);
         // фильтр
         manager->setColorFilter(this, zColor::white);
         glDisable(GL_SCISSOR_TEST);
         // нарисовать линии
         glLineWidth(2);
-        glDrawArrays(GL_LINES, 0, drwDebug.count);
+        glDrawArrays(GL_LINES, 0, drw[DRW_DBG]->count);
         // подсчет кол-во линий в кадре
-        manager->countLn += drwDebug.count;
+        manager->countLn += drw[DRW_DBG]->count;
         glEnable(GL_SCISSOR_TEST);
     }
 #endif
@@ -123,7 +132,7 @@ void zView::draw() {
                 drw[DRW_BK]->draw(&rview);
                 onDraw();
                 // форма обрезки
-                if(drwShape.tile) drawShape();
+                if(drw[DRW_MSK]->isValid()) drawShape();
             });
             updateStatus(ZS_DIRTY_LAYER, !isFBO());
         }
@@ -257,9 +266,7 @@ void zView::layout(crti& position) {
         oldPos = position;
 #ifndef NDEBUG
         // убрать сетку
-        if(drwDebug.count) {
-            drwDebug.release();
-        }
+        if(drw[DRW_DBG]->count) drw[DRW_DBG]->release();
 #endif
     }
 }
@@ -288,7 +295,7 @@ void zView::defaultOnMeasure(cszm& spec, szi size) {
 
 void zView::drawShape() {
     glBlendFunc(GL_DST_COLOR, GL_SRC_COLOR);
-    drwShape.draw(&rview);
+    drw[DRW_MSK]->draw(&rview);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
@@ -305,7 +312,7 @@ void zView::onLayout(crti &position, bool changed) {
         // позиционирование базовых отображателей
         drw[DRW_BK]->measure(rview.w, rview.h, 3, false);
         drw[DRW_FBO]->measure(rview.w, rview.h, 3, false);
-        drwShape.measure(rview.w, rview.h, 3, false);
+        drw[DRW_MSK]->measure(rview.w, rview.h, 3, false);
     }
 }
 
@@ -470,16 +477,15 @@ void zFlyng::stop() {
     manager->eraseAllEventsView(this);
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                        SCROLLBAR                                                                       //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 zViewScrollBar::zViewScrollBar(zView* group, bool _vert) : zView(styles_z_scrollbar, 0) {
-    parent = group; vert = _vert;
-    zView::onInit(false);
-    size = styles->_int(Z_SCROLLBAR_SIZE, 4);
-    fade = styles->_int(Z_SCROLLBAR_FADE, 0);
+    auto tl(drParams[DR_SCL].tiles); parent = group; vert = _vert;
+    fade = (drParams[DR_SCL].type == -1 ? styles->_int(Z_SCROLLBAR_FADE, 0) : drParams[DR_SCL].type);
+    size = (drParams[DR_SCL].size == -1 ? styles->_int(Z_SCROLLBAR_SIZE, 2_dp) : drParams[DR_SCL].size);
+    zView::onInit(false); if(tl != -1) drw[DRW_BK]->tile = tl;
     setOnAnimation([this](zView*, int) {
         invalidate();
         return updateStatus(ZS_VISIBLED, animator.update(alpha));

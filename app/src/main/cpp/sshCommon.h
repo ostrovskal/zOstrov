@@ -10,6 +10,7 @@
 
 extern sshApp*      theApp;
 
+/*
 static zStyle themeDark[] = {
         { Z_THEME_NAME,                   z.R.string.themeDark },
         // картинки
@@ -17,7 +18,7 @@ static zStyle themeDark[] = {
         { Z_FONT2,                        z.R.drawable.font2 },
         { Z_FONT3,                        z.R.drawable.font3 },
         { Z_BITMAP_COMMON,                z.R.drawable.zssh },
-        { Z_BITMAP_ICONS,                 z.R.drawable.zssh },
+        { Z_BITMAP_ICONS,                 z.R.drawable.zxIcons },
         { Z_COLOR_COMMON,                 z.R.color.themeDark },
         // цвета
         { Z_COLOR_DIVIDER,                z.R.color.dividerDark },
@@ -51,7 +52,7 @@ static zStyle themeLight[] = {
         { Z_FONT2,                     z.R.drawable.font2 },
         { Z_FONT3,                     z.R.drawable.font3 },
         { Z_BITMAP_COMMON,             z.R.drawable.zssh },
-        { Z_BITMAP_ICONS,              z.R.drawable.zssh },
+        { Z_BITMAP_ICONS,              z.R.drawable.zxIcons },
         { Z_COLOR_COMMON,              z.R.color.themeLight },
         // цвета
         { Z_COLOR_DIVIDER,             z.R.color.dividerLight },
@@ -78,3 +79,4 @@ static zStyle themeLight[] = {
         //{ Z_FORM_TILE,                 z.R.integer.rectRound },
         { Z_SLIDER_MODE | ZT_END,      ZS_SLIDER_ROTATE }
 };
+*/

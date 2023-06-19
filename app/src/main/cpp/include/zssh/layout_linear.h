@@ -25,13 +25,13 @@
 			VIEW_MATCH, VIEW_WRAP);
 	grp10->attach(new zViewSwitch(styles_z_zviewswitch1, z.R.id.switch1, z.R.string.mode_already), 
 			VIEW_MATCH, VIEW_WRAP);
-	grp10->attach(new zViewButton(styles_z_zviewbutton1, z.R.id.button2, z.R.string.press_me, z.R.integer.iconCancel), 
+	grp10->attach(new zViewButton(styles_z_button2, z.R.id.button2, z.R.string.press_me, z.R.integer.iconCancel), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp10->attach(new zViewSwitch(styles_z_switch2, z.R.id.switch2, z.R.string.switcher), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp10->attach(new zViewSwitch(styles_z_switch3, z.R.id.switch3, z.R.string.activate), 
 			VIEW_MATCH, VIEW_WRAP);
-	grp10->attach(new zViewButton(styles_z_zviewbutton1, z.R.id.button3, z.R.string.press_me, z.R.integer.iconCancel), 
+	grp10->attach(new zViewButton(styles_z_button2, z.R.id.button3, z.R.string.press_me, z.R.integer.iconCancel), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp10->attach(new zViewSlider(styles_z_zviewslider1, z.R.id.seek, z.R.string.slider_text, szi(5, 40), 3, false), 
 			VIEW_MATCH, VIEW_WRAP);
@@ -41,7 +41,7 @@
 			VIEW_MATCH, VIEW_WRAP);
 	grp10->attach(new zViewSlider(styles_z_seek2, z.R.id.seek2, 0, szi(0, 70), 30, false), 
 			VIEW_MATCH, VIEW_WRAP);
-	grp10->attach(new zViewButton(styles_z_zviewbutton1, z.R.id.button4, z.R.string.press_me, z.R.integer.iconCancel), 
+	grp10->attach(new zViewButton(styles_z_button4, z.R.id.button4, z.R.string.press_me, z.R.integer.iconCancel), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp10->attach(new zViewProgress(styles_z_linearprogress, z.R.id.progress1, z.R.string.sergey, szi(0, 70), 10, false), 
 			ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP);

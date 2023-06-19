@@ -4,30 +4,30 @@
 
     <item
         android:id="@integer/MENU_KEYBOARD"
-        android:icon="@integer/iconKeyb"
+        android:icon="@integer/iconZxKeyb"
         android:title="@string/menuKeyJoy"
         android:showAsAction="always"/>
     <item
         android:id="@integer/MENU_DEBUGGER1"
         android:title="@string/menuDebugger"
-        android:icon="@integer/iconDebug"
+        android:icon="@integer/iconZxDebug"
         android:showAsAction="always"
         tools:ignore="AlwaysShowAction">
         <menu>
             <group android:checkableBehavior="all">
                 <item
                     android:id="@integer/MENU_DEBUGGER_LABEL"
-                    android:icon="@integer/iconDebug"
+                    android:icon="@integer/iconZxDebug"
                     android:title="@string/menuLabel"
                     android:showAsAction="never" />
                 <item
                     android:id="@integer/MENU_DEBUGGER_CODE"
-                    android:icon="@integer/iconCode"
+                    android:icon="@integer/iconZxCode"
                     android:title="@string/menuCode"
                     android:showAsAction="never" />
                 <item
                     android:id="@integer/MENU_DEBUGGER_VALUE"
-                    android:icon="@integer/iconContent"
+                    android:icon="@integer/iconZxContent"
                     android:title="@string/menuValue"
                     android:showAsAction="never" />
             </group>
@@ -35,49 +35,49 @@
     </item>
     <item
         android:id="@integer/MENU_BROWSER"
-        android:icon="@integer/iconOpen"
+        android:icon="@integer/iconZxOpen"
         android:title="@string/menuOpenSave"
         android:showAsAction="always" />
     <item
         android:id="@integer/MENU_SETTINGS"
-        android:icon="@integer/iconSettings"
+        android:icon="@integer/iconZxSettings"
         android:title="@string/menuSettings"
         android:showAsAction="always" />
     <item
         android:id="@integer/MENU_PROPS"
-        android:icon="@integer/iconProps"
+        android:icon="@integer/iconZxProps"
         android:title="@string/menuProperties"
         android:showAsAction="always" >
         <menu>
             <group android:checkableBehavior="all">
                 <item
                     android:id="@integer/MENU_PROPS_SOUND"
-                    android:icon="@integer/iconSound"
+                    android:icon="@integer/iconZxSound"
                     android:title="@string/menuSound"
                     android:showAsAction="never" />
                 <item
                     android:id="@integer/MENU_PROPS_MAGNITOPHON"
-                    android:icon="@integer/iconCasette"
+                    android:icon="@integer/iconZxCasette"
                     android:title="@string/menuTape"
                     android:showAsAction="never"/>
                 <item
                     android:id="@integer/MENU_PROPS_FILTER"
-                    android:icon="@integer/iconFilter"
+                    android:icon="@integer/iconZxFilter"
                     android:title="@string/menuFilter"
                     android:showAsAction="never"/>
                 <item
                     android:id="@integer/MENU_PROPS_TURBO"
-                    android:icon="@integer/iconTurbo"
+                    android:icon="@integer/iconZxTurbo"
                     android:title="@string/menuTurbo"
                     android:showAsAction="never"/>
                 <item
                     android:id="@integer/MENU_PROPS_EXECUTE"
-                    android:icon="@integer/iconLock"
+                    android:icon="@integer/iconZxLock"
                     android:title="@string/menuExecute"
                     android:showAsAction="never" />
                 <item
                     android:id="@integer/MENU_PROPS_DEBUGGER"
-                    android:icon="@integer/iconDebug"
+                    android:icon="@integer/iconZxDebug"
                     android:title="@string/menuDebugger"
                     android:showAsAction="never" />
             </group>
@@ -85,29 +85,29 @@
     </item>
     <item
         android:id="@integer/MENU_MODEL"
-        android:icon="@integer/iconModel"
+        android:icon="@integer/iconZxModel"
         android:title="@string/menuModel"
         android:showAsAction="ifRoom">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@integer/MENU_MODEL_48KS"
-                    android:icon="@integer/iconComp"
+                    android:icon="@integer/iconZxComp"
                     android:title="@string/menuSinclair48"
                     android:showAsAction="never"/>
                 <item
                     android:id="@integer/MENU_MODEL_128K"
-                    android:icon="@integer/iconComp"
+                    android:icon="@integer/iconZxComp"
                     android:title="@string/menuSinclair128"
                     android:showAsAction="never"/>
                 <item
                     android:id="@integer/MENU_MODEL_PENTAGON"
-                    android:icon="@integer/iconComp"
+                    android:icon="@integer/iconZxComp"
                     android:title="@string/menuPentagon"
                     android:showAsAction="never"/>
                 <item
                     android:id="@integer/MENU_MODEL_SCORPION"
-                    android:icon="@integer/iconComp"
+                    android:icon="@integer/iconZxComp"
                     android:title="@string/menuScorpion"
                     android:showAsAction="never"/>
             </group>
@@ -115,68 +115,68 @@
     </item>
     <item
         android:id="@integer/MENU_OPERATIONS"
-        android:icon="@integer/iconNote"
+        android:icon="@integer/iconZx1"
         android:title="@string/menuOperations"
         android:showAsAction="ifRoom" >
         <menu>
             <item
                 android:id="@integer/MENU_POKES"
-                android:icon="@integer/iconPoke"
+                android:icon="@integer/iconZxPoke"
                 android:title="@string/menuPokes"
                 android:showAsAction="never" />
             <item
                 android:id="@integer/MENU_RESET"
-                android:icon="@integer/iconReset"
+                android:icon="@integer/iconZxReset"
                 android:title="@string/menuReset"
                 android:showAsAction="ifRoom" />
             <item
                 android:id="@integer/MENU_RESTORE"
-                android:icon="@integer/iconRestore"
+                android:icon="@integer/iconZxRestore"
                 android:title="@string/menuRestore"
                 android:showAsAction="ifRoom" />
             <item
                 android:id="@integer/MENU_ASSEMBLER"
-                android:icon="@integer/iconRom"
+                android:icon="@integer/iconZxConfig"
                 android:title="@string/menuAsm"
                 android:showAsAction="ifRoom" />
             <item
                 android:id="@integer/MENU_EDITOR_TZX"
-                android:icon="@integer/iconTzx"
+                android:icon="@integer/iconZxTZX"
                 android:title="@string/menuTzx"
                 android:showAsAction="ifRoom" />
             <item
                 android:id="@integer/MENU_MAGIC"
-                android:icon="@integer/iconMagic"
+                android:icon="@integer/iconZxMagic"
                 android:title="@string/menuMagic"
                 android:showAsAction="ifRoom" />
         </menu>
     </item>
     <item
         android:id="@integer/MENU_MRU"
-        android:icon="@integer/iconMru"
+        android:icon="@integer/iconZxMru"
         android:title="@string/menuMru"
         android:showAsAction="ifRoom" >
         <menu>
-            <item android:id="@integer/MENU_MRU_1" android:icon="@integer/iconMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
-            <item android:id="@integer/MENU_MRU_2" android:icon="@integer/iconMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
-            <item android:id="@integer/MENU_MRU_3" android:icon="@integer/iconMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
-            <item android:id="@integer/MENU_MRU_4" android:icon="@integer/iconMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
-            <item android:id="@integer/MENU_MRU_5" android:icon="@integer/iconMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
-            <item android:id="@integer/MENU_MRU_6" android:icon="@integer/iconMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
-            <item android:id="@integer/MENU_MRU_7" android:icon="@integer/iconMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
-            <item android:id="@integer/MENU_MRU_8" android:icon="@integer/iconMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
-            <item android:id="@integer/MENU_MRU_9" android:icon="@integer/iconMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
-            <item android:id="@integer/MENU_MRU_10" android:icon="@integer/iconMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
+            <item android:id="@integer/MENU_MRU_1" android:icon="@integer/iconZxMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
+            <item android:id="@integer/MENU_MRU_2" android:icon="@integer/iconZxMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
+            <item android:id="@integer/MENU_MRU_3" android:icon="@integer/iconZxMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
+            <item android:id="@integer/MENU_MRU_4" android:icon="@integer/iconZxMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
+            <item android:id="@integer/MENU_MRU_5" android:icon="@integer/iconZxMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
+            <item android:id="@integer/MENU_MRU_6" android:icon="@integer/iconZxMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
+            <item android:id="@integer/MENU_MRU_7" android:icon="@integer/iconZxMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
+            <item android:id="@integer/MENU_MRU_8" android:icon="@integer/iconZxMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
+            <item android:id="@integer/MENU_MRU_9" android:icon="@integer/iconZxMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
+            <item android:id="@integer/MENU_MRU_10" android:icon="@integer/iconZxMru" android:title="@string/menuMruEmpty" android:showAsAction="never" />
         </menu>
     </item>
     <item
         android:id="@integer/MENU_SHOW_DEBUGGER"
-        android:icon="@integer/iconDebug"
+        android:icon="@integer/iconZxDebug"
         android:title="@string/menuExeDebugger"
         android:showAsAction="never" />
     <item
         android:id="@integer/MENU_EXIT"
-        android:icon="@integer/iconExit"
+        android:icon="@integer/iconZxExit"
         android:title="@string/menuExit"
         android:showAsAction="never" />
 </menu>

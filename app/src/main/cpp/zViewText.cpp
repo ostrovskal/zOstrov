@@ -8,12 +8,12 @@
 zViewText::zViewText(zStyle *_styles, i32 _id, u32 _text) : zView(_styles, _id) {
     defSpan         = new zTextSpan();
     defPaint        = new zTextPaint();
+    dr              = new zDrawable(this, DRW_BK);
     minMaxSize.x    = z_dp(z.R.dimen.textMinWidth);
     minMaxSize.w    = z_dp(z.R.dimen.textMinHeight);
     setText(_text);
     // значения по умолчанию
     setShadowOffset(2, 2);
-    setTextColorShadow(0xff000000);
 }
 
 zViewText::~zViewText() {
@@ -301,14 +301,12 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
 
 void zViewText::onInit(bool _theme) {
     zView::onInit(_theme);
-    setTextColorHighlight(theme->styles->_int(Z_COLOR_HIGHLIGHT_TEXT, 0xffa0a0a0));
-    zParamDrawable txt, tbk, ic; tbk.texture = 0x01000000; txt.texture = z.R.drawable.fontDefault;
-    styles->enumerate([this, &ic, &txt, &tbk, _theme](u32 attr) {
+    setTextColorHighlight(theme->styles->_int(Z_THEME_COLOR_TEXT_HIGHLIGHT, 0xffa0a0a0));
+    setTextColorShadow(theme->styles->_int(Z_THEME_COLOR_TEXT_SHADOW, 0xff000000));
+    styles->enumerate([this, _theme](u32 attr) {
         auto v(&zTheme::value); auto val(v->u);
         attr |= _theme * ZTT_THM;
         switch(attr) {
-            case Z_TEXT_FONT:               txt.texture = val; break;
-            case Z_TEXT_FOREGROUND_COLOR:   txt.color   = val; setTextColorDefault(val); setTextColorForeground(val); break;
             case Z_TEXT_HIGHLIGHT_COLOR:    setTextColorHighlight(val); break;
             case Z_TEXT_SHADOW_COLOR:       setTextColorShadow(val); break;
             case Z_TEXT_SIZE:               setTextSize(val); break;
@@ -316,25 +314,30 @@ void zViewText::onInit(bool _theme) {
             case Z_TEXT_NOWRAP: 		    setWrap(val != 0); break;
             case Z_TEXT_SHADOW_OFFS:        setShadowOffset(val & 0xff, (val >> 8) & 0xff); break;
             case Z_TEXT_DISTANCE:           distance    = (int)val; break;
-            case Z_TEXT_BACKGROUND:         tbk.texture = val; break;
-            case Z_TEXT_BACKGROUND_COLOR:   tbk.color   = val; break;
-            case Z_TEXT_BACKGROUND_TILES:   tbk.tiles   = val; break;
             case Z_TEXT_LENGTH:             maxLength   = val; break;
-            case Z_ICON:                    ic.texture  = val; break;
-            case Z_ICON_COLOR:              ic.color    = val; break;
-            case Z_ICON_TILES:              ic.tiles    = val; break;
-            case Z_ICON_SCALE:              ic.scale    = v->f; break;
             case Z_ICON_GRAVITY:            setIconGravity(v->u); icGravity &= ~ZS_SCALE_MASK; icGravity |= (v->u & ZS_SCALE_MASK); break;
+            case Z_TEXT_FONT:
+            case Z_TEXT_FOREGROUND_COLOR:   drParams[DR_TXT].set(Z_TEXT_FONT, attr, val); break;
+            case Z_TEXT_BACKGROUND:
+            case Z_TEXT_BACKGROUND_COLOR:
+            case Z_TEXT_BACKGROUND_TILES:   drParams[DR_BTXT].set(Z_TEXT_BACKGROUND, attr, val);
+            case Z_ICON:
+            case Z_ICON_COLOR:
+            case Z_ICON_TILES:
+            case Z_ICON_PADDING:
+            case Z_ICON_SCALE:              drParams[DR_ICON].set(Z_ICON, attr, val);
+                                            if(attr == Z_ICON_SCALE) drParams[DR_ICON].scale = v->f; break;
         }
     });
     // шрифт
-    setDrawable(&txt, DRW_TXT);
+    setDrawable(&drParams[DR_TXT], DRW_TXT);
     drw[DRW_TXT]->typeTri = GL_TRIANGLES;
+    setTextColorDefault(drParams[DR_TXT].color); setTextColorForeground(drParams[DR_TXT].color);
     // фон шрифта
-    if(!dr) dr = new zDrawable(this, DRW_BK);
-    dr->init(tbk); defPaint->bkColor = dr->color.toARGB();
+    dr->init(drParams[DR_BTXT]);
+    defPaint->bkColor = dr->color.toARGB();
     // иконка
-    setDrawable(&ic, DRW_ICON);
+    setDrawable(&drParams[DR_ICON], DRW_ICON);
     // сброс краски
     defPaint->reset(this);
     // сброс кэша спанов

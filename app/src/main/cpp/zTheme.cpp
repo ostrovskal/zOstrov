@@ -124,7 +124,7 @@ bool zTheme::setTheme(zStyle* _styles, czs& lang, zResource** _user_resources, z
         if(val) {
             ret = (themeName != val);
             themeName = val;
-            themeColor = _styles->_int(Z_COLOR_COMMON, 0xffffffff);
+            themeColor = _styles->_int(Z_THEME_COLOR, 0xffffffff);
         } else {
             themeName.empty();
             ILOG("Недопустимая структура темы!");

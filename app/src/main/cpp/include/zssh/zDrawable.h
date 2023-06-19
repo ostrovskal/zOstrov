@@ -8,9 +8,10 @@
 #include "zSpanText.h"
 
 struct zParamDrawable {
-    zParamDrawable() { }
-    zParamDrawable(u32 _tx, u32 _cl, i32 _tl, u32 _pd, float _sc) : texture(_tx), color(_cl), tiles(_tl), padding(_pd), scale(_sc) { }
-    void set(u32 idx, int val) { params[idx] = val; }
+    //zParamDrawable() { }
+    //zParamDrawable(u32 _tx, u32 _cl, i32 _tl, u32 _pd, float _sc) : texture(_tx), color(_cl), tiles(_tl), padding(_pd), scale(_sc) { }
+    void set(u32 bs, u32 idx, int val);
+    static void setDefaults();
     union {
         struct { u32 texture{0}, color{0}, padding{0}; i32 tiles{-1}, size{8}, type{0}; float scale{1.0f}; };
         int params[8];

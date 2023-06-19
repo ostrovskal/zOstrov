@@ -242,7 +242,9 @@ public:
     // интерполятор
     zInterpolator animator{};
     // буферы отрисовки
-    zDrawable* drw[5]{};
+    zDrawable* drw[DRW_COUNT]{};
+    // параметры
+    static zParamDrawable drParams[DR_COUNT];
     // стили
     zStyle* styles{nullptr};
 protected:
@@ -286,10 +288,6 @@ protected:
     bool vert{false};
     // родитель
     zView* parent{nullptr};
-    // буфер отрисовки при отладке
-    zDrawable drwDebug{this, -1};
-    // для наложения маски
-    zDrawable drwShape{this, -1};
     // спецификаторы габаритов
     szm measureSpec{};
     // предыдущая позиция

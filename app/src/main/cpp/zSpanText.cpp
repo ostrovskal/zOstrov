@@ -7,7 +7,7 @@
 #include "zssh/zViewText.h"
 
 zTextPaint::zTextPaint() {
-    font = manager->loadResourceTexture(z.R.drawable.fontDefault, nullptr);
+    font = manager->loadResourceTexture(theme->styles->_int(Z_THEME_FONT, z.R.drawable.fontDefault), nullptr);
     setStyle(ZS_TEXT_NORMAL);
     setSize(20_dp);
 }
@@ -189,6 +189,6 @@ bool zTextSpanBullet::draw(int x, int y, int hmax, zTextPaint *paint) {
 }
 
 zTextSpanUrl::zTextSpanUrl(cstr _url) {
-    color = theme->styles->_int(Z_COLOR_LINK_TEXT, 0xffff0000);
+    color = theme->styles->_int(Z_THEME_COLOR_TEXT_URL, 0xffff0000);
     url = _url;
 }

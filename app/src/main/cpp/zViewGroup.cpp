@@ -157,46 +157,43 @@ i32 zViewGroup::touchEvent(AInputEvent* event) {
 void zViewGroup::onInit(bool _theme) {
     zView::onInit(_theme);
     // теперь специфичные
-    int decor(0); zParamDrawable dv, sl, sc;
-    sc.type = -1; sc.size = 2_dp; sc.tiles = -1;
-    styles->enumerate([this, &dv, &sl, &sc, &decor, _theme](u32 attr) {
+    int decor(0);
+    styles->enumerate([this, &decor, _theme](u32 attr) {
         auto v((int)zTheme::value.u); attr |= _theme * ZTT_THM;
         switch(attr) {
             case Z_SIZE_TOUCH:		    sizeTouch.set(v);break;
             case Z_DECORATE:            decor       = v; break;
-            case Z_DIVIDER:             dv.texture  = v; break;
-            case Z_DIVIDER_COLOR:       dv.color    = v; break;
-            case Z_DIVIDER_TILES:       dv.tiles    = v; break;
-            case Z_DIVIDER_PADDING:     dv.padding  = v; break;
-            case Z_DIVIDER_TYPE:        dv.type     = v; break;
-            case Z_DIVIDER_SIZE:        dv.size     = v; break;
-            case Z_SELECTOR:            sl.texture  = v; break;
-            case Z_SELECTOR_COLOR:      sl.color    = v; break;
-            case Z_SELECTOR_TILES:      sl.tiles    = v; break;
-            case Z_SELECTOR_PADDING:    sl.padding  = v; break;
-            case Z_SCROLLBAR_SIZE:      sc.size     = v; break;
-            case Z_SCROLLBAR_FADE:      sc.type     = v; break;
-            case Z_SCROLLBAR_TILES:     sc.tiles    = v; break;
+            case Z_DIVIDER:
+            case Z_DIVIDER_COLOR:
+            case Z_DIVIDER_TILES:
+            case Z_DIVIDER_PADDING:
+            case Z_DIVIDER_TYPE:
+            case Z_DIVIDER_SIZE:        drParams[DR_DIV].set(Z_DIVIDER, attr, v); break;
+            case Z_SELECTOR:
+            case Z_SELECTOR_COLOR:
+            case Z_SELECTOR_TILES:
+            case Z_SELECTOR_PADDING:    drParams[DR_SEL].set(Z_SELECTOR, attr, v); break;
+            case Z_SCROLLBAR:
+            case Z_SCROLLBAR_SIZE:
+            case Z_SCROLLBAR_FADE:
+            case Z_SCROLLBAR_TILES:     drParams[DR_SCL].set(Z_SCROLLBAR, attr, v); break;
         }
     });
+    // селектор
+    setDrawable(&drParams[DR_SEL], DRW_SEL);
+    // разделитель
+    setDrawable<zDrawableDivider>(&drParams[DR_DIV], DRW_DIV, &div);
+    // прокрутка
+    if(decor & ZS_SCROLLBAR) {
+        SAFE_DELETE(scrollBar); auto _decor(decor);
+        if((_decor & ZS_SCROLLBAR) == ZS_SCROLLBAR) _decor = vert * ZS_VSCROLLBAR;
+        scrollBar = new zViewScrollBar(this, (_decor & ZS_SCROLLBAR) == ZS_VSCROLLBAR);
+    }
     // глоу
     if(decor & ZS_GLOW) {
         SAFE_DELETE(glow);
         glow = new zViewGlow(this);
     }
-    // прокрутка
-    if(decor & ZS_SCROLLBAR) {
-        SAFE_DELETE(scrollBar);
-        if((decor & ZS_SCROLLBAR) == ZS_SCROLLBAR) decor = vert * ZS_VSCROLLBAR;
-        scrollBar = new zViewScrollBar(this, (decor & ZS_SCROLLBAR) == ZS_VSCROLLBAR);
-        if(sc.type != -1) scrollBar->fade = sc.type;
-        if(sc.tiles != -1) scrollBar->drw[DRW_BK]->tile = sc.tiles;
-        scrollBar->size = sc.size;
-    }
-    // селектор
-    setDrawable(&sl, DRW_SEL);
-    // разделитель
-    setDrawable<zDrawableDivider>(&dv, DRW_DIV, &div);
 }
 
 szi zViewGroup::measureChildren(cszm& spec) {

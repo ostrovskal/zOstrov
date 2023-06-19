@@ -27,7 +27,7 @@ void zViewForm::onDrawFBO() {
 void zViewForm::onInit(bool _theme) {
 	zLinearLayout::onInit(_theme);
 	// затенение
-	zParamDrawable fp(0x90000000, 0, -1, 0, 1.0f);
+	zParamDrawable fp{0x90000000, 0x0, 0, -1, 8, 0, 1.0f};
 	setDrawable(testFlags(ZS_MODAL) ? &fp : nullptr, DRW_FK);
 	auto screen(zGL::instance()->getSizeScreen());
 	drw[DRW_FK]->measure(screen.w, screen.h, 0, false);

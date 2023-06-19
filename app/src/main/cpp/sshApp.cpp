@@ -31,7 +31,7 @@ void sshApp::processEvents(i32 event) {
             redrawNativeWindow();
             break;
         case APP_CMD_WINDOW_RESIZED:
-            updateNativeWindow(android->config, theme->styles ? theme->styles : themeLight, theme->user_resources, theme->user_styles);
+            updateNativeWindow(android->config, theme->styles ? theme->styles : styles_z_themelight, theme->user_resources, theme->user_styles);
             break;
     }
 }
@@ -82,9 +82,9 @@ void sshApp::setContent() {
     })->setOnClickMenuItem([](zView* v, zMenuItem* i) {
         if(i->getId() == z.R.integer.MENU_KEYBOARD) {
             auto ic(i->getImage());
-            i->setImage(ic == z.R.integer.iconKeyb ? z.R.integer.iconGamepad : (ic == z.R.integer.iconGamepad
-                                                                                ? z.R.integer.iconDisplay
-                                                                                : z.R.integer.iconKeyb));
+            i->setImage(ic == z.R.integer.iconZxKeyb ? z.R.integer.iconZxGamepad : (ic == z.R.integer.iconZxGamepad
+                                                                                ? z.R.integer.iconZxDisplay
+                                                                                : z.R.integer.iconZxKeyb));
         } else {
             //i->setEnabled(false);
             //i->setVisibled(i->getId() & 1);
@@ -93,10 +93,10 @@ void sshApp::setContent() {
        DLOG("click item %i %s", v->id, i->getText().str());
     });
     idView(z.R.id.radioLight)->setOnClick([this](zView*, int) {
-        setTheme(themeLight, nullptr, nullptr);
+        setTheme(styles_z_themelight, nullptr, nullptr);
     });
     idView(z.R.id.radioDark)->setOnClick([this](zView*, int) {
-        setTheme(themeDark, nullptr, nullptr);
+        setTheme(styles_z_themedark, nullptr, nullptr);
     });
     zArray<zStringUTF8> objects(theme->findArray(z.R.array.spinArray));
     for(int i = 0 ; i < 1000; i += 7) {

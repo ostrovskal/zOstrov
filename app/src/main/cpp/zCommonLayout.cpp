@@ -410,7 +410,7 @@ void zEditLayout::layoutChild() {
         int x(edit->rclient.x + edit->ipad.x);
         switch(hint->gravity & ZS_GRAVITY_HORZ) {
             case ZS_GRAVITY_END:     x += (wmax - hint->rview.w - edit->ipad.extent(false)); break;
-            case ZS_GRAVITY_HCENTER: x += (wmax - hint->rview.w + 4) / 2; break;
+            case ZS_GRAVITY_HCENTER: x += (wmax - hint->rview.w) / 2; break;
         }
         hint->layout(rti(x, rclient.y + hsub, hint->rview.w, hint->rview.h));
     }

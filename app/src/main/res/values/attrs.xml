@@ -134,8 +134,14 @@
 			<flag name="disabled" value="256"/>
 		</attr>
 		<attr name="mask" format="reference|color|string"/>
-		<attr name="mskColor" format="color|string" />
-		<attr name="mskTiles" format="integer|string" />
+		<attr name="mskColor" format="color|string"/>
+		<attr name="mskTiles" format="integer|string"/>
+		<attr name="mskGravity" format="enum|string">
+			<enum name="min" value="1"/>
+			<enum name="max" value="2"/>
+			<enum name="width" value="4"/>
+			<enum name="height" value="8"/>
+		</attr>
 		<attr name="bkText" format="reference|color|string"/>
 		<attr name="bkTextColor" format="color|string"/>
 		<attr name="font" format="reference|color|string"/>
@@ -182,10 +188,10 @@
 			<enum name="zx" value="32"/>
 		</attr>
 		<attr name="speedTrack" format="float"/>
-		<attr name="sliderMode" format="enum|string">
-			<enum name="none" value="1"/>
-			<enum name="rotate" value="2"/>
-			<enum name="scale" value="4"/>
+		<attr name="sliderMode" format="flags|string">
+			<flag name="none" value="1"/>
+			<flag name="rotate" value="2"/>
+			<flag name="scale" value="4"/>
 		</attr>
 		<attr name="lines" format="integer|string"/>
 		<attr name="spacingLine" format="dimension"/>
@@ -213,6 +219,39 @@
 		<attr name="fadeScrollBars" format="boolean"/>
 		<attr name="tilesScrollBars" format="integer|string"/>
 		<attr name="sizeTouch" format="string"/>
+		<attr name="themeName" format="string"/>
+		<attr name="themeFont" format="reference|color|string"/>
+		<attr name="themeBitmap" format="reference|color|string"/>
+		<attr name="themeIcons" format="reference|color|string"/>
+		<attr name="themeColor" format="color|string"/>
+		<attr name="themeColorDivider" format="color|string"/>
+		<attr name="themeColorSelector" format="color|string"/>
+		<attr name="themeColorProgress" format="color|string"/>
+		<attr name="themeColorPrimary" format="color|string"/>
+		<attr name="themeColorMenu" format="color|string"/>
+		<attr name="themeColorTabbed" format="color|string"/>
+		<attr name="themeColorTextText" format="color|string"/>
+		<attr name="themeColorTextHighlight" format="color|string"/>
+		<attr name="themeColorTextShadow" format="color|string"/>
+		<attr name="themeColorTextMessage" format="color|string"/>
+		<attr name="themeColorTextHint" format="color|string"/>
+		<attr name="themeColorTextHeader" format="color|string"/>
+		<attr name="themeColorTextUrl" format="color|string"/>
+		<attr name="themeColorTextTabbed" format="color|string"/>
+		<attr name="themeColorTextProgress" format="color|string"/>
+		<attr name="themeColorTextMenu" format="color|string"/>
+		<attr name="themeTile1Progress" format="integer|string"/>
+		<attr name="themeTile2Progress" format="integer|string"/>
+		<attr name="themeTile1Slider" format="integer|string"/>
+		<attr name="themeTile2Slider" format="integer|string"/>
+		<attr name="themeTilesForm" format="integer|string"/>
+		<attr name="themeTilesWait" format="integer|string"/>
+		<attr name="themeSizeTextText" format="integer"/>
+		<attr name="themeModeSlider" format="flags|string">
+			<flag name="none" value="1"/>
+			<flag name="rotate" value="2"/>
+			<flag name="scale" value="4"/>
+		</attr>
 		<attr name="layout_x" format="dimension"/>
 		<attr name="layout_y" format="dimension"/>
 		<attr name="layout_width" format="dimension"/>

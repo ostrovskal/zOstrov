@@ -68,10 +68,10 @@
         <attr name="fkColor" translate="Z_FOREGROUND_COLOR" format="color" />
         <attr name="fkScale" translate="Z_FOREGROUND_SCALE" format="float" />
         <attr name="fkTiles" translate="Z_FOREGROUND_TILES" format="integer" />
-        <attr name="fkTile1" translate="Z_FOREGROUND_TILES" format="complexH" alt="integer" />
-        <attr name="fkTile2" translate="Z_FOREGROUND_TILES" format="complexW" alt="integer" />
-        <attr name="fkTile3" translate="Z_FOREGROUND_TILES" format="complexY" alt="integer" />
-        <attr name="fkTile4" translate="Z_FOREGROUND_TILES" format="complexX" alt="integer" />
+        <attr name="fkTile1" translate="Z_FOREGROUND_TILE1" format="integer" />
+        <attr name="fkTile2" translate="Z_FOREGROUND_TILE2" format="integer" />
+        <attr name="fkTile3" translate="Z_FOREGROUND_TILE3" format="integer" />
+        <attr name="fkTile4" translate="Z_FOREGROUND_TILE4" format="integer" />
         <attr name="duration" translate="Z_DURATION" format="integer" />
         <attr name="gravity" translate="Z_GRAVITY" format="flags">
             <item name="start" value="ZS_GRAVITY_START" />
@@ -136,6 +136,12 @@
         <attr name="mask" translate="Z_MASK" format="drawable" />
         <attr name="mskColor" translate="Z_MASK_COLOR" format="color" />
         <attr name="mskTiles" translate="Z_MASK_TILES" format="integer" />
+        <attr name="mskGravity" translate="Z_MASK_GRAVITY" format="enum">
+            <item name="min" value="ZS_SCALE_MIN" />
+            <item name="max" value="ZS_SCALE_MAX" />
+            <item name="width" value="ZS_SCALE_WIDTH" />
+            <item name="height" value="ZS_SCALE_HEIGHT" />
+        </attr>
         <attr name="bkText" translate="Z_TEXT_BACKGROUND" format="drawable" />
         <attr name="bkTextColor" translate="Z_TEXT_BACKGROUND_COLOR" format="color" />
         <attr name="font" translate="Z_TEXT_FONT" format="drawable" />
@@ -182,7 +188,7 @@
             <item name="zx" value="ZS_EDIT_ZX_DATA" />
         </attr>
         <attr name="speedTrack" translate="Z_SPEED_TRACK" format="float" />
-        <attr name="sliderMode" translate="Z_MODE" format="enum">
+        <attr name="sliderMode" translate="Z_MODE" format="flags">
             <item name="none" value="ZS_SLIDER_NONE" />
             <item name="rotate" value="ZS_SLIDER_ROTATE" />
             <item name="scale" value="ZS_SLIDER_SCALE" />
@@ -213,6 +219,40 @@
         <attr name="fadeScrollBars" translate="Z_SCROLLBAR_FADE" format="boolean" />
         <attr name="tilesScrollBars" translate="Z_SCROLLBAR_TILES" format="integer" />
         <attr name="sizeTouch" translate="Z_SIZE_TOUCH" format="dsize" />
+        <!-- атрибуты темы -->
+        <attr name="themeName" translate="Z_THEME_NAME" format="string" />
+        <attr name="themeFont" translate="Z_THEME_FONT" format="drawable" />
+        <attr name="themeBitmap" translate="Z_THEME_BITMAP" format="drawable" />
+        <attr name="themeIcons" translate="Z_THEME_ICONS" format="drawable" />
+        <attr name="themeColor" translate="Z_THEME_COLOR" format="color" />
+        <attr name="themeColorDivider" translate="Z_THEME_COLOR_DIVIDER" format="color" />
+        <attr name="themeColorSelector" translate="Z_THEME_COLOR_SELECTOR" format="color" />
+        <attr name="themeColorProgress" translate="Z_THEME_COLOR_PROGRESS" format="color" />
+        <attr name="themeColorPrimary" translate="Z_THEME_COLOR_PRIMARY" format="color" />
+        <attr name="themeColorMenu" translate="Z_THEME_COLOR_MENU" format="color" />
+        <attr name="themeColorTabbed" translate="Z_THEME_COLOR_TABBED" format="color" />
+        <attr name="themeColorTextText" translate="Z_THEME_COLOR_TEXT_TEXT" format="color" />
+        <attr name="themeColorTextHighlight" translate="Z_THEME_COLOR_TEXT_HIGHLIGHT" format="color" />
+        <attr name="themeColorTextShadow" translate="Z_THEME_COLOR_TEXT_SHADOW" format="color" />
+        <attr name="themeColorTextMessage" translate="Z_THEME_COLOR_TEXT_MESSAGE" format="color" />
+        <attr name="themeColorTextHint" translate="Z_THEME_COLOR_TEXT_HINT" format="color" />
+        <attr name="themeColorTextHeader" translate="Z_THEME_COLOR_TEXT_HEADER" format="color" />
+        <attr name="themeColorTextUrl" translate="Z_THEME_COLOR_TEXT_URL" format="color" />
+        <attr name="themeColorTextTabbed" translate="Z_THEME_COLOR_TEXT_TABBED" format="color" />
+        <attr name="themeColorTextProgress" translate="Z_THEME_COLOR_TEXT_PROGRESS" format="color" />
+        <attr name="themeColorTextMenu" translate="Z_THEME_COLOR_TEXT_MENU" format="color" />
+        <attr name="themeTile1Progress" translate="Z_THEME_TILE1_PROGRESS" format="integer" />
+        <attr name="themeTile2Progress" translate="Z_THEME_TILE2_PROGRESS" format="integer" />
+        <attr name="themeTile1Slider" translate="Z_THEME_TILE1_SLIDER" format="integer" />
+        <attr name="themeTile2Slider" translate="Z_THEME_TILE2_SLIDER" format="integer" />
+        <attr name="themeTilesForm" translate="Z_THEME_TILES_FORM" format="integer" />
+        <attr name="themeTilesWait" translate="Z_THEME_TILES_WAIT" format="integer" />
+        <attr name="themeSizeTextText" translate="Z_THEME_SIZE_TEXT_TEXT" format="dimension" />
+        <attr name="themeModeSlider" translate="Z_THEME_MODE_SLIDER" format="flags">
+            <item name="none" value="ZS_SLIDER_NONE" />
+            <item name="rotate" value="ZS_SLIDER_ROTATE" />
+            <item name="scale" value="ZS_SLIDER_SCALE" />
+        </attr>
     </attributes>
     <constructors>
         <attr name="layout_x" translate="0" format="x" />

@@ -27,43 +27,41 @@
     <color name="dividerDark">#5c5c75</color>
     <color name="dividerLight">#4f4f4f</color>
     <!-- цвет подсветки текста -->
-    <color name="highlightTextDark">#5670f1</color>
-    <color name="highlightTextLight">#f17056</color>
+    <color name="textHighlightDark">#5670f1</color>
+    <color name="textHighlightLight">#f17056</color>
     <!-- цвет информационных сообщений в форме -->
-    <color name="messageTextDark">#64fad2</color>
-    <color name="messageTextLight">#64fad2</color>
+    <color name="textMessageDark">#64fad2</color>
+    <color name="textMessageLight">#64fad2</color>
     <!-- цвет текста заголовка формы -->
-    <color name="headerTextDark">#41bacf</color>
-    <color name="headerTextLight">#a9f145</color>
+    <color name="textHeaderDark">#41bacf</color>
+    <color name="textHeaderLight">#a9f145</color>
     <!-- цвет ссылки -->
-    <color name="linkTextDark">#01fab8</color>
-    <color name="linkTextLight">#a0a0a0</color>
+    <color name="textUrlDark">#01fab8</color>
+    <color name="textUrlLight">#a0a0a0</color>
     <!-- общий цвет текста -->
-    <color name="textTextDark">#f79995</color>
-    <color name="textTextLight">#9151ea</color>
+    <color name="textDark">#f79995</color>
+    <color name="textLight">#9151ea</color>
+    <!-- цвет тени текста -->
+    <color name="textShadowDark">#101010</color>
+    <color name="textShadowLight">#101010</color>
     <!-- цвет заголовка табуляции и текста в заголовке -->
-    <color name="tabDark">#00a0a0</color>
-    <color name="tabLight">#a0a000</color>
-    <color name="tabTextDark">#00b0b0</color>
-    <color name="tabTextLight">#707000</color>
+    <color name="tabbedDark">#00a0a0</color>
+    <color name="tabbedLight">#a0a000</color>
+    <color name="textTabbedDark">#00b0b0</color>
+    <color name="textTabbedLight">#707000</color>
     <!-- цвет прогресса и текста подсказки прогресса -->
     <color name="progressDark">#80909090</color>
     <color name="progressLight">#80505050</color>
-    <color name="progressPrimaryDark">#0070ff</color>
-    <color name="progressPrimaryLight">#00ff00</color>
-    <color name="progressSecondaryDark">#0030a0</color>
-    <color name="progressSecondaryLight">#00a000</color>
-    <color name="progressTextDark">#b0b0b0</color>
-    <color name="progressTextLight">#ffffff</color>
-    <!-- цвет подсказки слайдера -->
-    <color name="sliderTextDark">#e0e0e0</color>
-    <color name="sliderTextLight">#e0e0e0</color>
+    <color name="primaryDark">#0070ff</color>
+    <color name="primaryLight">#00ff00</color>
+    <color name="textProgressDark">#b0b0b0</color>
+    <color name="textProgressLight">#ffffff</color>
     <!-- цвет меню и текста меню -->
     <color name="menuDark">#0140af</color>
     <color name="menuLight">#6f4000</color>
-    <color name="menuTextDark">#ffffff</color>
-    <color name="menuTextLight">#ffffff</color>
+    <color name="textMenuDark">#ffffff</color>
+    <color name="textMenuLight">#ffffff</color>
     <!-- цвет подсказки редактора -->
-    <color name="hintTextDark">#606060</color>
-    <color name="hintTextLight">#606060</color>
+    <color name="textHintDark">#606060</color>
+    <color name="textHintLight">#606060</color>
 </resources>

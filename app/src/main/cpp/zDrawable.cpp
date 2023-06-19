@@ -4,6 +4,52 @@
 
 #include "zssh/zCommon.h"
 
+//struct { u32 texture{0}, color{0}, padding{0}; i32 tiles{-1}, size{8}, type{0}; float scale{1.0f}; };
+//int params[8];
+
+static zParamDrawable drDef[DR_COUNT] = {
+        {0,                 0x0,        0, -1, 8, 0, 1.0f }, // DR_MSK
+        {0,                 0x0,        0, -1, 8, 0, 1.0f }, // DR_BK
+        {0,                 0x0,        0, -1, 8, 0, 1.0f }, // DR_FK
+        {0,                 0x0,        0, -1, 8, 0, 1.0f }, // DR_SEL
+        {0,                 0x0,        0, -1, 8, 0, 1.0f }, // DR_TXT
+        {0,                 0xffffffff, 0, -1, 8, 0, 1.0f }, // DR_ICON
+        {0,                 0x0,        0, -1, 8, 0, 1.0f }, // DR_DIV
+        {0xffffffff,        0x0,        0, -1,-1,-1, 1.0f }, // DR_SCL
+        {0x01000000,        0x0,        0, -1, 8, 0, 1.0f }  // DR_BTXT
+};
+
+void zParamDrawable::set(u32 bs, u32 idx, int val) {
+    if(scale == 0.0f) memcpy(this, &drDef[(int)(this - zView::drParams)], sizeof(zParamDrawable));
+    params[(idx & ZTV_MASK) - (bs & ZTV_MASK)] = val;
+}
+
+void zParamDrawable::setDefaults() {
+    memset(zView::drParams, 0, sizeof(zView::drParams));
+    // прокрутка
+    zView::drParams[DR_SCL].size = -1; zView::drParams[DR_SCL].type = -1; zView::drParams[DR_SCL].tiles = -1;
+    // шрифт по умолчанию
+    zView::drParams[DR_TXT].texture = theme->styles->_int(Z_THEME_FONT, z.R.drawable.fontDefault );
+    drDef[DR_TXT].texture = zView::drParams[DR_TXT].texture;
+    // цвет текста по умолчанию
+    zView::drParams[DR_TXT].color = theme->styles->_int(Z_THEME_COLOR_TEXT_TEXT, 0xffaabbcc);
+    drDef[DR_TXT].color = zView::drParams[DR_TXT].color;
+    // размер текста по умолчанию
+    zView::drParams[DR_TXT].size = theme->styles->_int(Z_THEME_SIZE_TEXT_TEXT, 20_dp);
+    drDef[DR_TXT].size = zView::drParams[DR_TXT].size;
+    // иконка по умолчанию
+    drDef[DR_ICON].texture = theme->styles->_int(Z_THEME_ICONS, z.R.drawable.zssh);
+    // divider
+    drDef[DR_DIV].texture = theme->styles->_int(Z_THEME_COLOR_DIVIDER, 0xff7f7f7f);
+    drDef[DR_DIV].type = ZS_DIVIDER_MIDDLE;
+    // цвет фона текста
+    zView::drParams[DR_BTXT].texture = 0x01000000;
+    zView::drParams[DR_BTXT].tiles = z.R.integer.rect;
+    // источник fk/bk
+    drDef[DR_BK].texture = theme->styles->_int(Z_THEME_BITMAP, z.R.drawable.zssh );
+    drDef[DR_FK].texture = theme->styles->_int(Z_THEME_BITMAP, z.R.drawable.zssh );
+}
+
 void zDrawable::release() {
     clear();
     if(texture) {
