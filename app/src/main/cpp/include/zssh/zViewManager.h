@@ -61,7 +61,7 @@ public:
     // подсчет использования видео памяти
     void volumeVideoMemory(int size, bool _add) { videoMemory += size * (_add * 2 - 1); }
     // привязка формы
-    virtual zViewForm* attachForm(zViewForm* form, cszi& rect);
+    virtual zViewForm* attachForm(zViewForm* form, int width, int height);
     // обработка сенсоров
     virtual void processSensors(int id) const { sensor.processSensor(id); }
     // отображение тоста

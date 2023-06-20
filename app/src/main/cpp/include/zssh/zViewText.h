@@ -55,7 +55,7 @@ public:
     // установка текста парсингом из html
     bool setHtmlText(czs& html, const std::function<bool(cstr tag, bool end, zHtml* html)>& parser);
     // установка макс. линий
-    void setWrap(bool set) { if(testFlags(ZS_NOWRAP) != set) { updateStatus(ZS_NOWRAP, set); requestLayout(); } }
+    void setLines(int _lines) { if(getLines() != _lines) { maxLines = _lines; requestLayout(); } }
     // вернуть макс. линий
     int getLines() const { return maxLines; }
     // установка размера шрифта

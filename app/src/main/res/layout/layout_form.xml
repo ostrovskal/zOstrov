@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Form xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:z="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/formOpen"
+    android:layout_width="280dp" android:layout_height="300dp"
+    z:styles="@style/form" android:text="Управление файлами"
+    z:styleCaption="@style/formCaption"
+    z:gravity="center"
+
+    z:modal="true"
+    z:nameView="formBrowser"
+    z:styleFooter="@style/formFooter">
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        z:pad="3dp" android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <Spinner
+                android:id="@+id/choiceSource"
+                z:styles="@style/select"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <ListView
+                android:id="@+id/catalog"
+                z:styles="@style/ribbon"
+                z:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    z:styles="@style/tools"
+                    z:icon="@drawable/zx_icons"
+                    z:iconka="@integer/iconZxDEL" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    z:styles="@style/tools"
+                    z:icon="@drawable/zx_icons"
+                    z:iconka="@integer/iconZxEject" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    z:styles="@style/tools"
+                    z:icon="@drawable/zx_icons"
+                    z:iconka="@integer/iconZxOpen" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    z:styles="@style/tools"
+                    z:icon="@drawable/zx_icons"
+                    z:iconka="@integer/iconZxSave" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    z:styles="@style/tools"
+                    z:icon="@drawable/zx_icons"
+                    z:iconka="@integer/iconZxTrDos" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    z:styles="@style/tools"
+                    z:iconka="@integer/iconCancel" />
+            </LinearLayout>
+            <CheckBox
+                android:id="@+id/chkReadOnly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                z:text="Read only"
+                z:styles="@style/checkbox" />
+        </LinearLayout>
+    </LinearLayout>
+</Form>

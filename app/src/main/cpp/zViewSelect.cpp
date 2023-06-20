@@ -35,6 +35,7 @@ zViewSelect::zViewSelect(zStyle* _styles, i32 _id) : zViewGroup(_styles, _id) {
     dropdown->setOnClick([this](zView* v, int sel) { setItemSelected(sel); });
     minMaxSize.set(z_dp(z.R.dimen.selectMinWidth), 0, z_dp(z.R.dimen.selectMinHeight), 0);
     updateStatus(ZS_CLICKABLE, true);
+    setAdapter(new zAdapterList({ "adapter default" }, new zFabricSelectItem(styles_z_spin_capt), new zFabricSelectItem(styles_z_spin_item)));
 }
 
 zViewSelect::~zViewSelect() {
@@ -46,14 +47,9 @@ zViewSelect::~zViewSelect() {
 }
 
 zViewSelect* zViewSelect::setAdapter(zAdapterList *_adapter) {
-    if(adapter) {
-        adapter->unregistration(this);
-        SAFE_DELETE(adapter);
-    }
     if(_adapter) {
         adapter = new zAdapterSelect(this, _adapter);
         dropdown->setAdapter(adapter);
-        adapter->registration(this);
     }
     return this;
 }
@@ -147,7 +143,6 @@ void zViewPopup::show(cpti& _offs) {
     offs = _offs;
     manager->getSystemView(false)->attach(this, VIEW_WRAP, VIEW_WRAP);
     updateVisible(true);
-    if(content) content->requestLayout();
 }
 
 i32 zViewPopup::touchEvent(AInputEvent *event) {
@@ -172,7 +167,7 @@ void zViewPopup::onLayout(crti &position, bool changed) {
         auto sub(rview.extent(true) - hScreen);
         // вниз - за пределы экрана
         // проверить вверх
-        auto ry(owner->edges(true, false) - offs.y - rview.h);
+        auto ry(owner->edges(true, false) - rview.h);
         if(ry < 0) {
             ry = -ry;
             if(sub > ry) sub = ry, rview.y = 0;
@@ -181,8 +176,8 @@ void zViewPopup::onLayout(crti &position, bool changed) {
         rview.h -= sub; rclient.h -= sub;
     }
     zView::onLayout(rview, changed);
-    rti r(rclient.x, rclient.y, content->rview.w, content->rview.h);
-    content->layout(r);
+//    rti r(rclient.x, rclient.y, content->rview.w, content->rview.h);
+    content->layout(rclient);
 }
 
 i32 zViewPopup::keyEvent(int key, bool sysKey) {

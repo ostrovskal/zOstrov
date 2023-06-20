@@ -116,7 +116,7 @@ enum ViewStyles {
     Z_DECORATE                  = (13 | ZTT_INT), // декорации
     Z_SIZE_TOUCH				= (14 | ZTT_VEC), // чувствительность касания
     Z_MODE						= (15 | ZTT_INT | ZTT_THM), // режим для слайдера/прогресса/формы/чарта/сетки/редактора
-    Z_SIZE                      = (16 | ZTT_DMN), // минимальный/максимальный размер представления
+    Z_SIZE                      = (16 | ZTT_VEC), // минимальный/максимальный размер представления
     // отступы
     Z_MARGINS					= (17 | ZTT_VEC), // отступ от макета
     Z_PADDING					= (18 | ZTT_VEC), // внутренний отступ от бэкграунда
@@ -169,7 +169,7 @@ enum ViewStyles {
     Z_TEXT_FOREGROUND_COLOR		= (57 | ZTT_INT | ZTT_THM),
     Z_TEXT_SIZE					= (58 | ZTT_DMN),
     Z_TEXT_STYLE				= (59 | ZTT_INT),
-    Z_TEXT_NOWRAP				= (60 | ZTT_INT),
+    Z_TEXT_LINES			    = (60 | ZTT_INT),
     Z_TEXT_BACKGROUND			= (61 | ZTT_INT | ZTT_THM),
     Z_TEXT_BACKGROUND_COLOR		= (62 | ZTT_INT | ZTT_THM),
     Z_TEXT_DISTANCE				= (63 | ZTT_DMN),
@@ -177,14 +177,14 @@ enum ViewStyles {
     Z_TEXT_SHADOW_OFFS			= (65 | ZTT_VEC),
     Z_TEXT_SHADOW_COLOR			= (66 | ZTT_INT | ZTT_THM),
     Z_TEXT_HIGHLIGHT_COLOR		= (67 | ZTT_INT | ZTT_THM),
+    Z_TEXT_LENGTH               = (68 | ZTT_INT),
     // таблица
-    Z_LINES						= (68 | ZTT_INT),
-    Z_SPACING_CELL				= (69 | ZTT_DMN),
-    Z_SPACING_LINE				= (70 | ZTT_DMN),
-    Z_CELL_SIZE					= (71 | ZTT_DMN),
-    Z_CHART_FLAGS               = (72 | ZTT_INT),
-    Z_PRIMARY                   = (73 | ZTT_INT | ZTT_THM),
-    Z_TEXT_LENGTH               = (74 | ZTT_INT),
+    Z_LINES						= (69 | ZTT_INT),
+    Z_SPACING_CELL				= (70 | ZTT_DMN),
+    Z_SPACING_LINE				= (71 | ZTT_DMN),
+    Z_CELL_SIZE					= (72 | ZTT_DMN),
+    Z_CHART_FLAGS               = (73 | ZTT_INT),
+    Z_PRIMARY                   = (74 | ZTT_INT | ZTT_THM),
     Z_STYLES                    = (75 | ZTT_INT),
     Z_FOREGROUND_TILE1          = (76 | ZTT_INT | ZTT_THM),
     Z_FOREGROUND_TILE2          = (77 | ZTT_INT | ZTT_THM),

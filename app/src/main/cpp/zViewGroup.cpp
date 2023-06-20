@@ -94,28 +94,15 @@ void zViewGroup::disable(bool set) {
     zView::disable(set);
 }
 
-void zViewGroup::draw() {
-    if(isVisibled()) {
-        // рисуем
-        if(isDirty()) {
-            drw[DRW_FBO]->drawFBO(fbo, [this] {
-                drw[DRW_BK]->draw(&rview);
-                // селектор
-                drw[DRW_SEL]->draw(nullptr);
-                onDraw();
-                // дочерние
-                for(auto v : children) v->draw();
-                // рисуем декорации
-                // прокрутка
-                if(scrollBar && scrollBar->isVisibled()) scrollBar->draw();
-                // глоу
-                if(glow && glow->isVisibled()) glow->draw();
-            });
-            updateStatus(ZS_DIRTY_LAYER, !isFBO());
-        }
-        onDrawFBO();
-        drawDebug();
-    }
+void zViewGroup::onDraw() {
+    // селектор
+    drw[DRW_SEL]->draw(nullptr);
+    // дочерние
+    for(auto v : children) v->draw();
+    // прокрутка
+    if(scrollBar && scrollBar->isVisibled()) scrollBar->draw();
+    // глоу
+    if(glow && glow->isVisibled()) glow->draw();
 }
 
 bool zViewGroup::intersectChildren(int x, int y) const {

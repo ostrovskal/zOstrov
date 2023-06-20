@@ -31,7 +31,10 @@ void zViewBaseRibbon::requestLayout() {
 
 zViewBaseRibbon* zViewBaseRibbon::setAdapter(zBaseAdapter* _adapter) {
     reset();
-    if(adapter) adapter->unregistration(this);
+    if(adapter) {
+        adapter->unregistration(this);
+        SAFE_DELETE(adapter);
+    }
     adapter = _adapter;
     if(_adapter) {
         _adapter->registration(this);
@@ -346,7 +349,7 @@ i32 zViewBaseRibbon::onTouchEvent(zTouch *touch) {
 
 void zViewBaseRibbon::onDraw() {
     zViewGroup::onDraw();
-    if(div) div->make(0, countItem, firstItem);
+    if(div) div->make(getExtra(), countItem, firstItem);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

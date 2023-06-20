@@ -12,6 +12,7 @@ class zViewForm : public zLinearLayout {
 public:
     // конструктор
     zViewForm(zStyle* _styles, i32 _id, zStyle* _styles_caption, zStyle* _styles_footer, u32 _caption, bool _modal);
+    virtual ~zViewForm() { delete shade; }
     // тип
     virtual cstr typeName() const override { return "zViewForm"; }
     // событие кнопки
@@ -19,6 +20,10 @@ public:
     virtual rti drawableClip() const override { return { 0, 0, 65535, 65535 }; }
     // инициализация
     virtual void onInit(bool _theme) override;
+    // обновление видимости
+    virtual int updateVisible(bool set) override;
+    // добавление дочерних
+    virtual zView* attach(zView *v, int width, int height, int where = -1) override;
     // установка события закрытия формы
     void setOnClose(std::function<int(zView*, int code)> _close) { onClose = std::move(_close); }
     // закрыть форму
@@ -26,6 +31,7 @@ public:
     // добавить элемент в контент
     zView* setContent(zView* view);
 protected:
+    virtual void onMeasure(cszm& spec) override;
     // отрисовка fbo
     virtual void onDrawFBO() override;
     // заголовок
@@ -39,6 +45,8 @@ protected:
     // сохраненные значения
     zStyle* _styles_button_footer{nullptr};
     zStyle* _styles_header{nullptr};
+    // затемнение
+    zDrawable* shade{nullptr};
 };
 
 class zViewFormMessage : public zViewForm {

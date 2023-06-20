@@ -18,7 +18,7 @@
         z:textColor="?attr/themeColorTextText" z:textSize="20sp" z:hint="подсказка" z:fkGravity="center"
         z:icon="@drawable/zssh" z:icGravity="end" z:icColor="#ffffffff" z:icTiles="@integer/iconEdit" z:textStyle="bold_italic|underline"
         z:pad="10dp" android:gravity="center_vertical" z:foreground="?attr/themeBitmap" z:fkTiles="@integer/edit"
-        z:textWrap="true" />
+        z:textLines="1" />
     <Button
         android:id="@+id/button1"
         android:layout_x="0px" android:layout_y="4px" android:layout_width="2px" android:layout_height="1px"

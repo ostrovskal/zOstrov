@@ -10,10 +10,10 @@
         <attr name="rotateY" translate="Z_ROTATE_Y" format="float" />
         <attr name="translateX" translate="Z_TRANSLATE_X" format="float" />
         <attr name="translateY" translate="Z_TRANSLATE_Y" format="float" />
-        <attr name="sizeMinW" translate="Z_SIZE" format="complexY" />
-        <attr name="sizeMinH" translate="Z_SIZE" format="complexH" />
-        <attr name="sizeMaxW" translate="Z_SIZE" format="complexX" />
-        <attr name="sizeMaxH" translate="Z_SIZE" format="complexW" />
+        <attr name="sizeMinW" translate="Z_SIZE" format="complexX" />
+        <attr name="sizeMinH" translate="Z_SIZE" format="complexW" />
+        <attr name="sizeMaxW" translate="Z_SIZE" format="complexY" />
+        <attr name="sizeMaxH" translate="Z_SIZE" format="complexH" />
         <attr name="pad" translate="Z_PADDING" format="complex" />
         <attr name="padStart" translate="Z_PADDING" format="complexX" />
         <attr name="padEnd" translate="Z_PADDING" format="complexW" />
@@ -155,7 +155,7 @@
         </attr>
         <attr name="textColor" translate="Z_TEXT_FOREGROUND_COLOR" format="color" />
         <attr name="textSize" translate="Z_TEXT_SIZE" format="dimension" />
-        <attr name="textWrap" translate="Z_TEXT_NOWRAP" format="boolean" />
+        <attr name="textLines" translate="Z_TEXT_LINES" format="integer" />
         <attr name="textDistance" translate="Z_TEXT_DISTANCE" format="dimension" />
         <attr name="textShadowColor" translate="Z_TEXT_SHADOW_COLOR" format="color" />
         <attr name="textHighlightColor" translate="Z_TEXT_HIGHLIGHT_COLOR" format="color" />
@@ -219,6 +219,7 @@
         <attr name="fadeScrollBars" translate="Z_SCROLLBAR_FADE" format="boolean" />
         <attr name="tilesScrollBars" translate="Z_SCROLLBAR_TILES" format="integer" />
         <attr name="sizeTouch" translate="Z_SIZE_TOUCH" format="dsize" />
+        <attr name="nameView" translate="Z_NAME_VIEW" format="string" />
         <!-- атрибуты темы -->
         <attr name="themeName" translate="Z_THEME_NAME" format="string" />
         <attr name="themeFont" translate="Z_THEME_FONT" format="drawable" />

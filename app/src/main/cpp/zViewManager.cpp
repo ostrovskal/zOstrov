@@ -38,26 +38,6 @@ static cstr fragShader = "precision mediump float;\n"
 
 zViewManager* manager(nullptr);
 
-/*
-static void* threadFunc(void*) {
-    static HANDLER_MESSAGE *msg(nullptr);
-    while(manager && !manager->isQuit()) {
-        if(!manager->isAnim()) continue;
-        while((msg = manager->event.obtain())) {
-            // отправить на обработку в представление
-            if(msg->what == MSG_ANIM) {
-                auto view(msg->view);
-                if(view->onAnimation(view, msg->arg)) {
-                    manager->event.send(view, MSG_ANIM, view->duration, msg->arg);
-                }
-            }
-        }
-        usleep(1000);
-    }
-    return nullptr;
-}
-*/
-
 zViewManager::zViewManager(ANativeActivity* _activity, int size_cache) {
     memset(shaderVars, 0, sizeof(shaderVars));
     if(!theme) theme = new zTheme();
@@ -106,12 +86,10 @@ i32 zViewManager::processInputEvens(AInputEvent *_event) {
     return 0;
 }
 
-zViewForm* zViewManager::attachForm(zViewForm* form, cszi& rect) {
+zViewForm* zViewManager::attachForm(zViewForm* form, int width, int height) {
     root->detach(form);
-    root->attach(form, ZS_GRAVITY_CENTER, 0, rect.w, rect.h);
-    // отобразить форму
-    form->updateVisible(true);
-    form->setGravity(ZS_GRAVITY_CENTER);
+    root->attach(form, ZS_GRAVITY_CENTER, 0, width, height);
+    form->updateStatus(ZS_VISIBLED, false);
     return form;
 }
 
@@ -142,7 +120,8 @@ bool zViewManager::displayInit() {
     glDisable(GL_STENCIL_TEST);
     glEnable(GL_BLEND);
     glEnable(GL_SCISSOR_TEST);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+//    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     // запускаем тред анимации
 /*

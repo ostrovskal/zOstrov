@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Mon Jun 19 23:16:26 2023
+// Tue Jun 20 13:08:42 2023
 
 #pragma once
 
@@ -21,23 +21,23 @@ struct _z {
 				iconZxDisk	= 4, 	iconZxBp	= 5, 	iconZxTraceStep	= 6, 	iconZxMru	= 7, 
 				iconZxHex	= 8, 	iconZxForward	= 9, 	iconZxDel	= 10, 	iconZxTZX	= 11, 
 				iconZxDebug	= 12, 	iconZxFind	= 13, 	iconZxContent	= 14, 
-				iconZxConfig	= 15, 	iconZxSuper	= 16, 	iconZxFolder2	= 17, 
-				iconZxAccelOn	= 18, 	iconZxKeyb	= 19, 	iconZxInsert	= 20, 
-				iconZxHelp	= 21, 	iconZx16	= 22, 	iconZxAccelOff	= 23, 	iconZxLock	= 24, 
-				iconZx1	= 25, 	iconApp_round	= 26, 	iconZxComp	= 27, 	iconZxMagic	= 28, 
-				iconZxCode	= 29, 	iconZxFilter	= 30, 	iconZxEject	= 31, 	iconZxTraceIn	= 32, 
-				iconZx8	= 33, 	iconZxSound	= 34, 	iconZxProps	= 35, 	iconZxGamepad	= 36, 
-				iconZxOpen	= 37, 	iconZxRom	= 38, 	iconZxCasette	= 39, 	iconZxDisplay	= 40, 
-				iconZxNote	= 41, 	iconZxModel	= 42, 	iconZxTurbo	= 43, 	iconZxCloud	= 44, 
-				iconZxWeb	= 45, 	iconZxPoke	= 46, 	iconZxTools	= 47, 	iconZxSettings	= 48, 
-				iconZxExit	= 49, 	iconZxReset	= 50, 	iconZxTrDos	= 51, 	iconZxRestore	= 52, 
-				iconZxFolder1	= 53, 	iconZxBps	= 54, 	iconZxPlay	= 55, 	zxBar	= 56, 
-				iconZxAppZx	= 57, 	iconZxPause	= 58, 	iconZxG00	= 59, 	iconZxG01	= 60, 
-				iconZxG02	= 61, 	iconZxG03	= 62, 	iconZxG04	= 63, 	iconZxG05	= 64, 
-				iconZxG06	= 65, 	iconZxG07	= 66, 	iconZxG08	= 67, 	iconZxG09	= 68, 
-				iconZxG10	= 69, 	iconZxG11	= 70, 	iconZxG12	= 71, 	iconZxG13	= 72, 
-				iconZxG14	= 73, 	iconZxG15	= 74, 	iconZxArrowLeft	= 75, 	iconZxArrowDown	= 76, 
-				iconZxArrowUp	= 77, 	iconZxArrowRight	= 78, 	MENU_BROWSER	= 1001, 
+				iconZxConfig	= 15, 	iconZxOK	= 16, 	iconZxDEL	= 17, 	iconZxSave	= 18, 
+				iconZxAccelOn	= 19, 	iconZxKeyb	= 20, 	iconZxInsert	= 21, 
+				iconZxHelp	= 22, 	iconZx16	= 23, 	iconZxAccelOff	= 24, 	iconZxLock	= 25, 
+				iconZx1	= 26, 	iconApp_round	= 27, 	iconZxComp	= 28, 	iconZxMagic	= 29, 
+				iconZxCode	= 30, 	iconZxFilter	= 31, 	iconZxEject	= 32, 	iconZxTraceIn	= 33, 
+				iconZx8	= 34, 	iconZxSound	= 35, 	iconZxProps	= 36, 	iconZxGamepad	= 37, 
+				iconZxOpen	= 38, 	iconZxRom	= 39, 	iconZxCasette	= 40, 	iconZxDisplay	= 41, 
+				iconZxNote	= 42, 	iconZxModel	= 43, 	iconZxTurbo	= 44, 	iconZxCloud	= 45, 
+				iconZxWeb	= 46, 	iconZxPoke	= 47, 	iconZxTools	= 48, 	iconZxSettings	= 49, 
+				iconZxExit	= 50, 	iconZxReset	= 51, 	iconZxTrDos	= 52, 	iconZxRestore	= 53, 
+				iconZxFolder1	= 54, 	iconZxBps	= 55, 	iconZxPlay	= 56, 	zxBar	= 57, 
+				iconZxAppZx	= 58, 	iconZxPause	= 59, 	iconZxG00	= 60, 	iconZxG01	= 61, 
+				iconZxG02	= 62, 	iconZxG03	= 63, 	iconZxG04	= 64, 	iconZxG05	= 65, 
+				iconZxG06	= 66, 	iconZxG07	= 67, 	iconZxG08	= 68, 	iconZxG09	= 69, 
+				iconZxG10	= 70, 	iconZxG11	= 71, 	iconZxG12	= 72, 	iconZxG13	= 73, 
+				iconZxG14	= 74, 	iconZxG15	= 75, 	iconZxArrowLeft	= 76, 	iconZxArrowDown	= 77, 
+				iconZxArrowUp	= 78, 	iconZxArrowRight	= 79, 	MENU_BROWSER	= 1001, 
 				MENU_SETTINGS	= 1002, 	MENU_PROPS	= 1003, 	MENU_MODEL	= 1004, 
 				MENU_RESET	= 1005, 	MENU_RESTORE	= 1006, 	MENU_EXIT	= 1007, 
 				MENU_KEYBOARD	= 1008, 	MENU_JOYSTICK	= 1009, 	MENU_PROPS_SOUND	= 1010, 
@@ -100,7 +100,7 @@ struct _z {
 				actionMinWidth	= 30, 	actionMinHeight	= 30, 	textMinWidth	= 30, 
 				textMinHeight	= 10, 	butMinWidth	= 80, 	butMinHeight	= 25, 
 				toolsMinWidth	= 50, 	toolsMinHeight	= 50, 	checkMinWidth	= 50, 
-				checkMinHeight	= 20, 	radioMinWidth	= 50, 	radioMinHeight	= 20, 
+				checkMinHeight	= 20, 	radioMinWidth	= 50, 	radioMinHeight	= 15, 
 				headerMinWidth	= 50, 	headerMinHeight	= 20, 	controllerMinWidth	= 96, 
 				controllerMinHeight	= 96, 	switchMinWidth	= 70, 	switchMinHeight	= 30, 
 				progressMinWidth	= 70, 	progressMinHeight	= 22, 	progressMaxWidth	= 150, 
@@ -108,7 +108,7 @@ struct _z {
 				sliderMaxWidth	= 150, 	sliderMaxHeight	= 35, 	selectMinWidth	= 60, 
 				selectMinHeight	= 30, 	chartMinWidth	= 12, 	chartMinHeight	= 5, 
 				editMinWidth	= 110, 	editMinHeight	= 30, 	divider	= 2, 	menuText	= 15, 
-				hintText	= 12, 	textText	= 16, 	messageText	= 22, 	headerText	= 17, 
+				hintText	= 12, 	textText	= 14, 	messageText	= 22, 	headerText	= 15, 
 			};
 		}; 
 		_dimen dimen;
@@ -120,12 +120,13 @@ struct _z {
 				actionBar	= 0x00101009, 	wndPopup	= 0x0010100A, 	root	= 0x0010100B, 
 				common	= 0x0010100C, 	keyboard	= 0x0010100D, 	list1	= 0x0010100E, 
 				edit1	= 0x0010100F, 	button1	= 0x00101010, 	switch1	= 0x00101011, 
-				seek	= 0x00101012, 	progress1	= 0x00101013, 	select	= 0x00101014, 
-				grid1	= 0x00101015, 	radioDark	= 0x00101016, 	chkbox	= 0x00101017, 
-				radioLight	= 0x00101018, 	button2	= 0x00101019, 	switch2	= 0x0010101A, 
-				switch3	= 0x0010101B, 	button3	= 0x0010101C, 	seek1	= 0x0010101D, 
-				button11	= 0x0010101E, 	seek2	= 0x0010101F, 	button4	= 0x00101020, 
-				edit2	= 0x00101021, 	progress2	= 0x00101022, 	form	= 0x00101023, 
+				seek	= 0x00101012, 	progress1	= 0x00101013, 	formOpen	= 0x00101014, 
+				choiceSource	= 0x00101015, 	catalog	= 0x00101016, 	chkReadOnly	= 0x00101017, 
+				select	= 0x00101018, 	grid1	= 0x00101019, 	radioDark	= 0x0010101A, 
+				chkbox	= 0x0010101B, 	radioLight	= 0x0010101C, 	button2	= 0x0010101D, 
+				switch2	= 0x0010101E, 	switch3	= 0x0010101F, 	button3	= 0x00101020, 
+				seek1	= 0x00101021, 	button11	= 0x00101022, 	seek2	= 0x00101023, 
+				button4	= 0x00101024, 	edit2	= 0x00101025, 	progress2	= 0x00101026, 
 			};
 		}; 
 		_id id;
@@ -150,40 +151,43 @@ struct _z {
 				menuScorpion	= 0x00100034, 	menuMruEmpty	= 0x00100035, 	menuKeyJoy	= 0x00100036, 
 				menuLabel	= 0x00100037, 	menuCode	= 0x00100038, 	menuValue	= 0x00100039, 
 				menuQuickSave	= 0x0010003A, 	menuAsm	= 0x0010003B, 	menuTzx	= 0x0010003C, 
-				podskazka	= 0x0010003D, 	Perekljuchatelw	= 0x0010003E, 			};
+				podskazka	= 0x0010003D, 	Perekljuchatelw	= 0x0010003E, 	Upravlenie_faylami	= 0x0010003F, 
+				Read_only	= 0x00100040, 			};
 		}; 
 		_string string;
 		struct _array {
 			enum { 
-				spinArray	= 0x0010003F, 			};
+				spinArray	= 0x00100041, 			};
 		}; 
 		_array array;
 		struct _style {
 			enum {
-				keyboardBase	= 0x00100000, 	keyboardAlt	= 0x00100001, 	scrollbar	= 0x00100002, 
-				glow	= 0x00100003, 	caret	= 0x00100004, 	editButClear	= 0x00100005, 
-				tabs	= 0x00100006, 	tabContent	= 0x00100007, 	formFooterLyt	= 0x00100008, 
-				formContentLyt	= 0x00100009, 	toast	= 0x0010000A, 	bar	= 0x0010000B, 
-				barButton	= 0x0010000C, 	barOverflow	= 0x0010000D, 	menuImage	= 0x0010000E, 
-				barPopup	= 0x0010000F, 	formCaption	= 0x00100010, 	formFooter	= 0x00100011, 
-				spin_item	= 0x00100012, 	list_item	= 0x00100013, 	menu_item	= 0x00100014, 
-				spin_capt	= 0x00100015, 	button	= 0x00100016, 	tools	= 0x00100017, 
-				checkbox	= 0x00100018, 	radiobutton	= 0x00100019, 	edittext	= 0x0010001A, 
-				ribbon	= 0x0010001B, 	grid	= 0x0010001C, 	select	= 0x0010001D, 
-				msgForm	= 0x0010001E, 	slider	= 0x0010001F, 	linearProgress	= 0x00100020, 
-				circularProgress	= 0x00100021, 	switchButton	= 0x00100022, 
-				llinear	= 0x00100023, 	tabWidget	= 0x00100024, 	tabHost	= 0x00100025, 
-				ccontroller	= 0x00100026, 	acontroller	= 0x00100027, 	form	= 0x00100028, 
-				chart	= 0x00100029, 	chartDiagramm	= 0x0010002A, 	chartGraph	= 0x0010002B, 
-				themeDark	= 0x0010002C, 	themeLight	= 0x0010002D, 	zcelllayout1	= 0x0010002E, 
-				list1	= 0x0010002F, 	edit1	= 0x00100030, 	button1	= 0x00100031, 
-				switch1	= 0x00100032, 	seek	= 0x00100033, 	progress1	= 0x00100034, 
-				zscrolllayout1	= 0x00100035, 	grid1	= 0x00100036, 	zlinearlayout1	= 0x00100037, 
-				radiodark	= 0x00100038, 	chkbox	= 0x00100039, 	radiolight	= 0x0010003A, 
-				zviewedit1	= 0x0010003B, 	zviewbutton1	= 0x0010003C, 	zviewswitch1	= 0x0010003D, 
-				button2	= 0x0010003E, 	switch2	= 0x0010003F, 	switch3	= 0x00100040, 
-				zviewslider1	= 0x00100041, 	seek1	= 0x00100042, 	button11	= 0x00100043, 
-				seek2	= 0x00100044, 	edit2	= 0x00100045, 	};
+				formCaption	= 0x00100000, 	keyboardBase	= 0x00100001, 	keyboardAlt	= 0x00100002, 
+				scrollbar	= 0x00100003, 	glow	= 0x00100004, 	caret	= 0x00100005, 
+				editButClear	= 0x00100006, 	tabs	= 0x00100007, 	tabContent	= 0x00100008, 
+				formFooterLyt	= 0x00100009, 	formContentLyt	= 0x0010000A, 
+				toast	= 0x0010000B, 	bar	= 0x0010000C, 	barButton	= 0x0010000D, 
+				barOverflow	= 0x0010000E, 	menuImage	= 0x0010000F, 	barPopup	= 0x00100010, 
+				formFooter	= 0x00100011, 	spin_item	= 0x00100012, 	list_item	= 0x00100013, 
+				menu_item	= 0x00100014, 	spin_capt	= 0x00100015, 	button	= 0x00100016, 
+				tools	= 0x00100017, 	checkbox	= 0x00100018, 	radiobutton	= 0x00100019, 
+				edittext	= 0x0010001A, 	ribbon	= 0x0010001B, 	grid	= 0x0010001C, 
+				select	= 0x0010001D, 	msgForm	= 0x0010001E, 	slider	= 0x0010001F, 
+				linearProgress	= 0x00100020, 	circularProgress	= 0x00100021, 
+				switchButton	= 0x00100022, 	llinear	= 0x00100023, 	tabWidget	= 0x00100024, 
+				tabHost	= 0x00100025, 	ccontroller	= 0x00100026, 	acontroller	= 0x00100027, 
+				form	= 0x00100028, 	chart	= 0x00100029, 	chartDiagramm	= 0x0010002A, 
+				chartGraph	= 0x0010002B, 	themeDark	= 0x0010002C, 	themeLight	= 0x0010002D, 
+				zcelllayout1	= 0x0010002E, 	list1	= 0x0010002F, 	edit1	= 0x00100030, 
+				button1	= 0x00100031, 	switch1	= 0x00100032, 	seek	= 0x00100033, 
+				progress1	= 0x00100034, 	formopen	= 0x00100035, 	zlinearlayout1	= 0x00100036, 
+				zviewbutton1	= 0x00100037, 	zscrolllayout1	= 0x00100038, 
+				grid1	= 0x00100039, 	radiodark	= 0x0010003A, 	chkbox	= 0x0010003B, 
+				radiolight	= 0x0010003C, 	zviewedit1	= 0x0010003D, 	zviewbutton2	= 0x0010003E, 
+				zviewswitch1	= 0x0010003F, 	button2	= 0x00100040, 	switch2	= 0x00100041, 
+				switch3	= 0x00100042, 	zviewslider1	= 0x00100043, 	seek1	= 0x00100044, 
+				button11	= 0x00100045, 	seek2	= 0x00100046, 	edit2	= 0x00100047, 
+	};
 		};
 		_style style;
 	};
@@ -196,6 +200,7 @@ static _z z;
 
 /* styles resources */
 static zStyles z_styles[] = {
+		{ _z::_R::_style::formCaption, styles_z_formcaption },
 		{ _z::_R::_style::keyboardBase, styles_z_keyboardbase },
 		{ _z::_R::_style::keyboardAlt, styles_z_keyboardalt },
 		{ _z::_R::_style::scrollbar, styles_z_scrollbar },
@@ -212,7 +217,6 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::barOverflow, styles_z_baroverflow },
 		{ _z::_R::_style::menuImage, styles_z_menuimage },
 		{ _z::_R::_style::barPopup, styles_z_barpopup },
-		{ _z::_R::_style::formCaption, styles_z_formcaption },
 		{ _z::_R::_style::formFooter, styles_z_formfooter },
 		{ _z::_R::_style::spin_item, styles_z_spin_item },
 		{ _z::_R::_style::list_item, styles_z_list_item },
@@ -249,14 +253,16 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::switch1, styles_z_switch1 },
 		{ _z::_R::_style::seek, styles_z_seek },
 		{ _z::_R::_style::progress1, styles_z_progress1 },
+		{ _z::_R::_style::formopen, styles_z_formopen },
+		{ _z::_R::_style::zlinearlayout1, styles_z_zlinearlayout1 },
+		{ _z::_R::_style::zviewbutton1, styles_z_zviewbutton1 },
 		{ _z::_R::_style::zscrolllayout1, styles_z_zscrolllayout1 },
 		{ _z::_R::_style::grid1, styles_z_grid1 },
-		{ _z::_R::_style::zlinearlayout1, styles_z_zlinearlayout1 },
 		{ _z::_R::_style::radiodark, styles_z_radiodark },
 		{ _z::_R::_style::chkbox, styles_z_chkbox },
 		{ _z::_R::_style::radiolight, styles_z_radiolight },
 		{ _z::_R::_style::zviewedit1, styles_z_zviewedit1 },
-		{ _z::_R::_style::zviewbutton1, styles_z_zviewbutton1 },
+		{ _z::_R::_style::zviewbutton2, styles_z_zviewbutton2 },
 		{ _z::_R::_style::zviewswitch1, styles_z_zviewswitch1 },
 		{ _z::_R::_style::button2, styles_z_button2 },
 		{ _z::_R::_style::switch2, styles_z_switch2 },
@@ -336,6 +342,8 @@ static zResource z_resources[] = {
 		{ _z::_R::_string::menuTzx, "Editor TZX" },
 		{ _z::_R::_string::podskazka, "подсказка" },
 		{ _z::_R::_string::Perekljuchatelw, "Переключатель" },
+		{ _z::_R::_string::Upravlenie_faylami, "Управление файлами" },
+		{ _z::_R::_string::Read_only, "Read only" },
 		/* array */
 		{ _z::_R::_array::spinArray | ZT_END, "Ivan|Irina|Sergey Shatalov|Maxim|Vladislav|06.06.1979|Shatalov Sergey|Olga|Viktor Alexeevich|Cat|Maria|Nina Shatalova|Alex|Alexandr" }
 };

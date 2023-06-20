@@ -239,8 +239,8 @@ void zView::requestPosition() {
 void zView::invalidate() {
     if(isVisibled()) {
         status |= ZS_DIRTY_LAYER;
-        if(parent && !parent->testFlags(ZS_DIRTY_LAYER))
-            parent->invalidate();
+        if(parent && parent->isInvalidate())
+            if(parent != this) parent->invalidate();
     }
 }
 
@@ -294,9 +294,9 @@ void zView::defaultOnMeasure(cszm& spec, szi size) {
 }
 
 void zView::drawShape() {
-    glBlendFunc(GL_DST_COLOR, GL_SRC_COLOR);
+    glBlendFuncSeparate(GL_DST_COLOR, GL_SRC_COLOR, GL_DST_COLOR, GL_SRC_COLOR);
     drw[DRW_MSK]->draw(&rview);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void zView::onLayout(crti &position, bool changed) {

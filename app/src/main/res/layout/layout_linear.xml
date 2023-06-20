@@ -35,7 +35,7 @@
                 z:layout_group="1" z:text="@string/radio_dark"
                 z:styles="@style/radiobutton"
                 z:decorate="checked|ellipsis"
-                z:textWrap="true" />
+                z:textLines="1" />
             <CheckBox
                 android:layout_width="wrap_content" android:layout_weight="2"
                 android:layout_height="match_parent"
@@ -66,7 +66,7 @@
                 z:pad="1dp"
                 android:gravity="center_vertical|start"
                 z:fkTiles="@integer/edit"
-                z:textWrap="true"
+                z:textLines="1"
                 z:textStyle="bold_italic" />
         </EditLayout>
         <ListView
@@ -123,30 +123,22 @@
         <SeekBar
             android:id="@+id/seek"
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:fkScale="1.0" z:fkGravity="center"
+            z:styles="@style/slider"
             z:speedTrack="1.0" z:progress="3"
             z:text="@string/slider_text"
-            z:textSize="20sp" z:textColor="?attr/themeColorTextProgress"
-            z:fkTile1="?attr/themeTile1Slider"
-            z:fkTile2="?attr/themeTile2Slider"
-            z:gravity="center" z:sliderMode="?attr/themeModeSlider"
-            z:duration="40" z:orientation="horizontal"
+            z:orientation="horizontal"
             z:decorate="tips"
             z:range="5,40" />
         <SeekBar
             android:id="@+id/seek1"
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:fkScale="1.0" z:fkGravity="center"
+            z:styles="@style/slider"
             z:speedTrack="1.2" z:progress="130"
-            z:textSize="20sp" z:textColor="?attr/themeColorTextProgress"
-            z:fkTile1="?attr/themeTile1Slider"
-            z:fkTile2="?attr/themeTile2Slider"
-            z:gravity="center" z:sliderMode="?attr/themeModeSlider"
-            z:duration="40" z:orientation="horizontal"
+            z:orientation="horizontal"
             z:marginStart="10dp"
             z:marginTop="3dp"
             z:decorate="tips"
-            z:pad="3dp" z:range="50,170" />
+            z:range="50,170" />
         <Button
             android:id="@+id/button11"
             android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -158,13 +150,8 @@
         <SeekBar
             android:id="@+id/seek2"
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:fkScale="1.0" z:fkGravity="center"
+            z:styles="@style/slider"
             z:speedTrack="1.0" z:progress="30"
-            z:textSize="20sp" z:textColor="?attr/themeColorTextProgress"
-            z:fkTile1="?attr/themeTile1Slider"
-            z:fkTile2="?attr/themeTile2Slider"
-            z:gravity="center"
-            z:duration="40" z:orientation="horizontal"
             z:sliderMode="scale"
             z:decorate="tips"
             z:pad="1dp" z:range="0,70" />
@@ -186,7 +173,5 @@
             android:id="@+id/progress2" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:text="@string/progress" z:layout_gravity="center"  z:styles="@style/linearProgress"
             z:range="0,170" z:progress="150" z:orientation="horizontal" />
-    <Form android:id="@+id/form" android:layout_width="500dp" android:layout_height="400dp"
-        z:styles="@style/form" android:text="@string/first_form" z:styleCaption="@style/formCaption" z:styleFooter="@style/formFooter" />
     </LinearLayout>
 </ScrollView>

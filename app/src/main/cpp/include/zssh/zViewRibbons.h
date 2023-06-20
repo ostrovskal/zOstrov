@@ -54,6 +54,8 @@ protected:
     virtual void childMeasure(zView* child, zLayoutParams* lps) = 0;
     // рассчитать габариты всех дочерних
     virtual szi measureChildrenSize(cszm& spec);
+    // вернуть extra
+    virtual int getExtra() const { return 0; }
     // Ликвидация расстояния между началом списка и первым элементом
     void correctBegin(int used);
     // Ликвидация расстояния между концом списка и последним элементом
@@ -122,11 +124,10 @@ public:
     // возврат параметра
     i32 getParameters(i32 param) const;
 protected:
+    virtual int getExtra() const override;
     virtual void childMeasure(zView *child, zLayoutParams *lps) override;
     // вычисление размера
     virtual void onMeasure(cszm& spec) override;
-    // отрисовка
-    virtual void onDraw() override;
     // Заполнение таблицы
     virtual void fill(int edgePos) override;
     virtual void fillReverse(int pos, int start) override;

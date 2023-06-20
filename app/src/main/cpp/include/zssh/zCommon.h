@@ -87,7 +87,7 @@ enum { TOUCH_CONTINUE, TOUCH_FINISH, TOUCH_ACTION, TOUCH_STOP };
 #define ZS_MODAL   			        0x00800000U	// модальный
 #define ZS_TAP	        	        0x00400000U	// прикоснулись
 #define ZS_CHECKED			        0x00100000U // признак выбора
-#define ZS_NOWRAP                   0x00080000U // признак однострочного текста
+//#define ZS_NOWRAP                   0x00080000U // признак однострочного текста
 #define ZS_LAYOUT                   0x00040000U // признак вызова layout
 #define ZS_FOCUSABLE_IN_TOUCHABLE   0x00020000U // признак получать фокус при касании
 #define ZS_SYSTEM                   0x00010000U // способен принимать сис. события

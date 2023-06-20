@@ -13,47 +13,58 @@
 
 zViewForm::zViewForm(zStyle* _styles, i32 _id, zStyle* styles_header, zStyle* styles_button_footer, u32 _caption, bool _modal) :
 					zLinearLayout(_styles, _id, true), caption(_caption) {
-	updateStatus(ZS_SYSTEM, true); updateStatus(ZS_MODAL, _modal);
+	updateStatus(ZS_SYSTEM | ZS_CLICKABLE, true); updateStatus(ZS_MODAL, _modal);
 	_styles_button_footer = styles_button_footer; _styles_header = styles_header;
+}
+
+zView* zViewForm::attach(zView *v, int width, int height, int where) {
+	if(content) return setContent(v);
+	return zViewGroup::attach(v, width, height, where);
+}
+
+void zViewForm::onMeasure(cszm& spec) {
+    zLinearLayout::onMeasure(spec);
 }
 
 void zViewForm::onDrawFBO() {
 	// отрисовка затенения
-	if(testFlags(ZS_MODAL)) drw[DRW_FK]->draw(nullptr);
+	if(shade) shade->draw(nullptr);
 	// отрисовка FBO
 	drw[DRW_FBO]->draw(&rview);
 }
 
+int zViewForm::updateVisible(bool set) {
+	manager->changeFocus(nullptr);
+	manager->getActionBar()->show(false);
+	return zView::updateVisible(set);
+}
+
 void zViewForm::onInit(bool _theme) {
 	zLinearLayout::onInit(_theme);
+	if(countChildren()) return;
 	// затенение
-	zParamDrawable fp{0x90000000, 0x0, 0, -1, 8, 0, 1.0f};
-	setDrawable(testFlags(ZS_MODAL) ? &fp : nullptr, DRW_FK);
-	auto screen(zGL::instance()->getSizeScreen());
-	drw[DRW_FK]->measure(screen.w, screen.h, 0, false);
-	// инициализация
-	if(_styles_header && caption) {
-		// заголовок
-		attach(new zViewText(_styles_header, 0, caption), 0, 1, VIEW_MATCH, VIEW_WRAP);
+	if(testFlags(ZS_MODAL)) {
+		zParamDrawable fp{0x90000000, 0x0, 0, -1, 8, 0, 1.0f};
+		shade = new zDrawable(this, DRW_BK); shade->init(fp);
+		auto screen(zGL::instance()->getSizeScreen());
+		shade->measure(screen.w, screen.h, 0, false);
 	}
+	// заголовок
+	if(_styles_header && caption) zViewGroup::attach(new zViewText(_styles_header, 0, caption), VIEW_MATCH, VIEW_WRAP);
 	// тело
-	content = new zFrameLayout(styles_z_formcontentlyt, 0);
-	attach(content, 0, 5, VIEW_MATCH, VIEW_WRAP);
+	content = (zFrameLayout*)attach(new zFrameLayout(styles_z_formcontentlyt, 0), VIEW_MATCH, VIEW_MATCH);
 	// футер
 	mode = styles->_int(Z_MODE, ZS_FORM_NONE);
 	if(_styles_button_footer) {
 		auto countButtons(mode & ZS_MODE_FORM_MASK);
 		auto footer(new zLinearLayout(styles_z_formfooterlyt, 0, false));
-		attach(footer, 0, 1, VIEW_MATCH, VIEW_WRAP);
+		zViewGroup::attach(footer, VIEW_MATCH, VIEW_WRAP);
 		// в футер поместить кнопки(OK|CANCEL|DEFAULT)
 		static i32 idxParams[] = { 0, 2, 4, 8 };
 		static i32 butParams[] = { 0, 0,
 								   z.R.id.ok, z.R.integer.iconOk,
-								   z.R.id.yes, z.R.integer.iconYes,
-								   z.R.id.no, z.R.integer.iconNo,
-								   z.R.id.yes, z.R.integer.iconYes,
-								   z.R.id.def, z.R.integer.iconDef,
-								   z.R.id.no, z.R.integer.iconNo };
+								   z.R.id.yes, z.R.integer.iconOk, z.R.id.no, z.R.integer.iconCancel,
+								   z.R.id.yes, z.R.integer.iconOk, z.R.id.def, z.R.integer.iconDef, z.R.id.no, z.R.integer.iconCancel };
 		auto idx(idxParams[countButtons]);
 		for(int i = 0; i < countButtons; i++) {
 			auto but(new zViewButton(_styles_button_footer, butParams[idx], 0, butParams[idx + 1]));
@@ -95,5 +106,5 @@ zViewFormMessage::zViewFormMessage(zStyle* _styles, i32 _id, zStyle* _styles_cap
 void zViewFormMessage::onInit(bool _theme) {
     zViewForm::onInit(_theme);
 	// установить текст в контент
-	content->attach(new zViewText(styles, 0, message), VIEW_MATCH, VIEW_MATCH);
+	attach(new zViewText(styles, 0, message), VIEW_MATCH, VIEW_MATCH);
 }

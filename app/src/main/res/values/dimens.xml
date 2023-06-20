@@ -17,7 +17,7 @@
     <dimen name="checkMinWidth">50dp</dimen>
     <dimen name="checkMinHeight">20dp</dimen>
     <dimen name="radioMinWidth">50dp</dimen>
-    <dimen name="radioMinHeight">20dp</dimen>
+    <dimen name="radioMinHeight">15dp</dimen>
     <dimen name="headerMinWidth">50dp</dimen>
     <dimen name="headerMinHeight">20dp</dimen>
     <dimen name="controllerMinWidth">96dp</dimen>
@@ -41,7 +41,7 @@
     <dimen name="divider">2dp</dimen>
     <dimen name="menuText">15sp</dimen>
     <dimen name="hintText">12sp</dimen>
-    <dimen name="textText">16sp</dimen>
+    <dimen name="textText">14sp</dimen>
     <dimen name="messageText">22sp</dimen>
-    <dimen name="headerText">17sp</dimen>
+    <dimen name="headerText">15sp</dimen>
 </resources>

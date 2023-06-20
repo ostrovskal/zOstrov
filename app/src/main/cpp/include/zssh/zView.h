@@ -16,6 +16,7 @@ public:
     zMeasure(int _mode, int _size) : value((_mode & MEASURE_MASK_MODE) | (_size & MEASURE_MASK_SIZE)) { }
     int size() const { return (value & MEASURE_MASK_SIZE); }
     int mode() const { return (value & MEASURE_MASK_MODE); }
+    void setSize(int _size) { value = (mode() | _size); }
     bool isExact() const { return mode() == MEASURE_EXACT; }
     bool isNotExact() const { return mode() != MEASURE_EXACT; }
     operator int() const { return value; }
@@ -130,7 +131,7 @@ public:
     u32 updateStatus(u32 msk, u32 val, bool set) { status &= ~msk; val = (val & msk) * set; status |= val; return val; }
     u32 updateStatus(u32 val, bool set) { status &= ~val; val *= set; status |= val; return val; }
     // обновление видимости
-    int updateVisible(bool set);
+    virtual int updateVisible(bool set);
     // установка паддинга
     void setPadding(crti& r) { pad = r; requestLayout(); }
     // удаление отображателя
@@ -151,6 +152,8 @@ public:
     bool isChecked() const { return (status & ZS_CHECKED); }
     // вернуть признак FBO
     bool isFBO() const { return drw[DRW_FBO]->isValid(); }
+    // вернуть признак возможности обновления
+    bool isInvalidate() const { return !isDirty() || !isFBO(); }
     // вернуть признак перерисовки
     bool isDirty() const { return (status & ZS_DIRTY_LAYER); }
     // признак возможности клика

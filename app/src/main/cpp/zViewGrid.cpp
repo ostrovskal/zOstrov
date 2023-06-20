@@ -20,9 +20,8 @@ i32 zViewGrid::getParameters(i32 param) const {
     return -1;
 }
 
-void zViewGrid::onDraw() {
-    zViewGroup::onDraw();
-    if(div) div->make(((div->size + div->padBegin + div->padEnd) - params[GRID_LINES_SPACE]) / 2, countItem, firstItem);
+int zViewGrid::getExtra() const {
+    return ((div->size + div->padBegin + div->padEnd) - params[GRID_LINES_SPACE]) / 2;
 }
 
 void zViewGrid::fill(int _edge) {

@@ -203,7 +203,7 @@ void zViewText::drawText() {
                 // сформировать фрагмент
                 wpix = drw[DRW_TXT]->makeText(txt, lenText, paint);
                 // отрисовка фона текста(если есть)
-                if(dr) {
+                if(dr && (paint->bkColor & 0xfe000000)) {
                     dr->measure(wpix, cacheStr->size, 0, false);
                     dr->color.set(paint->bkColor);
                     m.translate(coord.x - screenX, coord.y - screenY - subH, 0);
@@ -243,7 +243,7 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
     }
     // разбить текст по спец. символам по ширине ректа
     if(testFlags(ZS_ELLIPSIS)) {
-        _ellipsis = widthRect;
+        _ellipsis = widthRect <= 0 ? INT_MAX : widthRect;
         ellText = _text; _text = ellText.str();
     }
     if(widthRect <= 0 || getLines() == 1) widthRect = INT_MAX;
@@ -256,7 +256,7 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
     // идти по всем спанам
     for(auto& sp : cacheSpans) {
         auto paint(sp->paint); auto _pos(sp->s), _end(sp->e);
-        if(testFlags(ZS_ELLIPSIS)) pt3 = paint->getWidthChar('.') * 3;
+        if(testFlags(ZS_ELLIPSIS)) pt3 = paint->getWidthChar('.') * 4 + 10;
         height = z_max(height, paint->getSize());
         width += paint->getMargin() + paint->getItalic();
         // корректировать длину в пикселях, если длина нулевая
@@ -311,7 +311,7 @@ void zViewText::onInit(bool _theme) {
             case Z_TEXT_SHADOW_COLOR:       setTextColorShadow(val); break;
             case Z_TEXT_SIZE:               setTextSize(val); break;
             case Z_TEXT_STYLE:              setTextStyle(val & ZS_MODE_TEXT_MASK); break;
-            case Z_TEXT_NOWRAP: 		    setWrap(val != 0); break;
+            case Z_TEXT_LINES: 		        setLines(val); break;
             case Z_TEXT_SHADOW_OFFS:        setShadowOffset(val & 0xff, (val >> 8) & 0xff); break;
             case Z_TEXT_DISTANCE:           distance    = (int)val; break;
             case Z_TEXT_LENGTH:             maxLength   = val; break;

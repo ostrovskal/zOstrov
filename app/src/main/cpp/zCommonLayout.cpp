@@ -73,24 +73,24 @@ void zAbsoluteLayout::onLayout(crti &position, bool changed) {
 
 void zLinearLayout::onMeasure(cszm& spec) {
     int sizeMatch(0), allWeight(0), marginsChild(0), countMatch(0); bool isWeights(false);
-    szi _max, _wh;  szm childSpec;
+    szm cur(spec); szi _max, _wh;  szm childSpec;
     auto divSize(div ? div->resolve(countChildren(), true) : 0);
     _max[vert] = divSize + padMargin(vert);
     // определяем габариты и веса дочерних
     auto _undef(spec[vert].mode() == MEASURE_UNDEF);
     for(auto child : children) {
         if(child->isVisibled()) {
-            measureChild(child, spec);
-            marginsChild += child->margin.extent(vert);
-            // определение количества дочерних с VIEW_MATCH
-            if(_undef || child->lps[vert + 2] != VIEW_MATCH)
-                _max[vert] += child->sizes(vert); else countMatch++;
-            _max[!vert] = z_max(_max[!vert], child->sizes(!vert));
-//            DLOG("child %i %i %s", child->sizes(false), child->sizes(true), child->typeName());
             // весь вес
             auto weight(child->lps.weight);
             isWeights |= (weight != 0);
             allWeight += z_max(1, weight);
+            measureChild(child, cur);
+            marginsChild += child->margin.extent(vert);
+            // определение количества дочерних с VIEW_MATCH
+            if(_undef || child->lps[vert + 2] != VIEW_MATCH) _max[vert] += child->sizes(vert); else countMatch++;
+            _max[!vert] = z_max(_max[!vert], child->sizes(!vert));
+            if(!_undef && !isWeights) cur[vert].setSize(z_max(0, cur[vert] - child->sizes(vert)));
+//            DLOG("child %i %i %s", child->sizes(false), child->sizes(true), child->typeName());
         }
     }
     // определение габаритов для дочерних с VIEW_MATCH
@@ -108,18 +108,22 @@ void zLinearLayout::onMeasure(cszm& spec) {
     for(auto child: children) {
         if(child->isVisibled()) {
             auto& lps(child->lps);
-            auto weight(z_max<float>(1.0f, (float)child->lps.weight));
-            if(isWeights) weight /= (float)allWeight;
-            auto oldSize(child->rview[vert + 2]);
-            auto _size(lps[vert + 2] == VIEW_MATCH ? sizeMatch : (int)lps[vert + 2]);
-            auto size(isWeights ? (int)roundf((float)_wh[vert] * weight) : _size), wh((int)lps[3 - vert]);
-            childSpec.set(makeChildMeasureSpec(zMeasure(MEASURE_EXACT, _wh.w), child->margin.extent(false), vert ? wh : size),
-                          makeChildMeasureSpec(zMeasure(MEASURE_EXACT, _wh.h), child->margin.extent(true), vert ? size : wh));
-            child->measure(childSpec);
+//            auto oldSize(child->rview[vert + 2]);
+            if(lps[vert + 2] == VIEW_MATCH || isWeights) {
+                auto weight(z_max<float>(1.0f, (float)child->lps.weight));
+                if(isWeights) weight /= (float)allWeight;
+                auto _size(lps[vert + 2] == VIEW_MATCH ? sizeMatch : (int)lps[vert + 2]);
+                auto size(isWeights ? (int)roundf((float)_wh[vert] * weight) : _size), wh((int)lps[3 - vert]);
+                childSpec.set(makeChildMeasureSpec(zMeasure(MEASURE_EXACT, _wh.w), child->margin.extent(false), vert ? wh : size),
+                              makeChildMeasureSpec(zMeasure(MEASURE_EXACT, _wh.h), child->margin.extent(true), vert ? size : wh));
+                child->measure(childSpec);
+            } else {
+//                DLOG("no measure! %s", child->typeName());
+            }
             if(!isWeights) {
                 _wh[vert] -= child->sizes(vert);
-                auto subSize(child->rview[vert + 2] - oldSize);
-                _wh[vert] += subSize; _max[vert] += subSize;
+//                auto subSize(child->rview[vert + 2] - oldSize);
+  //              _wh[vert] += subSize; _max[vert] += subSize;
             }
         }
     }
@@ -136,11 +140,16 @@ pti zLinearLayout::applyGravity(crti& sizeParent, crti& sizeChild, u32 _gravity)
 
 void zLinearLayout::onLayout(crti &position, bool changed) {
     zView::onLayout(position, changed);
-    auto r(rclient);
+    auto r(rclient); int sizeChildren(0);
     // размер разделителя
     auto divSize(div ? div->getSize(ZS_DIVIDER_MIDDLE) : 0);
     // начальная координата с учетом разделителя
     r[vert] += (div ? div->getSize(ZS_DIVIDER_BEGIN) : 0);
+    // подсчитать размер всех дочерних вместе с разделителем
+    for(auto& child : children) sizeChildren += child->sizes(vert);
+    sizeChildren += (div ? div->resolve(countChildren(), true) : 0);
+    // выровнять все дочерние по верт/гор
+    r[vert] += zView::applyGravity(r.size(), szi(sizeChildren, sizeChildren), gravity)[vert];
     // позиционировать дочерние
     for(auto& child : children) {
         if(child->isVisibled()) { child->layout(r); r[vert] += child->sizes(vert) + divSize; }
@@ -346,9 +355,8 @@ static zStyle styles_z_hint[] = {
         { Z_FBO, true },
         { Z_IPADDING, 0x0 },
         { Z_BEHAVIOR, 0 },
-        { Z_TEXT_NOWRAP, true },
-        { Z_DURATION, 20},
-        { Z_TEXT_FONT | ZT_END, z.R.drawable.font1 }
+        { Z_TEXT_LINES, 1 },
+        { Z_DURATION | ZT_END, 20}
 };
 
 void zEditLayout::changeTheme() {
@@ -363,11 +371,10 @@ zView *zEditLayout::attach(zView *v, int width, int height, int where) {
             frame += !textEmpty * 2 - 1;
             auto cont(frame > 0 && frame < 4);
             if(!cont && textEmpty) {
-                auto h(atView<zViewText>(1));
-                atView<zViewEdit>(0)->setHint(h->getText());
-                h->updateVisible(false);
+                edit->setHint(hint->getText());
+                hint->updateStatus(ZS_VISIBLED, false);
             }
-            requestLayout();
+            edit->requestLayout();
             return cont;
         });
         edit = new zLayoutEdit(_edit);

@@ -39,8 +39,6 @@ public:
     virtual bool scrolling(int _delta) { return false; }
     // проверка на пересечение с дочерними
     virtual bool intersectChildren(int x, int y) const;
-    // отрисовка
-    virtual void draw() override;
     // сдвинуть дочерние
     void offsetChildren(int delta);
     // вернуть системное представление
@@ -96,6 +94,7 @@ public:
     // установка события прокрутки
     zViewGroup* setOnChangeScrolling(std::function<void(zView*, int)> _scroll) { onChangeScroll = _scroll; return this; }
 protected:
+    void onDraw() override;
     // уведомление о событии
     virtual void notifyEvent(HANDLER_MESSAGE* msg) override;
     // отсоединение

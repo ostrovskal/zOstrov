@@ -77,9 +77,23 @@ void sshApp::run() {
 void sshApp::setContent() {
 //    debug = true;
     #include "zssh/layout_linear.h"
+    #include "zssh/layout_form.h"
+    zArray<zStringUTF8> objects(theme->findArray(z.R.array.spinArray));
+    for(int i = 0 ; i < 1000; i += 7) {
+        objects += zStringUTF8(z_ntos(&i, RADIX_HEX, false));
+    }
+    attachForm(formBrowser, 280_dp, 300_dp);
+    auto sel(idView<zViewSelect>(z.R.id.choiceSource));
+    auto lst(idView<zViewRibbon>(z.R.id.catalog));
+    lst->setAdapter(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
+    sel->setAdapter(new zAdapterList(objects, new zFabricSelectItem(styles_z_spin_capt), new zFabricSelectItem(styles_z_spin_item)));
+    //formBrowser->updateStatus(ZS_VISIBLED, false);
     getActionBar()->setOnClickMenuGroup([](zView* v, zMenuGroup* g) {
         DLOG("click group %i %i", g->getId(), g->count());
-    })->setOnClickMenuItem([](zView* v, zMenuItem* i) {
+    })->setOnClickMenuItem([formBrowser](zView* v, zMenuItem* i) {
+        if(i->getId() == z.R.integer.MENU_BROWSER) {
+            formBrowser->updateVisible(true);
+        }
         if(i->getId() == z.R.integer.MENU_KEYBOARD) {
             auto ic(i->getImage());
             i->setImage(ic == z.R.integer.iconZxKeyb ? z.R.integer.iconZxGamepad : (ic == z.R.integer.iconZxGamepad
@@ -101,14 +115,10 @@ void sshApp::setContent() {
     idView(z.R.id.chkbox)->setOnClick([this](zView* v, int) {
         getActionBar()->show(v->isChecked());
     });
-    zArray<zStringUTF8> objects(theme->findArray(z.R.array.spinArray));
-    for(int i = 0 ; i < 1000; i += 7) {
-        objects += zStringUTF8(z_ntos(&i, RADIX_HEX, false));
-    }
-    auto sel(idView<zViewSelect>(z.R.id.select));
-    grp10->detach(sel); getActionBar()->setContent(sel);
-    sel->setAdapter(new zAdapterList(objects, new zFabricSelectItem(styles_z_spin_capt),
-                                        new zFabricSelectItem(styles_z_spin_item)))->
+    auto sel1(idView<zViewSelect>(z.R.id.select));
+    grp01->detach(sel1); getActionBar()->setContent(sel1);
+    sel1->setAdapter(new zAdapterList(objects, new zFabricSelectItem(styles_z_spin_capt),
+                                     new zFabricSelectItem(styles_z_spin_item)))->
                                         setOnChangeSelected([](zView*, int s) {
                                             DLOG("select sel %i", s);
                                         });
@@ -117,7 +127,7 @@ void sshApp::setContent() {
     grd->setAdapter(adapter)->setOnChangeSelected([](zView*, int sel) {
 //        DLOG("grid sel %i", sel);
     });
-    auto lst(idView<zViewRibbon>(z.R.id.list1));
+    auto lst1(idView<zViewRibbon>(z.R.id.list1));
     auto adapter1(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
-    lst->setAdapter(adapter1);
+    lst1->setAdapter(adapter1);
 }
