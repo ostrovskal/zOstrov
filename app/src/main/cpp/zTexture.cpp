@@ -100,7 +100,7 @@ void zTexture::makeTexture(u8* ptr, u32 size) {
             auto img(new u8[sizeAlpha * 2]); image = img;
             for(int i = 0; i < sizeAlpha; i++) {
                 *img++ = alpha[i];
-                *img++ = alpha[i];// == 0 ? 0 : 0xff;
+                *img++ = alpha[i] <= 64 ? 0 : 0xff;
             }
             type = GL_LUMINANCE_ALPHA;
         }

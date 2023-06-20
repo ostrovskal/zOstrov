@@ -195,11 +195,11 @@ void zDrawable::measure(int width, int height, int pivot, bool isSave) {
         // проверить на текстуру
         if(!(texture && texture->isEqual(width, height))) {
             if(!texture) texture = new zTexture();
-            manager->volumeVideoMemory(width * height * 4, true);
             if(!texture->makeFBO(width, height)) {
-                DLOG("error makeFBO %s(%i)", view->typeName(), view->id);
+                DLOG("error makeFBO %s(%i) %ix%i", view->typeName(), view->id, width, height);
                 release(); return;
             }
+            manager->volumeVideoMemory(width * height * 4, true);
 //            DLOG("fbo:%i %i %s", width, height, view->typeName());
         }
     }

@@ -158,8 +158,7 @@
         <item name="gravity">center</item>
         <item name="foreground">@drawable/zssh</item>
         <item name="fkGravity">center</item>
-        <item name="textLines">1</item>
-        <item name="decorate">ellipsis</item>
+        <item name="textLines">3</item>
         <item name="ipad">3dp</item>
         <item name="fkTiles">@integer/selectItem</item>
     </style>
@@ -305,6 +304,9 @@
         <item name="formMode">ok</item>
         <item name="pad">3dp</item>
     </style>
+    <style name="textDef">
+
+    </style>
     <style name="slider">
         <item name="fbo">true</item>
         <item name="foreground">@drawable/zssh</item>
@@ -318,7 +320,7 @@
         <item name="fkGravity">center</item>
         <item name="pad">3dp</item>
         <item name="sliderMode">?attr/themeModeSlider</item>
-        <item name="speedTrack">0.5</item>
+        <item name="speedTrack">2.0</item>
         <item name="decorate">tips</item>
     </style>
     <style name="linearProgress">
@@ -369,7 +371,7 @@
     </style>
     <style name="tabWidget">
         <item name="foreground">@drawable/zssh</item>
-        <item name="icon">?attr/themeIcons</item>
+        <item name="icon">@drawable/zx_icons</item>
         <item name="sizeMinW">16dp</item>
         <item name="sizeMinH">16dp</item>
         <item name="icScale">0.5</item>
@@ -378,13 +380,16 @@
         <item name="font">@drawable/font1</item>
         <item name="textSize">@dimen/textText</item>
         <item name="textColor">?attr/themeColorTextTabbed</item>
+        <item name="padHorz">6dp</item>
+        <item name="padVert">2dp</item>
+        <item name="ipad">2dp</item>
         <item name="gravity">center</item>
     </style>
     <style name="tabHost">
         <item name="background">?attr/themeColorTabbed</item>
         <item name="bkTiles">@integer/gradientDiag</item>
         <item name="selector">?attr/themeColorSelector</item>
-        <item name="selTiles">@integer/gradientDiag</item>
+        <item name="selTiles">@integer/rect</item>
     </style>
     <style name="ccontroller">
         <item name="fbo">true</item>

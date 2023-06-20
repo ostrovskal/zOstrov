@@ -107,8 +107,15 @@ protected:
     virtual u32 getDrawColorText(u32 color) { return color; }
     // отрисовка текста
     void drawText();
+    // отрисовка текста со спанами
+    void drawTextSpan(crti& clip);
+    // отрисовка фрагмента текста
+    int drawFragment(cstr txt, int count, zTextPaint* paint, const CACHE* cache, cpti& coord, crti& clip);
+    cstr addCacheSubString(cstr _stext, cstr _text, int& width, int height, bool isEdit);
     // разбивка текста
     szi textWrap(cstr _text, int widthRect);
+    // разбивка текста с учетом спанов
+    szi textWrapSpan(cstr _text, int widthRect);
     // очистка кэшей
     void clearCacheSpans(bool del_spans);
     // получить строку из кэша строк
@@ -122,7 +129,7 @@ protected:
     // кэш картинки
     int fkW{0}, fkH{0};
     // максимальная длина текста(для редактора)
-    int maxLength{32};
+    int maxLength{INT_MAX};
     // максимальное количество линий текста
     int maxLines{1};
     // кэш иконки
@@ -234,7 +241,7 @@ protected:
     // установка каретки
     void updateCaret();
     // позиция каретки в тексте
-    int caretIndex{0};
+    int caretIndex{-1};
     // начальная позиция видимого текста
     int visibleIndex{0};
     // ширина рабочей области редактора

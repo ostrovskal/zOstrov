@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Tue Jun 20 13:08:42 2023
+// Tue Jun 20 22:21:00 2023
 
 #pragma once
 
@@ -122,12 +122,12 @@ struct _z {
 				edit1	= 0x0010100F, 	button1	= 0x00101010, 	switch1	= 0x00101011, 
 				seek	= 0x00101012, 	progress1	= 0x00101013, 	formOpen	= 0x00101014, 
 				choiceSource	= 0x00101015, 	catalog	= 0x00101016, 	chkReadOnly	= 0x00101017, 
-				select	= 0x00101018, 	grid1	= 0x00101019, 	radioDark	= 0x0010101A, 
-				chkbox	= 0x0010101B, 	radioLight	= 0x0010101C, 	button2	= 0x0010101D, 
-				switch2	= 0x0010101E, 	switch3	= 0x0010101F, 	button3	= 0x00101020, 
-				seek1	= 0x00101021, 	button11	= 0x00101022, 	seek2	= 0x00101023, 
-				button4	= 0x00101024, 	edit2	= 0x00101025, 	progress2	= 0x00101026, 
-			};
+				tv1	= 0x00101018, 	select	= 0x00101019, 	grid1	= 0x0010101A, 
+				radioDark	= 0x0010101B, 	chkbox	= 0x0010101C, 	radioLight	= 0x0010101D, 
+				button2	= 0x0010101E, 	switch2	= 0x0010101F, 	switch3	= 0x00101020, 
+				button3	= 0x00101021, 	seek1	= 0x00101022, 	button11	= 0x00101023, 
+				seek2	= 0x00101024, 	button4	= 0x00101025, 	edit2	= 0x00101026, 
+				progress2	= 0x00101027, 	formSettings	= 0x00101028, 			};
 		}; 
 		_id id;
 		struct _string {
@@ -152,12 +152,14 @@ struct _z {
 				menuLabel	= 0x00100037, 	menuCode	= 0x00100038, 	menuValue	= 0x00100039, 
 				menuQuickSave	= 0x0010003A, 	menuAsm	= 0x0010003B, 	menuTzx	= 0x0010003C, 
 				podskazka	= 0x0010003D, 	Perekljuchatelw	= 0x0010003E, 	Upravlenie_faylami	= 0x0010003F, 
-				Read_only	= 0x00100040, 			};
+				Read_only	= 0x00100040, 	serg	= 0x00100041, 	Nastroyki	= 0x00100042, 
+				CPU	= 0x00100043, 	BORDER	= 0x00100044, 	JOYSTICK	= 0x00100045, 
+				KEYBOARD	= 0x00100046, 			};
 		}; 
 		_string string;
 		struct _array {
 			enum { 
-				spinArray	= 0x00100041, 			};
+				spinArray	= 0x00100047, 			};
 		}; 
 		_array array;
 		struct _style {
@@ -187,7 +189,8 @@ struct _z {
 				zviewswitch1	= 0x0010003F, 	button2	= 0x00100040, 	switch2	= 0x00100041, 
 				switch3	= 0x00100042, 	zviewslider1	= 0x00100043, 	seek1	= 0x00100044, 
 				button11	= 0x00100045, 	seek2	= 0x00100046, 	edit2	= 0x00100047, 
-	};
+				zlinearlayout2	= 0x00100048, 	zviewtext1	= 0x00100049, 	zlinearlayout3	= 0x0010004A, 
+				ztabwidget1	= 0x0010004B, 	};
 		};
 		_style style;
 	};
@@ -271,7 +274,11 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::seek1, styles_z_seek1 },
 		{ _z::_R::_style::button11, styles_z_button11 },
 		{ _z::_R::_style::seek2, styles_z_seek2 },
-		{ _z::_R::_style::edit2, styles_z_edit2 }
+		{ _z::_R::_style::edit2, styles_z_edit2 },
+		{ _z::_R::_style::zlinearlayout2, styles_z_zlinearlayout2 },
+		{ _z::_R::_style::zviewtext1, styles_z_zviewtext1 },
+		{ _z::_R::_style::zlinearlayout3, styles_z_zlinearlayout3 },
+		{ _z::_R::_style::ztabwidget1, styles_z_ztabwidget1 }
 };
 
 /* string resources [values] */
@@ -344,6 +351,12 @@ static zResource z_resources[] = {
 		{ _z::_R::_string::Perekljuchatelw, "Переключатель" },
 		{ _z::_R::_string::Upravlenie_faylami, "Управление файлами" },
 		{ _z::_R::_string::Read_only, "Read only" },
+		{ _z::_R::_string::serg, "serg" },
+		{ _z::_R::_string::Nastroyki, "Настройки" },
+		{ _z::_R::_string::CPU, "CPU" },
+		{ _z::_R::_string::BORDER, "BORDER" },
+		{ _z::_R::_string::JOYSTICK, "JOYSTICK" },
+		{ _z::_R::_string::KEYBOARD, "KEYBOARD" },
 		/* array */
 		{ _z::_R::_array::spinArray | ZT_END, "Ivan|Irina|Sergey Shatalov|Maxim|Vladislav|06.06.1979|Shatalov Sergey|Olga|Viktor Alexeevich|Cat|Maria|Nina Shatalova|Alex|Alexandr" }
 };
@@ -397,7 +410,7 @@ static zResource z_resources_ru[] = {
 		{ _z::_R::_string::menuAsm, "Ассемблер" },
 		{ _z::_R::_string::menuTzx, "Редактор TZX" },
 		/* array */
-		{ _z::_R::_array::spinArray | ZT_END, "Иван|Ирина|Сергей Викторович|Максим|Владислав|06.06.1979|Шаталов Сергей|Ольга|Виктор Алексеевич|Катя|Маша|Нина Шаталова|Алекс|Саша" }
+		{ _z::_R::_array::spinArray | ZT_END, "Иван|Ирина|Сергей.Викторович|Максим|Владислав|06.06.1979|Шаталов.Сергей|Ольга|Виктор.Алексеевич|Катя|Маша|Нина Шаталова|Алекс|Саша" }
 };
 
 

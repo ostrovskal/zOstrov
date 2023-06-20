@@ -12,6 +12,11 @@
         z:styles="@style/llinear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            z:text="serg"/>
         <Spinner
             android:id="@+id/select"
             android:layout_width="match_parent"
@@ -57,7 +62,6 @@
                 android:id="@+id/edit1" z:fbo="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                z:textSize="20sp"
                 z:hint="@string/prompt"
                 z:fkGravity="center"
                 z:icGravity="end"
@@ -66,7 +70,7 @@
                 z:pad="1dp"
                 android:gravity="center_vertical|start"
                 z:fkTiles="@integer/edit"
-                z:textLines="1"
+                z:textLines="3"
                 z:textStyle="bold_italic" />
         </EditLayout>
         <ListView

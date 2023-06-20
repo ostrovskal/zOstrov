@@ -291,9 +291,11 @@
             <item name="bottom" value="ZS_GRAVITY_BOTTOM" />
             <item name="center_vertical" value="ZS_GRAVITY_VCENTER" />
         </attr>
-        <attr name="tabGravity" translate="0" format="enum">
+        <attr name="tabGravity" translate="ZS_GRAVITY_TOP" format="enum">
             <item name="top" value="ZS_GRAVITY_TOP" />
             <item name="start" value="ZS_GRAVITY_START" />
+            <item name="end" value="ZS_GRAVITY_END" />
+            <item name="bottom" value="ZS_GRAVITY_BOTTOM" />
         </attr>
         <attr name="message" translate="" format="integer" />
         <attr name="modal" translate="false" format="boolean" />
@@ -305,7 +307,7 @@
         <attr name="AbsoluteLayout" translate="zAbsoluteLayout" format="" layout="1" remark="0" />
         <attr name="FrameLayout" translate="zFrameLayout" format="" layout="1" remark="0" />
         <attr name="CellLayout" translate="zCellLayout" format="layout_cells|layout_space" layout="1" remark="0" />
-        <attr name="TabHost" translate="zTabLayout" format="styleCaption|tabGravity" layout="1" remark="1" />
+        <attr name="TabHost" translate="zTabLayout" format="styleCaption|tabGravity" layout="1" remark="0" />
         <attr name="Form" translate="zViewForm" format="styleCaption|styleFooter|text|modal" layout="1" remark="1" />
         <attr name="FormMsg" translate="zViewFormMessage" format="styleCaption|styleFooter|text|message|modal" layout="1" remark="1" />
         <attr name="ScrollView" translate="zScrollLayout" format="orientation" layout="1" remark="0" />
@@ -323,7 +325,7 @@
         <attr name="Spinner" translate="zViewSelect" format="" />
         <attr name="GridView" translate="zViewGrid" format="orientation" />
         <attr name="NavigationView" translate="zViewController" format="file" />
-        <attr name="TabWidget" translate="TabWidget" format="" remark="1" />
+        <attr name="TabWidget" translate="zTabWidget" format="text|iconka" layout="1" remark="0" />
         <attr name="VideoView" translate="zViewVideo" format="file|assets" />
         <attr name="ImageView" translate="zViewImage" format="iconka" />
     </widgets>

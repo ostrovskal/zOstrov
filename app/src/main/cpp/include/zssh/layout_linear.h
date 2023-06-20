@@ -3,6 +3,8 @@
 			VIEW_MATCH, VIEW_MATCH)); 
 	auto grp01((zLinearLayout*)grp->attach(new zLinearLayout(styles_z_llinear, 0, true), 
 			VIEW_MATCH, VIEW_WRAP)); 
+	grp01->attach(new zViewText(styles_default, z.R.id.tv1, z.R.string.serg), 
+			VIEW_MATCH, VIEW_WRAP);
 	grp01->attach(new zViewSelect(styles_z_select, z.R.id.select), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp01->attach(new zViewGrid(styles_z_grid1, z.R.id.grid1, false), 

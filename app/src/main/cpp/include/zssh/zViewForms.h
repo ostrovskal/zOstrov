@@ -20,6 +20,8 @@ public:
     virtual rti drawableClip() const override { return { 0, 0, 65535, 65535 }; }
     // инициализация
     virtual void onInit(bool _theme) override;
+    // состояние
+    virtual void stateView(STATE& state, bool save, int& index) override;
     // обновление видимости
     virtual int updateVisible(bool set) override;
     // добавление дочерних

@@ -439,18 +439,18 @@ void zEditLayout::childUpdateText(bool _empty) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 zTabLayout::zTabLayout(zStyle* _styles, i32 _id, zStyle* _styles_capt, int _gravityCaption) :
-        zLinearLayout(styles_z_tabs, _id, (_gravityCaption & ZS_GRAVITY_VERT) != 0), styles_caption(_styles_capt), gravCapt(_gravityCaption) {
+        zLinearLayout(styles_default, _id, (_gravityCaption & ZS_GRAVITY_VERT) != 0), styles_caption(_styles_capt), gravCapt(_gravityCaption) {
     // макет заголовков
     caption = new zLinearLayout(_styles, 0, (_gravityCaption & ZS_GRAVITY_VERT) == 0);
     // макет контента
-    content = new zFrameLayout(styles_z_tabcontent, 0);
+    content = new zFrameLayout(styles_default, 0);
 }
 
 void zTabLayout::onInit(bool _theme) {
     zViewGroup::onInit(_theme);
-    detachAllViews(true);
-    attach(caption, vert ? VIEW_MATCH : VIEW_WRAP, vert ? VIEW_WRAP : VIEW_MATCH);
-    attach(content, VIEW_MATCH, VIEW_MATCH);
+    if(countChildren()) return;
+    zViewGroup::attach(content, VIEW_MATCH, VIEW_MATCH);
+    zViewGroup::attach(caption, vert ? VIEW_MATCH : VIEW_WRAP, vert ? VIEW_WRAP : VIEW_MATCH, (gravCapt == ZS_GRAVITY_START || gravCapt == ZS_GRAVITY_TOP) - 1);
 }
 
 void zTabLayout::showPage(int _page) {
@@ -467,18 +467,23 @@ void zTabLayout::showPage(int _page) {
 }
 
 void zTabLayout::showSelector() {
-    auto r(&caption->atView(activePage)->rview);
-    caption->drw[DRW_SEL]->measure(r->w, r->h, 3, false);
-    caption->drw[DRW_SEL]->bound = r->xy();
+    auto& r(caption->atView(activePage)->rview);
+    caption->drw[DRW_SEL]->measure(vert ? r.w : 6, vert ? 6 : r.h, 3, false);
+    caption->drw[DRW_SEL]->bound.x = r.x + (gravCapt == ZS_GRAVITY_START) * (r[3 - !vert] - 8);
+    caption->drw[DRW_SEL]->bound.y = r.y + (gravCapt == ZS_GRAVITY_TOP) * (r[vert + 2] - 8);
 }
 
-void zTabLayout::addPage(zViewGroup* group, u32 tabText, i32 tabIcon) {
-    auto countPages(caption->countChildren());
-    auto v(new zViewButton(styles_caption, countPages, tabText, tabIcon));
-    v->setOnClick([this](zView* v, int) { setActivePage(v->id); });
-    caption->attach(v, VIEW_WRAP, VIEW_WRAP);
-    content->attach(group, VIEW_MATCH, VIEW_MATCH);
-    if(countPages) group->updateVisible(false);
+zView* zTabLayout::attach(zView* page, int width, int height, int where) {
+    auto widget(dynamic_cast<zTabWidget*>(page));
+    if(widget) {
+        auto countPages(caption->countChildren());
+        auto v(new zViewButton(styles_caption, countPages, widget->getText(), widget->getIcon()));
+        v->setOnClick([this](zView *v, int) { setActivePage(v->id); });
+        caption->attach(v, VIEW_WRAP, VIEW_WRAP);
+        content->attach(page, VIEW_MATCH, VIEW_MATCH);
+        page->updateVisible(false);
+    }
+    return page;
 }
 
 void zTabLayout::setActivePage(int _page) {
@@ -506,4 +511,5 @@ void zTabLayout::stateView(STATE &state, bool save, int &index) {
 void zTabLayout::onLayout(crti &position, bool changed) {
     zLinearLayout::onLayout(position, changed);
     if(activePage == -1) setActivePage(0);
+    showSelector();
 }

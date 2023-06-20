@@ -26,6 +26,13 @@ void zViewForm::onMeasure(cszm& spec) {
     zLinearLayout::onMeasure(spec);
 }
 
+void zViewForm::stateView(STATE& state, bool save, int& index) {
+	zLinearLayout::stateView(state, save, index);
+	auto child(content->atView(0));
+	if(child) child->stateView(state, save, index);
+	if(!save) requestLayout();
+}
+
 void zViewForm::onDrawFBO() {
 	// отрисовка затенения
 	if(shade) shade->draw(nullptr);
@@ -52,7 +59,7 @@ void zViewForm::onInit(bool _theme) {
 	// заголовок
 	if(_styles_header && caption) zViewGroup::attach(new zViewText(_styles_header, 0, caption), VIEW_MATCH, VIEW_WRAP);
 	// тело
-	content = (zFrameLayout*)attach(new zFrameLayout(styles_z_formcontentlyt, 0), VIEW_MATCH, VIEW_MATCH);
+	content = (zFrameLayout*)attach(new zFrameLayout(styles_default, 0), VIEW_MATCH, VIEW_MATCH);
 	// футер
 	mode = styles->_int(Z_MODE, ZS_FORM_NONE);
 	if(_styles_button_footer) {

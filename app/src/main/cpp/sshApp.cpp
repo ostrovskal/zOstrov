@@ -75,9 +75,12 @@ void sshApp::run() {
 #include "zssh/zViewRibbons.h"
 
 void sshApp::setContent() {
-//    debug = true;
+    debug = true;
     #include "zssh/layout_linear.h"
+    #include "zssh/layout_tabbed.h"
     #include "zssh/layout_form.h"
+    attachForm(formSettings, 300_dp, 300_dp);
+    attachForm(formBrowser, 300_dp, 300_dp);
     zArray<zStringUTF8> objects(theme->findArray(z.R.array.spinArray));
     for(int i = 0 ; i < 1000; i += 7) {
         objects += zStringUTF8(z_ntos(&i, RADIX_HEX, false));
@@ -87,12 +90,48 @@ void sshApp::setContent() {
     auto lst(idView<zViewRibbon>(z.R.id.catalog));
     lst->setAdapter(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
     sel->setAdapter(new zAdapterList(objects, new zFabricSelectItem(styles_z_spin_capt), new zFabricSelectItem(styles_z_spin_item)));
-    //formBrowser->updateStatus(ZS_VISIBLED, false);
+    auto txt(root->idView<zViewText>(z.R.id.tv1));
+    if(txt) {
+        txt->setLines(3);
+        txt->setText("Завершение работы фоновых приложений после"
+                     " блокировки экрана <c value=\"ff0ff00\">помогает</c>  экономить заряд аккумулятора. "
+                     "С другой стороны, в этом случае вы не будете получать "
+                     "новые сообщения (электронные, текстовые, из соцсетей и т.д.).", true);
+/*
+        txt->setTextFromHtml(txt->getText(), [](cstr tag, bool end, zHtml* html) {
+            return false;
+        });
+*/
+        txt->setSpan(new zTextSpanParagraph(), 0, 0);
+        txt->setSpan(new zTextSpanBackgroundColor(0xff00ff00), 0, 10);
+        txt->setSpan(new zTextSpanForegrounColor(0xff00ffff), 10, 20);
+        txt->setSpan(new zTextSpanBackgroundColor(0xff9fff9f), 60, 220);
+/*
+        txt->setSpan(new zTextSpanHeightSize(30_dp), 20, 30);
+        txt->setSpan(new zTextSpanRelativeHeightSize(1.2f), 30, 40);
+        txt->setSpan(new zTextSpanStyle(ZS_TYPEFACE_ITALIC), 40, 45);
+        txt->setSpan(new zTextSpanStyle(ZS_TYPEFACE_BOLD_ITALIC), 45, 50);
+        txt->setSpan(new zTextSpanStrikeline(), 50, 55);
+        txt->setSpan(new zTextSpanUnderline(), 55, 60);
+        txt->setSpan(new zTextSpanStyle(ZS_TYPEFACE_BOLD), 60, 70);
+        txt->setSpan(new zTextSpanImage("zssh", z.R.integer.rectRound, 0.3f, 0x0), 80, 80);
+        txt->setSpan(new zTextSpanUrl("block"), 80, 85);
+        txt->setSpan(new zTextSpanImage("zssh", z.R.integer.rectRound, 0.3f, 0x0), 82, 82);
+        txt->setSpan(new zTextSpanSubscript(), 90, 92);
+        txt->setSpan(new zTextSpanSuperscript(), 97, 99);
+        txt->setSpan(new zTextSpanStyle(ZS_TYPEFACE_ITALIC), 100, 130);
+        txt->setSpan(new zTextSpanForegrounColor(z.R.color.red), 90, 110);
+        txt->setSpan(new zTextSpanImage("zssh", z.R.integer.gradientRadial, 0.3f, 0x0), 120, 120);
+*/
+    }
     getActionBar()->setOnClickMenuGroup([](zView* v, zMenuGroup* g) {
         DLOG("click group %i %i", g->getId(), g->count());
-    })->setOnClickMenuItem([formBrowser](zView* v, zMenuItem* i) {
+    })->setOnClickMenuItem([formBrowser, formSettings](zView* v, zMenuItem* i) {
         if(i->getId() == z.R.integer.MENU_BROWSER) {
             formBrowser->updateVisible(true);
+        }
+        if(i->getId() == z.R.integer.MENU_SETTINGS) {
+            formSettings->updateVisible(true);
         }
         if(i->getId() == z.R.integer.MENU_KEYBOARD) {
             auto ic(i->getImage());

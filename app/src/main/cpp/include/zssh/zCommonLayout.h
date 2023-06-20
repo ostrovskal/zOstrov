@@ -88,11 +88,21 @@ protected:
     zLayoutEdit* edit{nullptr};
 };
 
+class zTabWidget : public zFrameLayout {
+public:
+    zTabWidget(zStyle* _styles, i32 _id, u32 _text, i32 _icon) : zFrameLayout(_styles, _id), text(_text), icon(_icon) { }
+    u32 getText() const { return text; }
+    i32 getIcon() const { return icon; }
+protected:
+    u32 text{0};
+    i32 icon{-1};
+};
+
 class zTabLayout : public zLinearLayout {
 public:
     zTabLayout(zStyle* _styles, i32 _id, zStyle* _styles_capt, int _gravityCaption);
     // добавить страницу
-    virtual void addPage(zViewGroup* page, u32 tabText, i32 tabIcon = -1);
+    virtual zView* attach(zView* v, int width, int height, int where = -1) override;
     // сохранение/восстановление
     virtual void stateView(STATE &state, bool save, int &index) override;
     // установить активную страницу

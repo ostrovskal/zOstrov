@@ -326,9 +326,7 @@ void zViewManager::stateAllViews(u32 action, u8** _ptr, u32* _size) {
         }
         SAFE_DELETE(bufViewStates); sizeViewStates = 0;
         // восстановить клавиатуру
-        if(keybStatus && idView(keybStatus)) {
-            showSoftKeyboard(keybStatus, true);
-        }
+        if(keybStatus && idView(keybStatus)) showSoftKeyboard(keybStatus, true);
     }
 }
 

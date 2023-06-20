@@ -48,6 +48,8 @@ public:
     bool getBoundChar(int ch, rti& tex, rti& bound) const;
     bool isUnderline() const { return style & ZS_TEXT_UNDERLINE; }
     bool isStrike() const { return style & ZS_TEXT_STRIKE; }
+    // корректировать baseline
+    int correctBaseline(int size, int htex) const;
     // вернуть ширину текста в пикселях
     int widthText(cstr _text, int length) const;
     // вернуть ближайщую позицию в тексте(screenLimit - предел/screenX - начальная коор. текста)

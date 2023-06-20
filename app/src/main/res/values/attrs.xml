@@ -291,6 +291,8 @@
 		<attr name="tabGravity" format="enum|string">
 			<enum name="top" value="1" />
 			<enum name="start" value="2" />
+			<enum name="end" value="3" />
+			<enum name="bottom" value="8" />
 		</attr>
 		<attr name="message" format="integer|string" />
 		<attr name="modal" format="boolean" />
