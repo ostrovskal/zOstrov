@@ -5,19 +5,20 @@
 #pragma once
 
 #define SPAN_DEFAULT        0
-#define SPAN_FK_COLOR       1   // задает цвет
-#define SPAN_BK_COLOR       2   // задает фоновый цвет
-#define SPAN_ABSOLUTE_SIZE  3   // размер
-#define SPAN_RELATIVE_SIZE  4   // относительный размер
-#define SPAN_STYLE          5   // стиль
-#define SPAN_IMAGE          6   // картинка
-#define SPAN_PARAGRAPH      7   // параграф
-#define SPAN_BULLET         8   // список
-#define SPAN_URL            9   // ссылка
-#define SPAN_SUBSCRIPT      10  // текст снизу -
-#define SPAN_SUPERSCRIPT    11  // текст сверху - степень
-#define SPAN_UNDERLINE      12  //
-#define SPAN_STRIKELINE     13  //
+#define SPAN_BK_COLOR       1  // задает фоновый цвет
+#define SPAN_FK_COLOR       2  // задает цвет
+#define SPAN_ABSOLUTE_SIZE  3  // размер
+#define SPAN_RELATIVE_SIZE  4  // относительный размер
+#define SPAN_SUBSCRIPT      5  // текст снизу -
+#define SPAN_SUPERSCRIPT    6  // текст сверху - степень
+#define SPAN_STYLE          7  // стиль
+#define SPAN_UNDERLINE      8  //
+#define SPAN_STRIKELINE     9  //
+#define SPAN_PARAGRAPH      10 // параграф
+#define SPAN_URL            11 // ссылка
+#define SPAN_IMAGE          12 // картинка
+#define SPAN_BULLET         13 // список
+#define SPAN_MASK           14 // маска
 
 #define SPAN_FLAGS_DEFAULT  0
 #define SPAN_FLAGS_SPECIFIC 1
@@ -49,14 +50,18 @@ public:
     bool isUnderline() const { return style & ZS_TEXT_UNDERLINE; }
     bool isStrike() const { return style & ZS_TEXT_STRIKE; }
     // корректировать baseline
-    int correctBaseline(int size, int htex) const;
+    int correctBaseline(int size) const;
+    int getSizeFont() const { return font->getSize().h / 2; }
     // вернуть ширину текста в пикселях
     int widthText(cstr _text, int length) const;
     // вернуть ближайщую позицию в тексте(screenLimit - предел/screenX - начальная коор. текста)
     int indexOf(cstr _text, int length, int screenLimit, int screenX, bool exact) const;
     int indexReverseOf(cstr _text, int length, int screenLimit) const;
+    zStringUTF8 info() const;
     // цвет текста/фона
     u32 fkColor{0xffffffff}, bkColor{0};
+    // ширина в пикселях/смешение высоты
+    int width{0}, subH{0};
 protected:
     // фактор масштабирования
     float factor{1.0f};
@@ -69,7 +74,6 @@ protected:
     u32 style{ZS_TEXT_NORMAL};
     // шрифт
     zTexture* font{nullptr};
-    int idx{0};
 };
 
 class zTextSpan {
@@ -77,8 +81,10 @@ public:
     zTextSpan() { }
     // обновление состояния
     virtual void updateState(zTextPaint* paint) { }
+    // пропускать
+    virtual bool isSkip() const { return false; }
     // позиционирование
-    virtual bool draw(int x, int y, int hmax, zTextPaint *paint) { return false; }
+    virtual void draw(int x, int y, int hmax, zTextPaint *paint, crti& clip) { }
     // клик по спану
     virtual bool click() { return false; }
     // вернуть тип спана
@@ -92,9 +98,7 @@ public:
     // вернуть тип спана
     virtual int typeId() const override { return SPAN_STYLE; }
     // обновление состояния
-    void updateState(zTextPaint *paint) override {
-        paint->setStyle(style | paint->getStyle());
-    }
+    void updateState(zTextPaint *paint) override { paint->setStyle(style | paint->getStyle()); }
     int style{0};
 };
 
@@ -105,9 +109,7 @@ public:
     // вернуть тип спана
     virtual int typeId() const override { return SPAN_FK_COLOR; }
     // обновление состояния
-    void updateState(zTextPaint *paint) override {
-        paint->fkColor = color;
-    }
+    void updateState(zTextPaint *paint) override { paint->fkColor = color; }
     u32 color{0};
 };
 
@@ -118,9 +120,7 @@ public:
     // вернуть тип спана
     virtual int typeId() const override { return SPAN_BK_COLOR; }
     // обновление состояния
-    void updateState(zTextPaint *paint) override {
-        paint->bkColor = color;
-    }
+    void updateState(zTextPaint *paint) override { paint->bkColor = color; }
     u32 color{0};
 };
 
@@ -131,9 +131,7 @@ public:
     // вернуть тип спана
     virtual int typeId() const override { return SPAN_ABSOLUTE_SIZE; }
     // обновление состояния
-    void updateState(zTextPaint *paint) override {
-        paint->setSize(size);
-    }
+    void updateState(zTextPaint *paint) override { paint->setSize(size); }
     i32 size{0};
 };
 
@@ -144,26 +142,22 @@ public:
     // вернуть тип спана
     virtual int typeId() const override { return SPAN_RELATIVE_SIZE; }
     // обновление состояния
-    void updateState(zTextPaint *paint) override {
-        paint->setSize((int)roundf((float)paint->getSize() * rel));
-    }
+    void updateState(zTextPaint *paint) override { paint->setSize((int)roundf((float)paint->getSize() * rel)); }
     float rel{0.0f};
 };
 
 // изображение
-class zViewImageSpan;
 class zTextSpanImage : public zTextSpan {
 public:
-    zTextSpanImage(cstr _image, int _tile, float _factor, int _pad);
-    virtual ~zTextSpanImage();
+    zTextSpanImage(int _image, int _tile, float _factor, int _color = 0);
     // обновление состояния
     virtual void updateState(zTextPaint *paint) override;
     // отрисовка
-    virtual bool draw(int x, int y, int hmax, zTextPaint *paint) override;
+    virtual void draw(int x, int y, int hmax, zTextPaint *paint, crti& clip) override;
     // вернуть тип спана
     virtual int typeId() const override { return SPAN_IMAGE; }
     // изображение для спана
-    zViewImageSpan* image{nullptr};
+    zDrawable dr{nullptr, DRW_FK};
 };
 
 class zTextSpanBullet : public zTextSpanImage {
@@ -172,7 +166,7 @@ public:
     // обновление состояния
     virtual void updateState(zTextPaint *paint) override;
     // отрисовка
-    virtual bool draw(int x, int y, int hmax, zTextPaint *paint) override;
+    virtual void draw(int x, int y, int hmax, zTextPaint *paint, crti& clip) override;
     // вернуть тип спана
     virtual int typeId() const override { return SPAN_BULLET; }
     // признак нумерованного списка
@@ -183,15 +177,10 @@ public:
 
 class zTextSpanParagraph : public zTextSpan {
 public:
-    zTextSpanParagraph() { }
     // обновление состояния
-    void updateState(zTextPaint *paint) override {
-        paint->setMargin(40);
-    }
-    // отрисовка
-    bool draw(int x, int y, int hmax, zTextPaint* paint) override {
-        return true;
-    }
+    virtual void updateState(zTextPaint *paint) override;
+    // пропускать
+    virtual bool isSkip() const { return true; }
     // вернуть тип спана
     virtual int typeId() const override { return SPAN_PARAGRAPH; }
 };
@@ -214,11 +203,10 @@ public:
 
 class zTextSpanSubscript : public zTextSpan {
 public:
-    zTextSpanSubscript() {}
     // обновление состояния
     void updateState(zTextPaint *paint) override {
         paint->setSize((int)roundf((float)paint->getSize() * 0.66f));
-        paint->setBaseline(paint->getBaseline() - paint->getAscent() / 4);
+        paint->setBaseline(paint->getBaseline() - paint->getSize() / 4);
     }
     // вернуть тип спана
     virtual int typeId() const override { return SPAN_SUBSCRIPT; }
@@ -226,11 +214,11 @@ public:
 
 class zTextSpanSuperscript : public zTextSpan {
 public:
-    zTextSpanSuperscript() {}
     // обновление состояния
     void updateState(zTextPaint *paint) override {
-        paint->setSize((int)roundf((float)paint->getSize() * 0.66f));
-        paint->setBaseline(paint->getBaseline() + paint->getAscent() / 2);
+        auto sz((int)roundf((float)paint->getSize() * 0.66f));
+        paint->setBaseline(paint->getBaseline() - paint->getAscent() + paint->getSize() + sz / 4);
+        paint->setSize(sz);
     }
     // вернуть тип спана
     virtual int typeId() const override { return SPAN_SUPERSCRIPT; }
@@ -238,22 +226,27 @@ public:
 
 class zTextSpanUnderline : public zTextSpan {
 public:
-    zTextSpanUnderline() {}
     // обновление состояния
-    void updateState(zTextPaint *paint) override {
-        paint->setStyle(paint->getStyle() | ZS_TEXT_UNDERLINE);
-    }
+    void updateState(zTextPaint *paint) override { paint->setStyle(paint->getStyle() | ZS_TEXT_UNDERLINE); }
     // вернуть тип спана
     virtual int typeId() const override { return SPAN_UNDERLINE; }
 };
 
 class zTextSpanStrikeline : public zTextSpan {
 public:
-    zTextSpanStrikeline() {}
     // обновление состояния
-    void updateState(zTextPaint *paint) override {
-        paint->setStyle(paint->getStyle() | ZS_TEXT_STRIKE);
-    }
+    void updateState(zTextPaint *paint) override { paint->setStyle(paint->getStyle() | ZS_TEXT_STRIKE); }
     // вернуть тип спана
     virtual int typeId() const override { return SPAN_STRIKELINE; }
+};
+
+class zTextSpanMask : public zTextSpan {
+public:
+    void updateState(zTextPaint *paint) override {
+
+    }
+    // отрисовка
+    virtual void draw(int x, int y, int hmax, zTextPaint *paint, crti &clip) override;
+   // вернуть тип спана
+    virtual int typeId() const override { return SPAN_MASK; }
 };

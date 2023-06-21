@@ -26,10 +26,14 @@ public:
         // конструкторы
         SPAN() { }
         SPAN(zTextSpan* _span, int _s, int _e, zTextPaint* _paint, int _f = 0) : s(_s), e(_e), f(_f), span(_span), paint(_paint) { }
+        ~SPAN() { delete paint; }
         // инфо
-        zStringUTF8 info() const { return ""; }
+        zStringUTF8 info() const {
+            static cstr names[] = { "def", "bk", "fk", "abs", "rel", "sub", "sup", "sts", "und", "str", "par", "url", "img", "lst", "msk" };
+            return z_fmt("%i-%i %s(%s)", s, e, names[span->typeId()], paint->info().str()).str(); }
         // сброс
         void reset(zViewText* vt) { paint->reset(vt); }
+        bool operator == (cszi& _s) const { return s == _s.w && e == _s.h; }
         // оператор сравнения
         bool operator == (zTextSpan* _span) const { return span == _span; }
         // начальная/конечная позиция/флаг
@@ -49,7 +53,7 @@ public:
     // установить текст по идентификатору из ресурсов
     void setText(u32 _text) { setText(theme->findString(_text), false); }
     // установить текст из строки
-    void setText(czs& _text, bool force);
+    void setText(czs& _text, bool force, bool eraseSpane = true);
     // специальный - для клавиатурных кнопок
     void setTextSpecial(czs& _text, cszm& spec);
     // установка текста парсингом из html
@@ -80,6 +84,10 @@ public:
     czs& getText() const { return realText; }
     // вернуть стиль текста
     u32 getTextStyle() const { return defPaint->getStyle(); }
+    // вставка текста в некоторую позицию
+    void insertText(int pos, cstr _text);
+    // удаление некоторого количества символов
+    void removeText(int pos, int count);
     // вернуть верхнее смещение шрифта
     int getAscent() const { return drw[DRW_TXT]->texture->ascent; }
     // вернуть базовую линию шрифта
@@ -93,8 +101,14 @@ public:
     // установка величины смещения тени текста
     void setShadowOffset(int x, int y) { shadow.set(x, y); invalidate(); }
 protected:
-    // вернуть спан по начальной/конечной позиции
-    SPAN* getSpan(int start, int end) const;
+    // изменить спаны на длину
+    void changeSpans(int pos, int length);
+    // вернуть минимальную позицию диапазона
+    bool getMinRangePos(int mn, int& ret) const;
+    // вывод информации о спанах
+    void infoSpans();
+    // вернуть спан по позиции
+    SPAN* getSpan(int pos) const;
     // событие позиционирования
     virtual void onLayout(crti &position, bool changed) override;
     // событие определения габаритов
@@ -110,7 +124,8 @@ protected:
     // отрисовка текста со спанами
     void drawTextSpan(crti& clip);
     // отрисовка фрагмента текста
-    int drawFragment(cstr txt, int count, zTextPaint* paint, const CACHE* cache, cpti& coord, crti& clip);
+    int drawFragment(cstr txt, int count, zTextPaint* paint, const CACHE* cache, cpti& coord, crti& clip, int subH = 0);
+    // добавление подстроки в кэш
     cstr addCacheSubString(cstr _stext, cstr _text, int& width, int height, bool isEdit);
     // разбивка текста
     szi textWrap(cstr _text, int widthRect);
@@ -122,8 +137,6 @@ protected:
     const CACHE* getStringFromCache(int index, rti* tbound, pti& pos);
     // слить все спаны
     void mergeSpans(czs& text);
-    // добавление краски в кэш
-    zTextPaint* addCache(zTextPaint* _paint) { return cachePaints += new zTextPaint(_paint); }
     // дистанция между текстом и фореграундом
     int distance{0};
     // кэш картинки
@@ -142,8 +155,6 @@ protected:
     zArray<SPAN*> spans{};
     // кэш спанов
     zArray<SPAN*> cacheSpans{};
-    // кэш краски
-    zArray<zTextPaint*> cachePaints{};
     // кэш разбитого на подстроки текста
     zArray<CACHE*> textCache{};
     // спан по умолчанию
@@ -226,10 +237,6 @@ protected:
     }
     // вернуть цвет текста для отображения
     virtual u32 getDrawColorText(u32 color) override { return (realText.isNotEmpty() ? color : colorHint); }
-    // вставка текста в некоторую позицию
-    void insertText(int pos, cstr _text) { setText(realText.insert(pos, _text), true); }
-    // удаление некоторого количества символов
-    void removeText(int pos, int count) { setText(realText.remove(pos, count), true); }
     // при удалении и вставке символа - начальная позиция текста/позиция каретки
     int correct(int index);
     // коррекция позиции каретки на экране

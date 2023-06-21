@@ -75,7 +75,7 @@ void sshApp::run() {
 #include "zssh/zViewRibbons.h"
 
 void sshApp::setContent() {
-    debug = true;
+    //debug = true;
     #include "zssh/layout_linear.h"
     #include "zssh/layout_tabbed.h"
     #include "zssh/layout_form.h"
@@ -90,11 +90,18 @@ void sshApp::setContent() {
     auto lst(idView<zViewRibbon>(z.R.id.catalog));
     lst->setAdapter(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
     sel->setAdapter(new zAdapterList(objects, new zFabricSelectItem(styles_z_spin_capt), new zFabricSelectItem(styles_z_spin_item)));
+    auto chSp(idView(z.R.id.spans));
     auto txt(root->idView<zViewText>(z.R.id.tv1));
+    if(chSp) {
+        chSp->setOnClick([txt](zView*, int) {
+            txt->insertText(35, "serg!!!");
+            DLOG("ins");
+        });
+    }
     if(txt) {
-        txt->setLines(3);
-        txt->setText("Завершение работы фоновых приложений после"
-                     " блокировки экрана <c value=\"ff0ff00\">помогает</c>  экономить заряд аккумулятора. "
+        txt->setLines(51);
+        txt->setText(" Завершение работы фоновых приложений после"
+                     " блокировки экрана <c value=\"ff0ff00\">помогает</c> экономить заряд аккумулятора. "
                      "С другой стороны, в этом случае вы не будете получать "
                      "новые сообщения (электронные, текстовые, из соцсетей и т.д.).", true);
 /*
@@ -102,25 +109,24 @@ void sshApp::setContent() {
             return false;
         });
 */
-        txt->setSpan(new zTextSpanParagraph(), 0, 0);
-        txt->setSpan(new zTextSpanBackgroundColor(0xff00ff00), 0, 10);
-        txt->setSpan(new zTextSpanForegrounColor(0xff00ffff), 10, 20);
-        txt->setSpan(new zTextSpanBackgroundColor(0xff9fff9f), 60, 220);
+        txt->setSpan(new zTextSpanParagraph(), 0, 1);
+        txt->setSpan(new zTextSpanBackgroundColor(z.R.color.lime), 0, 44);
+        txt->setSpan(new zTextSpanBackgroundColor(z.R.color.maroon), 44, 105);
+        txt->setSpan(new zTextSpanBackgroundColor(z.R.color.navy), 105, 260);
+        txt->setSpan(new zTextSpanForegrounColor(z.R.color.red), 20, 110);
+        txt->setSpan(new zTextSpanAbsoluteSize(10_dp), 11, 21);
+        txt->setSpan(new zTextSpanSubscript(), 17, 20);
+        txt->setSpan(new zTextSpanSuperscript(), 23, 27);
+        txt->setSpan(new zTextSpanForegrounColor(z.R.color.black), 11, 25);
+        txt->setSpan(new zTextSpanStyle(ZS_TEXT_BOLD), 16, 32);
+        txt->setSpan(new zTextSpanStyle(ZS_TEXT_ITALIC), 60, 70);
+        txt->setSpan(new zTextSpanImage(z.R.drawable.zssh, z.R.integer.iconSelf_round, 0.33f, 0xffffffff), 5, 6);
+        txt->setSpan(new zTextSpanImage(z.R.drawable.zssh, z.R.integer.iconSelf, 0.75f, 0xffffffff), 45, 46);
+        txt->setSpan(new zTextSpanImage(z.R.drawable.zssh, z.R.integer.iconOk, 0.5f, 0xffffffff), 15, 16);
 /*
-        txt->setSpan(new zTextSpanHeightSize(30_dp), 20, 30);
-        txt->setSpan(new zTextSpanRelativeHeightSize(1.2f), 30, 40);
-        txt->setSpan(new zTextSpanStyle(ZS_TYPEFACE_ITALIC), 40, 45);
-        txt->setSpan(new zTextSpanStyle(ZS_TYPEFACE_BOLD_ITALIC), 45, 50);
-        txt->setSpan(new zTextSpanStrikeline(), 50, 55);
-        txt->setSpan(new zTextSpanUnderline(), 55, 60);
         txt->setSpan(new zTextSpanStyle(ZS_TYPEFACE_BOLD), 60, 70);
         txt->setSpan(new zTextSpanImage("zssh", z.R.integer.rectRound, 0.3f, 0x0), 80, 80);
         txt->setSpan(new zTextSpanUrl("block"), 80, 85);
-        txt->setSpan(new zTextSpanImage("zssh", z.R.integer.rectRound, 0.3f, 0x0), 82, 82);
-        txt->setSpan(new zTextSpanSubscript(), 90, 92);
-        txt->setSpan(new zTextSpanSuperscript(), 97, 99);
-        txt->setSpan(new zTextSpanStyle(ZS_TYPEFACE_ITALIC), 100, 130);
-        txt->setSpan(new zTextSpanForegrounColor(z.R.color.red), 90, 110);
         txt->setSpan(new zTextSpanImage("zssh", z.R.integer.gradientRadial, 0.3f, 0x0), 120, 120);
 */
     }

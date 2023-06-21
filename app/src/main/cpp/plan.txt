@@ -785,17 +785,17 @@ hwyx
 22:20
 сейчас:
 1. доделать спаны
-   1.1. fkColor
-    1.2. bkColor
-    1.3. absSize
-    1.4. relSize
-    1.5. Style
+   1.1. fkColor             +
+    1.2. bkColor            +
+    1.3. absSize            ++-
+    1.4. relSize            +
+    1.5. Style              +
     1.6. Image
-    1.7. Paragraph
+    1.7. Paragraph          +
     1.8. Bullet
     1.9. Url
-    1.10.subScript
-    1.11.superScript
-    1.12.underline
-    1.13.strike
+    1.10.subScript          +
+    1.11.superScript        +
+    1.12.underline          +
+    1.13.strike             +
 2. html

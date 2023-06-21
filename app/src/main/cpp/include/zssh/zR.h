@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Tue Jun 20 22:21:00 2023
+// Wed Jun 21 22:07:42 2023
 
 #pragma once
 
@@ -122,12 +122,13 @@ struct _z {
 				edit1	= 0x0010100F, 	button1	= 0x00101010, 	switch1	= 0x00101011, 
 				seek	= 0x00101012, 	progress1	= 0x00101013, 	formOpen	= 0x00101014, 
 				choiceSource	= 0x00101015, 	catalog	= 0x00101016, 	chkReadOnly	= 0x00101017, 
-				tv1	= 0x00101018, 	select	= 0x00101019, 	grid1	= 0x0010101A, 
-				radioDark	= 0x0010101B, 	chkbox	= 0x0010101C, 	radioLight	= 0x0010101D, 
-				button2	= 0x0010101E, 	switch2	= 0x0010101F, 	switch3	= 0x00101020, 
-				button3	= 0x00101021, 	seek1	= 0x00101022, 	button11	= 0x00101023, 
-				seek2	= 0x00101024, 	button4	= 0x00101025, 	edit2	= 0x00101026, 
-				progress2	= 0x00101027, 	formSettings	= 0x00101028, 			};
+				tv1	= 0x00101018, 	spans	= 0x00101019, 	select	= 0x0010101A, 
+				grid1	= 0x0010101B, 	radioDark	= 0x0010101C, 	chkbox	= 0x0010101D, 
+				radioLight	= 0x0010101E, 	button2	= 0x0010101F, 	switch2	= 0x00101020, 
+				switch3	= 0x00101021, 	button3	= 0x00101022, 	seek1	= 0x00101023, 
+				button11	= 0x00101024, 	seek2	= 0x00101025, 	button4	= 0x00101026, 
+				edit2	= 0x00101027, 	progress2	= 0x00101028, 	formSettings	= 0x00101029, 
+			};
 		}; 
 		_id id;
 		struct _string {
@@ -152,14 +153,14 @@ struct _z {
 				menuLabel	= 0x00100037, 	menuCode	= 0x00100038, 	menuValue	= 0x00100039, 
 				menuQuickSave	= 0x0010003A, 	menuAsm	= 0x0010003B, 	menuTzx	= 0x0010003C, 
 				podskazka	= 0x0010003D, 	Perekljuchatelw	= 0x0010003E, 	Upravlenie_faylami	= 0x0010003F, 
-				Read_only	= 0x00100040, 	serg	= 0x00100041, 	Nastroyki	= 0x00100042, 
-				CPU	= 0x00100043, 	BORDER	= 0x00100044, 	JOYSTICK	= 0x00100045, 
-				KEYBOARD	= 0x00100046, 			};
+				Read_only	= 0x00100040, 	serg	= 0x00100041, 	changeSpans	= 0x00100042, 
+				Nastroyki	= 0x00100043, 	CPU	= 0x00100044, 	BORDER	= 0x00100045, 
+				JOYSTICK	= 0x00100046, 	KEYBOARD	= 0x00100047, 			};
 		}; 
 		_string string;
 		struct _array {
 			enum { 
-				spinArray	= 0x00100047, 			};
+				spinArray	= 0x00100048, 			};
 		}; 
 		_array array;
 		struct _style {
@@ -352,6 +353,7 @@ static zResource z_resources[] = {
 		{ _z::_R::_string::Upravlenie_faylami, "Управление файлами" },
 		{ _z::_R::_string::Read_only, "Read only" },
 		{ _z::_R::_string::serg, "serg" },
+		{ _z::_R::_string::changeSpans, "changeSpans" },
 		{ _z::_R::_string::Nastroyki, "Настройки" },
 		{ _z::_R::_string::CPU, "CPU" },
 		{ _z::_R::_string::BORDER, "BORDER" },

@@ -5,7 +5,7 @@
 #pragma once
 
 #include "zTexture.h"
-#include "zSpanText.h"
+//#include "zSpanText.h"
 
 struct zParamDrawable {
     //zParamDrawable() { }

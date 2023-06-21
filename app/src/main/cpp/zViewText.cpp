@@ -22,15 +22,15 @@ zViewText::~zViewText() {
 
 void zViewText::setTextSpecial(czs &_text, cszm &spec) {
     realText = _text; measureSpec.set(0, 0);
-    clearCacheSpans(false);
+    clearCacheSpans(true);
     measure(spec);
 }
 
-void zViewText::setText(czs& _text, bool force) {
+void zViewText::setText(czs& _text, bool force, bool eraseSpane) {
     if(force || realText != _text) {
         auto changed(rview.isNotEmpty());
         realText = _text;
-        clearCacheSpans(true);
+        clearCacheSpans(eraseSpane);
         if(changed) {
             auto rv(rview);
             szm spec(zMeasure(lps.w == VIEW_WRAP ? MEASURE_UNDEF : MEASURE_EXACT, measureSpec.w.size()),
@@ -44,7 +44,6 @@ void zViewText::setText(czs& _text, bool force) {
 
 void zViewText::clearCacheSpans(bool del_spans) {
     cacheSpans.clear();
-    cachePaints.clear();
     textCache.clear();
     if(del_spans) {
         for(auto &sp : spans) {
@@ -158,28 +157,30 @@ const zViewText::CACHE* zViewText::getStringFromCache(int i, rti* tbound, pti& p
     return nullptr;
 }
 
-int zViewText::drawFragment(cstr txt, int count, zTextPaint* paint, const CACHE* cache, cpti& coord, crti& clip) {
+int zViewText::drawFragment(cstr txt, int count, zTextPaint* paint, const CACHE* cache, cpti& coord, crti& clip, int subH) {
     static zMatrix m;
     // сформировать фрагмент
-    auto wpix(drw[DRW_TXT]->makeText(txt, count, paint));
+    auto wpix(paint->width ? paint->width : drw[DRW_TXT]->makeText(txt, count, paint));
     auto screenX(manager->screen.x), screenY(manager->screen.y);
     // отрисовка фона текста(если есть)
     if(dr && (paint->bkColor & 0xfe000000)) {
         dr->measure(wpix, cache->size, 0, false);
         dr->color.set(paint->bkColor);
-        m.translate(coord.x - screenX, coord.y - screenY, 0);
+        m.translate(coord.x - screenX, coord.y - screenY - subH, 0);
         dr->drawCommon(clip, m, true);
     }
-    // отрисовка теневого текста
-    if(shadow.isNotEmpty()) {
-        drw[DRW_TXT]->color.set(colors[TEXT_COLOR_SHADOW]);
-        m.translate(coord.x - screenX + shadow.x, coord.y - screenY + shadow.y, 0);
+    if(!paint->width) {
+        // отрисовка теневого текста
+        if(shadow.isNotEmpty()) {
+            drw[DRW_TXT]->color.set(colors[TEXT_COLOR_SHADOW]);
+            m.translate(coord.x - screenX + shadow.x, coord.y - screenY + shadow.y, 0);
+            drw[DRW_TXT]->drawCommon(clip, m, true);
+        }
+        // отрисовка текста
+        drw[DRW_TXT]->color.set(getDrawColorText(paint->fkColor));
+        m.translate(coord.x - screenX, coord.y - screenY, 0);
         drw[DRW_TXT]->drawCommon(clip, m, true);
     }
-    // отрисовка текста
-    drw[DRW_TXT]->color.set(getDrawColorText(paint->fkColor));
-    m.translate(coord.x - screenX, coord.y - screenY, 0);
-    drw[DRW_TXT]->drawCommon(clip, m, true);
     return wpix;
 }
 
@@ -194,7 +195,7 @@ void zViewText::drawText() {
         if(spans.isNotEmpty()) drawTextSpan(clip);
         else {
             // отрисовка
-            auto tbound(&drw[DRW_TXT]->bound); pti coord(std::move(tbound->xy()));
+            auto tbound(&drw[DRW_TXT]->bound); pti coord(tbound->xy());
             const CACHE* cacheStr; int indexCache(0);
             // взять текущий текст из кэша
             while((cacheStr = getStringFromCache(indexCache++, tbound, coord))) {

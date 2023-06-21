@@ -68,6 +68,7 @@ protected:
 };
 
 class zLayoutEdit;
+class zViewText;
 class zEditLayout : public zViewGroup {
     friend class zLayoutEdit;
 public:
