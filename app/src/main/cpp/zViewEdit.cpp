@@ -222,13 +222,13 @@ i32 zViewEdit::onTouchEvent(zTouch *touch) {
         if(bkgSpan) {
             bool isMove(true);
             if(pos >= bkgSpan->s && pos < bkgSpan->e) isMove = (touch->isDragging(true) || touch->isDragging(false));
-            if(isMove) clearSelected(); else post(MSG_EDIT_MENU, 2000, 0);
+            if(isMove) clearSelected(); else post(MSG_EDIT_MENU, 1000, 0);
         }
         posSel.y = pos;
         if(posSel.x != posSel.y) {
             int p1(z_min(posSel.x, posSel.y)); int p2(z_max(posSel.x, posSel.y));
             if(bkgSpan) { bkgSpan->s = p1; bkgSpan->e = p2;
-            } else { bkgSpan = setSpan(new zTextSpanBackgroundColor(z.R.color.backgroundHighlight), p1, p2); }
+            } else { bkgSpan = setSpan(new zTextSpanBackgroundColor(bkgHighlight), p1, p2); }
             cacheSpans.clear(); setText(realText, true, false);
         }
         if(pos != caretIndex) {

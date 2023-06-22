@@ -112,7 +112,6 @@ void zViewText::onMeasure(cszm& spec) {
 i32 zViewText::onTouchEvent(zTouch *touch) {
     int ret(TOUCH_CONTINUE);
     if(isClickabled()) {
-        zTextSpanUrl* sp(nullptr);
         if(touch->isCaptured()) {
             for(auto u: urls) {
                 if(u->rect.contains(touch->cpt.x, touch->cpt.y)) { urlRect = u->rect; break; }
@@ -121,10 +120,10 @@ i32 zViewText::onTouchEvent(zTouch *touch) {
         auto idx(urls.indexOf(urlRect));
         auto url(idx != -1 ? urls[idx] : nullptr);
         if(url) {
-            sp = dynamic_cast<zTextSpanUrl*>(url->span->span);
+            auto sp(dynamic_cast<zTextSpanUrl*>(url->span->span));
             auto paint(url->span->paint);
             paint->setStyle((paint->getStyle() & ~ ZS_TEXT_UNDERLINE) | (ZS_TEXT_UNDERLINE * !touch->isCaptured()));
-            paint->bkColor = (touch->isCaptured() ? z.R.color.backgroundHighlight : sp->bkg);
+            paint->bkColor = (touch->isCaptured() ? bkgHighlight : sp->bkg);
             if(touch->click()) {
                 if(sp && urlRect.contains(touch->cpt.x, touch->cpt.y)) {
                     sp->click();
@@ -291,6 +290,7 @@ void zViewText::onInit(bool _theme) {
     zView::onInit(_theme);
     setTextColorHighlight(theme->styles->_int(Z_THEME_COLOR_TEXT_HIGHLIGHT, 0xffa0a0a0));
     setTextColorShadow(theme->styles->_int(Z_THEME_COLOR_TEXT_SHADOW, 0xff000000));
+    bkgHighlight = theme->styles->_int(Z_THEME_COLOR_BK_HIGHLIGHT, 0xff909090);
     styles->enumerate([this, _theme](u32 attr) {
         auto v(&zTheme::value); auto val(v->u);
         attr |= _theme * ZTT_THM;

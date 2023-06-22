@@ -159,6 +159,8 @@ protected:
     szi icSize{};
     // кэшированное значение ширины wrap текста
     int widthRectCache{0};
+    // цвет backgroundHighlight
+    u32 bkgHighlight{0};
     // смещение тени
     pti shadow{};
     // массив спанов

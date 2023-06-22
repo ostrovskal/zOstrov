@@ -242,6 +242,7 @@
         <attr name="themeColorTextTabbed" translate="Z_THEME_COLOR_TEXT_TABBED" format="color" />
         <attr name="themeColorTextProgress" translate="Z_THEME_COLOR_TEXT_PROGRESS" format="color" />
         <attr name="themeColorTextMenu" translate="Z_THEME_COLOR_TEXT_MENU" format="color" />
+        <attr name="themeColorBackgroundHighlight" translate="Z_THEME_COLOR_BK_HIGHLIGHT" format="color" />
         <attr name="themeTile1Progress" translate="Z_THEME_TILE1_PROGRESS" format="integer" />
         <attr name="themeTile2Progress" translate="Z_THEME_TILE2_PROGRESS" format="integer" />
         <attr name="themeTile1Slider" translate="Z_THEME_TILE1_SLIDER" format="integer" />

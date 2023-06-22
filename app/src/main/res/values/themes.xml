@@ -22,6 +22,7 @@
         <item name="themeColorTextTabbed">@color/textTabbedDark</item>
         <item name="themeColorTextProgress">@color/textProgressDark</item>
         <item name="themeColorTextMenu">@color/textMenuDark</item>
+        <item name="themeColorBackgroundHighlight">@color/backgroundHighlightDark</item>
         <item name="themeTile1Progress">@integer/rectRound</item>
         <item name="themeTile2Progress">@integer/rectRound</item>
         <item name="themeTile1Slider">@integer/sliderTrack1</item>
@@ -53,6 +54,7 @@
         <item name="themeColorTextTabbed">@color/textTabbedLight</item>
         <item name="themeColorTextProgress">@color/textProgressLight</item>
         <item name="themeColorTextMenu">@color/textMenuLight</item>
+        <item name="themeColorBackgroundHighlight">@color/backgroundHighlightLight</item>
         <item name="themeTile1Progress">@integer/gradientRadial</item>
         <item name="themeTile2Progress">@integer/gradientRadial</item>
         <item name="themeTile1Slider">@integer/sliderTrack2</item>
