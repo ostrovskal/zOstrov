@@ -16,6 +16,8 @@
             android:id="@+id/tv1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            z:fkTile1="@integer/formBackground" z:fbo="true"
+            z:fkGravity="center" z:fkScale="0.5"
             z:text="serg"/>
         <CheckBox
             android:id="@+id/spans"
@@ -23,6 +25,23 @@
             z:styles="@style/checkbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+        <EditLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/edit1" z:fbo="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                z:hint="@string/prompt"
+                z:fkGravity="center"
+                z:icGravity="end"
+                z:icTiles="@integer/iconEditEx"
+                z:inputMode="text"
+                z:pad="1dp"
+                android:gravity="center_vertical|start"
+                z:fkTiles="@integer/edit"
+                z:textLines="3" />
+        </EditLayout>
         <Spinner
             android:id="@+id/select"
             android:layout_width="match_parent"
@@ -61,24 +80,6 @@
                 z:decorate="checked|ellipsis"
                 z:styles="@style/radiobutton" />
         </LinearLayout>
-        <EditLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/edit1" z:fbo="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                z:hint="@string/prompt"
-                z:fkGravity="center"
-                z:icGravity="end"
-                z:icTiles="@integer/iconEditEx"
-                z:inputMode="text"
-                z:pad="1dp"
-                android:gravity="center_vertical|start"
-                z:fkTiles="@integer/edit"
-                z:textLines="3"
-                z:textStyle="bold_italic" />
-        </EditLayout>
         <ListView
             android:id="@+id/list1"
             android:layout_width="wrap_content" android:layout_height="120dp"

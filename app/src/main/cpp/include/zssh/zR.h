@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Wed Jun 21 22:07:42 2023
+// Thu Jun 22 09:43:47 2023
 
 #pragma once
 
@@ -76,9 +76,9 @@ struct _z {
 				purple	= 0xFF800080, 	fuchsia	= 0xFFFF00FF, 	green	= 0xFF008000, 
 				lime	= 0xFF00FF00, 	olive	= 0xFF008080, 	yellow	= 0xFF00F0F0, 
 				teal	= 0xFF808000, 	aqua	= 0xFFFFFF00, 	gray	= 0xFF808080, 
-				white	= 0xFFFFFFFF, 	themeDark	= 0xFFED2E4A, 	themeLight	= 0xFF2376B8, 
-				selectorDark	= 0xFFA000A0, 	selectorLight	= 0xFFA0A000, 	dividerDark	= 0xFF755C5C, 
-				dividerLight	= 0xFF4F4F4F, 	textHighlightDark	= 0xFFF17056, 
+				white	= 0xFFFFFFFF, 	backgroundHighlight	= 0xFF00FF00, 	themeDark	= 0xFFED2E4A, 
+				themeLight	= 0xFF2376B8, 	selectorDark	= 0xFFA000A0, 	selectorLight	= 0xFFA0A000, 
+				dividerDark	= 0xFF755C5C, 	dividerLight	= 0xFF4F4F4F, 	textHighlightDark	= 0xFFF17056, 
 				textHighlightLight	= 0xFF5670F1, 	textMessageDark	= 0xFFD2FA64, 
 				textMessageLight	= 0xFFD2FA64, 	textHeaderDark	= 0xFFCFBA41, 
 				textHeaderLight	= 0xFF45F1A9, 	textUrlDark	= 0xFFB8FA01, 
@@ -160,7 +160,7 @@ struct _z {
 		_string string;
 		struct _array {
 			enum { 
-				spinArray	= 0x00100048, 			};
+				menuEditor	= 0x00100048, 	spinArray	= 0x00100049, 			};
 		}; 
 		_array array;
 		struct _style {
@@ -171,27 +171,28 @@ struct _z {
 				formFooterLyt	= 0x00100009, 	formContentLyt	= 0x0010000A, 
 				toast	= 0x0010000B, 	bar	= 0x0010000C, 	barButton	= 0x0010000D, 
 				barOverflow	= 0x0010000E, 	menuImage	= 0x0010000F, 	barPopup	= 0x00100010, 
-				formFooter	= 0x00100011, 	spin_item	= 0x00100012, 	list_item	= 0x00100013, 
-				menu_item	= 0x00100014, 	spin_capt	= 0x00100015, 	button	= 0x00100016, 
-				tools	= 0x00100017, 	checkbox	= 0x00100018, 	radiobutton	= 0x00100019, 
-				edittext	= 0x0010001A, 	ribbon	= 0x0010001B, 	grid	= 0x0010001C, 
-				select	= 0x0010001D, 	msgForm	= 0x0010001E, 	slider	= 0x0010001F, 
-				linearProgress	= 0x00100020, 	circularProgress	= 0x00100021, 
-				switchButton	= 0x00100022, 	llinear	= 0x00100023, 	tabWidget	= 0x00100024, 
-				tabHost	= 0x00100025, 	ccontroller	= 0x00100026, 	acontroller	= 0x00100027, 
-				form	= 0x00100028, 	chart	= 0x00100029, 	chartDiagramm	= 0x0010002A, 
-				chartGraph	= 0x0010002B, 	themeDark	= 0x0010002C, 	themeLight	= 0x0010002D, 
-				zcelllayout1	= 0x0010002E, 	list1	= 0x0010002F, 	edit1	= 0x00100030, 
-				button1	= 0x00100031, 	switch1	= 0x00100032, 	seek	= 0x00100033, 
-				progress1	= 0x00100034, 	formopen	= 0x00100035, 	zlinearlayout1	= 0x00100036, 
-				zviewbutton1	= 0x00100037, 	zscrolllayout1	= 0x00100038, 
-				grid1	= 0x00100039, 	radiodark	= 0x0010003A, 	chkbox	= 0x0010003B, 
-				radiolight	= 0x0010003C, 	zviewedit1	= 0x0010003D, 	zviewbutton2	= 0x0010003E, 
-				zviewswitch1	= 0x0010003F, 	button2	= 0x00100040, 	switch2	= 0x00100041, 
-				switch3	= 0x00100042, 	zviewslider1	= 0x00100043, 	seek1	= 0x00100044, 
-				button11	= 0x00100045, 	seek2	= 0x00100046, 	edit2	= 0x00100047, 
-				zlinearlayout2	= 0x00100048, 	zviewtext1	= 0x00100049, 	zlinearlayout3	= 0x0010004A, 
-				ztabwidget1	= 0x0010004B, 	};
+				menuPopup	= 0x00100011, 	formFooter	= 0x00100012, 	spin_item	= 0x00100013, 
+				list_item	= 0x00100014, 	menu_item	= 0x00100015, 	edit_menu_item	= 0x00100016, 
+				spin_capt	= 0x00100017, 	button	= 0x00100018, 	tools	= 0x00100019, 
+				checkbox	= 0x0010001A, 	radiobutton	= 0x0010001B, 	edittext	= 0x0010001C, 
+				ribbon	= 0x0010001D, 	grid	= 0x0010001E, 	select	= 0x0010001F, 
+				msgForm	= 0x00100020, 	slider	= 0x00100021, 	linearProgress	= 0x00100022, 
+				circularProgress	= 0x00100023, 	switchButton	= 0x00100024, 
+				llinear	= 0x00100025, 	tabWidget	= 0x00100026, 	tabHost	= 0x00100027, 
+				ccontroller	= 0x00100028, 	acontroller	= 0x00100029, 	form	= 0x0010002A, 
+				chart	= 0x0010002B, 	chartDiagramm	= 0x0010002C, 	chartGraph	= 0x0010002D, 
+				themeDark	= 0x0010002E, 	themeLight	= 0x0010002F, 	zcelllayout1	= 0x00100030, 
+				list1	= 0x00100031, 	edit1	= 0x00100032, 	button1	= 0x00100033, 
+				switch1	= 0x00100034, 	seek	= 0x00100035, 	progress1	= 0x00100036, 
+				formopen	= 0x00100037, 	zlinearlayout1	= 0x00100038, 	zviewbutton1	= 0x00100039, 
+				zscrolllayout1	= 0x0010003A, 	tv1	= 0x0010003B, 	zviewedit1	= 0x0010003C, 
+				grid1	= 0x0010003D, 	radiodark	= 0x0010003E, 	chkbox	= 0x0010003F, 
+				radiolight	= 0x00100040, 	zviewbutton2	= 0x00100041, 	zviewswitch1	= 0x00100042, 
+				button2	= 0x00100043, 	switch2	= 0x00100044, 	switch3	= 0x00100045, 
+				zviewslider1	= 0x00100046, 	seek1	= 0x00100047, 	button11	= 0x00100048, 
+				seek2	= 0x00100049, 	edit2	= 0x0010004A, 	zlinearlayout2	= 0x0010004B, 
+				zviewtext1	= 0x0010004C, 	zlinearlayout3	= 0x0010004D, 	ztabwidget1	= 0x0010004E, 
+	};
 		};
 		_style style;
 	};
@@ -221,10 +222,12 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::barOverflow, styles_z_baroverflow },
 		{ _z::_R::_style::menuImage, styles_z_menuimage },
 		{ _z::_R::_style::barPopup, styles_z_barpopup },
+		{ _z::_R::_style::menuPopup, styles_z_menupopup },
 		{ _z::_R::_style::formFooter, styles_z_formfooter },
 		{ _z::_R::_style::spin_item, styles_z_spin_item },
 		{ _z::_R::_style::list_item, styles_z_list_item },
 		{ _z::_R::_style::menu_item, styles_z_menu_item },
+		{ _z::_R::_style::edit_menu_item, styles_z_edit_menu_item },
 		{ _z::_R::_style::spin_capt, styles_z_spin_capt },
 		{ _z::_R::_style::button, styles_z_button },
 		{ _z::_R::_style::tools, styles_z_tools },
@@ -261,11 +264,12 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::zlinearlayout1, styles_z_zlinearlayout1 },
 		{ _z::_R::_style::zviewbutton1, styles_z_zviewbutton1 },
 		{ _z::_R::_style::zscrolllayout1, styles_z_zscrolllayout1 },
+		{ _z::_R::_style::tv1, styles_z_tv1 },
+		{ _z::_R::_style::zviewedit1, styles_z_zviewedit1 },
 		{ _z::_R::_style::grid1, styles_z_grid1 },
 		{ _z::_R::_style::radiodark, styles_z_radiodark },
 		{ _z::_R::_style::chkbox, styles_z_chkbox },
 		{ _z::_R::_style::radiolight, styles_z_radiolight },
-		{ _z::_R::_style::zviewedit1, styles_z_zviewedit1 },
 		{ _z::_R::_style::zviewbutton2, styles_z_zviewbutton2 },
 		{ _z::_R::_style::zviewswitch1, styles_z_zviewswitch1 },
 		{ _z::_R::_style::button2, styles_z_button2 },
@@ -360,6 +364,7 @@ static zResource z_resources[] = {
 		{ _z::_R::_string::JOYSTICK, "JOYSTICK" },
 		{ _z::_R::_string::KEYBOARD, "KEYBOARD" },
 		/* array */
+		{ _z::_R::_array::menuEditor, "Copy|Paste|Cut|Delete" },
 		{ _z::_R::_array::spinArray | ZT_END, "Ivan|Irina|Sergey Shatalov|Maxim|Vladislav|06.06.1979|Shatalov Sergey|Olga|Viktor Alexeevich|Cat|Maria|Nina Shatalova|Alex|Alexandr" }
 };
 
@@ -412,6 +417,7 @@ static zResource z_resources_ru[] = {
 		{ _z::_R::_string::menuAsm, "Ассемблер" },
 		{ _z::_R::_string::menuTzx, "Редактор TZX" },
 		/* array */
+		{ _z::_R::_array::menuEditor, "Копировать|Вставить|Вырезать|Удалить" },
 		{ _z::_R::_array::spinArray | ZT_END, "Иван|Ирина|Сергей.Викторович|Максим|Владислав|06.06.1979|Шаталов.Сергей|Ольга|Виктор.Алексеевич|Катя|Маша|Нина Шаталова|Алекс|Саша" }
 };
 

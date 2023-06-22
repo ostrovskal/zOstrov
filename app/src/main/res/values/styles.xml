@@ -128,6 +128,15 @@
         <item name="selector">?attr/themeColorSelector</item>
         <item name="pad">2dp</item>
     </style>
+    <style name="menuPopup">
+        <item name="fbo">true</item>
+        <item name="divSize">@dimen/divider</item>
+        <item name="divType">middle</item>
+        <item name="background">?attr/themeColorMenu</item>
+        <item name="gravity">center</item>
+        <item name="selector">?attr/themeColorSelector</item>
+        <item name="pad">2dp</item>
+    </style>
     <style name="formFooter">
         <item name="foreground">@drawable/zssh</item>
         <item name="fkTiles">@integer/button2</item>
@@ -158,7 +167,7 @@
         <item name="gravity">center</item>
         <item name="foreground">@drawable/zssh</item>
         <item name="fkGravity">center</item>
-        <item name="textLines">3</item>
+        <item name="textLines">1</item>
         <item name="ipad">3dp</item>
         <item name="fkTiles">@integer/selectItem</item>
     </style>
@@ -166,13 +175,21 @@
         <item name="textColor">?attr/themeColorTextMenu</item>
         <item name="textSize">@dimen/menuText</item>
         <item name="gravity">start|center_vertical</item>
-        <item name="foreground">@drawable/zssh</item>
-        <item name="font">@drawable/font1</item>
         <item name="textStyle">bold</item>
         <item name="fkTile1">@integer/iconGroup</item>
         <item name="fkTile2">@integer/iconGroup</item>
         <item name="textLines">1</item>
         <item name="fkGravity">end|center_vertical</item>
+        <item name="fkScale">0.5</item>
+        <item name="textDistance">7dp</item>
+        <item name="pad">1dp</item>
+    </style>
+    <style name="edit_menu_item">
+        <item name="textColor">?attr/themeColorTextMenu</item>
+        <item name="textSize">@dimen/menuText</item>
+        <item name="gravity">center</item>
+        <item name="textStyle">bold</item>
+        <item name="textLines">1</item>
         <item name="fkScale">0.5</item>
         <item name="textDistance">7dp</item>
         <item name="pad">1dp</item>

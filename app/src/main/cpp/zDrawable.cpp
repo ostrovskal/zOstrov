@@ -288,7 +288,7 @@ int zDrawable::makeText(cstr text, int len, zTextPaint* paint) {
         }
     }
     paint->getBoundChar('_', tex, _pos); tex = tex.padding(4, 0);
-    stx += paint->getMargin() + paint->getItalic();
+    stx += paint->getItalic();
     // strike
     if(paint->isStrike()) {
         _pos.set(0, paint->getSize() / 2 + 1, stx - 2, paint->getFactor(2.0f));

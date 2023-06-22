@@ -73,11 +73,19 @@ zViewEdit::zViewEdit(zStyle *_stl, i32 _id, u32 _hint) : zViewText(_stl, _id, 0)
     if(_hint) hintText = theme->findString(_hint);
     minMaxSize.x    = z_dp(z.R.dimen.editMinWidth);
     minMaxSize.w    = z_dp(z.R.dimen.editMinHeight);
+    dropdown        = new zViewDropdown(styles_z_menupopup);
+    popup           = new zViewPopup(styles_default, this, dropdown);
+    dropdown->setAdapter(new zAdapterList(theme->findArray(z.R.array.menuEditor), new zFabricListItem(styles_z_edit_menu_item)));
+    dropdown->setOnClick([this](zView* v, int sel) {
+        popup->dismiss();
+        DLOG("menu %i", sel);
+    });
 }
 
 zViewEdit::~zViewEdit() {
     SAFE_DELETE(filter);
     SAFE_DELETE(but);
+    SAFE_DELETE(popup);
 }
 
 void zViewEdit::setFilter(u32 inputMode, zFilterEdit* _filter) {
@@ -153,9 +161,15 @@ i32 zViewEdit::keyEvent(int key, bool sysKey) {
     }
     if(key == '\n') {
         // enter
-        updateText(MSG_EDIT_FINISH);
+        post(MSG_EDIT_FINISH, 10, 0);
         manager->changeFocus(nullptr);
     } else if(key) {
+        // если есть выделение - удалить его
+        if(bkgSpan) {
+            auto l((bkgSpan->e - bkgSpan->s));
+            removeText(bkgSpan->s, l); if(caretIndex > bkgSpan->s) caretIndex -= l;
+            clearSelected(); if(key == '\b') return 1;
+        }
         auto caretPos(caretIndex);
         if(key == '\b') {
             if(caretPos > 0) removeText(--caretPos, 1);
@@ -163,7 +177,7 @@ i32 zViewEdit::keyEvent(int key, bool sysKey) {
             insertText(caretPos++, (char*)&key);
         }
         if(caretPos != caretIndex) {
-            updateText(MSG_EDIT);
+            post(MSG_EDIT, 10, 0);
             caretIndex = correct(caretPos);
             updateCaret();
         }
@@ -171,10 +185,30 @@ i32 zViewEdit::keyEvent(int key, bool sysKey) {
     return 1;
 }
 
+cstr zViewEdit::getDrawText(bool _real) {
+    return (_real || realText.isNotEmpty()) ? z_ptrUTF8(filter->getText(realText), visibleIndex) : hintText.str();
+}
+
+void zViewEdit::notifyEvent(HANDLER_MESSAGE* msg) {
+    zViewText::notifyEvent(msg);
+    switch(msg->what) {
+        case MSG_EDIT:
+        case MSG_EDIT_FINISH:
+            if(onChangeText) onChangeText(this, msg->what);
+            break;
+        case MSG_EDIT_CARET:
+            if(onChangeCaretPos) onChangeCaretPos(this, msg->arg);
+            break;
+        case MSG_EDIT_MENU:
+            popup->show({caretScreen.x, 50});
+            break;
+    }
+}
+
 i32 zViewEdit::onTouchEvent(zTouch *touch) {
     if(!isFocus()) return zViewText::onTouchEvent(touch);
     i32 result(touch->isCaptured());
-    auto isButton(but && but->rview.contains((int) touch->cpt.x, (int) touch->cpt.y));
+    auto isButton(but && but->rview.contains((int)touch->cpt.x, (int)touch->cpt.y));
     if(isButton) {
         // вызываем событие касания дочернего
         result = but->onEvent(touch);
@@ -183,14 +217,35 @@ i32 zViewEdit::onTouchEvent(zTouch *touch) {
     if(result == TOUCH_FINISH) {
         // определить позицию каретки в тексте и на экране
         auto pos(indexFromPosition(pti(touch->cpt.x, touch->cpt.y), true));
+        if(posSel.x == INT_MIN) posSel.x = pos;
+        // нажали в выделение?
+        if(bkgSpan) {
+            bool isMove(true);
+            if(pos >= bkgSpan->s && pos < bkgSpan->e) isMove = (touch->isDragging(true) || touch->isDragging(false));
+            if(isMove) clearSelected(); else post(MSG_EDIT_MENU, 2000, 0);
+        }
+        posSel.y = pos;
+        if(posSel.x != posSel.y) {
+            int p1(z_min(posSel.x, posSel.y)); int p2(z_max(posSel.x, posSel.y));
+            if(bkgSpan) { bkgSpan->s = p1; bkgSpan->e = p2;
+            } else { bkgSpan = setSpan(new zTextSpanBackgroundColor(z.R.color.backgroundHighlight), p1, p2); }
+            cacheSpans.clear(); setText(realText, true, false);
+        }
         if(pos != caretIndex) {
-            if(onChangeCaretPos) onChangeCaretPos(this, pos);
+            post(MSG_EDIT_CARET, duration, pos);
             caretIndex = pos;
         }
         correctCaretPosition(caretIndex);
         // обновить каретку
         if(manager->isCheckFocus(this)) updateCaret();
-    } else isButton = true;
+    } else {
+        if(!popup->isVisibled()) {
+            if(bkgSpan && (caretIndex > bkgSpan->s && caretIndex < bkgSpan->e)) clearSelected();
+            manager->eraseAllEventsView(this);
+        }
+        posSel.x = posSel.y = INT_MIN;
+        isButton = true;
+    }
     if(isButton && but) {
         but->updateStatus(ZS_TAP, result == TOUCH_FINISH);
         invalidate();
@@ -220,7 +275,7 @@ void zViewEdit::stateView(STATE &state, bool save, int &index) {
     } else {
         caretIndex = (int)state.data[index++];
         setText(state.string, true);
-        updateText(MSG_EDIT);
+        post(MSG_EDIT, 10, 0);
     }
 }
 
@@ -278,6 +333,7 @@ void zViewEdit::onLayout(crti &position, bool changed) {
 
 void zViewEdit::onMeasure(cszm& spec) {
     zViewText::onMeasure(spec);
+    dropdown->measure({zMeasure(MEASURE_UNDEF, 0), zMeasure(MEASURE_UNDEF, 0)});
     auto butW(icSize.w);
     if(but) but->measure({zMeasure(MEASURE_EXACT, butW), zMeasure(MEASURE_EXACT, icSize.h)}); else butW = 0;
     wmax = rclient.w - distance - (butW + 4) - ipad.extent(false);
@@ -285,10 +341,11 @@ void zViewEdit::onMeasure(cszm& spec) {
 
 void zViewEdit::clearText() {
     if(realText.isNotEmpty()) {
-        setText("", true);
+        setText("", true, true);
         caretIndex = correct(0);
         visibleIndex = 0; updateCaret();
-        updateText(MSG_EDIT);
+        bkgSpan = nullptr;
+        post(MSG_EDIT, 10, 0);
     }
 }
 

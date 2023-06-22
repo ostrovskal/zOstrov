@@ -23,6 +23,8 @@ constexpr int MSG_EDIT_FINISH      = 3;
 constexpr int MSG_CLICK            = 4;
 constexpr int MSG_SELECTED         = 5;
 constexpr int MSG_SCROLLING        = 6;
+constexpr int MSG_EDIT_CARET       = 7;
+constexpr int MSG_EDIT_MENU        = 8;
 
 constexpr int VIEW_MATCH		   = -1;
 constexpr int VIEW_WRAP			   = -2;

@@ -345,9 +345,9 @@ class zLayoutEdit : public zViewEdit {
 public:
     explicit zLayoutEdit(zViewEdit* _edit) : zViewEdit(_edit->styles, _edit->id, 0) { setHint(_edit->getHint()); }
 protected:
-    void updateText(int _what) override {
-        if(_what == MSG_EDIT) getParent<zEditLayout>()->childUpdateText(z_isempty(getText()));
-        zViewEdit::updateText(_what);
+    void notifyEvent(HANDLER_MESSAGE* msg) override {
+        if(msg->what == MSG_EDIT) getParent<zEditLayout>()->childUpdateText(z_isempty(getText()));
+        zViewEdit::notifyEvent(msg);
     }
 };
 

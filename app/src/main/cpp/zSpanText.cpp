@@ -57,8 +57,7 @@ bool zTextPaint::getBoundChar(int ch, rti& tex, rti& bound) const {
     auto glyph(font->paramGlyph(ch + bold));
     if(glyph) {
         tex.set(glyph); tex.w += tex.x; tex.h += tex.y;
-        auto cw((int)round((float)glyph[2] * factor));
-        if(ch == ' ') cw = 10.0f;
+        auto cw(ch == ' ' ? 10 : (int)round((float)glyph[2] * factor));
         bound.set(0, (int)round((float)(glyph[1] - yBold) * factor), cw, (int)round((float)glyph[3] * factor));
     }
     return glyph != nullptr;
@@ -67,8 +66,9 @@ bool zTextPaint::getBoundChar(int ch, rti& tex, rti& bound) const {
 int zTextPaint::correctBaseline(int _size) const {
     if(!(_size - getSize())) return 0;
     auto htex((float)getSizeFont());
-    auto bs = (float)getBaseline() * ((float)_size / (float)(htex + 0.5f));
+    auto bs((float)getBaseline() * ((float)_size / (float)(htex + 0.5f)));
     auto _bs((float)getBaseline() * ((float)getSize() / (float)(htex + 0.5f)));
+//    DLOG("base:%i bs1:%f bs2:%f sz1:%i sz2:%i", getBaseline(), bs, _bs, _size, getSize());
     return ((_size - bs) - (getSize() - _bs));
 }
 
@@ -108,8 +108,9 @@ int zTextPaint::indexReverseOf(cstr _text, int length, int screenLimit) const {
     return _count;
 }
 
-zTextSpanImage::zTextSpanImage(int image, int tile, float factor, int _color) {
-    dr.init(image, _color, tile, 0, factor);
+zTextSpanImage::zTextSpanImage(cstr image, int tile, float factor, int _color) {
+    dr.init(0, _color, tile, 0, factor);
+    dr.texture = manager->cache->get(image, nullptr);
 }
 
 void zTextSpanImage::draw(int x, int y, int hmax, zTextPaint *paint, crti& clip) {
@@ -125,69 +126,52 @@ void zTextSpanImage::updateState(zTextPaint *paint) {
     rti t(dr.texture->getTile(dr.tile));
     paint->width = ((int)round(t.w * dr.scale) + 4_dp);
     paint->setSize((int)round(t.h * dr.scale));
-//    paint->setBaseline(paint->getBaseline() + paint->getSize());
 }
 
-zTextSpanBullet::zTextSpanBullet(bool _ordered, int _index) : zTextSpanImage(z.R.drawable.zssh, z.R.integer.iconBullet, 0.33f, !_ordered * 2), ordered(_ordered) {
-/*
+zTextSpanBullet::zTextSpanBullet(bool _ordered, int _index) : zTextSpanImage("zssh", z.R.integer.iconBullet, 1, 0xffffffff), ordered(_ordered) {
     if(_ordered) {
-        strIdx = z_ntos(&_index, RADIX_DEC, true);
-        strIdx += ". ";
+        _idx = z_ntos(&_index, RADIX_DEC, true);
+        _idx += ". "; dr.typeTri = GL_TRIANGLES;
     }
-*/
 }
 
 void zTextSpanBullet::updateState(zTextPaint *paint) {
-/*
-    if(!ordered) {
-        zTextSpanImage::updateState(paint);
-    } else {
+    zTextSpanImage::updateState(paint);
+    if(ordered) {
         // определить ширину
-        auto tex(paint->texture); auto _text(strIdx.str());
-        int width(0); auto factor((float)paint->height / (float)tex->getSize().h);
-        while(*_text) width += tex->widthGlyph((u8)*_text++, factor);
-        width = z_max(width, image->rfull.w);
-        paint->width = width;
+        paint->width = z_max(paint->widthText(_idx.str(), INT_MAX), paint->width);
+        paint->setSize(12_dp);
+        dr.texture = paint->getFont();
     }
-    paint->preWidth = 40;
-*/
-}
-
-void zTextSpanMask::draw(int x, int y, int hmax, zTextPaint *paint, crti &clip) {
-
+    paint->setMargin(25_dp);
 }
 
 void zTextSpanBullet::draw(int x, int y, int hmax, zTextPaint *paint, crti& clip) {
-/*
-    if(!ordered) return zTextSpanImage::draw(x, y, hmax, paint);
-    auto htex(paint->texture->getSize().h);
-    // выровнять по базовой линии
-    auto sc1((float)paint->height / (float)htex), sc2((float)hmax / (float)htex);
-    auto bs1((int)round((float)paint->baseLine * sc2 + 0.5f));
-    auto bs2((int)round((float)paint->baseLine * sc1 + 0.5f));
-    auto subH((hmax - bs1) - (paint->height - bs2));
-    rti r(x, y + subH, paint->width, paint->height);
-    auto len(strIdx.length()), width(paint->width); paint->width = 0;
-    image->drs[zView::DR_IDX_FK]->make(len * 6);
-    image->drs[zView::DR_IDX_FK]->texture = vmanager->cache.get(paint->texture->name, image->drs[zView::DR_IDX_FK]->texture);
-    image->drs[zView::DR_IDX_FK]->clip = r;
-    image->drs[zView::DR_IDX_FK]->color = zColor::shadow;
-    image->drs[zView::DR_IDX_FK]->makeText(strIdx, len, r, paint, true);
-    image->drs[zView::DR_IDX_FK]->specDraw(false);
-    image->drs[zView::DR_IDX_FK]->color.set(paint->fkColor);
-    image->drs[zView::DR_IDX_FK]->makeText(strIdx, len, r, paint, false);
-    image->drs[zView::DR_IDX_FK]->specDraw(false);
-    paint->width = width;
-*/
+    if(ordered) {
+        static zMatrix m;
+        // выровнять по базовой линии
+        auto len(_idx.count()); dr.make(len * 6); dr.makeText(_idx.str(), len, paint);
+        auto screenX(manager->screen.x), screenY(manager->screen.y);
+        m.translate(x - screenX + 2, y - screenY + 2, 0);
+        dr.color = 0xff000000; dr.drawCommon(clip, m, true);
+        m.translate(x - screenX, y - screenY, 0);
+        dr.color = z.R.color.white; dr.drawCommon(clip, m, true);
+    } else {
+        // просто нарисовать значок
+        zTextSpanImage::draw(x, y, hmax, paint, clip);
+    }
+}
+
+void zTextSpanMask::draw(int x, int y, int hmax, zTextPaint *paint, crti &clip) {
+    glBlendFuncSeparate(GL_DST_COLOR, GL_SRC_COLOR, GL_DST_COLOR, GL_SRC_COLOR);
+    auto w(paint->width); paint->width += _width;
+    zTextSpanImage::draw(x + w - paint->width, y, hmax, paint, clip);
+    paint->width -= _width;
+    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void zTextSpanParagraph::updateState(zTextPaint *paint) {
     paint->setMargin(15_dp);
-}
-
-zTextSpanUrl::zTextSpanUrl(cstr _url) {
-    color = theme->styles->_int(Z_THEME_COLOR_TEXT_URL, 0xffff0000);
-    url = _url;
 }
 
 void zViewText::infoSpans() {
@@ -196,18 +180,15 @@ void zViewText::infoSpans() {
 }
 
 void zViewText::changeSpans(int pos, int length) {
-    for(int i = 0 ; i < cacheSpans.size(); i++) {
-        auto s(cacheSpans[i]);
-        if(pos >= s->s && pos <= s->e) {
-            s->e += length; if(s->e <= 0) cacheSpans.erase(i--, 1);
-            for(int j = i + 1 ; j < cacheSpans.size(); j++) {
-                s = cacheSpans[j];
-                s->s += length; s->e += length;
-                if(s->e <= 0) cacheSpans.erase(j--, 1);
-            }
-            break;
+    getSpan(SPAN_POSITION, pos, false, [this, length](int i, SPAN* s) {
+        s->e += length;
+        if(s->e <= s->s) cacheSpans.erase(i--, 1);
+        for(int j = i + 1 ; j < cacheSpans.size(); j++) {
+            s = cacheSpans[j];
+            s->s += length; s->e += length;
+            if(s->e <= s->s) cacheSpans.erase(j--, 1);
         }
-    }
+    });
 }
 
 bool zViewText::getMinRangePos(int mn, int& ret) const {
@@ -219,7 +200,7 @@ bool zViewText::getMinRangePos(int mn, int& ret) const {
     return ret != INT_MAX;
 }
 
-void zViewText::mergeSpans(czs& _text) {
+void zViewText::mergeSpans(int count) {
     // если кэш уже есть - выйти
     if(cacheSpans.isNotEmpty()) return;
     int pos(0);
@@ -228,64 +209,71 @@ void zViewText::mergeSpans(czs& _text) {
         int minX1, minX2;
         if(!getMinRangePos(INT_MIN, minX1)) return;
         while(getMinRangePos(minX1, minX2)) {
-            cacheSpans += new SPAN(new zTextSpan(), minX1, minX2, new zTextPaint(defPaint));
+            cacheSpans += new SPAN(defSpan, minX1, minX2, new zTextPaint(defPaint));
             minX1 = minX2;
         }
-//        DLOG("1. make range");
-//        infoSpans();
+    //    DLOG("1. make range");
+      //  infoSpans();
         // 2. заполняем созданные диапазоны параметрами
         for(auto real : cacheSpans) {
             auto s(real->s), e(real->e);
             for(auto sp : spans) {
                 if(s < sp->s || e > sp->e) continue;
                 sp->span->updateState(real->paint);
-                auto t1(sp->span->typeId()), t2(real->span->typeId()); auto r(real->span);
-                real->span = (t1 > t2 ? sp->span : real->span);
-                if(t1 == SPAN_DEFAULT) delete r;
+                auto t1(real->span->typeId()), t2(sp->span->typeId());
+                if(real->span->isClickable() || sp->span->isClickable()) {
+                    auto url(dynamic_cast<zTextSpanUrl*>(real->span->isClickable() ? real->span : sp->span));
+                    auto image(dynamic_cast<zTextSpanImage*>(real->span->isImage() ? real->span : sp->span));
+                    if(image) url->image = image;
+                }
+                real->span = (t1 > t2 ? real->span : sp->span);
             }
         }
 //        DLOG("1. fill range");
-//        infoSpans();
+  //      infoSpans();
         // добавить спан по умолчанию в разрывы
-        for(int i = 0; i < cacheSpans.size(); i++) {
+        for(int i = 0 ; i < cacheSpans.size(); i++) {
             auto sp(cacheSpans[i]);
-            if(pos < sp->s) cacheSpans.insert(i, new SPAN(defSpan, pos, sp->s, defPaint));
+            if(pos < sp->s) cacheSpans.insert(i, new SPAN(defSpan, pos, sp->s, new zTextPaint(defPaint)));
             pos = sp->e;
         }
     }
     // последний спан
-    auto len(_text.count());
-    if(len && pos < len) cacheSpans += new SPAN(defSpan, pos, len, defPaint);
+    if(count && pos < count) cacheSpans += new SPAN(defSpan, pos, count, new zTextPaint(defPaint));
 //    DLOG("3. add default span");
-    infoSpans();
+//    infoSpans();
 }
 
-zViewText::SPAN* zViewText::getSpan(int pos) const {
-    for(auto& s : spans) { if(s->s >= pos && s->e <= pos) return s; }
-    return nullptr;
+void zViewText::getSpan(int what, int arg, bool reverse, const std::function<void(int, SPAN*)>& act) {
+    cacheSpans.enumerate(reverse, [what, arg, act](int i, SPAN* s) {
+        switch(what) {
+            case SPAN_FLAGS: if(s->f != arg) return false; break;
+            case SPAN_POSITION: if(arg < s->s || arg > s->e) return false; break;
+            case SPAN_TYPE: if(s->span->typeId() != arg) return false; break;
+        }
+        act(i, s); return true;
+    });
 }
 
-void zViewText::setSpan(zTextSpan* _span, int start, int end, int flags) {
-    auto len(realText.count()); if(!len) return;
-    start = z_max(0, start); end = z_min(len, end);
-    len = end - start;
-    if(len < 0) { delete _span; return; }
+zViewText::SPAN* zViewText::setSpan(zTextSpan* _span, int start, int end, int flags) {
+    start = z_max(0, start); end = z_min(realText.count(), end);
+    auto len(end - start); if(len < 0) { delete _span; return nullptr; }
     if(flags == SPAN_FLAGS_DEFAULT && len == 0) {
         // найти последний c флагом SPAN_FLAGS_MARK
-        for(int i = spans.size() - 1; i >= 0; i--) {
-            auto sp(spans[i]);
-            if(sp->f != SPAN_FLAGS_MARK) continue;
-            if(sp->span->typeId() != _span->typeId()) continue;
-            sp->f = flags; sp->e = end;
-            delete _span;
-            return;
-        }
+        spans.enumerate(true, [_span, end](int i, SPAN* s) {
+            if(s->f == SPAN_FLAGS_MARK) {
+                s->f = SPAN_FLAGS_DEFAULT; s->e = end;
+                delete _span; return true;
+            }
+           return false;
+        });
+        return nullptr;
     }
     // создать внутренню структуру
     auto tspan(new SPAN(_span, start, end, new zTextPaint(defPaint), flags));
     // инициализировать краску
     _span->updateState(tspan->paint);
-    spans += tspan;
+    return spans += tspan;
 }
 
 void zViewText::delSpan(zTextSpan* _span) {
@@ -295,7 +283,7 @@ void zViewText::delSpan(zTextSpan* _span) {
 
 bool zViewText::setHtmlText(czs& text, const std::function<bool(cstr tag, bool end, zHtml* html)>& parser) {
     clearCacheSpans(true);
-    realText.empty(); bool listOrdered(true); int listNum(1), listRev(1);
+    bool listOrdered(true); int listNum(1), listRev(1);
     zHtml html(text.str(), [this, &parser, &listOrdered, &listNum, &listRev](cstr tag, bool end, zHtml* _html) {
         static float htmlHeaderSize[] = { 1.7f, 1.6f, 1.5f, 1.4f, 1.3f, 1.2f };
         zTextSpan* span(nullptr);
@@ -307,95 +295,87 @@ bool zViewText::setHtmlText(czs& text, const std::function<bool(cstr tag, bool e
             switch(hash) {
                 // big
                 case 0xb79e14f3: span = new zTextSpanRelativeSize(1.5f); break;
-                    // small
+                // small
                 case 0xbf4847de: span = new zTextSpanRelativeSize(0.8f); break;
-                    // br
+                // br
                 case 0x221bed08: _html->text += "\n"; break;
-                    // p div
-                case 0x3ee0e:
-                case 0x79832919:
-                    if(_html->text.isNotEmpty() && !end) {
-                        if(_html->text[pos] != '\n') { _html->text += "\n"; pos++; }
+                // p div
+                case 0x3ee0e: case 0x79832919:
+                    if(!end) {
+                        pos += (_html->text[pos] == '\n');
+                        _html->text += "!";
                         span = new zTextSpanParagraph();
                         flags = SPAN_FLAGS_SPECIFIC;
                     }
                     break;
-                    // h1 - h6
-                case 0xc7ada38:
-                case 0xc7c22dd:
-                case 0xc7d9a75:
-                case 0xc7aa490:
-                case 0xc7cf97d:
-                case 0xc79a5b2:
-                    if(_html->text.isNotEmpty() && _html->text[pos] != '\n') { _html->text += "\n"; pos++; }
-                    _html->text += "\n"; pos++;
+                // h1 - h6
+                case 0xc7ada38: case 0xc7c22dd: case 0xc7d9a75:
+                case 0xc7aa490: case 0xc7cf97d: case 0xc79a5b2:
+                    if(_html->text[pos] != '\n') {_html->text += "\n"; pos += !end; }
                     span = new zTextSpanRelativeSize(htmlHeaderSize[tag[1] - '1']);
                     break;
-                    // b strong
-                case 0x50e75:
-                case 0x8e4b388b:span = new zTextSpanStyle(ZS_TEXT_BOLD); break;
-                    // i em
-                case 0x6b5:
-                case 0xb073db:  span = new zTextSpanStyle(ZS_TEXT_ITALIC); break;
-                    // u
-                case 0x6ae4b:   span = new zTextSpanUnderline(); break;
-                    // s strike
-                case 0x51bdf:
-                case 0xef748f41:span = new zTextSpanStrikeline(); break;
-                    // img
+                // b strong
+                case 0x50e75: case 0x8e4b388b:
+                    span = new zTextSpanStyle(ZS_TEXT_BOLD); break;
+                // i em
+                case 0x6b5: case 0xb073db:
+                    span = new zTextSpanStyle(ZS_TEXT_ITALIC); break;
+                // u
+                case 0x6ae4b:
+                    span = new zTextSpanUnderline(); break;
+                // s strike
+                case 0x51bdf: case 0xef748f41:
+                    span = new zTextSpanStrikeline(); break;
+                // img
                 case 0x9ae16064:
-//                    _html->text += '!';
-                    span = new zTextSpanImage(/*_html->getStringAttr("src", "znull")*/ 0,
-                                              _html->getIntegerAttr("tile", RADIX_DEC, 0),
-                                              _html->getFloatAttr("factor", 1.0f),
-                                              _html->getIntegerAttr("pad", RADIX_DEC, 0));
+                    _html->text += "!";
+                    span = new zTextSpanImage(_html->getStringAttr("src", "znull"), _html->getIntegerAttr("t", RADIX_DEC, z.R.integer.rect),
+                                              _html->getFloatAttr("s", 1.0f), _html->getColorAttr("c", 0xffffffff));
                     flags = SPAN_FLAGS_SPECIFIC;
                     break;
-                    // a
-                case 0x58de4:   span = new zTextSpanUrl(_html->getStringAttr("href", "self")); break;
-                    // title
+                // a
+                case 0x58de4:   span = new zTextSpanUrl(end ? "" : _html->getStringAttr("href", "self").str()); break;
+                // title
                 case 0x6f58b184:span = new zTextSpanAbsoluteSize(10); break;
-                    // sub
+                // sub
                 case 0x80391c79:span = new zTextSpanSubscript(); break;
-                    // sup
+                // sup
                 case 0x803c7044:span = new zTextSpanSuperscript(); break;
-                    // font
-                case 0x89c2d575:
-                    break;
-                    // ul ol
-                case 0x2c4b9944:
-                case 0x1466284c:
+                // font
+                case 0x89c2d575: break;
+                // ul ol
+                case 0x2c4b9944: case 0x1466284c:
+                    if(_html->text[pos] != '\n') _html->text += "\n";
                     listOrdered = (hash == 0x1466284c);
                     listNum = _html->getIntegerAttr("start", RADIX_DEC, 1);
                     listRev = _html->getIntegerAttr("reversed", RADIX_DEC, 0);
                     break;
-                    // li
+                // li
                 case 0x13844afb:
-                    if(!end) {
-                        if(_html->text.isNotEmpty() && _html->text[pos] != '\n') { _html->text += "\n"; pos++; }
+                    if(end) {
+                        if(_html->text[pos] != '\n') _html->text += "\n";
+                    } else {
+                        _html->text += "!";
                         span = new zTextSpanBullet(listOrdered, listNum);
                         flags = SPAN_FLAGS_SPECIFIC;
                         listNum += !listRev * 2 - 1;
                     }
                     break;
-                    // bkg background
+                // bkg background
                 case 0xc9b77622:
-                case 0x1aaadb91: span = new zTextSpanBackgroundColor(_html->getColorAttr("value", -1)); break;
-                    // c color
+                case 0x1aaadb91: span = new zTextSpanBackgroundColor(end ? 0 : _html->getColorAttr("value", -1)); break;
+                // c color
                 case 0xdbf89687:
-                case 0x4595e:   span = new zTextSpanForegrounColor(_html->getColorAttr("value", -1)); break;
-                default: break;
+                case 0x4595e:   span = new zTextSpanForegrounColor(end ? 0 : _html->getColorAttr("value", -1)); break;
             }
-            if(span) setSpan(span, pos, pos, flags);
+            if(span) setSpan(span, pos, pos + (flags == SPAN_FLAGS_SPECIFIC), flags);
         }
         return span != nullptr;
     });
     setText(html.text, true, false);
     // убрать все спаны с пометной mark
     for(int i = 0; i < spans.size(); i++) {
-        if(spans[i]->f == SPAN_FLAGS_MARK) {
-            spans.erase(i--, 1, true);
-        }
+        if(spans[i]->f == SPAN_FLAGS_MARK) spans.erase(i--, 1, true);
     }
     return true;
 }
@@ -403,19 +383,13 @@ bool zViewText::setHtmlText(czs& text, const std::function<bool(cstr tag, bool e
 szi zViewText::textWrapSpan(cstr _text, int widthRect) {
     int lines(1), maxHeight(0), maxWidth(0), sepPos(0), sepWidth(0), _count;
     SPAN* _sp(nullptr);
-    // проверить на кэшированные значения
-    if(textCache.isNotEmpty() && widthRect >= widthRectCache) {
-        //DLOG("from cache %s", textCache[0]->text.str());
-        for(auto& cache : textCache) maxHeight += cache->size;
-        return { widthRectCache, maxHeight };
-    }
     // разбить текст по спец. символам по ширине ректа
     if(widthRect <= 0 || getLines() == 1) widthRect = INT_MAX;
     textCache.clear();
     // адрес последнего разделителя/начало подстроки/текущий символ
     cstr separator(nullptr), _stext(_text); int ch('A');
     // массив спанов
-    mergeSpans(_text);
+    mergeSpans(z_countUTF8(_text));
     // идти по всем спанам
     int width(0), height(0), _i(0), offs(0);
     for(int i = 0; i < cacheSpans.size(); i++) {
@@ -431,7 +405,7 @@ szi zViewText::textWrapSpan(cstr _text, int widthRect) {
                 auto ln(paint->getWidthChar(ch) + width);
                 // если длина подстроки меньше ширины ректа и символ не "новая строка" = дальше
                 if(_stext == _text || lines >= getLines() || ln < widthRect) { width = ln; _text += _count; _pos++; continue; }
-            } else { separator = nullptr; }
+            } else { separator = nullptr; _text++; }
             // добавить подстроку в массив
             if(separator) _text = separator, width = sepWidth, _pos = sepPos, sp = _sp, i = _i, separator = nullptr;
             _text = addCacheSubString(_stext, _text, width, height, true);
@@ -450,20 +424,25 @@ szi zViewText::textWrapSpan(cstr _text, int widthRect) {
 }
 
 void zViewText::drawTextSpan(crti& clip) {
-    static bool isShow = true;
+    URL* _url(nullptr); urls.clear();
     // отрисовка
     auto tbound(&drw[DRW_TXT]->bound); pti coord(tbound->xy());
     int indexCache(0), indexText(0);
     // взять текущий текст из кэша
     auto cacheStr(getStringFromCache(indexCache++, tbound, coord));
+    if(!cacheStr) return;
     for(auto sp: cacheSpans) {
-        auto paint(sp->paint);
+        auto paint(sp->paint); auto posSpan(sp->s);
         coord.x += paint->getMargin();
         if(sp->span->isSkip()) { indexText++; continue; }
-        auto posSpan(sp->s);
         // корректировать вертикальную позицию, относительно базовой линии шрифта
         auto subH(paint->correctBaseline(cacheStr->size));
-//        if(isShow) DLOG("size %i subH %i string %s", cacheStr->size, subH, cacheStr->text.ptr(indexText));
+        // проверить на ссылку
+        if(_url) {
+            _url->rect.w = _url->rect.x + coord.x;
+            urls += _url;
+        }
+        _url = (sp->span->typeId() == spans::SPAN_URL ? new URL(rti(coord.x, coord.y, 0, cacheStr->size), sp) : nullptr);
         while(posSpan < sp->e) {
             // сдвинуть по верт. относительно общей высоты строки
             coord.y += subH;
@@ -484,18 +463,16 @@ void zViewText::drawTextSpan(crti& clip) {
                 if(!(cacheStr = getStringFromCache(indexCache++, tbound, coord))) break;
                 // корректировать вертикальную позицию, относительно базовой линии шрифта
                 subH = paint->correctBaseline(cacheStr->size);
-//                if(isShow) DLOG("size %i subH %i string %s", cacheStr->size, subH, cacheStr->text.str());
                 indexText = 0;
             }
         }
     }
-    isShow = false;
+    updateStatus(ZS_CLICKABLE, urls.isNotEmpty());
 }
 
 void zViewText::insertText(int pos, cstr _text) {
     changeSpans(pos, z_countUTF8(_text));
     setText(realText.insert(pos, _text), true, false);
-    DLOG("t %s", realText.str());
 }
 
 void zViewText::removeText(int pos, int count) {

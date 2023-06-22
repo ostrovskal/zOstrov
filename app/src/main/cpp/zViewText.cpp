@@ -29,8 +29,7 @@ void zViewText::setTextSpecial(czs &_text, cszm &spec) {
 void zViewText::setText(czs& _text, bool force, bool eraseSpane) {
     if(force || realText != _text) {
         auto changed(rview.isNotEmpty());
-        realText = _text;
-        clearCacheSpans(eraseSpane);
+        realText = _text; clearCacheSpans(eraseSpane);
         if(changed) {
             auto rv(rview);
             szm spec(zMeasure(lps.w == VIEW_WRAP ? MEASURE_UNDEF : MEASURE_EXACT, measureSpec.w.size()),
@@ -43,13 +42,10 @@ void zViewText::setText(czs& _text, bool force, bool eraseSpane) {
 }
 
 void zViewText::clearCacheSpans(bool del_spans) {
-    cacheSpans.clear();
     textCache.clear();
     if(del_spans) {
-        for(auto &sp : spans) {
-            SAFE_DELETE(sp->paint);
-            SAFE_DELETE(sp->span);
-        }
+        cacheSpans.clear();
+        for(auto sp : spans) SAFE_DELETE(sp->span);
         spans.clear();
     }
 }
@@ -111,6 +107,37 @@ void zViewText::onMeasure(cszm& spec) {
     } else {
         fkW = rclient.w; fkH = rclient.h;
     }
+}
+
+i32 zViewText::onTouchEvent(zTouch *touch) {
+    int ret(TOUCH_CONTINUE);
+    if(isClickabled()) {
+        zTextSpanUrl* sp(nullptr);
+        if(touch->isCaptured()) {
+            for(auto u: urls) {
+                if(u->rect.contains(touch->cpt.x, touch->cpt.y)) { urlRect = u->rect; break; }
+            }
+        }
+        auto idx(urls.indexOf(urlRect));
+        auto url(idx != -1 ? urls[idx] : nullptr);
+        if(url) {
+            sp = dynamic_cast<zTextSpanUrl*>(url->span->span);
+            auto paint(url->span->paint);
+            paint->setStyle((paint->getStyle() & ~ ZS_TEXT_UNDERLINE) | (ZS_TEXT_UNDERLINE * !touch->isCaptured()));
+            paint->bkColor = (touch->isCaptured() ? z.R.color.backgroundHighlight : sp->bkg);
+            if(touch->click()) {
+                if(sp && urlRect.contains(touch->cpt.x, touch->cpt.y)) {
+                    sp->click();
+                    if(onClickUrl) onClickUrl(this, sp->url);
+                }
+                ret = TOUCH_ACTION;
+            }
+            if(touch->isReleased()) urlRect.empty();
+            invalidate();
+            return ret;
+        }
+    }
+    return zView::onTouchEvent(touch);
 }
 
 void zViewText::onLayout(crti &position, bool changed) {
@@ -211,7 +238,7 @@ cstr zViewText::addCacheSubString(cstr _stext, cstr _text, int& width, int heigh
     // убрать конечные пробелы
     auto _count(z_sizeCountUTF8(_stext, _text));
     if(!isEdit) while(z_isspace(z_charUTF8(z_ptrUTF8(_stext, _count - 1)))) _count--, width -= 10;
-    if(width) textCache += new CACHE(width, height, _stext, _count);
+    textCache += new CACHE(width, height, _stext, _count);
     // пропустить начальные пробелы
     if(!isEdit) { while(z_isspace(z_charUTF8(_text, &_count))) _text += _count; }
     return _text;
@@ -236,8 +263,7 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
     height = z_max(height, defPaint->getSize());
     width += defPaint->getItalic(); ch = 'A';
     while(true) {
-        auto _ch(ch);
-        if(!(ch = z_decodeUTF8(z_charUTF8(_text, &_count)))) break;
+        auto _ch(ch); if(!(ch = z_decodeUTF8(z_charUTF8(_text, &_count)))) break;
         // если это не начало подстроки и есть разделитель - запоминаем его
         if(_stext != _text && z_delimiter(_ch)) separator = _text, sepWidth = width, sepPos = _pos;
         if(getLines() == 1 || ch != '\n') {
@@ -245,7 +271,7 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
             auto ln(defPaint->getWidthChar(ch) + width);
             // если длина подстроки меньше ширины ректа и символ не "новая строка" = дальше
             if(_stext == _text || lines >= getLines() || ln < widthRect) { width = ln; _text += _count; _pos++; continue; }
-        } else { separator = nullptr; }
+        } else { separator = nullptr; _text++; }
         // добавить подстроку в массив
         if(separator) _text = separator, width = sepWidth, _pos = sepPos, separator = nullptr;
         _text = addCacheSubString(_stext, _text, width, height, isEdit);

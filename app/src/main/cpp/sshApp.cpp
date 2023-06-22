@@ -94,41 +94,19 @@ void sshApp::setContent() {
     auto txt(root->idView<zViewText>(z.R.id.tv1));
     if(chSp) {
         chSp->setOnClick([txt](zView*, int) {
-            txt->insertText(35, "serg!!!");
+            txt->removeText(35, 1);
             DLOG("ins");
         });
     }
     if(txt) {
         txt->setLines(51);
-        txt->setText(" Завершение работы фоновых приложений после"
-                     " блокировки экрана <c value=\"ff0ff00\">помогает</c> экономить заряд аккумулятора. "
-                     "С другой стороны, в этом случае вы не будете получать "
-                     "новые сообщения (электронные, текстовые, из соцсетей и т.д.).", true);
-/*
-        txt->setTextFromHtml(txt->getText(), [](cstr tag, bool end, zHtml* html) {
-            return false;
+        txt->setText(R"(<h1>Начало текста</h1><p>Завершение <b>работы фоновых</b> приложений после блокировки <s>экрана <c value="ff00ff00">помогает</c> экономить заряд</s> аккумулятора.
+<p>С другой стороны, в этом случае<img src="zssh" t="49" f="0.75"/> вы не будете получать <a href="self"><img src="zx_icons" t="27" f="1.0"/></a> новые сообщения (электронные<sup>1</sup>, текстовые<sub>2</sub>, из соцсетей и т.д.).
+<ol start="10" reversed="1"><li><a href="self">serg</a></li><li>maxim</li><li>olga</li></ol>)", true);
+        txt->setHtmlText(txt->getText(), [](cstr tag, bool end, zHtml* html) { return false; });
+        txt->setOnClickUrl([](zView*, czs& ref) {
+           DLOG("click url %s", ref.str());
         });
-*/
-        txt->setSpan(new zTextSpanParagraph(), 0, 1);
-        txt->setSpan(new zTextSpanBackgroundColor(z.R.color.lime), 0, 44);
-        txt->setSpan(new zTextSpanBackgroundColor(z.R.color.maroon), 44, 105);
-        txt->setSpan(new zTextSpanBackgroundColor(z.R.color.navy), 105, 260);
-        txt->setSpan(new zTextSpanForegrounColor(z.R.color.red), 20, 110);
-        txt->setSpan(new zTextSpanAbsoluteSize(10_dp), 11, 21);
-        txt->setSpan(new zTextSpanSubscript(), 17, 20);
-        txt->setSpan(new zTextSpanSuperscript(), 23, 27);
-        txt->setSpan(new zTextSpanForegrounColor(z.R.color.black), 11, 25);
-        txt->setSpan(new zTextSpanStyle(ZS_TEXT_BOLD), 16, 32);
-        txt->setSpan(new zTextSpanStyle(ZS_TEXT_ITALIC), 60, 70);
-        txt->setSpan(new zTextSpanImage(z.R.drawable.zssh, z.R.integer.iconSelf_round, 0.33f, 0xffffffff), 5, 6);
-        txt->setSpan(new zTextSpanImage(z.R.drawable.zssh, z.R.integer.iconSelf, 0.75f, 0xffffffff), 45, 46);
-        txt->setSpan(new zTextSpanImage(z.R.drawable.zssh, z.R.integer.iconOk, 0.5f, 0xffffffff), 15, 16);
-/*
-        txt->setSpan(new zTextSpanStyle(ZS_TYPEFACE_BOLD), 60, 70);
-        txt->setSpan(new zTextSpanImage("zssh", z.R.integer.rectRound, 0.3f, 0x0), 80, 80);
-        txt->setSpan(new zTextSpanUrl("block"), 80, 85);
-        txt->setSpan(new zTextSpanImage("zssh", z.R.integer.gradientRadial, 0.3f, 0x0), 120, 120);
-*/
     }
     getActionBar()->setOnClickMenuGroup([](zView* v, zMenuGroup* g) {
         DLOG("click group %i %i", g->getId(), g->count());

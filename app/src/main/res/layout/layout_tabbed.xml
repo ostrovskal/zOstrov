@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Form xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:z="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/formSettings"
+    android:layout_width="280dp" android:layout_height="300dp"
+    z:styles="@style/form" android:text="Настройки"
+    z:styleCaption="@style/formCaption" z:styleFooter="@style/formFooter"
+    z:gravity="center" z:modal="true" z:nameView="formSettings">
+    <TabHost
+        z:styles="@style/tabHost"
+        z:styleCaption="@style/tabWidget"
+        z:tabGravity="top">
+        <TabWidget
+            z:iconka="@integer/iconZxTools"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:orientation="vertical"
+                    z:gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        z:textStyle="bold" z:text="CPU" />
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        z:styles="@style/slider" z:range="0,10" z:progress="3" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        z:textStyle="bold" z:text="BORDER" />
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        z:styles="@style/slider" z:range="0,10" z:progress="3" />
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    z:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        z:textStyle="bold" z:text="JOYSTICK" />
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        z:styles="@style/slider" z:range="0,10" z:progress="3" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        z:textStyle="bold" z:text="KEYBOARD" />
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        z:styles="@style/slider" z:range="0,10" z:progress="3" />
+                </LinearLayout>
+            </LinearLayout>
+        </TabWidget>
+        <TabWidget
+            z:iconka="@integer/iconZxSound"
+            z:icon="@drawable/zx_icons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <SeekBar
+                    z:orientation="vertical"
+                    z:styles="@style/slider"
+                    z:range="0,50" z:progress="10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
+                <SeekBar
+                    z:orientation="vertical"
+                    z:styles="@style/slider"
+                    z:range="0,150" z:progress="120"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+        </TabWidget>
+        <TabWidget
+            z:iconka="@integer/iconZxGamepad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </TabWidget>
+        <TabWidget
+            z:iconka="@integer/iconZxDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </TabWidget>
+        <TabWidget
+            z:iconka="@integer/iconZxCasette"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </TabWidget>
+        <TabWidget
+            z:iconka="@integer/iconZxDisk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </TabWidget>
+        <TabWidget
+            z:iconka="@integer/iconZxHelp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </TabWidget>
+    </TabHost>
+</Form>

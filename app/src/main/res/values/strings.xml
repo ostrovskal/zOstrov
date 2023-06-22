@@ -20,6 +20,12 @@
     <string name="radio_dark">Dark theme</string>
     <string name="radio_light">Light theme</string>
     <string name="checkbox_text">Checkbox flags</string>
+    <string-array name="menuEditor">
+        <item>Copy</item>
+        <item>Paste</item>
+        <item>Cut</item>
+        <item>Delete</item>
+    </string-array>
     <string-array name="spinArray">
         <item>Ivan</item>
         <item>Irina</item>

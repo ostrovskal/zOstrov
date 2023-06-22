@@ -9,6 +9,7 @@
 
 class zViewText : public zView {
 public:
+    enum { SPAN_POSITION, SPAN_TYPE, SPAN_FLAGS };
     enum { TEXT_COLOR_DEFAULT, TEXT_COLOR_HIGHLIGHT, TEXT_COLOR_SHADOW };
     // структура кэшированного текста, разбитого на подстроки
     struct CACHE {
@@ -29,8 +30,7 @@ public:
         ~SPAN() { delete paint; }
         // инфо
         zStringUTF8 info() const {
-            static cstr names[] = { "def", "bk", "fk", "abs", "rel", "sub", "sup", "sts", "und", "str", "par", "url", "img", "lst", "msk" };
-            return z_fmt("%i-%i %s(%s)", s, e, names[span->typeId()], paint->info().str()).str(); }
+            return z_fmtUTF8("%i-%i %s(%s)", s, e, spans::_from_index_unchecked(span->typeId())._to_string(), paint->info().str()); }
         // сброс
         void reset(zViewText* vt) { paint->reset(vt); }
         bool operator == (cszi& _s) const { return s == _s.w && e == _s.h; }
@@ -42,6 +42,12 @@ public:
         zTextSpan* span{nullptr};
         // объект хранящий параметры рисования
         zTextPaint* paint{nullptr};
+    };
+    struct URL {
+        URL(crti& r, SPAN* s) : span(s), rect(r) { }
+        bool operator == (crti& r) const { return r == rect; }
+        SPAN* span{};
+        rti rect{};
     };
     // конструктор
     zViewText(zStyle *_styles, i32 _id, u32 _text);
@@ -93,22 +99,20 @@ public:
     // вернуть базовую линию шрифта
     int getBaseline() const { return drw[DRW_TXT]->texture->descent; }
     // установка спана
-    void setSpan(zTextSpan* _span, int start, int end, int flags = 0);
+    SPAN* setSpan(zTextSpan* _span, int start, int end, int flags = 0);
     // удаление спана
     void delSpan(zTextSpan* _span);
     // вернуть массив спанов
     const zArray<SPAN*>& getSpans() const { return spans; }
     // установка величины смещения тени текста
     void setShadowOffset(int x, int y) { shadow.set(x, y); invalidate(); }
+    // вернуть спан
+    void getSpan(int what, int arg, bool reverse, const std::function<void(int, SPAN*)>& act);
+    // установка события при клике по ссылке
+    zViewText* setOnClickUrl(std::function<void(zView*, czs&)> _clickUrl) { onClickUrl = std::move(_clickUrl); return this; }
 protected:
-    // изменить спаны на длину
-    void changeSpans(int pos, int length);
-    // вернуть минимальную позицию диапазона
-    bool getMinRangePos(int mn, int& ret) const;
-    // вывод информации о спанах
-    void infoSpans();
-    // вернуть спан по позиции
-    SPAN* getSpan(int pos) const;
+    // событие касания
+    virtual i32 onTouchEvent(zTouch *touch) override;
     // событие позиционирования
     virtual void onLayout(crti &position, bool changed) override;
     // событие определения габаритов
@@ -119,6 +123,12 @@ protected:
     virtual cstr getDrawText(bool _real) { return realText; }
     // вернуть цвет текста для отображения
     virtual u32 getDrawColorText(u32 color) { return color; }
+    // изменить спаны на длину
+    void changeSpans(int pos, int length);
+    // вернуть минимальную позицию диапазона
+    bool getMinRangePos(int mn, int& ret) const;
+    // вывод информации о спанах
+    void infoSpans();
     // отрисовка текста
     void drawText();
     // отрисовка текста со спанами
@@ -136,7 +146,7 @@ protected:
     // получить строку из кэша строк
     const CACHE* getStringFromCache(int index, rti* tbound, pti& pos);
     // слить все спаны
-    void mergeSpans(czs& text);
+    void mergeSpans(int count);
     // дистанция между текстом и фореграундом
     int distance{0};
     // кэш картинки
@@ -163,10 +173,16 @@ protected:
     zTextPaint* defPaint{nullptr};
     // цвет текста/подсветки/тени
     u32 colors[3]{};
+    // позиция нажатой ссылки
+    rti urlRect{};
     // фон текста
     zDrawable* dr{nullptr};
     // реальный текст
     zStringUTF8 realText{};
+    // массив ссылок
+    zArray<URL*> urls{};
+    // событие при нажатии на ссылку
+    std::function<void(zView*, czs&)> onClickUrl;
 };
 
 class zFilterEdit {
@@ -218,8 +234,6 @@ public:
     u32 getTextHintColor() const { return colorHint; }
     // установить цвет подсказки
     void setTextHintColor(u32 _color) { colorHint = _color; setText(realText, true); }
-    // обновление текста
-    virtual void updateText(int _what) { if(onChangeText) onChangeText(this, _what); }
 protected:
     // отрисовка
     virtual void onDraw() override;
@@ -232,11 +246,13 @@ protected:
     // касание
     virtual i32 onTouchEvent(zTouch *touch) override;
     // вернуть текст для отображения
-    virtual cstr getDrawText(bool _real) override {
-        return (_real || realText.isNotEmpty()) ? z_ptrUTF8(filter->getText(realText), visibleIndex) : hintText.str();
-    }
+    virtual cstr getDrawText(bool _real) override;
     // вернуть цвет текста для отображения
     virtual u32 getDrawColorText(u32 color) override { return (realText.isNotEmpty() ? color : colorHint); }
+    // уведомление о событии
+    virtual void notifyEvent(HANDLER_MESSAGE* msg) override;
+    // удаление выделения
+    void clearSelected() { spans.clear(); cacheSpans.clear(); bkgSpan = nullptr; }
     // при удалении и вставке символа - начальная позиция текста/позиция каретки
     int correct(int index);
     // коррекция позиции каретки на экране
@@ -263,6 +279,13 @@ protected:
     zFilterEdit* filter{nullptr};
     // кнопка отмены
     zViewClear* but{nullptr};
+    // фоновое выделение
+    SPAN* bkgSpan{nullptr};
+    // координаты выделения
+    pti posSel{INT_MIN, INT_MIN};
+    zViewDropdown* dropdown{nullptr};
+    zViewPopup* popup{nullptr};
+
     // событие редактирования
     std::function<void(zView*, int)> onChangeText;
     // событие установки каретки

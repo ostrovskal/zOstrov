@@ -17,6 +17,7 @@
     <color name="aqua">#00ffff</color>
     <color name="gray">#808080</color>
     <color name="white">#ffffff</color>
+    <color name="backgroundHighlight">#ff00ff00</color>
     <!-- общий цвет темы оформления -->
     <color name="themeDark">#4A2EED</color>
     <color name="themeLight">#b87623</color>

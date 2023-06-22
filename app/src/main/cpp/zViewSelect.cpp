@@ -22,6 +22,7 @@ szi zViewDropdown::measureChildrenSize(cszm& spec) {
         size.w = z_max(size.w, child->rview.w);
         size.h += child->rview.h;
     }
+    size.w += pad.extent(false);
     return size;
 }
 

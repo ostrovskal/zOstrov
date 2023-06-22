@@ -3,26 +3,26 @@
 			VIEW_MATCH, VIEW_MATCH)); 
 	auto grp01((zLinearLayout*)grp->attach(new zLinearLayout(styles_z_llinear, 0, true), 
 			VIEW_MATCH, VIEW_WRAP)); 
-	grp01->attach(new zViewText(styles_default, z.R.id.tv1, z.R.string.serg), 
+	grp01->attach(new zViewText(styles_z_tv1, z.R.id.tv1, z.R.string.serg), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp01->attach(new zViewCheck(styles_z_checkbox, z.R.id.spans, z.R.string.changeSpans), 
+			VIEW_MATCH, VIEW_WRAP);
+	auto grp02((zEditLayout*)grp01->attach(new zEditLayout(styles_default, 0), 
+			VIEW_MATCH, VIEW_WRAP)); 
+	grp02->attach(new zViewEdit(styles_z_zviewedit1, z.R.id.edit1, z.R.string.prompt), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp01->attach(new zViewSelect(styles_z_select, z.R.id.select), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp01->attach(new zViewGrid(styles_z_grid1, z.R.id.grid1, false), 
 			VIEW_WRAP, VIEW_WRAP);
-	auto grp02((zLinearLayout*)grp01->attach(new zLinearLayout(styles_z_zlinearlayout1, 0, false), 
+	auto grp12((zLinearLayout*)grp01->attach(new zLinearLayout(styles_z_zlinearlayout1, 0, false), 
 			VIEW_MATCH, VIEW_MATCH)); 
-	grp02->attach(new zViewRadio(styles_z_radiodark, z.R.id.radioDark, z.R.string.radio_dark, 1), 
+	grp12->attach(new zViewRadio(styles_z_radiodark, z.R.id.radioDark, z.R.string.radio_dark, 1), 
 			0, 1, VIEW_WRAP, VIEW_MATCH);
-	grp02->attach(new zViewCheck(styles_z_chkbox, z.R.id.chkbox, z.R.string.checkbox_text), 
+	grp12->attach(new zViewCheck(styles_z_chkbox, z.R.id.chkbox, z.R.string.checkbox_text), 
 			0, 2, VIEW_WRAP, VIEW_MATCH);
-	grp02->attach(new zViewRadio(styles_z_radiolight, z.R.id.radioLight, z.R.string.radio_light, 1), 
+	grp12->attach(new zViewRadio(styles_z_radiolight, z.R.id.radioLight, z.R.string.radio_light, 1), 
 			0, 1, VIEW_WRAP, VIEW_MATCH);
-	auto grp12((zEditLayout*)grp01->attach(new zEditLayout(styles_default, 0), 
-			VIEW_MATCH, VIEW_WRAP)); 
-	grp12->attach(new zViewEdit(styles_z_zviewedit1, z.R.id.edit1, z.R.string.prompt), 
-			VIEW_MATCH, VIEW_WRAP);
 	grp01->attach(new zViewRibbon(styles_z_list1, z.R.id.list1, false), 
 			VIEW_WRAP, 120_dp);
 	grp01->attach(new zViewButton(styles_z_zviewbutton2, z.R.id.button1, z.R.string.press_me, z.R.integer.iconCancel), 
