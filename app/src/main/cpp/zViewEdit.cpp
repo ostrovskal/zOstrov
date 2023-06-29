@@ -84,16 +84,16 @@ zViewEdit::zViewEdit(zStyle *_stl, i32 _id, u32 _hint) : zViewText(_stl, _id, 0)
             // copy/cut/delete
             case 0: case 2: case 3:
                 if(bkgSpan) {
-                    if(sel != 3) manager->exchangeBuffer = realText.substr(x, l);
+                    if(sel != 3) manager->exchangeBuffer = realText.substr(x + visibleIndex, l);
                     if(sel >= 2) clearSelected(true);
                 }
                 break;
             // paste
             case 1:
-                clearSelected(true);
-                setText(realText.insert(x, manager->exchangeBuffer), true);
+                if((realText.count() + manager->exchangeBuffer.count()) >= maxLength) break;
+                clearSelected(true); setText(realText.insert(x, manager->exchangeBuffer), true);
                 caretIndex += manager->exchangeBuffer.count();
-                correctCaretPosition(caretIndex);
+                post(MSG_EDIT, 10, correct(caretIndex));
                 break;
         }
     });
@@ -158,7 +158,7 @@ void zViewEdit::onInit(bool _theme) {
     // создать кнопку, если есть иконка
     if(drw[DRW_ICON]->isValid()) {
         if(!but) {
-            but = new zViewClear(this); onInit(false);
+            but = new zViewClear(this); but->onInit(false);
             but->drw[DRW_FK]->tile = drw[DRW_ICON]->tile;
         }
     }
@@ -192,7 +192,7 @@ i32 zViewEdit::keyEvent(int key, bool sysKey) {
             insertText(caretPos++, (char*)&key);
         }
         if(caretPos != caretIndex) {
-            post(MSG_EDIT, 10, 0);
+            post(MSG_EDIT, 10, caretPos);
             caretIndex = correct(caretPos);
         }
     }
@@ -250,15 +250,15 @@ i32 zViewEdit::onTouchEvent(zTouch *touch) {
             posSel.x = 0;  pos = posSel.y = realText.count();
         }
         manager->event.erase(this, 0);
-        if(posSel.x == INT_MIN) posSel.x = pos;
+        if(posSel.x == INT_MIN) posSel.x = pos - visibleIndex;
         // нажали в выделение?
         bool isMove(bkgSpan != nullptr);
         if(bkgSpan) {
-            if(pos >= bkgSpan->s && pos < bkgSpan->e) isMove = (touch->isDragging(true) || touch->isDragging(false));
+            if(posSel.x >= bkgSpan->s && posSel.x < bkgSpan->e) isMove = (touch->isDragging(true) || touch->isDragging(false));
             if(isMove) clearSelected(false);
         }
         if(!isMove) post(MSG_EDIT_MENU, 1000, 0);
-        posSel.y = pos;
+        posSel.y = pos - visibleIndex;
         if(posSel.x != posSel.y) {
             int p1(z_min(posSel.x, posSel.y)); int p2(z_max(posSel.x, posSel.y));
             if(bkgSpan) {

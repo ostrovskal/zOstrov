@@ -668,7 +668,7 @@ static zStyle styles_z_zviewedit1[] = {
 	{ Z_ICON_TILES, z.R.integer.iconEditEx },
 	{ Z_MODE, ZS_EDIT_TEXT },
 	{ Z_PADDING, 0x01010101 },
-	{ Z_GRAVITY, ZS_GRAVITY_VCENTER | ZS_GRAVITY_START },
+	{ Z_GRAVITY, ZS_GRAVITY_VCENTER | ZS_GRAVITY_HCENTER },
 	{ Z_FOREGROUND_TILES, z.R.integer.edit },
 	{ Z_TEXT_LINES | ZT_END, 3 }
 };

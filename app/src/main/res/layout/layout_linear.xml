@@ -38,7 +38,7 @@
                 z:icTiles="@integer/iconEditEx"
                 z:inputMode="text"
                 z:pad="1dp"
-                android:gravity="center_vertical|start"
+                android:gravity="center_vertical|center_horizontal"
                 z:fkTiles="@integer/edit"
                 z:textLines="3" />
         </EditLayout>
