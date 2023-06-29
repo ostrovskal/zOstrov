@@ -28,13 +28,13 @@
     <color name="dividerLight">#4f4f4f</color>
     <!-- цвет подсветки текста -->
     <color name="textHighlightDark">#5670f1</color>
-    <color name="textHighlightLight">#f17056</color>
+    <color name="textHighlightLight">#AA3E28</color>
     <!-- цвет информационных сообщений в форме -->
     <color name="textMessageDark">#64fad2</color>
     <color name="textMessageLight">#64fad2</color>
     <!-- цвет текста заголовка формы -->
-    <color name="textHeaderDark">#41bacf</color>
-    <color name="textHeaderLight">#3A08C1</color>
+    <color name="textHeaderDark">#90F758</color>
+    <color name="textHeaderLight">#8A67EA</color>
     <!-- цвет ссылки -->
     <color name="textUrlDark">#b86a21</color>
     <color name="textUrlLight">#8A025D</color>

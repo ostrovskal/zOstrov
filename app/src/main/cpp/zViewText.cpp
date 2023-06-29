@@ -26,22 +26,24 @@ void zViewText::setTextSpecial(czs &_text, cszm &spec) {
     measure(spec);
 }
 
+void zViewText::updateText() {
+    clearCacheSpans(false);
+    auto changed(rview.isNotEmpty());
+    if(changed) {
+        auto rv(rview);
+        szm spec(zMeasure(lps.w == VIEW_WRAP ? MEASURE_UNDEF : MEASURE_EXACT, measureSpec.w.size()),
+                 zMeasure(lps.h == VIEW_WRAP ? MEASURE_UNDEF : MEASURE_EXACT, measureSpec.h.size()));
+        onMeasure(spec);
+        changed = (rv != rview);
+    }
+    if(changed) requestLayout();
+    invalidate();
+}
+
 void zViewText::setText(czs& _text, bool force) {
     if(force || realText != _text) {
-        auto changed(rview.isNotEmpty());
-        realText = _text; clearCacheSpans(false);
-        if(changed) {
-            auto rv(rview);
-            szm spec(zMeasure(lps.w == VIEW_WRAP ? MEASURE_UNDEF : MEASURE_EXACT, measureSpec.w.size()),
-                     zMeasure(lps.h == VIEW_WRAP ? MEASURE_UNDEF : MEASURE_EXACT, measureSpec.h.size()));
-            onMeasure(spec);
-            changed = (rv != rview);
-        }
-        if(changed) {
-//            DLOG("change");
-            requestLayout();
-        }
-        invalidate();
+        realText = _text; spans.clear();
+        updateText();
     }
 }
 

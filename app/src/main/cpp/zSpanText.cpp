@@ -443,7 +443,7 @@ void zViewText::drawTextSpan(crti& clip) {
         // проверить на ссылку
         if(_url) {
             _url->rect.w = _url->rect.x + coord.x;
-            urls += _url;
+            urls += _url; status |= ZS_CLICKABLE;
         }
         _url = (sp->span->typeId() == spans::SPAN_URL ? new URL(rti(coord.x, coord.y, 0, cacheStr->size), sp) : nullptr);
         while(posSpan < sp->e) {
@@ -470,15 +470,16 @@ void zViewText::drawTextSpan(crti& clip) {
             }
         }
     }
-    updateStatus(ZS_CLICKABLE, urls.isNotEmpty());
 }
 
 void zViewText::insertText(int pos, cstr _text) {
     changeSpans(pos, z_countUTF8(_text));
-    setText(realText.insert(pos, _text), true);
+    realText.insert(pos, _text);
+    updateText();
 }
 
 void zViewText::removeText(int pos, int count) {
     changeSpans(pos, -count);
-    setText(realText.remove(pos, count), true);
+    realText.remove(pos, count);
+    updateText();
 }

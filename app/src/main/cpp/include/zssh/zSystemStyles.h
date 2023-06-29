@@ -67,12 +67,9 @@ static zStyle styles_z_editbutclear[] = {
 	{ Z_TAP | ZT_END, ZS_HOVERED }
 };
 
-static zStyle styles_z_tabs[] = {
-	{ Z_PADDING | ZT_END, 0x02020202 }
-};
-
 static zStyle styles_z_tabcontent[] = {
-	{ Z_PADDING | ZT_END, 0x01010101 }
+	{ Z_PADDING, 0x02020202 },
+	{ Z_BACKGROUND | ZT_END, 0x50000000 }
 };
 
 static zStyle styles_z_formfooterlyt[] = {
@@ -636,7 +633,8 @@ static zStyle styles_z_progress1[] = {
 
 static zStyle styles_z_formopen[] = {
 	{ Z_STYLES, z.R.style.form },
-	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_CENTER }
+	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
+	{ Z_MODE | ZT_END, ZS_FORM_NONE }
 };
 
 static zStyle styles_z_zlinearlayout1[] = {
@@ -785,6 +783,11 @@ static zStyle styles_z_edit2[] = {
 	{ Z_MODE, ZS_EDIT_TEXT },
 	{ Z_TEXT_STYLE, ZS_TEXT_NORMAL },
 	{ Z_TEXT_LINES | ZT_END, 1 }
+};
+
+static zStyle styles_z_formsettings[] = {
+	{ Z_STYLES, z.R.style.form },
+	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_CENTER }
 };
 
 static zStyle styles_z_zlinearlayout2[] = {

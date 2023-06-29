@@ -124,6 +124,8 @@ protected:
     virtual cstr getDrawText(bool _real) { return realText; }
     // вернуть цвет текста для отображения
     virtual u32 getDrawColorText(u32 color) { return color; }
+    // обновить текст
+    void updateText();
     // изменить спаны на длину
     void changeSpans(int pos, int length);
     // вернуть минимальную позицию диапазона
@@ -267,7 +269,7 @@ protected:
     // установка каретки
     void updateCaret();
     // позиция каретки в тексте
-    int caretIndex{-1};
+    int caretIndex{0};
     // начальная позиция видимого текста
     int visibleIndex{0};
     // ширина рабочей области редактора

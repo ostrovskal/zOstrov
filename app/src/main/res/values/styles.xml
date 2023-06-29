@@ -60,11 +60,9 @@
         <item name="fkGravity">center</item>
         <item name="tap">hovered</item>
     </style>
-    <style name="tabs">
-        <item name="pad">2dp</item>
-    </style>
     <style name="tabContent">
-        <item name="pad">1dp</item>
+        <item name="pad">2dp</item>
+        <item name="background">#50000000</item>
     </style>
     <style name="formFooterLyt">
         <item name="pad">1dp</item>

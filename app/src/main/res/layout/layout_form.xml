@@ -6,7 +6,7 @@
     z:styles="@style/form" android:text="Управление файлами"
     z:styleCaption="@style/formCaption"
     z:gravity="center"
-
+    z:formMode="none"
     z:modal="true"
     z:nameView="formBrowser"
     z:styleFooter="@style/formFooter">

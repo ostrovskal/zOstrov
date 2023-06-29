@@ -25,7 +25,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         z:textStyle="bold" z:text="CPU" />
                     <SeekBar
@@ -33,7 +33,7 @@
                         android:layout_height="wrap_content"
                         z:styles="@style/slider" z:range="0,10" z:progress="3" />
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         z:textStyle="bold" z:text="BORDER" />
                     <SeekBar
@@ -47,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         z:textStyle="bold" z:text="JOYSTICK" />
                     <SeekBar
@@ -55,7 +55,7 @@
                         android:layout_height="wrap_content"
                         z:styles="@style/slider" z:range="0,10" z:progress="3" />
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         z:textStyle="bold" z:text="KEYBOARD" />
                     <SeekBar

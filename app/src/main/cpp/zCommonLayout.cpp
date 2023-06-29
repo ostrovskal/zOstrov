@@ -443,7 +443,7 @@ zTabLayout::zTabLayout(zStyle* _styles, i32 _id, zStyle* _styles_capt, int _grav
     // макет заголовков
     caption = new zLinearLayout(_styles, 0, (_gravityCaption & ZS_GRAVITY_VERT) == 0);
     // макет контента
-    content = new zFrameLayout(styles_default, 0);
+    content = new zFrameLayout(styles_z_tabcontent, 0);
 }
 
 void zTabLayout::onInit(bool _theme) {
