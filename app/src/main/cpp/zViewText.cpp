@@ -309,6 +309,7 @@ void zViewText::onInit(bool _theme) {
             case Z_TEXT_SHADOW_OFFS:        setShadowOffset(val & 0xff, (val >> 8) & 0xff); break;
             case Z_TEXT_DISTANCE:           distance    = (int)val; break;
             case Z_TEXT_LENGTH:             maxLength   = val; break;
+            case Z_TEXT_ELLIPSIS:           ellipsis    = val; break;
             case Z_ICON_GRAVITY:            setIconGravity(v->u); icGravity &= ~ZS_SCALE_MASK; icGravity |= (v->u & ZS_SCALE_MASK); break;
             case Z_TEXT_FONT:
             case Z_TEXT_FOREGROUND_COLOR:   drParams[DR_TXT].set(Z_TEXT_FONT, attr, val); break;

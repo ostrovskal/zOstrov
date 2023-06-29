@@ -676,7 +676,8 @@ static zStyle styles_z_grid1[] = {
 
 static zStyle styles_z_radiodark[] = {
 	{ Z_STYLES, z.R.style.radiobutton },
-	{ Z_DECORATE, ZS_CHECKED | ZS_ELLIPSIS },
+	{ Z_DECORATE, ZS_CHECKED },
+	{ Z_TEXT_ELLIPSIS, ZS_ELLIPSIS_END },
 	{ Z_TEXT_LINES | ZT_END, 1 }
 };
 
@@ -686,7 +687,8 @@ static zStyle styles_z_chkbox[] = {
 };
 
 static zStyle styles_z_radiolight[] = {
-	{ Z_DECORATE, ZS_CHECKED | ZS_ELLIPSIS },
+	{ Z_DECORATE, ZS_CHECKED },
+	{ Z_TEXT_ELLIPSIS, ZS_ELLIPSIS_END },
 	{ Z_STYLES | ZT_END, z.R.style.radiobutton }
 };
 

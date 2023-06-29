@@ -190,7 +190,8 @@ enum ViewStyles {
     Z_FOREGROUND_TILE2          = (77 | ZTT_INT | ZTT_THM),
     Z_FOREGROUND_TILE3          = (78 | ZTT_INT | ZTT_THM),
     Z_FOREGROUND_TILE4          = (79 | ZTT_INT | ZTT_THM),
-    Z_SPEED_TRACK				= (80 | ZTT_FLT)
+    Z_SPEED_TRACK				= (80 | ZTT_FLT),
+    Z_TEXT_ELLIPSIS             = (81 | ZTT_INT)
 };
 
 // значения для темы

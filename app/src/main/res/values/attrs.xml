@@ -129,9 +129,8 @@
 			<flag name="scrollbar" value="8" />
 			<flag name="readOnly" value="16" />
 			<flag name="tips" value="32" />
-			<flag name="ellipsis" value="64" />
-			<flag name="checked" value="128" />
-			<flag name="disabled" value="256" />
+			<flag name="checked" value="64" />
+			<flag name="disabled" value="128" />
 		</attr>
 		<attr name="mask" format="reference|color|string" />
 		<attr name="mskColor" format="color|string" />
@@ -161,6 +160,12 @@
 		<attr name="textShadowColor" format="color|string" />
 		<attr name="textHighlightColor" format="color|string" />
 		<attr name="textShadowOffset" format="string" />
+		<attr name="textEllipsis" format="enum|string">
+			<enum name="none" value="1" />
+			<enum name="start" value="2" />
+			<enum name="middle" value="4" />
+			<enum name="end" value="8" />
+		</attr>
 		<attr name="formMode" format="flags|string">
 			<flag name="none" value="1" />
 			<flag name="ok" value="2" />
@@ -242,6 +247,7 @@
 		<attr name="themeColorTextTabbed" format="color|string" />
 		<attr name="themeColorTextProgress" format="color|string" />
 		<attr name="themeColorTextMenu" format="color|string" />
+		<attr name="themeColorBackgroundHighlight" format="color|string" />
 		<attr name="themeTile1Progress" format="integer|string" />
 		<attr name="themeTile2Progress" format="integer|string" />
 		<attr name="themeTile1Slider" format="integer|string" />

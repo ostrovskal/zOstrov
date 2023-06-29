@@ -156,6 +156,8 @@ protected:
     int fkW{0}, fkH{0};
     // максимальная длина текста(для редактора)
     int maxLength{INT_MAX};
+    // тип многоточия
+    int ellipsis{ZS_ELLIPSIS_NONE};
     // максимальное количество линий текста
     int maxLines{1};
     // кэш иконки

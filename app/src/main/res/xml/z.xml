@@ -129,7 +129,6 @@
             <item name="scrollbar" value="ZS_SCROLLBAR" />
             <item name="readOnly" value="ZS_READ_ONLY" />
             <item name="tips" value="ZS_TIPS" />
-            <item name="ellipsis" value="ZS_ELLIPSIS" />
             <item name="checked" value="ZS_CHECKED" />
             <item name="disabled" value="ZS_DISABLED" />
         </attr>
@@ -161,6 +160,12 @@
         <attr name="textShadowColor" translate="Z_TEXT_SHADOW_COLOR" format="color" />
         <attr name="textHighlightColor" translate="Z_TEXT_HIGHLIGHT_COLOR" format="color" />
         <attr name="textShadowOffset" translate="Z_TEXT_SHADOW_OFFS" format="dsize" />
+        <attr name="textEllipsis" translate="Z_TEXT_ELLIPSIS" format="enum">
+            <item name="none" value="ZS_ELLIPSIS_NONE" />
+            <item name="start" value="ZS_ELLIPSIS_START" />
+            <item name="middle" value="ZS_ELLIPSIS_MIDDLE" />
+            <item name="end" value="ZS_ELLIPSIS_END" />
+        </attr>
         <attr name="formMode" translate="Z_MODE" format="flags">
             <item name="none" value="ZS_FORM_NONE" />
             <item name="ok" value="ZS_FORM_OK" />
