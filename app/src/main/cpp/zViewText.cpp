@@ -26,10 +26,10 @@ void zViewText::setTextSpecial(czs &_text, cszm &spec) {
     measure(spec);
 }
 
-void zViewText::setText(czs& _text, bool force, bool eraseSpane) {
+void zViewText::setText(czs& _text, bool force) {
     if(force || realText != _text) {
         auto changed(rview.isNotEmpty());
-        realText = _text; clearCacheSpans(eraseSpane);
+        realText = _text; clearCacheSpans(false);
         if(changed) {
             auto rv(rview);
             szm spec(zMeasure(lps.w == VIEW_WRAP ? MEASURE_UNDEF : MEASURE_EXACT, measureSpec.w.size()),
@@ -37,14 +37,18 @@ void zViewText::setText(czs& _text, bool force, bool eraseSpane) {
             onMeasure(spec);
             changed = (rv != rview);
         }
-        if(changed) requestLayout();
+        if(changed) {
+//            DLOG("change");
+            requestLayout();
+        }
+        invalidate();
     }
 }
 
 void zViewText::clearCacheSpans(bool del_spans) {
     textCache.clear();
+    cacheSpans.clear();
     if(del_spans) {
-        cacheSpans.clear();
         for(auto sp : spans) SAFE_DELETE(sp->span);
         spans.clear();
     }
@@ -111,7 +115,7 @@ void zViewText::onMeasure(cszm& spec) {
 
 i32 zViewText::onTouchEvent(zTouch *touch) {
     int ret(TOUCH_CONTINUE);
-    if(isClickabled()) {
+    if(urls.isNotEmpty()) {
         if(touch->isCaptured()) {
             for(auto u: urls) {
                 if(u->rect.contains(touch->cpt.x, touch->cpt.y)) { urlRect = u->rect; break; }

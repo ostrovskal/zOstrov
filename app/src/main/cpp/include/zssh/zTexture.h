@@ -8,6 +8,14 @@ class zTextPaint;
 class zTexture final {
 public:
 #pragma pack(push, 1)
+    struct TILE_TTL {
+        TILE_TTL() { }
+        TILE_TTL(u16* ptr) : rect(ptr), patch9(*(int*)(ptr + 4)), name((char*)(ptr + 6)) { }
+        bool operator == (cstr _name) const { return _name == name; }
+        rti rect{};
+        int patch9{0};
+        zStringUTF8 name{};
+    };
     struct HEAD_TTL {
         // сигнатура
         u32 sign;
@@ -23,17 +31,17 @@ public:
         u16 ascent, descent;
     };
 #pragma pack(pop)
-    zTexture() { tiles = new u16[6]; count = 1; memset(tiles, 0, 12); }
+    zTexture() { tiles += TILE_TTL(); }
     // конструктор
     zTexture(cstr _name, u8* ptr, u32 size) : name(_name) { glGenTextures(1, &id); makeTexture(ptr, size); }
     // деструктор
-    ~zTexture() { release(); SAFE_DELETE(tiles); count = 0; }
+    ~zTexture() { release(); tiles.clear(); }
     // создать текстуру
     void makeTexture(u8* ptr, u32 size);
     // сохранить(tga)
     bool save(czs& path) const;
     // вернуть количество тайлов
-    int getCountTiles() const { return count; }
+    int getCountTiles() const { return tiles.size(); }
     // установить/сбросить целевую текстуру
     void setFBO(bool set, bool clear);
     // включение/отключение фильтрации
@@ -41,23 +49,24 @@ public:
     // создание текстуры для рендеринга
     u32 makeFBO(int width, int height);
     // проверка того, что тайл является патчем
-    bool isTilePatch9(u32 tile) const { auto ptr(getTile(tile)); return ptr[4] | ptr[5]; }
+    bool isTilePatch9(u32 tile) const { auto ptr(getTile(tile)); return ptr->patch9; }
     // создание "пустой" текстуры с параметрами
     static u32 makeEmpty(int internalFormat, int format, int width, int height);
     // диагностика
     zString info() { return z_fmt("ids: %i(%i) - name: %s(%i) size: %ix%i", id, idFBO, name.str(), ref, _size.w, _size.h); }
-    // вернуть габариты тайла
-    u16* getTile(u32 tile) const { return (tile < count ? &tiles[tile * 6] : nullptr); }
+    // вернуть тайл
+    TILE_TTL* getTile(u32 tile) const { return (tile < tiles.size() ? &tiles[tile] : nullptr); }
+    int getTile(czs& _name) const { return tiles.indexOf(_name); }
     // вернуть обратную величину габаритов
     cszf& getReverseSize() const { return _rsize; }
     // вернуть габариты
     cszi& getSize() const { return _size; }
     // вернуть параметры глифа
-    u16* paramGlyph(int ch) const { ch -= 32; return ((tiles && ch < count) ? tiles + ch * 6 : nullptr); }
+    TILE_TTL* paramGlyph(int ch) const { return getTile(ch - 32); }
     // вернуть ширину глифа
     int widthGlyph(int ch, float factor) const;
     // проверка на размер текстуры
-    bool isEqual(int width, int height) const { return (tiles[2] == width && tiles[3] == height); }
+    bool isEqual(int width, int height) const { return (tiles[0].rect.w == width && tiles[0].rect.h == height); }
     // реализация
     void release();
     // оператор сравнения по имени
@@ -77,8 +86,6 @@ protected:
     szf _rsize{};
     // габариты текстуры
     szi _size{};
-    // количество тайлов
-    u16 count{0};
     // тайлы
-    u16* tiles{nullptr};
+    zArray<TILE_TTL> tiles{};
 };

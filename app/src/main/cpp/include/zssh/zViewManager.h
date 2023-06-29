@@ -134,6 +134,8 @@ public:
     zSoundManager sound{};
     // менеджер датчиков
     zSensorManager sensor{};
+    // буфер обмена
+    zStringUTF8 exchangeBuffer{};
     // количество треугольников в кадре
     i32 countVertices{0};
     // количество линий в кадре

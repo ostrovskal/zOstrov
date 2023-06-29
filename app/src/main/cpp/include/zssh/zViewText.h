@@ -36,6 +36,7 @@ public:
         bool operator == (cszi& _s) const { return s == _s.w && e == _s.h; }
         // оператор сравнения
         bool operator == (zTextSpan* _span) const { return span == _span; }
+        int length() const { return e - s; }
         // начальная/конечная позиция/флаг
         int s{0}, e{0}, f{0};
         // реальный спан
@@ -59,7 +60,7 @@ public:
     // установить текст по идентификатору из ресурсов
     void setText(u32 _text) { setText(theme->findString(_text), false); }
     // установить текст из строки
-    void setText(czs& _text, bool force, bool eraseSpane = true);
+    void setText(czs& _text, bool force);
     // специальный - для клавиатурных кнопок
     void setTextSpecial(czs& _text, cszm& spec);
     // установка текста парсингом из html
@@ -254,7 +255,7 @@ protected:
     // уведомление о событии
     virtual void notifyEvent(HANDLER_MESSAGE* msg) override;
     // удаление выделения
-    void clearSelected() { spans.clear(); cacheSpans.clear(); bkgSpan = nullptr; }
+    bool clearSelected(bool del_text);
     // при удалении и вставке символа - начальная позиция текста/позиция каретки
     int correct(int index);
     // коррекция позиции каретки на экране

@@ -156,6 +156,7 @@
 		<attr name="textColor" format="color|string" />
 		<attr name="textSize" format="dimension" />
 		<attr name="textLines" format="integer|string" />
+		<attr name="textLength" format="integer|string" />
 		<attr name="textDistance" format="dimension" />
 		<attr name="textShadowColor" format="color|string" />
 		<attr name="textHighlightColor" format="color|string" />
@@ -241,6 +242,7 @@
 		<attr name="themeColorTextTabbed" format="color|string" />
 		<attr name="themeColorTextProgress" format="color|string" />
 		<attr name="themeColorTextMenu" format="color|string" />
+		<attr name="themeColorBackgroundHighlight" format="color|string" />
 		<attr name="themeTile1Progress" format="integer|string" />
 		<attr name="themeTile2Progress" format="integer|string" />
 		<attr name="themeTile1Slider" format="integer|string" />
@@ -291,7 +293,7 @@
 		<attr name="tabGravity" format="enum|string">
 			<enum name="top" value="1" />
 			<enum name="start" value="2" />
-			<enum name="end" value="3" />
+			<enum name="end" value="4" />
 			<enum name="bottom" value="8" />
 		</attr>
 		<attr name="message" format="integer|string" />

@@ -67,7 +67,7 @@
                 z:decorate="checked|ellipsis"
                 z:textLines="1" />
             <CheckBox
-                android:layout_width="wrap_content" android:layout_weight="2"
+                android:layout_width="wrap_content" android:layout_weight="1"
                 android:layout_height="match_parent"
                 z:decorate="checked"
                 android:id="@+id/chkbox"
@@ -177,9 +177,9 @@
             android:id="@+id/progress1" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:text="@string/sergey" z:layout_gravity="center"  z:styles="@style/linearProgress"
             z:range="0,70" z:progress="10" z:orientation="horizontal" />
-    <EditText
-        android:id="@+id/edit2" android:layout_width="match_parent" android:layout_height="wrap_content"
-        z:styles="@style/edittext" z:inputMode="text" z:hint="@string/enter_family" z:textStyle="normal"/>
+        <EditText
+            android:id="@+id/edit2" android:layout_width="match_parent" android:layout_height="wrap_content"
+            z:styles="@style/edittext" z:inputMode="text" z:hint="@string/enter_family" z:textStyle="normal"  z:textLines="1" />
         <ProgressBar
             android:id="@+id/progress2" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:text="@string/progress" z:layout_gravity="center"  z:styles="@style/linearProgress"

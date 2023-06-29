@@ -142,7 +142,7 @@ public:
 // изображение
 class zTextSpanImage : public zTextSpan {
 public:
-    zTextSpanImage(cstr _image, int _tile, float _factor, int _color = 0);
+    zTextSpanImage(cstr _image, cstr _tile, float _factor, int _color = 0);
     // обновление состояния
     virtual void updateState(zTextPaint *paint) override;
     // признак изображения
@@ -157,7 +157,7 @@ public:
 
 class zTextSpanMask : public zTextSpanImage {
 public:
-    zTextSpanMask(cstr image, int tile, float factor, int _w) : zTextSpanImage(image, tile, factor, 0x7f7f7f7f), _width(_w) { }
+    zTextSpanMask(cstr image, cstr tile, float factor, int _w) : zTextSpanImage(image, tile, factor, 0x7f7f7f7f), _width(_w) { }
     // отрисовка
     virtual void draw(int x, int y, int hmax, zTextPaint *paint, crti &clip) override;
     // вернуть тип спана

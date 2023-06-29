@@ -2,12 +2,12 @@
 <keyboards default="en_large_abc" minHeight="35">
 	<layout name="en_little_abc" shift="en_large_abc"  spec="digit123" lang="ru_little_abc" width="631" height="193">
 	<button x="1" y="145" width="92" height="47" spec="SPEC" com="?123" alt="?123"/>
-	<button x="94" y="145" width="62" height="47" spec="LANG" icon="48"/>
+	<button x="94" y="145" width="62" height="47" spec="LANG" icon="iconLang"/>
 	<button x="157" y="145" width="314" height="47" spec="SPACE" com="qwerty"/>
 	<button x="472" y="145" width="62" height="47" com="." alt="."/>
-	<button x="535" y="145" width="94" height="47" spec="ENTER" icon="55"/>
-	<button x="1" y="97" width="92" height="47" spec="SHIFT" icon="52"/>
-	<button x="535" y="97" width="94" height="47" spec="DELETE" icon="50"/>
+	<button x="535" y="145" width="94" height="47" spec="ENTER" icon="iconOk"/>
+	<button x="1" y="97" width="92" height="47" spec="SHIFT" icon="iconShift"/>
+	<button x="535" y="97" width="94" height="47" spec="DELETE" icon="iconDelete"/>
 	<button x="94" y="97" width="62" height="47" com="z" alt="@"/>
 	<button x="157" y="97" width="62" height="47" com="x" alt="/"/>
 	<button x="220" y="97" width="62" height="47" com="c" alt="-"/>
@@ -36,13 +36,13 @@
 	<button x="568" y="1" width="62" height="47" com="p" alt="0"/>
 	</layout>
 	<layout name="en_large_abc"  shift="en_little_abc" spec="digit123" lang="ru_large_abc"  input="en_little_abc" width="631" height="193">
-	<button x="535" y="145" width="94" height="47" spec="ENTER" icon="55"/>
+	<button x="535" y="145" width="94" height="47" spec="ENTER" icon="iconOk"/>
 	<button x="472" y="145" width="62" height="47" com="." alt="."/>
 	<button x="157" y="145" width="314" height="47" spec="SPACE" com="QWERTY"/>
-	<button x="94" y="145" width="62" height="47" spec="LANG" icon="48"/>
+	<button x="94" y="145" width="62" height="47" spec="LANG" icon="iconLang"/>
 	<button x="1" y="145" width="92" height="47" spec="SPEC" com="?123" alt="?123"/>
-	<button x="1" y="97" width="92" height="47" spec="SHIFT" icon="53"/>
-	<button x="535" y="97" width="94" height="47" spec="DELETE" icon="50"/>
+	<button x="1" y="97" width="92" height="47" spec="SHIFT" icon="iconShiftPress"/>
+	<button x="535" y="97" width="94" height="47" spec="DELETE" icon="iconDelete"/>
 	<button x="94" y="97" width="62" height="47" com="Z" alt="@"/>
 	<button x="157" y="97" width="62" height="47" com="X" alt="/"/>
 	<button x="220" y="97" width="62" height="47" com="C" alt="-"/>
@@ -71,13 +71,13 @@
 	<button x="568" y="1" width="62" height="47" com="P" alt="0"/>
 	</layout>
 	<layout name="ru_little_abc" shift="ru_large_abc"  spec="digit123" lang="en_little_abc" width="631" height="193">
-		<button x="535" y="145" width="94" height="47" spec="ENTER" icon="55"/>
+		<button x="535" y="145" width="94" height="47" spec="ENTER" icon="iconOk"/>
 		<button x="472" y="145" width="62" height="47" com="." alt="."/>
 		<button x="157" y="145" width="314" height="47" spec="SPACE" com="русский"/>
 		<button x="1" y="145" width="92" height="47" spec="SPEC" com="?123" alt="?123"/>
-		<button x="94" y="145" width="62" height="47" spec="LANG" icon="48"/>
-		<button x="1" y="97" width="79" height="47" spec="SHIFT" icon="52"/>
-		<button x="549" y="97" width="81" height="47" spec="DELETE" icon="50"/>
+		<button x="94" y="145" width="62" height="47" spec="LANG" icon="iconLang"/>
+		<button x="1" y="97" width="79" height="47" spec="SHIFT" icon="iconShift"/>
+		<button x="549" y="97" width="81" height="47" spec="DELETE" icon="iconDelete"/>
 		<button x="81" y="97" width="51" height="47" com="я" alt="@"/>
 		<button x="133" y="97" width="51" height="47" com="ч" alt="/"/>
 		<button x="185" y="97" width="51" height="47" com="с" alt="-"/>
@@ -112,13 +112,13 @@
 		<button x="575" y="1" width="51" height="47" com="ъ" alt=")"/>
 	</layout>
 	<layout name="ru_large_abc"  shift="ru_little_abc" spec="digit123" lang="en_large_abc"  input="ru_little_abc" width="631" height="193">
-		<button x="535" y="145" width="94" height="47" spec="ENTER" icon="55"/>
+		<button x="535" y="145" width="94" height="47" spec="ENTER" icon="iconOk"/>
 		<button x="472" y="145" width="62" height="47" com="." alt="."/>
 		<button x="157" y="145" width="314" height="47" spec="SPACE" com="РУССКИЙ"/>
 		<button x="1" y="145" width="92" height="47" spec="SPEC" com="?123" alt="?123"/>
-		<button x="94" y="145" width="62" height="47" spec="LANG" icon="48"/>
-		<button x="1" y="97" width="79" height="47" spec="SHIFT" icon="53"/>
-		<button x="549" y="97" width="81" height="47" spec="DELETE" icon="50"/>
+		<button x="94" y="145" width="62" height="47" spec="LANG" icon="iconLang"/>
+		<button x="1" y="97" width="79" height="47" spec="SHIFT" icon="iconShiftPress"/>
+		<button x="549" y="97" width="81" height="47" spec="DELETE" icon="iconDelete"/>
 		<button x="81" y="97" width="51" height="47" com="Я" alt="@"/>
 		<button x="133" y="97" width="51" height="47" com="Ч" alt="/"/>
 		<button x="185" y="97" width="51" height="47" com="С" alt="-"/>
@@ -153,12 +153,12 @@
 		<button x="575" y="1" width="51" height="47" com="Ъ" alt=")"/>
 	</layout>
 	<layout name="digit123" spec="back" width="568" height="193">
-		<button x="472" y="145" width="95" height="47" spec="ENTER" icon="55"/>
+		<button x="472" y="145" width="95" height="47" spec="ENTER" icon="iconOk"/>
 		<button x="157" y="145" width="251" height="47" spec="SPACE" com=""/>
 		<button x="409" y="145" width="62" height="47" com="." alt="."/>
 		<button x="94" y="145" width="62" height="47" com="0" alt="0"/>
 		<button x="1" y="145" width="92" height="47" spec="SPEC" com="?123" alt="?123"/>
-		<button x="442" y="97" width="125" height="47" spec="DELETE" icon="50"/>
+		<button x="442" y="97" width="125" height="47" spec="DELETE" icon="iconDelete"/>
 		<button x="379" y="97" width="62" height="47" com="=" alt="?"/>
 		<button x="316" y="97" width="62" height="47" com="," alt="!"/>
 		<button x="253" y="97" width="62" height="47" com="F" alt="F"/>

@@ -156,6 +156,7 @@
         <attr name="textColor" translate="Z_TEXT_FOREGROUND_COLOR" format="color" />
         <attr name="textSize" translate="Z_TEXT_SIZE" format="dimension" />
         <attr name="textLines" translate="Z_TEXT_LINES" format="integer" />
+        <attr name="textLength" translate="Z_TEXT_LENGTH" format="integer" />
         <attr name="textDistance" translate="Z_TEXT_DISTANCE" format="dimension" />
         <attr name="textShadowColor" translate="Z_TEXT_SHADOW_COLOR" format="color" />
         <attr name="textHighlightColor" translate="Z_TEXT_HIGHLIGHT_COLOR" format="color" />

@@ -95,14 +95,13 @@ void sshApp::setContent() {
     if(chSp) {
         chSp->setOnClick([txt](zView*, int) {
             txt->removeText(35, 1);
-            DLOG("ins");
         });
     }
     if(txt) {
         txt->setLines(51);
         txt->setText(R"(<h1>Начало текста</h1><p>Завершение <b>работы фоновых</b> приложений после блокировки <s>экрана <c value="ff00ff00">помогает</c> экономить заряд</s> аккумулятора.
-<p>С другой стороны, в этом случае<img src="zssh" t="49" f="0.75"/> вы не будете получать <a href="self"><img src="zx_icons" t="27" f="1.0"/></a> новые сообщения (электронные<sup>1</sup>, текстовые<sub>2</sub>, из соцсетей и т.д.).
-<ol start="10" reversed="1"><li><a href="self">serg</a></li><li>maxim</li><li>olga</li></ol>)", true);
+<p>С другой стороны, в этом случае<img src="zssh" t="iconSelf" f="0.75"/> вы не будете получать <a href="self"><img src="zx_icons" t="iconApp_round" f="1.0"/></a> новые сообщения (электронные<sup>1</sup>, текстовые<sub>2</sub>, из соцсетей и т.д.).
+<ul start="10" reversed="1"><li><a href="self">serg</a></li><li>maxim</li><li>olga</li></ul>)", true);
         txt->setHtmlText(txt->getText(), [](cstr tag, bool end, zHtml* html) { return false; });
         txt->setOnClickUrl([](zView*, czs& ref) {
            DLOG("click url %s", ref.str());

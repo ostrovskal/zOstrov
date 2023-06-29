@@ -56,9 +56,10 @@ bool zTextPaint::getBoundChar(int ch, rti& tex, rti& bound) const {
     if(ch < '!') ch = ' ';
     auto glyph(font->paramGlyph(ch + bold));
     if(glyph) {
-        tex.set(glyph); tex.w += tex.x; tex.h += tex.y;
-        auto cw(ch == ' ' ? 10 : (int)round((float)glyph[2] * factor));
-        bound.set(0, (int)round((float)(glyph[1] - yBold) * factor), cw, (int)round((float)glyph[3] * factor));
+        tex = glyph->rect;
+        auto cw(ch == ' ' ? 10 : (int)round((float)tex.w * factor));
+        bound.set(0, (int)round((float)(tex.y - yBold) * factor), cw, (int)round((float)tex.h * factor));
+        tex.w += tex.x; tex.h += tex.y;
     }
     return glyph != nullptr;
 }
@@ -108,9 +109,13 @@ int zTextPaint::indexReverseOf(cstr _text, int length, int screenLimit) const {
     return _count;
 }
 
-zTextSpanImage::zTextSpanImage(cstr image, int tile, float factor, int _color) {
-    dr.init(0, _color, tile, 0, factor);
-    dr.texture = manager->cache->get(image, nullptr);
+zTextSpanImage::zTextSpanImage(cstr image, cstr tile, float factor, int _color) {
+    dr.init(0, _color, -1, 0, factor);
+    auto tex(manager->cache->get(image, nullptr));
+    if(tex) {
+        dr.texture  = tex;
+        dr.tile     = tex->getTile(tile);
+    }
 }
 
 void zTextSpanImage::draw(int x, int y, int hmax, zTextPaint *paint, crti& clip) {
@@ -123,12 +128,14 @@ void zTextSpanImage::draw(int x, int y, int hmax, zTextPaint *paint, crti& clip)
 }
 
 void zTextSpanImage::updateState(zTextPaint *paint) {
-    rti t(dr.texture->getTile(dr.tile));
-    paint->width = ((int)round(t.w * dr.scale) + 4_dp);
-    paint->setSize((int)round(t.h * dr.scale));
+    auto t(dr.texture->getTile(dr.tile));
+    if(t) {
+        paint->width = ((int) round(t->rect.w * dr.scale) + 4_dp);
+        paint->setSize((int) round(t->rect.h * dr.scale));
+    }
 }
 
-zTextSpanBullet::zTextSpanBullet(bool _ordered, int _index) : zTextSpanImage("zssh", z.R.integer.iconBullet, 1, 0xffffffff), ordered(_ordered) {
+zTextSpanBullet::zTextSpanBullet(bool _ordered, int _index) : zTextSpanImage("zssh", "iconBullet", 1, 0xffffffff), ordered(_ordered) {
     if(_ordered) {
         _idx = z_ntos(&_index, RADIX_DEC, true);
         _idx += ". "; dr.typeTri = GL_TRIANGLES;
@@ -181,14 +188,14 @@ void zViewText::infoSpans() {
 
 void zViewText::changeSpans(int pos, int length) {
     getSpan(SPAN_POSITION, pos, false, [this, length](int i, SPAN* s) {
-        s->e += length;
-        if(s->e <= s->s) cacheSpans.erase(i--, 1);
-        for(int j = i + 1 ; j < cacheSpans.size(); j++) {
-            s = cacheSpans[j];
-            s->s += length; s->e += length;
-            if(s->e <= s->s) cacheSpans.erase(j--, 1);
-        }
+        s->e += length; if(s->length() <= 0) spans.erase(i, 1);
     });
+    spans.enumerate(false, [this, pos, length](int i, SPAN* s) {
+        if(pos >= s->s) return false;
+        for(; i < spans.size(); i++) { s = spans[i]; s->s += length; s->e += length; }
+        return true;
+    });
+    clearCacheSpans(false);
 }
 
 bool zViewText::getMinRangePos(int mn, int& ret) const {
@@ -245,13 +252,13 @@ void zViewText::mergeSpans(int count) {
 }
 
 void zViewText::getSpan(int what, int arg, bool reverse, const std::function<void(int, SPAN*)>& act) {
-    cacheSpans.enumerate(reverse, [what, arg, act](int i, SPAN* s) {
+    spans.enumerate(reverse, [what, arg, act](int i, SPAN* s) {
         switch(what) {
             case SPAN_FLAGS: if(s->f != arg) return false; break;
-            case SPAN_POSITION: if(arg < s->s || arg > s->e) return false; break;
+            case SPAN_POSITION: if(arg < s->s || arg >= s->e) return false; break;
             case SPAN_TYPE: if(s->span->typeId() != arg) return false; break;
         }
-        act(i, s); return true;
+        act(i, s); return what != SPAN_POSITION;
     });
 }
 
@@ -260,12 +267,9 @@ zViewText::SPAN* zViewText::setSpan(zTextSpan* _span, int start, int end, int fl
     auto len(end - start); if(len < 0) { delete _span; return nullptr; }
     if(flags == SPAN_FLAGS_DEFAULT && len == 0) {
         // найти последний c флагом SPAN_FLAGS_MARK
-        spans.enumerate(true, [_span, end](int i, SPAN* s) {
-            if(s->f == SPAN_FLAGS_MARK) {
-                s->f = SPAN_FLAGS_DEFAULT; s->e = end;
-                delete _span; return true;
-            }
-           return false;
+        getSpan(SPAN_FLAGS, SPAN_FLAGS_MARK, true, [end, _span](int, SPAN* s) {
+            s->f = SPAN_FLAGS_DEFAULT; s->e = end;
+            delete _span; return true;
         });
         return nullptr;
     }
@@ -328,8 +332,8 @@ bool zViewText::setHtmlText(czs& text, const std::function<bool(cstr tag, bool e
                     span = new zTextSpanStrikeline(); break;
                 // img
                 case 0x9ae16064:
-                    _html->text += "!";
-                    span = new zTextSpanImage(_html->getStringAttr("src", "znull"), _html->getIntegerAttr("t", RADIX_DEC, z.R.integer.rect),
+                    _html->text += " ";
+                    span = new zTextSpanImage(_html->getStringAttr("src", "znull"), _html->getStringAttr("t", "rect"),
                                               _html->getFloatAttr("s", 1.0f), _html->getColorAttr("c", 0xffffffff));
                     flags = SPAN_FLAGS_SPECIFIC;
                     break;
@@ -372,7 +376,7 @@ bool zViewText::setHtmlText(czs& text, const std::function<bool(cstr tag, bool e
         }
         return span != nullptr;
     });
-    setText(html.text, true, false);
+    realText = html.text;
     // убрать все спаны с пометной mark
     for(int i = 0; i < spans.size(); i++) {
         if(spans[i]->f == SPAN_FLAGS_MARK) spans.erase(i--, 1, true);
@@ -381,7 +385,7 @@ bool zViewText::setHtmlText(czs& text, const std::function<bool(cstr tag, bool e
 }
 
 szi zViewText::textWrapSpan(cstr _text, int widthRect) {
-    int lines(1), maxHeight(0), maxWidth(0), sepPos(0), sepWidth(0), _count;
+    int maxHeight(0), maxWidth(0), sepPos(0), sepWidth(0), _count;
     SPAN* _sp(nullptr);
     // разбить текст по спец. символам по ширине ректа
     if(widthRect <= 0 || getLines() == 1) widthRect = INT_MAX;
@@ -404,14 +408,13 @@ szi zViewText::textWrapSpan(cstr _text, int widthRect) {
                 // определить новую ширину строки
                 auto ln(paint->getWidthChar(ch) + width);
                 // если длина подстроки меньше ширины ректа и символ не "новая строка" = дальше
-                if(_stext == _text || lines >= getLines() || ln < widthRect) { width = ln; _text += _count; _pos++; continue; }
+                if(_stext == _text || ln < widthRect) { width = ln; _text += _count; _pos++; continue; }
             } else { separator = nullptr; _text++; }
             // добавить подстроку в массив
             if(separator) _text = separator, width = sepWidth, _pos = sepPos, sp = _sp, i = _i, separator = nullptr;
             _text = addCacheSubString(_stext, _text, width, height, true);
             maxWidth = z_max(width, maxWidth); maxHeight += height + offs;
-            _stext = _text; lines++;
-            width = paint->getItalic(); height = paint->getSize();
+            _stext = _text; width = paint->getItalic(); height = paint->getSize();
         }
     }
     // последняя подстрока
@@ -472,10 +475,10 @@ void zViewText::drawTextSpan(crti& clip) {
 
 void zViewText::insertText(int pos, cstr _text) {
     changeSpans(pos, z_countUTF8(_text));
-    setText(realText.insert(pos, _text), true, false);
+    setText(realText.insert(pos, _text), true);
 }
 
 void zViewText::removeText(int pos, int count) {
     changeSpans(pos, -count);
-    setText(realText.remove(pos, count), true, false);
+    setText(realText.remove(pos, count), true);
 }

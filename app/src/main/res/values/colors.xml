@@ -34,13 +34,13 @@
     <color name="textMessageLight">#64fad2</color>
     <!-- цвет текста заголовка формы -->
     <color name="textHeaderDark">#41bacf</color>
-    <color name="textHeaderLight">#a9f145</color>
+    <color name="textHeaderLight">#3A08C1</color>
     <!-- цвет ссылки -->
     <color name="textUrlDark">#b86a21</color>
-    <color name="textUrlLight">#216ab8</color>
+    <color name="textUrlLight">#8A025D</color>
     <!-- общий цвет подсветки фона текста -->
-    <color name="backgroundHighlightDark">#C6B72B</color>
-    <color name="backgroundHighlightLight">#226D8F</color>
+    <color name="backgroundHighlightDark">#DA560B</color>
+    <color name="backgroundHighlightLight">#A50181</color>
     <!-- общий цвет текста -->
     <color name="textDark">#f79995</color>
     <color name="textLight">#9151ea</color>

@@ -72,8 +72,6 @@ public:
     float scaleFactor(u32 value, bool text) const;
     // информация о объекте
     void info() const;
-    // рект тайла
-    rti rectTile(u32 _tile) const { return (texture->getTile(_tile)); }
     // фактор масштабирования
     float scale{1.0f};
     // тип треугольников

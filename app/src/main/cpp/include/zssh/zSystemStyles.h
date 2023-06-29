@@ -507,6 +507,7 @@ static zStyle styles_z_themedark[] = {
 	{ Z_THEME_COLOR_TEXT_TABBED, z.R.color.textTabbedDark },
 	{ Z_THEME_COLOR_TEXT_PROGRESS, z.R.color.textProgressDark },
 	{ Z_THEME_COLOR_TEXT_MENU, z.R.color.textMenuDark },
+	{ Z_THEME_COLOR_BK_HIGHLIGHT, z.R.color.backgroundHighlightDark },
 	{ Z_THEME_TILE1_PROGRESS, z.R.integer.rectRound },
 	{ Z_THEME_TILE2_PROGRESS, z.R.integer.rectRound },
 	{ Z_THEME_TILE1_SLIDER, z.R.integer.sliderTrack1 },
@@ -539,6 +540,7 @@ static zStyle styles_z_themelight[] = {
 	{ Z_THEME_COLOR_TEXT_TABBED, z.R.color.textTabbedLight },
 	{ Z_THEME_COLOR_TEXT_PROGRESS, z.R.color.textProgressLight },
 	{ Z_THEME_COLOR_TEXT_MENU, z.R.color.textMenuLight },
+	{ Z_THEME_COLOR_BK_HIGHLIGHT, z.R.color.backgroundHighlightLight },
 	{ Z_THEME_TILE1_PROGRESS, z.R.integer.gradientRadial },
 	{ Z_THEME_TILE2_PROGRESS, z.R.integer.gradientRadial },
 	{ Z_THEME_TILE1_SLIDER, z.R.integer.sliderTrack2 },
@@ -781,7 +783,8 @@ static zStyle styles_z_seek2[] = {
 static zStyle styles_z_edit2[] = {
 	{ Z_STYLES, z.R.style.edittext },
 	{ Z_MODE, ZS_EDIT_TEXT },
-	{ Z_TEXT_STYLE | ZT_END, ZS_TEXT_NORMAL }
+	{ Z_TEXT_STYLE, ZS_TEXT_NORMAL },
+	{ Z_TEXT_LINES | ZT_END, 1 }
 };
 
 static zStyle styles_z_zlinearlayout2[] = {

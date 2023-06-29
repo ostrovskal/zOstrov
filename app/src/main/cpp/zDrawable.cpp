@@ -190,7 +190,7 @@ void zDrawable::drawCommon(crti& clip, const zMatrix& m, bool fbo) const {
 }
 
 void zDrawable::measure(int width, int height, int pivot, bool isSave) {
-    u16* ptr;
+    zTexture::TILE_TTL* _tile;
     if(index >= DRW_FBO) {
         // проверить на текстуру
         if(!(texture && texture->isEqual(width, height))) {
@@ -203,13 +203,11 @@ void zDrawable::measure(int width, int height, int pivot, bool isSave) {
 //            DLOG("fbo:%i %i %s", width, height, view->typeName());
         }
     }
-    if(texture && (ptr = texture->getTile(tile))) {
-        rti tex(ptr); auto isPatch9(false);
+    if(texture && (_tile = texture->getTile(tile))) {
+        rti tex(_tile->rect);
         // определение патча
-        if(*(u32*)(ptr + 4)) {
-            if(!(isPatch9 = (ptr[4] != 0xffff)))
-                tex = texture->getSize();
-        }
+        auto isPatch9(_tile->patch9 != 0);
+        //if(!isPatch9) tex = texture->getSize();
         // определение количества вершин
         make(isPatch9 * 22 + 4);
         // определение ректа
@@ -228,7 +226,7 @@ void zDrawable::measure(int width, int height, int pivot, bool isSave) {
         tex.w += tex.x; tex.h += tex.y;
         if(isPatch9) {
             // формирование патча
-            makePatch9(bound, tex, (u8*)&ptr[4]);
+            makePatch9(bound, tex, (u8*)&_tile->patch9);
         } else {
             // формирование квада
             makeQuad(bound, tex, vertices);
@@ -361,17 +359,19 @@ szi zDrawable::resolveSize(int wmax, int hmax, u32 gravity) const {
     int w(0), h(0);
     // определить габариты картинки
     if(texture) {
-        auto rect(rectTile(tile));
-        w = rect.w, h = rect.h; auto rel((float)w / (float)h);
-        switch(gravity & ZS_SCALE_MASK) {
-            case ZS_SCALE_HEIGHT: h = hmax; w = (int)roundf(h * rel); break;
-            case ZS_SCALE_WIDTH:  w = wmax; h = (int)roundf(w * rel); break;
-            case ZS_SCALE_MIN: h = z_min(w, h); w = (int)roundf(h * rel); break;
-            case ZS_SCALE_MAX: h = z_max(w, h); w = (int)roundf(h * rel); break;
-            default: w *= 1_dp; h *= 1_dp; break;
+        auto _tile(texture->getTile(tile));
+        if(_tile) {
+            w = _tile->rect.w, h = _tile->rect.h; auto rel((float)w / (float)h);
+            switch(gravity & ZS_SCALE_MASK) {
+                case ZS_SCALE_HEIGHT: h = hmax; w = (int)roundf(h * rel); break;
+                case ZS_SCALE_WIDTH:  w = wmax; h = (int)roundf(w * rel); break;
+                case ZS_SCALE_MIN:    h = z_min(w, h); w = (int)roundf(h * rel); break;
+                case ZS_SCALE_MAX:    h = z_max(w, h); w = (int)roundf(h * rel); break;
+                default: w *= 1_dp; h *= 1_dp; break;
+            }
+            w = (int)roundf((float)w * scale);
+            h = (int)roundf((float)h * scale);
         }
-        w = (int)roundf((float)w * scale);
-        h = (int)roundf((float)h * scale);
     }
     return { w, h };
 

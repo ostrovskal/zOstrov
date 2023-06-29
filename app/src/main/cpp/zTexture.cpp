@@ -75,17 +75,20 @@ void zTexture::makeTexture(u8* ptr, u32 size) {
         // 3. alpha
         int sizeAlpha(ww * hh);
         alpha = z_rle_decompress(ptr, head->sizeAlpha, sizeAlpha);
-        ptr += head->sizeAlpha; count = head->count;
+        ptr += head->sizeAlpha;
         // 4. tiles
-        delete[] tiles; tiles = new u16[count * 6];
-        memcpy(tiles, ptr, count * 12); ptr += count * 12;
+        tiles.clear();
+        for(int i = 0 ; i < head->count; i++) {
+            TILE_TTL tl((u16*)ptr);
+            tiles += tl; ptr += 32;
+        }
         // 5. rgb
         if(head->sizeRgb) {
             // если есть цветовые данные
             zJpg jpg(ptr, head->sizeRgb);
             if(!jpg.isValid()) {
                 ILOG("Unable to create texture %s", name.str());
-                delete[] alpha; delete[] tiles;
+                delete[] alpha; tiles.clear();
                 return;
             }
             // совместить ALPHA и распакованный JPEG
@@ -118,9 +121,9 @@ void zTexture::makeTexture(u8* ptr, u32 size) {
 }
 
 int zTexture::widthGlyph(int ch, float factor) const {
-    if(ch == 32 || ch == 256) return 10;
+    if(ch == 32 || ch == (getCountTiles() + 32)) return 10;
     auto ptr(paramGlyph(ch));
-    return ptr ? (int)round((float)ptr[2] * factor) : 0;
+    return ptr ? (int)round((float)ptr->rect.w * factor) : 0;
 }
 
 u32 zTexture::makeEmpty(int internalFormat, int format, int width, int height) {
@@ -148,8 +151,8 @@ u32 zTexture::makeFBO(int width, int height) {
             return 0;
         }
         // 2. создаем параметры
-        tiles[2] = (u16) width;
-        tiles[3] = (u16) height;
+        tiles[0].rect.w = width;
+        tiles[0].rect.h = height;
         _size.set(width, height);
         _rsize.set(1.0f / (float) _size.w, 1.0f / (float) _size.h);
         // 3. создаем FBO
@@ -180,7 +183,7 @@ void zTexture::setFBO(bool set, bool clear) {
     if(set) {
         // устанавливаем активный FBO
         glBindFramebuffer(GL_FRAMEBUFFER, idFBO);
-        sz.set(tiles + 2);
+        sz = tiles[0].rect.size();
         // производим очистку буфера цвета
         if(clear) {
 //            glInvalidateFramebuffer();

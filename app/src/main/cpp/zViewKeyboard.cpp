@@ -31,7 +31,7 @@ zViewKeyboard::zViewKeyboard(cstr nameLayouts) : zViewGroup(styles_default, z.R.
             return;
         }
         const zXml::zNode* nodeLyt, *nodeBut;
-        BUTTON but; idx = 0;
+        BUTTON but; idx = 0; auto tex(manager->cache->get("zssh", nullptr));
         while((nodeLyt = root->getTag(idx++))) {
             if(nodeLyt->getName() != "layout") continue;
             static cstr _switch[] = { "name", "shift", "spec", "lang", "input" };
@@ -46,7 +46,7 @@ zViewKeyboard::zViewKeyboard(cstr nameLayouts) : zViewGroup(styles_default, z.R.
             while((nodeBut = nodeLyt->getTag(_idx++))) {
                 static cstr _coords[] = { "x", "y", "width", "height" };
                 for(int i = 0 ; i < 4; i++) but.rview[i] = z_ston(nodeBut->getAttrVal(_coords[i], "0"), RADIX_DEC);
-                but.icon = z_ston(nodeBut->getAttrVal("icon", "-1"), RADIX_DEC);
+                but.icon = tex->getTile(nodeBut->getAttrVal("icon", ""));
                 but.color= z_ston(nodeBut->getAttrVal("color", "ffffffff"), RADIX_HEX);
                 but.size = z_dp(z_ston(nodeBut->getAttrVal("size", "23"), RADIX_DEC));
                 but.spec = nodeBut->getAttrVal("spec", "");
@@ -56,6 +56,7 @@ zViewKeyboard::zViewKeyboard(cstr nameLayouts) : zViewGroup(styles_default, z.R.
             }
             layouts += lyt;
         }
+        manager->cache->recycle(tex);
         // основные
         minHeight= z_ston(root->getAttrVal("minHeight", "40"), RADIX_DEC);
         idx      = layouts.indexOf(root->getAttrVal("default", ""));

@@ -20,7 +20,7 @@
 	grp12->attach(new zViewRadio(styles_z_radiodark, z.R.id.radioDark, z.R.string.radio_dark, 1), 
 			0, 1, VIEW_WRAP, VIEW_MATCH);
 	grp12->attach(new zViewCheck(styles_z_chkbox, z.R.id.chkbox, z.R.string.checkbox_text), 
-			0, 2, VIEW_WRAP, VIEW_MATCH);
+			0, 1, VIEW_WRAP, VIEW_MATCH);
 	grp12->attach(new zViewRadio(styles_z_radiolight, z.R.id.radioLight, z.R.string.radio_light, 1), 
 			0, 1, VIEW_WRAP, VIEW_MATCH);
 	grp01->attach(new zViewRibbon(styles_z_list1, z.R.id.list1, false), 
