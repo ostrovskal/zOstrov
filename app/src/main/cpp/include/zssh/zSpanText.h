@@ -74,12 +74,10 @@ public:
     virtual bool isSkip() const { return false; }
     // позиционирование
     virtual void draw(int x, int y, int hmax, zTextPaint *paint, crti& clip) { }
+    // установка изображения(для ссылки)
+    virtual void setImage(zTextSpan* _span) { }
     // клик по спану
     virtual bool click() { return false; }
-    // признак кликабельности
-    virtual bool isClickable() const { return false; }
-    // признак изображения
-    virtual bool isImage() const { return false; }
     // вернуть тип спана
     virtual int typeId() const { return spans::SPAN_DEFAULT; }
 };
@@ -145,8 +143,6 @@ public:
     zTextSpanImage(cstr _image, cstr _tile, float _factor, int _color = 0);
     // обновление состояния
     virtual void updateState(zTextPaint *paint) override;
-    // признак изображения
-    virtual bool isImage() const { return true; }
     // отрисовка
     virtual void draw(int x, int y, int hmax, zTextPaint *paint, crti& clip) override;
     // вернуть тип спана
@@ -199,8 +195,9 @@ public:
         paint->setStyle(paint->getStyle() | ZS_TEXT_UNDERLINE);
         bkg = paint->bkColor;
     }
-    // признак кликабельности
-    virtual bool isClickable() const { return true; }
+    void setImage(zTextSpan* _span) override {
+        if(dynamic_cast<zTextSpanImage*>(_span)) image = _span;
+    }
     // отрисовка
     virtual void draw(int x, int y, int hmax, zTextPaint *paint, crti& clip) override {
         if(image) image->draw(x, y, hmax, paint, clip);

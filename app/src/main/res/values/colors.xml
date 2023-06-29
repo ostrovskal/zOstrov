@@ -21,8 +21,8 @@
     <color name="themeDark">#4A2EED</color>
     <color name="themeLight">#b87623</color>
     <!-- цвет селектора -->
-    <color name="selectorDark">#a000a0</color>
-    <color name="selectorLight">#00a0a0</color>
+    <color name="selectorDark">#930A93</color>
+    <color name="selectorLight">#2C27BD</color>
     <!-- цвет разделителя -->
     <color name="dividerDark">#5c5c75</color>
     <color name="dividerLight">#4f4f4f</color>
@@ -38,9 +38,6 @@
     <!-- цвет ссылки -->
     <color name="textUrlDark">#b86a21</color>
     <color name="textUrlLight">#8A025D</color>
-    <!-- общий цвет подсветки фона текста -->
-    <color name="backgroundHighlightDark">#DA560B</color>
-    <color name="backgroundHighlightLight">#A50181</color>
     <!-- общий цвет текста -->
     <color name="textDark">#f79995</color>
     <color name="textLight">#9151ea</color>

@@ -296,7 +296,7 @@ void zViewText::onInit(bool _theme) {
     zView::onInit(_theme);
     setTextColorHighlight(theme->styles->_int(Z_THEME_COLOR_TEXT_HIGHLIGHT, 0xffa0a0a0));
     setTextColorShadow(theme->styles->_int(Z_THEME_COLOR_TEXT_SHADOW, 0xff000000));
-    bkgHighlight = theme->styles->_int(Z_THEME_COLOR_BK_HIGHLIGHT, 0xff909090);
+    bkgHighlight = theme->styles->_int(Z_THEME_COLOR_SELECTOR, 0xff909090);
     styles->enumerate([this, _theme](u32 attr) {
         auto v(&zTheme::value); auto val(v->u);
         attr |= _theme * ZTT_THM;

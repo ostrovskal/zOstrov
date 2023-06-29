@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Thu Jun 29 06:44:46 2023
+// Thu Jun 29 11:13:43 2023
 
 #pragma once
 
@@ -77,14 +77,13 @@ struct _z {
 				lime	= 0xFF00FF00, 	olive	= 0xFF008080, 	yellow	= 0xFF00F0F0, 
 				teal	= 0xFF808000, 	aqua	= 0xFFFFFF00, 	gray	= 0xFF808080, 
 				white	= 0xFFFFFFFF, 	themeDark	= 0xFFED2E4A, 	themeLight	= 0xFF2376B8, 
-				selectorDark	= 0xFFA000A0, 	selectorLight	= 0xFFA0A000, 	dividerDark	= 0xFF755C5C, 
+				selectorDark	= 0xFF930A93, 	selectorLight	= 0xFFBD272C, 	dividerDark	= 0xFF755C5C, 
 				dividerLight	= 0xFF4F4F4F, 	textHighlightDark	= 0xFFF17056, 
 				textHighlightLight	= 0xFF283EAA, 	textMessageDark	= 0xFFD2FA64, 
 				textMessageLight	= 0xFFD2FA64, 	textHeaderDark	= 0xFF58F790, 
 				textHeaderLight	= 0xFFEA678A, 	textUrlDark	= 0xFF216AB8, 
-				textUrlLight	= 0xFF5D028A, 	backgroundHighlightDark	= 0xFF0B56DA, 
-				backgroundHighlightLight	= 0xFF8101A5, 	textDark	= 0xFF9599F7, 
-				textLight	= 0xFFEA5191, 	textShadowDark	= 0xFF101010, 	textShadowLight	= 0xFF101010, 
+				textUrlLight	= 0xFF5D028A, 	textDark	= 0xFF9599F7, 	textLight	= 0xFFEA5191, 
+				textShadowDark	= 0xFF101010, 	textShadowLight	= 0xFF101010, 
 				tabbedDark	= 0xFFA0A000, 	tabbedLight	= 0xFF00A0A0, 	textTabbedDark	= 0xFFB0B000, 
 				textTabbedLight	= 0xFF007070, 	progressDark	= 0xAF303030, 
 				progressLight	= 0xAF505050, 	primaryDark	= 0xFFFF7000, 	primaryLight	= 0xFF00FF00, 

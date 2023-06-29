@@ -224,8 +224,7 @@ enum ThemeStyles {
     Z_THEME_TILE2_SLIDER	        = (154 | ZTT_INT),
     Z_THEME_TILES_FORM			    = (155 | ZTT_INT),
     Z_THEME_MODE_SLIDER             = (156 | ZTT_INT),
-    Z_THEME_SIZE_TEXT_TEXT 		    = (157 | ZTT_DMN),
-    Z_THEME_COLOR_BK_HIGHLIGHT      = (158 | ZTT_INT)
+    Z_THEME_SIZE_TEXT_TEXT 		    = (157 | ZTT_DMN)
 };
 
 #include "zR.h"

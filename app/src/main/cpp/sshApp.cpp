@@ -99,9 +99,9 @@ void sshApp::setContent() {
     }
     if(txt) {
         txt->setLines(51);
-        txt->setText(R"(<h1>Начало текста</h1><p>Завершение <big>___1</big>1___2<small>2___4</small>4<b>работы фоновых</b> приложений после блокировки <s>экрана <c value="ff00ff00">помогает</c> экономить заряд</s> аккумулятора.
+        txt->setText(R"(<h1>Начало текста</h1><p>Завершение <a href="serg"><b>работы фоновых приложений после блокировки</b></a> <s>экрана <c value="ff00ff00">помогает</c> экономить заряд</s> аккумулятора.
 <p>С другой стороны, в этом случае<img src="zssh" t="iconSelf" f="0.75"/> вы не будете получать <a href="self"><img src="zx_icons" t="iconApp_round" f="1.0"/></a> новые сообщения (электронные<sup>1</sup>, текстовые<sub>2</sub>, из соцсетей и т.д.).
-<ul start="10" reversed="1"><li><a href="self">serg</a></li><li>maxim</li><li>olga</li></ul>)", true);
+<ul start="10" reversed="1"><li><a href="bullet">Сергей</a></li><li>Максим</li><li>Ольга</li></ul>)", true);
         txt->setHtmlText(txt->getText(), [](cstr tag, bool end, zHtml* html) { return false; });
         txt->setOnClickUrl([](zView*, czs& ref) {
            DLOG("click url %s", ref.str());

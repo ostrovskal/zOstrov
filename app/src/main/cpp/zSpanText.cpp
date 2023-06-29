@@ -135,7 +135,7 @@ void zTextSpanImage::updateState(zTextPaint *paint) {
     }
 }
 
-zTextSpanBullet::zTextSpanBullet(bool _ordered, int _index) : zTextSpanImage("zssh", "iconBullet", 1, 0xffffffff), ordered(_ordered) {
+zTextSpanBullet::zTextSpanBullet(bool _ordered, int _index) : zTextSpanImage("zssh", "iconBullet", 0.5f, 0xffffffff), ordered(_ordered) {
     if(_ordered) {
         _idx = z_ntos(&_index, RADIX_DEC, true);
         _idx += ". "; dr.typeTri = GL_TRIANGLES;
@@ -227,13 +227,9 @@ void zViewText::mergeSpans(int count) {
             for(auto sp : spans) {
                 if(s < sp->s || e > sp->e) continue;
                 sp->span->updateState(real->paint);
-                auto t1(real->span->typeId()), t2(sp->span->typeId());
-                if(real->span->isClickable() || sp->span->isClickable()) {
-                    auto url(dynamic_cast<zTextSpanUrl*>(real->span->isClickable() ? real->span : sp->span));
-                    auto image(dynamic_cast<zTextSpanImage*>(real->span->isImage() ? real->span : sp->span));
-                    if(image) url->image = image;
-                }
-                real->span = (t1 > t2 ? real->span : sp->span);
+                // если в ссылке изображение
+                real->span->setImage(sp->span);
+                real->span = (real->span->typeId() > sp->span->typeId() ? real->span : sp->span);
             }
         }
 //        DLOG("1. fill range");
@@ -427,7 +423,7 @@ szi zViewText::textWrapSpan(cstr _text, int widthRect) {
 }
 
 void zViewText::drawTextSpan(crti& clip) {
-    URL* _url(nullptr); urls.clear();
+    urls.clear();
     // отрисовка
     auto tbound(&drw[DRW_TXT]->bound); pti coord(tbound->xy());
     int indexCache(0), indexText(0);
@@ -440,12 +436,6 @@ void zViewText::drawTextSpan(crti& clip) {
         if(sp->span->isSkip()) { indexText++; continue; }
         // корректировать вертикальную позицию, относительно базовой линии шрифта
         auto subH(paint->correctBaseline(cacheStr->size));
-        // проверить на ссылку
-        if(_url) {
-            _url->rect.w = _url->rect.x + coord.x;
-            urls += _url; status |= ZS_CLICKABLE;
-        }
-        _url = (sp->span->typeId() == spans::SPAN_URL ? new URL(rti(coord.x, coord.y, 0, cacheStr->size), sp) : nullptr);
         while(posSpan < sp->e) {
             // сдвинуть по верт. относительно общей высоты строки
             coord.y += subH;
@@ -455,6 +445,11 @@ void zViewText::drawTextSpan(crti& clip) {
             // следующая позиция
             indexText += lenText; posSpan += lenText;
             auto wpix(drawFragment(txt, lenText, paint, cacheStr, coord, clip, subH));
+            // проверить на ссылку
+            if(sp->span->typeId() == spans::SPAN_URL) {
+                urls += new URL(rti(coord.x, coord.y, wpix, cacheStr->size), sp);
+                status |= ZS_CLICKABLE;
+            }
             // проверка - если спан сам себя рисует
             sp->span->draw(coord.x, coord.y, cacheStr->size, paint, clip);
             // корректировать позицию для следующего спана

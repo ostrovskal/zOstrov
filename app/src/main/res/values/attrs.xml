@@ -242,7 +242,6 @@
 		<attr name="themeColorTextTabbed" format="color|string" />
 		<attr name="themeColorTextProgress" format="color|string" />
 		<attr name="themeColorTextMenu" format="color|string" />
-		<attr name="themeColorBackgroundHighlight" format="color|string" />
 		<attr name="themeTile1Progress" format="integer|string" />
 		<attr name="themeTile2Progress" format="integer|string" />
 		<attr name="themeTile1Slider" format="integer|string" />
