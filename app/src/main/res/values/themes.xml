@@ -2,7 +2,7 @@
 <resources>
     <style name="themeDark">
         <item name="themeName">@string/themeDark</item>
-        <item name="themeFont">@drawable/font1</item>
+        <item name="themeFont">@drawable/font_default</item>
         <item name="themeBitmap">@drawable/zssh</item>
         <item name="themeIcons">@drawable/zssh</item>
         <item name="themeColor">@color/themeDark</item>
@@ -33,7 +33,7 @@
     </style>
     <style name="themeLight">
         <item name="themeName">@string/themeLight</item>
-        <item name="themeFont">@drawable/font1</item>
+        <item name="themeFont">@drawable/font_default</item>
         <item name="themeBitmap">@drawable/zssh</item>
         <item name="themeIcons">@drawable/zssh</item>
         <item name="themeColor">@color/themeLight</item>

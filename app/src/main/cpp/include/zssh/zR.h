@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Thu Jun 29 11:45:37 2023
+// Thu Jun 29 15:49:24 2023
 
 #pragma once
 
@@ -10,9 +10,8 @@ struct _z {
 	struct _R {
 		struct _drawable {
 			enum { 
-				font1	= 0x00100000, 	font2	= 0x00100001, 	font3	= 0x00100002, 
-				fontDefault	= 0x00100003, 	znull	= 0x00100004, 	zssh	= 0x00100005, 
-				zx_icons	= 0x00100006, 			};
+				font_default	= 0x00100000, 	znull	= 0x00100001, 	zssh	= 0x00100002, 
+				zx_icons	= 0x00100003, 			};
 		}; 
 		_drawable drawable;
 		struct _integer {
@@ -133,34 +132,34 @@ struct _z {
 		_id id;
 		struct _string {
 			enum { 
-				app_name	= 0x00100007, 	acontrollerMap	= 0x00100008, 	ccontrollerMap	= 0x00100009, 
-				themeDark	= 0x0010000A, 	themeLight	= 0x0010000B, 	textSpan	= 0x0010000C, 
-				first_form	= 0x0010000D, 	enter_family	= 0x0010000E, 	press_me	= 0x0010000F, 
-				sergey	= 0x00100010, 	progress	= 0x00100011, 	text_on_button	= 0x00100012, 
-				mode_already	= 0x00100013, 	switcher	= 0x00100014, 	activate	= 0x00100015, 
-				slider_text	= 0x00100016, 	prompt	= 0x00100017, 	radio_dark	= 0x00100018, 
-				radio_light	= 0x00100019, 	checkbox_text	= 0x0010001A, 	menuOpenSave	= 0x0010001B, 
-				menuSettings	= 0x0010001C, 	menuProperties	= 0x0010001D, 
-				menuSound	= 0x0010001E, 	menuPokes	= 0x0010001F, 	menuMru	= 0x00100020, 
-				menuOperations	= 0x00100021, 	menuReset	= 0x00100022, 	menuRestore	= 0x00100023, 
-				menuExecute	= 0x00100024, 	menuExit	= 0x00100025, 	menuModel	= 0x00100026, 
-				menuTurbo	= 0x00100027, 	menuFilter	= 0x00100028, 	menuTape	= 0x00100029, 
-				menuDebugger	= 0x0010002A, 	menuExeDebugger	= 0x0010002B, 
-				menuMagic	= 0x0010002C, 	menuDisk1	= 0x0010002D, 	menuDisk2	= 0x0010002E, 
-				menuDisk3	= 0x0010002F, 	menuDisk4	= 0x00100030, 	menuSinclair48	= 0x00100031, 
-				menuSinclair128	= 0x00100032, 	menuPentagon	= 0x00100033, 
-				menuScorpion	= 0x00100034, 	menuMruEmpty	= 0x00100035, 	menuKeyJoy	= 0x00100036, 
-				menuLabel	= 0x00100037, 	menuCode	= 0x00100038, 	menuValue	= 0x00100039, 
-				menuQuickSave	= 0x0010003A, 	menuAsm	= 0x0010003B, 	menuTzx	= 0x0010003C, 
-				podskazka	= 0x0010003D, 	Perekljuchatelw	= 0x0010003E, 	Upravlenie_faylami	= 0x0010003F, 
-				Read_only	= 0x00100040, 	serg	= 0x00100041, 	changeSpans	= 0x00100042, 
-				Nastroyki	= 0x00100043, 	CPU	= 0x00100044, 	BORDER	= 0x00100045, 
-				JOYSTICK	= 0x00100046, 	KEYBOARD	= 0x00100047, 			};
+				app_name	= 0x00100004, 	acontrollerMap	= 0x00100005, 	ccontrollerMap	= 0x00100006, 
+				themeDark	= 0x00100007, 	themeLight	= 0x00100008, 	textSpan	= 0x00100009, 
+				first_form	= 0x0010000A, 	enter_family	= 0x0010000B, 	press_me	= 0x0010000C, 
+				sergey	= 0x0010000D, 	progress	= 0x0010000E, 	text_on_button	= 0x0010000F, 
+				mode_already	= 0x00100010, 	switcher	= 0x00100011, 	activate	= 0x00100012, 
+				slider_text	= 0x00100013, 	prompt	= 0x00100014, 	radio_dark	= 0x00100015, 
+				radio_light	= 0x00100016, 	checkbox_text	= 0x00100017, 	menuOpenSave	= 0x00100018, 
+				menuSettings	= 0x00100019, 	menuProperties	= 0x0010001A, 
+				menuSound	= 0x0010001B, 	menuPokes	= 0x0010001C, 	menuMru	= 0x0010001D, 
+				menuOperations	= 0x0010001E, 	menuReset	= 0x0010001F, 	menuRestore	= 0x00100020, 
+				menuExecute	= 0x00100021, 	menuExit	= 0x00100022, 	menuModel	= 0x00100023, 
+				menuTurbo	= 0x00100024, 	menuFilter	= 0x00100025, 	menuTape	= 0x00100026, 
+				menuDebugger	= 0x00100027, 	menuExeDebugger	= 0x00100028, 
+				menuMagic	= 0x00100029, 	menuDisk1	= 0x0010002A, 	menuDisk2	= 0x0010002B, 
+				menuDisk3	= 0x0010002C, 	menuDisk4	= 0x0010002D, 	menuSinclair48	= 0x0010002E, 
+				menuSinclair128	= 0x0010002F, 	menuPentagon	= 0x00100030, 
+				menuScorpion	= 0x00100031, 	menuMruEmpty	= 0x00100032, 	menuKeyJoy	= 0x00100033, 
+				menuLabel	= 0x00100034, 	menuCode	= 0x00100035, 	menuValue	= 0x00100036, 
+				menuQuickSave	= 0x00100037, 	menuAsm	= 0x00100038, 	menuTzx	= 0x00100039, 
+				podskazka	= 0x0010003A, 	Perekljuchatelw	= 0x0010003B, 	Upravlenie_faylami	= 0x0010003C, 
+				Read_only	= 0x0010003D, 	serg	= 0x0010003E, 	changeSpans	= 0x0010003F, 
+				Nastroyki	= 0x00100040, 	CPU	= 0x00100041, 	BORDER	= 0x00100042, 
+				JOYSTICK	= 0x00100043, 	KEYBOARD	= 0x00100044, 			};
 		}; 
 		_string string;
 		struct _array {
 			enum { 
-				menuEditor	= 0x00100048, 	spinArray	= 0x00100049, 			};
+				menuEditor	= 0x00100045, 	spinArray	= 0x00100046, 			};
 		}; 
 		_array array;
 		struct _style {
@@ -290,10 +289,7 @@ static zStyles z_styles[] = {
 static zResource z_resources[] = {
 		{ 0, "" },
 		/* drawable */
-		{ _z::_R::_drawable::font1, "font1" },
-		{ _z::_R::_drawable::font2, "font2" },
-		{ _z::_R::_drawable::font3, "font3" },
-		{ _z::_R::_drawable::fontDefault, "fontDefault" },
+		{ _z::_R::_drawable::font_default, "font_default" },
 		{ _z::_R::_drawable::znull, "znull" },
 		{ _z::_R::_drawable::zssh, "zssh" },
 		{ _z::_R::_drawable::zx_icons, "zx_icons" },
@@ -418,7 +414,7 @@ static zResource z_resources_ru[] = {
 		{ _z::_R::_string::menuTzx, "Редактор TZX" },
 		/* array */
 		{ _z::_R::_array::menuEditor, "Копировать|Вставить|Вырезать|Удалить" },
-		{ _z::_R::_array::spinArray | ZT_END, "Иван|Ирина|Сергей.Викторович|Максим|Владислав|06.06.1979|Шаталов.Сергей|Ольга|Виктор.Алексеевич|Катя|Маша|Нина Шаталова|Алекс|Саша" }
+		{ _z::_R::_array::spinArray | ZT_END, "Иван|Ирина|Сергей Викторович|Максим|Владислав|06.06.1979|Шаталов Сергей|Ольга|Виктор Алексеевич|Катя|Маша|Нина Шаталова|Алекс|Саша" }
 };
 
 

@@ -35,7 +35,6 @@ static zStyle styles_z_keyboardbase[] = {
 static zStyle styles_z_keyboardalt[] = {
 	{ Z_VISIBLED, false },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
-	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_TEXT_LINES, 1 },
 	{ Z_TEXT_FOREGROUND_COLOR, 0xffafafaf },
 	{ Z_TEXT_STYLE, ZS_TEXT_BOLD },
@@ -179,6 +178,7 @@ static zStyle styles_z_list_item[] = {
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_TEXT_LINES, 1 },
+	{ Z_TEXT_ELLIPSIS, ZS_ELLIPSIS_START },
 	{ Z_IPADDING, 0x03030303 },
 	{ Z_FOREGROUND_TILES | ZT_END, z.R.integer.selectItem }
 };
@@ -213,7 +213,6 @@ static zStyle styles_z_spin_capt[] = {
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_FOREGROUND_TILES, z.R.integer.selectCapt },
-	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_IPADDING, 0x03030303 },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_THEME_COLOR_TEXT_HIGHLIGHT },
 	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_CENTER }
@@ -225,7 +224,6 @@ static zStyle styles_z_button[] = {
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_TEXT_DISTANCE, 3 },
 	{ Z_FOREGROUND_SCALE, 49151 },
-	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_PADDING, 0x03030303 },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_ICON_GRAVITY, ZS_GRAVITY_END | ZS_GRAVITY_VCENTER },
@@ -377,7 +375,6 @@ static zStyle styles_z_linearprogress[] = {
 static zStyle styles_z_circularprogress[] = {
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_FOREGROUND_COLOR, 0xffffffff },
-	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_FOREGROUND_TILES | ZT_THEME, Z_THEME_TILES_WAIT },
 	{ Z_MODE, ZS_SLIDER_ROTATE },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER | ZS_SCALE_HEIGHT },
@@ -393,7 +390,6 @@ static zStyle styles_z_switchbutton[] = {
 	{ Z_FOREGROUND_TILE1, z.R.integer.switchTrack },
 	{ Z_FOREGROUND_TILE2, z.R.integer.switchTrumb },
 	{ Z_PADDING, 0x05050505 },
-	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_GRAVITY, ZS_GRAVITY_START | ZS_GRAVITY_VCENTER },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_END | ZS_GRAVITY_VCENTER },
 	{ Z_DURATION, 20 },
@@ -414,7 +410,6 @@ static zStyle styles_z_tabwidget[] = {
 	{ Z_ICON_SCALE, 32767 },
 	{ Z_ICON_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_ICON_COLOR, 0xffffffff },
-	{ Z_TEXT_FONT, z.R.drawable.font1 },
 	{ Z_TEXT_SIZE, z.R.dimen.textText },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_THEME_COLOR_TEXT_TABBED },
 	{ Z_PADDING, 0x06020602 },
@@ -484,7 +479,7 @@ static zStyle styles_z_chartgraph[] = {
 
 static zStyle styles_z_themedark[] = {
 	{ Z_THEME_NAME, z.R.string.themeDark },
-	{ Z_THEME_FONT, z.R.drawable.font1 },
+	{ Z_THEME_FONT, z.R.drawable.font_default },
 	{ Z_THEME_BITMAP, z.R.drawable.zssh },
 	{ Z_THEME_ICONS, z.R.drawable.zssh },
 	{ Z_THEME_COLOR, z.R.color.themeDark },
@@ -516,7 +511,7 @@ static zStyle styles_z_themedark[] = {
 
 static zStyle styles_z_themelight[] = {
 	{ Z_THEME_NAME, z.R.string.themeLight },
-	{ Z_THEME_FONT, z.R.drawable.font1 },
+	{ Z_THEME_FONT, z.R.drawable.font_default },
 	{ Z_THEME_BITMAP, z.R.drawable.zssh },
 	{ Z_THEME_ICONS, z.R.drawable.zssh },
 	{ Z_THEME_COLOR, z.R.color.themeLight },
@@ -677,7 +672,7 @@ static zStyle styles_z_grid1[] = {
 static zStyle styles_z_radiodark[] = {
 	{ Z_STYLES, z.R.style.radiobutton },
 	{ Z_DECORATE, ZS_CHECKED },
-	{ Z_TEXT_ELLIPSIS, ZS_ELLIPSIS_END },
+	{ Z_TEXT_ELLIPSIS, ZS_ELLIPSIS_START },
 	{ Z_TEXT_LINES | ZT_END, 1 }
 };
 
@@ -688,7 +683,7 @@ static zStyle styles_z_chkbox[] = {
 
 static zStyle styles_z_radiolight[] = {
 	{ Z_DECORATE, ZS_CHECKED },
-	{ Z_TEXT_ELLIPSIS, ZS_ELLIPSIS_END },
+	{ Z_TEXT_ELLIPSIS, ZS_ELLIPSIS_START },
 	{ Z_STYLES | ZT_END, z.R.style.radiobutton }
 };
 

@@ -7,7 +7,7 @@
 #include "zssh/zViewText.h"
 
 zTextPaint::zTextPaint() {
-    font = manager->loadResourceTexture(theme->styles->_int(Z_THEME_FONT, z.R.drawable.fontDefault), nullptr);
+    font = manager->loadResourceTexture(theme->styles->_int(Z_THEME_FONT, z.R.drawable.font_default), nullptr);
     setStyle(ZS_TEXT_NORMAL);
     setSize(theme->styles->_int(Z_THEME_SIZE_TEXT_TEXT, 20_dp));
 }
@@ -381,10 +381,10 @@ bool zViewText::setHtmlText(czs& text, const std::function<bool(cstr tag, bool e
 }
 
 szi zViewText::textWrapSpan(cstr _text, int widthRect) {
-    int maxHeight(0), maxWidth(0), sepPos(0), sepWidth(0), _count;
+    int maxHeight(0), sepPos(0), sepWidth(0), _count;
     SPAN* _sp(nullptr);
     // разбить текст по спец. символам по ширине ректа
-    if(widthRect <= 0 || getLines() == 1) widthRect = INT_MAX;
+    if(widthRect <= 0) widthRect = INT_MAX;
     textCache.clear();
     // адрес последнего разделителя/начало подстроки/текущий символ
     cstr separator(nullptr), _stext(_text); int ch('A');
@@ -400,7 +400,7 @@ szi zViewText::textWrapSpan(cstr _text, int widthRect) {
             auto _ch(ch); if(!(ch = z_decodeUTF8(z_charUTF8(_text, &_count)))) break;
             // если это не начало подстроки и есть разделитель - запоминаем его
             if(_stext != _text && z_delimiter(_ch)) separator = _text, sepWidth = width, sepPos = _pos, _sp = sp, _i = i;
-            if(getLines() == 1 || ch != '\n') {
+            if(ch != '\n') {
                 // определить новую ширину строки
                 auto ln(paint->getWidthChar(ch) + width);
                 // если длина подстроки меньше ширины ректа и символ не "новая строка" = дальше
@@ -409,17 +409,16 @@ szi zViewText::textWrapSpan(cstr _text, int widthRect) {
             // добавить подстроку в массив
             if(separator) _text = separator, width = sepWidth, _pos = sepPos, sp = _sp, i = _i, separator = nullptr;
             _text = addCacheSubString(_stext, _text, width, height, true);
-            maxWidth = z_max(width, maxWidth); maxHeight += height + offs;
+            widthRectCache = z_max(width, widthRectCache); maxHeight += height + offs;
             _stext = _text; width = paint->getItalic(); height = paint->getSize();
         }
     }
     // последняя подстрока
     if(_stext < _text) {
         addCacheSubString(_stext, _text, width, height, true);
-        maxWidth = z_max(width, maxWidth); maxHeight += height + offs;
+        widthRectCache = z_max(width, widthRectCache); maxHeight += height + offs;
     }
-    widthRectCache = maxWidth;
-    return { maxWidth, maxHeight };
+    return { widthRectCache, maxHeight };
 }
 
 void zViewText::drawTextSpan(crti& clip) {

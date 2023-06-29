@@ -250,17 +250,17 @@ cstr zViewText::addCacheSubString(cstr _stext, cstr _text, int& width, int heigh
 }
 
 szi zViewText::textWrap(cstr _text, int widthRect) {
-    int maxHeight(0);
+    int maxHeight(0); widthRectCache = 0;
     // проверить на кэшированные значения
-    if(textCache.isNotEmpty() && widthRect >= widthRectCache) {
-//        DLOG("from cache %s", textCache[0]->text.str());
+    if(textCache.isNotEmpty() && widthRect == widthRectCache) {
+        DLOG("from cache %s", textCache[0]->text.str());
         for(auto& cache : textCache) maxHeight += cache->size;
         return { widthRectCache, maxHeight };
     }
     if(spans.isNotEmpty()) return textWrapSpan(_text, widthRect);
-    int width(0), lines(1), maxWidth(0), sepPos(0), sepWidth(0), height(0), _count, _pos;
+    int width(0), lines(getLines()), sepPos(0), sepWidth(0), height(0), _count, _pos;
     // разбить текст по спец. символам по ширине ректа
-    if(widthRect <= 0 || getLines() == 1) widthRect = INT_MAX;
+    if(widthRect <= 0) widthRect = INT_MAX;
     textCache.clear();
     auto isEdit(dynamic_cast<zViewEdit*>(this));
     // адрес последнего разделителя/начало подстроки/текущий символ
@@ -271,25 +271,51 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
         auto _ch(ch); if(!(ch = z_decodeUTF8(z_charUTF8(_text, &_count)))) break;
         // если это не начало подстроки и есть разделитель - запоминаем его
         if(_stext != _text && z_delimiter(_ch)) separator = _text, sepWidth = width, sepPos = _pos;
-        if(getLines() == 1 || ch != '\n') {
+        if(lines == 1 || ch != '\n') {
             // определить новую ширину строки
             auto ln(defPaint->getWidthChar(ch) + width);
             // если длина подстроки меньше ширины ректа и символ не "новая строка" = дальше
-            if(_stext == _text || lines >= getLines() || ln < widthRect) { width = ln; _text += _count; _pos++; continue; }
+            if(_stext == _text || lines == 1 || ln < widthRect) { width = ln; _text += _count; _pos++; continue; }
         } else { separator = nullptr; _text++; }
         // добавить подстроку в массив
         if(separator) _text = separator, width = sepWidth, _pos = sepPos, separator = nullptr;
         _text = addCacheSubString(_stext, _text, width, height, isEdit);
-        maxWidth = z_max(width, maxWidth); maxHeight += height;
-        _stext = _text; width = defPaint->getItalic(); lines++;
+        widthRectCache = z_max(width, widthRectCache); maxHeight += height;
+        _stext = _text; width = defPaint->getItalic(); lines--;
     }
     // последняя подстрока
     if(_stext < _text) {
         addCacheSubString(_stext, _text, width, height, isEdit);
-        maxWidth = z_max(width, maxWidth); maxHeight += height;
+        widthRectCache = z_max(width, widthRectCache); maxHeight += height;
     }
-    widthRectCache = maxWidth;
-    return { maxWidth, maxHeight };
+    // данные ...
+    if(lines == 1 && ellipsis != ZS_ELLIPSIS_NONE) {
+        auto pt3(defPaint->widthText("...", 3));
+        auto c(textCache[0]); auto w(c->width - widthRect + pt3);
+        if(w >= 0) {
+            zStringUTF8 tmp;
+            auto _c(c->text.count()), _c1(_c / 2), l(0), ll(0);
+            auto _t(c->text.str()), _t1(z_ptrUTF8(_t, _c1));
+            while(w >= 0) {
+                switch(ellipsis) {
+                    case ZS_ELLIPSIS_END:   ch = z_charUTF8(z_ptrUTF8(_t, --_c)); break;
+                    case ZS_ELLIPSIS_START: ch = z_charUTF8(_t, &l); _t += l; break;
+                    default:                if(ll++ & 1) ch = z_charUTF8(z_ptrUTF8(_t, --_c1)); else { ch = z_charUTF8(_t1, &l); _t1 += l; } break;
+                }
+                l = defPaint->getWidthChar(z_decodeUTF8(ch));
+                c->width -= l; w -= l;
+            }
+            c->width += pt3;
+            switch(ellipsis) {
+                case ZS_ELLIPSIS_END:   tmp = c->text.left(_c) + "..."; break;
+                case ZS_ELLIPSIS_START: tmp = "..."; tmp += _t; break;
+                default:                tmp = c->text.left(_c1) + "..."; tmp += _t1; break;
+            }
+            c->text = tmp;
+        }
+//        DLOG("%s %i %i", c->text.str(), c->width, widthRect);
+    }
+    return { widthRectCache, maxHeight };
 }
 
 void zViewText::onInit(bool _theme) {

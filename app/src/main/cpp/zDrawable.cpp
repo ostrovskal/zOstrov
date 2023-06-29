@@ -29,7 +29,7 @@ void zParamDrawable::setDefaults() {
     // прокрутка
     zView::drParams[DR_SCL].size = -1; zView::drParams[DR_SCL].type = -1; zView::drParams[DR_SCL].tiles = -1;
     // шрифт по умолчанию
-    zView::drParams[DR_TXT].texture = theme->styles->_int(Z_THEME_FONT, z.R.drawable.fontDefault );
+    zView::drParams[DR_TXT].texture = theme->styles->_int(Z_THEME_FONT, z.R.drawable.font_default );
     drDef[DR_TXT].texture = zView::drParams[DR_TXT].texture;
     // цвет текста по умолчанию
     zView::drParams[DR_TXT].color = theme->styles->_int(Z_THEME_COLOR_TEXT_TEXT, 0xffaabbcc);

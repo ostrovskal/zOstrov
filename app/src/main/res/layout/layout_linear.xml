@@ -65,10 +65,10 @@
                 z:layout_group="1" z:text="@string/radio_dark"
                 z:styles="@style/radiobutton"
                 z:decorate="checked"
-                z:textEllipsis="end"
+                z:textEllipsis="start"
                 z:textLines="1" />
             <CheckBox
-                android:layout_width="wrap_content" android:layout_weight="1"
+                android:layout_width="wrap_content" android:layout_weight="2"
                 android:layout_height="match_parent"
                 z:decorate="checked"
                 android:id="@+id/chkbox"
@@ -79,7 +79,7 @@
                 android:layout_height="match_parent"
                 z:layout_group="1" z:text="@string/radio_light"
                 z:decorate="checked"
-                z:textEllipsis="end"
+                z:textEllipsis="start"
                 z:styles="@style/radiobutton" />
         </LinearLayout>
         <ListView

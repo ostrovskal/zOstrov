@@ -32,7 +32,6 @@
     <style name="keyboardAlt">
         <item name="visibled">false</item>
         <item name="fkGravity">center</item>
-        <item name="font">@drawable/font1</item>
         <item name="textLines">1</item>
         <item name="textColor">#ffafafaf</item>
         <item name="textStyle">bold</item>
@@ -156,16 +155,12 @@
     </style>
     <style name="list_item">
         <item name="fbo">true</item>
-<!--
-        <item name="mask">@drawable/zssh</item>
-        <item name="mskColor">#ffffff</item>
-        <item name="mskTiles">@integer/ellips</item>
--->
         <item name="textStyle">bold_italic</item>
         <item name="gravity">center</item>
         <item name="foreground">@drawable/zssh</item>
         <item name="fkGravity">center</item>
         <item name="textLines">1</item>
+        <item name="textEllipsis">start</item>
         <item name="ipad">3dp</item>
         <item name="fkTiles">@integer/selectItem</item>
     </style>
@@ -197,7 +192,6 @@
         <item name="fkGravity">center</item>
         <item name="foreground">@drawable/zssh</item>
         <item name="fkTiles">@integer/selectCapt</item>
-        <item name="font">@drawable/font1</item>
         <item name="ipad">3dp</item>
         <item name="textColor">?attr/themeColorTextHighlight</item>
         <item name="gravity">center</item>
@@ -208,7 +202,6 @@
         <item name="fkGravity">center</item>
         <item name="textDistance">3dp</item>
         <item name="fkScale">0.75</item>
-        <item name="font">@drawable/font1</item>
         <item name="pad">3dp</item>
         <item name="gravity">center</item>
         <item name="icGravity">end|center_vertical</item>
@@ -356,7 +349,6 @@
     <style name="circularProgress">
         <item name="gravity">center</item>
         <item name="fkColor">#ffffff</item>
-        <item name="font">@drawable/font1</item>
         <item name="fkTiles">?attr/themeTilesWait</item>
         <item name="sliderMode">rotate</item>
         <item name="fkGravity">center|height</item>
@@ -371,7 +363,6 @@
         <item name="fkTile1">@integer/switchTrack</item>
         <item name="fkTile2">@integer/switchTrumb</item>
         <item name="pad">5dp</item>
-        <item name="font">@drawable/font1</item>
         <item name="gravity">start|center_vertical</item>
         <item name="fkGravity">end|center_vertical</item>
         <item name="duration">20</item>
@@ -392,7 +383,6 @@
         <item name="icScale">0.5</item>
         <item name="icGravity">center</item>
         <item name="icColor">#ffffffff</item>
-        <item name="font">@drawable/font1</item>
         <item name="textSize">@dimen/textText</item>
         <item name="textColor">?attr/themeColorTextTabbed</item>
         <item name="padHorz">6dp</item>
