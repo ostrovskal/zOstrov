@@ -34,7 +34,7 @@ public:
     auto getAscent() const { return font->ascent; }
     auto getWidthChar(int ch) const { return font->widthGlyph(ch + bold, factor); }
     auto getFactor(float _mul) const { return (int)round(_mul * factor); }
-    bool getBoundChar(int ch, rti& tex, rti& bound) const;
+    zTexture::TILE_TTL* getBoundChar(int ch, rti& tex, rti& bound) const;
     bool isUnderline() const { return style & ZS_TEXT_UNDERLINE; }
     bool isStrike() const { return style & ZS_TEXT_STRIKE; }
     zTexture* getFont() const { return font; }
@@ -68,6 +68,7 @@ protected:
 class zTextSpan {
 public:
     zTextSpan() { }
+    virtual ~zTextSpan() { }
     // обновление состояния
     virtual void updateState(zTextPaint* paint) { }
     // пропускать

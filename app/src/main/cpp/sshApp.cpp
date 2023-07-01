@@ -45,7 +45,7 @@ static i32 callback_inputEvent(android_app*, AInputEvent *event) {
 }
 
 void android_main(android_app* android) {
-    ANativeActivity_setWindowFlags(android->activity, AWINDOW_FLAG_FULLSCREEN | AWINDOW_FLAG_KEEP_SCREEN_ON, 0x00800000);
+    ANativeActivity_setWindowFlags(android->activity, AWINDOW_FLAG_FULLSCREEN | AWINDOW_FLAG_KEEP_SCREEN_ON | AWINDOW_FLAG_LAYOUT_IN_SCREEN | AWINDOW_FLAG_LAYOUT_INSET_DECOR, 0);
     sshApp app(android);
     theApp->run();
 }
@@ -60,13 +60,16 @@ sshApp::sshApp(android_app* _android) : zViewManager(_android->activity, 8) {
 }
 
 void sshApp::run() {
+    sensor.enableSensor(ASENSOR_TYPE_ACCELEROMETER, 1000, 20000, android->looper, [](zSensor* s) {
+        DLOG("process sensor");
+        return 0;
+    });
     while(true) {
-        i32 events, sens;
+        i32 events;
         android_poll_source* source;
-        while((sens = ALooper_pollAll((int)isActive() - 1, nullptr, &events, (void**)&source)) >= 0) {
+        while((ALooper_pollAll((int)isActive() - 1, nullptr, &events, (void**)&source)) >= 0) {
             if(source) source->process(android, source);
             if(android->destroyRequested) return;
-            manager->sensor.processSensor(sens);
         }
         if(isActive()) drawViews();
     }
@@ -81,6 +84,8 @@ void sshApp::setContent() {
     #include "zssh/layout_form.h"
     attachForm(formSettings, 300_dp, 300_dp);
     attachForm(formBrowser, 300_dp, 300_dp);
+    formBrowser->setOnProcess([](zView*) {
+    });
     zArray<zStringUTF8> objects(theme->findArray(z.R.array.spinArray));
     for(int i = 0 ; i < 1000; i += 7) {
         objects += zStringUTF8(z_ntos(&i, RADIX_HEX, false));
@@ -100,7 +105,7 @@ void sshApp::setContent() {
     if(txt) {
         txt->setLines(51);
         txt->setText(R"(<h1>Начало текста</h1><p>Завершение <a href="serg"><b>работы фоновых приложений после блокировки</b></a> <s>экрана <c value="ff00ff00">помогает</c> экономить заряд</s> аккумулятора.
-<p>С другой стороны, в этом случае<img src="zssh" t="iconSelf" f="0.75"/> вы не будете получать <a href="self"><img src="zx_icons" t="iconApp_round" f="1.0"/></a> новые сообщения (электронные<sup>1</sup>, текстовые<sub>2</sub>, из соцсетей и т.д.).
+<p>С другой стороны, в этом случае<img src="zssh" t="iconSelf" f="0.75"/>вы не будете получать<a href="self"><img src="zx_icons" t="iconApp_round" f="1.0"/></a>новые сообщения (электронные<sup>1</sup>, текстовые<sub>2</sub>, из соцсетей и т.д.).
 <ul start="10" reversed="1"><li><a href="bullet">Сергей</a></li><li>Максим</li><li>Ольга</li></ul>)", true);
         txt->setHtmlText(txt->getText(), [](cstr tag, bool end, zHtml* html) { return false; });
         txt->setOnClickUrl([](zView*, czs& ref) {

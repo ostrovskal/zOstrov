@@ -140,6 +140,8 @@ void zView::draw() {
         drawDebug();
         // каретка
         manager->drawCaret(this);
+        // внутренний обработчик
+        if(onProcess) onProcess(this);
     }
 }
 

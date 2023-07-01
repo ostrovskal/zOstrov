@@ -79,7 +79,7 @@
                 android:layout_height="match_parent"
                 z:layout_group="1" z:text="@string/radio_light"
                 z:decorate="checked"
-                z:textEllipsis="start"
+                z:textEllipsis="end"
                 z:styles="@style/radiobutton" />
         </LinearLayout>
         <ListView
@@ -91,48 +91,39 @@
         <Button
             android:id="@+id/button1"
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:fkTiles="@integer/gradientRadial" z:fkGravity="center" z:iconka="@integer/iconCancel"
-            android:gravity="center" z:fkScale="0.5" z:icScale="0.5"
+            z:styles="@style/button"
+            z:iconka="@integer/iconCancel"
             android:text="@string/press_me" z:textSize="25sp" z:icGravity="end|center_vertical"
-            z:pad="5dp" z:tap="pressed" />
+            z:tap="pressed" />
         <Switch
             android:id="@+id/switch1" android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:fkGravity="end|center_vertical"
-            z:fkTile1="@integer/switchTrack" z:fkTile2="@integer/switchTrumb"
-            z:text="@string/mode_already"
-            z:gravity="start|center_vertical"
-            z:pad="5dp" z:duration="30" />
+            z:styles="@style/switchButton"
+            z:text="@string/mode_already" />
         <Button
-            android:id="@+id/button2"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:fkTiles="@integer/gradientRadial" z:fkGravity="center" z:iconka="@integer/iconCancel"
-            android:gravity="center" z:fkScale="0.5" z:icScale="0.5"
-            android:text="@string/press_me" z:icGravity="end|center_vertical"
-            z:pad="5dp" z:tap="pressed" />
+            android:id="@+id/button2" android:layout_width="match_parent" android:layout_height="wrap_content"
+            z:styles="@style/button"
+            z:iconka="@integer/iconCancel" android:text="@string/press_me" z:icGravity="end|center_vertical"
+            z:tap="pressed" />
         <Switch
             android:id="@+id/switch2" android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:fkGravity="end|center_vertical"
-            z:fkTile1="@integer/switchTrack" z:fkTile2="@integer/switchTrumb"
+            z:styles="@style/switchButton"
+            z:fkGravity="start|center_vertical"
             z:textStyle="bold"
             z:text="@string/switcher"
-            z:gravity="start|center_vertical"
-            z:pad="5dp" z:duration="30" />
+            z:gravity="end|center_vertical" />
         <Switch
             android:id="@+id/switch3" android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:fkGravity="end|center_vertical"
-            z:fkTile1="@integer/switchTrack" z:fkTile2="@integer/switchTrumb"
+            z:styles="@style/switchButton"
             z:textStyle="italic|strike|underline"
             z:text="@string/activate"
-            z:gravity="start|center_vertical"
-            z:decorate="checked"
-            z:pad="5dp" z:duration="30" />
+            z:decorate="checked" />
         <Button
             android:id="@+id/button3"
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:fkTiles="@integer/gradientRadial" z:fkGravity="center" z:iconka="@integer/iconCancel"
-            android:gravity="center" z:fkScale="0.5" z:icScale="0.5"
-            android:text="@string/press_me" z:icGravity="end|center_vertical"
-            z:pad="5dp" z:tap="pressed" />
+            z:styles="@style/button"
+            z:iconka="@integer/iconCancel"
+            android:text="@string/press_me"
+            z:tap="pressed" />
         <SeekBar
             android:id="@+id/seek"
             android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -155,11 +146,10 @@
         <Button
             android:id="@+id/button11"
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:fkTiles="@integer/gradientRadial" z:fkGravity="center" z:iconka="@integer/iconCancel"
-            android:gravity="center" z:fkScale="0.5" z:icScale="0.5"
+            z:styles="@style/button"
+            z:iconka="@integer/iconCancel"
             android:text="@string/text_on_button" z:icGravity="start|center_vertical"
-            z:textStyle="underline|bold_italic"
-            z:pad="5dp" z:tap="pressed" />
+            z:textStyle="underline|bold_italic" />
         <SeekBar
             android:id="@+id/seek2"
             android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -171,10 +161,10 @@
         <Button
             android:id="@+id/button4"
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:fkTiles="@integer/gradientRadial" z:fkGravity="center" z:iconka="@integer/iconCancel"
-            android:gravity="center" z:fkScale="0.5" z:icScale="0.5"
-            android:text="@string/press_me" z:icGravity="end|center_vertical"
-            z:pad="5dp" z:tap="pressed" />
+            z:styles="@style/button"
+            z:iconka="@integer/iconCancel"
+            android:text="@string/press_me"
+            z:tap="pressed" />
         <ProgressBar
             android:id="@+id/progress1" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:text="@string/sergey" z:layout_gravity="center"  z:styles="@style/linearProgress"

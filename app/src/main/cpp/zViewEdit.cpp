@@ -229,7 +229,7 @@ void zViewEdit::notifyEvent(HANDLER_MESSAGE* msg) {
             if(onChangeCaretPos) onChangeCaretPos(this, msg->arg);
             break;
         case MSG_EDIT_MENU:
-            popup->show({caretScreen.x, 50});
+            popup->show({caretScreen.x - rclient.x, caretScreen.y - 80 - rclient.y});
             break;
     }
 }
@@ -238,7 +238,7 @@ i32 zViewEdit::onTouchEvent(zTouch *touch) {
     auto result(zViewText::onTouchEvent(touch));
     if(!isFocus()) return result;
     result = touch->isCaptured();
-    if(but && but->rview.contains((int)touch->cpt.x, (int)touch->cpt.y)) {
+    if(but && (but->testFlags(ZS_TAP) || but->rview.contains((int)touch->cpt.x, (int)touch->cpt.y))) {
         // вызываем событие касания дочернего
         result = but->onEvent(touch);
         if(result == TOUCH_ACTION) clearText();

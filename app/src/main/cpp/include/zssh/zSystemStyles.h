@@ -223,7 +223,8 @@ static zStyle styles_z_button[] = {
 	{ Z_ICON | ZT_THEME, Z_THEME_ICONS },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_TEXT_DISTANCE, 3 },
-	{ Z_FOREGROUND_SCALE, 49151 },
+	{ Z_FOREGROUND_SCALE, 32767 },
+	{ Z_TEXT_SHADOW_OFFS, 0x0202 },
 	{ Z_PADDING, 0x03030303 },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_ICON_GRAVITY, ZS_GRAVITY_END | ZS_GRAVITY_VCENTER },
@@ -392,7 +393,7 @@ static zStyle styles_z_switchbutton[] = {
 	{ Z_PADDING, 0x05050505 },
 	{ Z_GRAVITY, ZS_GRAVITY_START | ZS_GRAVITY_VCENTER },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_END | ZS_GRAVITY_VCENTER },
-	{ Z_DURATION, 20 },
+	{ Z_DURATION, 30 },
 	{ Z_FOREGROUND_SCALE | ZT_END, 65535 }
 };
 
@@ -479,7 +480,7 @@ static zStyle styles_z_chartgraph[] = {
 
 static zStyle styles_z_themedark[] = {
 	{ Z_THEME_NAME, z.R.string.themeDark },
-	{ Z_THEME_FONT, z.R.drawable.font_default },
+	{ Z_THEME_FONT, z.R.drawable.font_def },
 	{ Z_THEME_BITMAP, z.R.drawable.zssh },
 	{ Z_THEME_ICONS, z.R.drawable.zssh },
 	{ Z_THEME_COLOR, z.R.color.themeDark },
@@ -511,7 +512,7 @@ static zStyle styles_z_themedark[] = {
 
 static zStyle styles_z_themelight[] = {
 	{ Z_THEME_NAME, z.R.string.themeLight },
-	{ Z_THEME_FONT, z.R.drawable.font_default },
+	{ Z_THEME_FONT, z.R.drawable.font_def },
 	{ Z_THEME_BITMAP, z.R.drawable.zssh },
 	{ Z_THEME_ICONS, z.R.drawable.zssh },
 	{ Z_THEME_COLOR, z.R.color.themeLight },
@@ -683,61 +684,39 @@ static zStyle styles_z_chkbox[] = {
 
 static zStyle styles_z_radiolight[] = {
 	{ Z_DECORATE, ZS_CHECKED },
-	{ Z_TEXT_ELLIPSIS, ZS_ELLIPSIS_START },
+	{ Z_TEXT_ELLIPSIS, ZS_ELLIPSIS_END },
 	{ Z_STYLES | ZT_END, z.R.style.radiobutton }
 };
 
 static zStyle styles_z_zviewbutton2[] = {
-	{ Z_FOREGROUND_TILES, z.R.integer.gradientRadial },
-	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
-	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
-	{ Z_FOREGROUND_SCALE, 32767 },
-	{ Z_ICON_SCALE, 32767 },
+	{ Z_STYLES, z.R.style.button },
 	{ Z_TEXT_SIZE, 25 },
 	{ Z_ICON_GRAVITY, ZS_GRAVITY_END | ZS_GRAVITY_VCENTER },
-	{ Z_PADDING, 0x05050505 },
 	{ Z_TAP | ZT_END, ZS_PRESSED }
 };
 
-static zStyle styles_z_zviewswitch1[] = {
-	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_END | ZS_GRAVITY_VCENTER },
-	{ Z_FOREGROUND_TILE1, z.R.integer.switchTrack },
-	{ Z_FOREGROUND_TILE2, z.R.integer.switchTrumb },
-	{ Z_GRAVITY, ZS_GRAVITY_START | ZS_GRAVITY_VCENTER },
-	{ Z_PADDING, 0x05050505 },
-	{ Z_DURATION | ZT_END, 30 }
-};
-
 static zStyle styles_z_button2[] = {
-	{ Z_FOREGROUND_TILES, z.R.integer.gradientRadial },
-	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
-	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
-	{ Z_FOREGROUND_SCALE, 32767 },
-	{ Z_ICON_SCALE, 32767 },
+	{ Z_STYLES, z.R.style.button },
 	{ Z_ICON_GRAVITY, ZS_GRAVITY_END | ZS_GRAVITY_VCENTER },
-	{ Z_PADDING, 0x05050505 },
 	{ Z_TAP | ZT_END, ZS_PRESSED }
 };
 
 static zStyle styles_z_switch2[] = {
-	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_END | ZS_GRAVITY_VCENTER },
-	{ Z_FOREGROUND_TILE1, z.R.integer.switchTrack },
-	{ Z_FOREGROUND_TILE2, z.R.integer.switchTrumb },
+	{ Z_STYLES, z.R.style.switchButton },
+	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_START | ZS_GRAVITY_VCENTER },
 	{ Z_TEXT_STYLE, ZS_TEXT_BOLD },
-	{ Z_GRAVITY, ZS_GRAVITY_START | ZS_GRAVITY_VCENTER },
-	{ Z_PADDING, 0x05050505 },
-	{ Z_DURATION | ZT_END, 30 }
+	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_END | ZS_GRAVITY_VCENTER }
 };
 
 static zStyle styles_z_switch3[] = {
-	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_END | ZS_GRAVITY_VCENTER },
-	{ Z_FOREGROUND_TILE1, z.R.integer.switchTrack },
-	{ Z_FOREGROUND_TILE2, z.R.integer.switchTrumb },
+	{ Z_STYLES, z.R.style.switchButton },
 	{ Z_TEXT_STYLE, ZS_TEXT_ITALIC | ZS_TEXT_STRIKE | ZS_TEXT_UNDERLINE },
-	{ Z_GRAVITY, ZS_GRAVITY_START | ZS_GRAVITY_VCENTER },
-	{ Z_DECORATE, ZS_CHECKED },
-	{ Z_PADDING, 0x05050505 },
-	{ Z_DURATION | ZT_END, 30 }
+	{ Z_DECORATE | ZT_END, ZS_CHECKED }
+};
+
+static zStyle styles_z_button3[] = {
+	{ Z_STYLES, z.R.style.button },
+	{ Z_TAP | ZT_END, ZS_PRESSED }
 };
 
 static zStyle styles_z_zviewslider1[] = {
@@ -754,15 +733,9 @@ static zStyle styles_z_seek1[] = {
 };
 
 static zStyle styles_z_button11[] = {
-	{ Z_FOREGROUND_TILES, z.R.integer.gradientRadial },
-	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
-	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
-	{ Z_FOREGROUND_SCALE, 32767 },
-	{ Z_ICON_SCALE, 32767 },
+	{ Z_STYLES, z.R.style.button },
 	{ Z_ICON_GRAVITY, ZS_GRAVITY_START | ZS_GRAVITY_VCENTER },
-	{ Z_TEXT_STYLE, ZS_TEXT_UNDERLINE | ZS_TEXT_BOLD_ITALIC },
-	{ Z_PADDING, 0x05050505 },
-	{ Z_TAP | ZT_END, ZS_PRESSED }
+	{ Z_TEXT_STYLE | ZT_END, ZS_TEXT_UNDERLINE | ZS_TEXT_BOLD_ITALIC }
 };
 
 static zStyle styles_z_seek2[] = {

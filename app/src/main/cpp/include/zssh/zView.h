@@ -113,8 +113,6 @@ public:
     virtual void post(int what, u64 millis, int arg);
     // требование фокуса
     virtual void requestFocus();
-    // фоновая обработка
-    virtual bool backgroundProcess() { return false; }
     // уведомление об изменении параметров адаптера
     virtual void notifyAdapter(zBaseAdapter* _adapter) { }
     // вернуть имя типа
@@ -194,6 +192,8 @@ public:
     zView* setOnTouch(std::function<int(zView*, zTouch*)> _touch) { onTouch = std::move(_touch); return this; }
     // установка анимации
     zView* setOnAnimation(std::function<int(zView*, int)> _anim) { onAnimation = std::move(_anim); return this; }
+    // установка обработки
+    zView* setOnProcess(std::function<void(zView*)> _proc) { onProcess = std::move(_proc); return this; }
     // вернуть родителя
     template<typename T = zViewGroup> T* getParent() const { return dynamic_cast<T*>(parent); }
     // crc типа
@@ -301,6 +301,8 @@ protected:
     std::function<int(zView*, zTouch*)> onTouch;
     // событие анимации
     std::function<int(zView*, int)> onAnimation;
+    // событие обработки
+    std::function<void(zView*)> onProcess;
     // отрисовщик отладки
     zDrawable drwDebug{this, -1};
     // фейковый отрисовщик

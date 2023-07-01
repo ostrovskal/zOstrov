@@ -102,6 +102,18 @@ zView* zViewForm::setContent(zView* view) {
     return view;
 }
 
+i32 zViewForm::touchEvent(AInputEvent *event) {
+	if(isVisibled()) {
+		auto action(zTouch::getEventAction(event));
+		if(action == AMOTION_EVENT_ACTION_POINTER_DOWN || action == AMOTION_EVENT_ACTION_DOWN) {
+			if(!zTouch::intersect(event, rview)) {
+				close(z.R.id.no); return TOUCH_STOP;
+			}
+		}
+	}
+	return zLinearLayout::touchEvent(event);
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                        ФОРМА СООБЩЕНИЙ                                                                 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

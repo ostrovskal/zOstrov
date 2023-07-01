@@ -465,7 +465,6 @@ zViewToast::zViewToast(cstr _text, zStyle* styles) : zViewText(styles ? styles :
     auto common(manager->getSystemView(true));
     auto v(common->idView(z.R.id.toast));
     common->remove(v);
-    animator.clear();
     animator.init(0.0f, false);
     animator.add(5.0f, zInterpolator::LINEAR, 128);
     animator.add(0.0f, zInterpolator::LINEAR, 64);

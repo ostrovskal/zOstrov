@@ -7,16 +7,16 @@
 #include "android/sensor.h"
 
 class zSensor {
+    friend int sensProc(int, int, void* _sens);
+    friend class zSensorManager;
 public:
     // конструкторы
     zSensor() { }
-    zSensor(ASensor* _sensor, int _type, int _id) : sensor(_sensor), type(_type), id(_id) { }
+    zSensor(ASensor* _sensor, int _type, int _id, const std::function<int(zSensor*)>& act) : sensor(_sensor), type(_type), id(_id), onChange(std::move(act)) { }
     // деструктор
     ~zSensor() { ASensorEventQueue_enableSensor(queue, sensor); }
-    // обработка
-    void process();
     // настройки
-    void settings() const;
+    void settings(int rate) const;
     // оператор сравнения
     bool operator == (int _id) const { return id == _id; }
     // идентификатор/тип
@@ -25,8 +25,13 @@ public:
     ASensor* sensor{nullptr};
     // очередь
     ASensorEventQueue* queue{nullptr};
-    // событие
+    // данные
     ASensorEvent event{};
+protected:
+    // обработка
+    virtual int process();
+    // обработчик
+    std::function<int(zSensor*)> onChange;
 };
 
 class zSensorManager {
@@ -36,7 +41,7 @@ public:
     // деструктор
     virtual ~zSensorManager() { sensors.clear(); }
     // подключение сенсора
-    zSensor* enableSensor(int type, int id, ALooper* looper);
+    zSensor* enableSensor(int type, int id, int rate, ALooper* looper, const std::function<int(zSensor*)>& act);
     // получение сенсора
     zSensor* getSensor(int id) const;
     // отключение сенсора

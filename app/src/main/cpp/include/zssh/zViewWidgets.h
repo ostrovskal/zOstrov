@@ -207,22 +207,72 @@ protected:
     int image{-1};
 };
 
+#include <OMXAL/OpenMAXAL.h>
+#include <OMXAL/OpenMAXAL_Android.h>
+
 class zViewVideo : public zView {
+    friend XAresult AndroidBufferQueueCallback(XAAndroidBufferQueueItf caller, void *ctx, void *bufCtx, void *data,
+                                               XAuint32 size, XAuint32 used, const XAAndroidBufferItem *items, XAuint32 itemsLength);
+    friend void StreamChangeCallback(XAStreamInformationItf caller, XAuint32 id, XAuint32 idx, void* data, void* ctx);
 public:
-/*
+    enum {
+        // количество буферов в нашей очереди буферов, произвольное число
+        NB_BUFFERS = 8,
+        // мы передаем данные транспортного потока MPEG-2, оперируем размером блока транспортного потока
+        MPEG2_TS_PACKET_SIZE = 188,
+        // количество блоков транспортного потока MPEG-2 в буфере, произвольное число
+        PACKETS_PER_BUFFER = 10,
+        // XAAndroidBufferQueueItf, XAStreamInformationItf and XAPlayItf
+        NB_MAXAL_INTERFACES = 3,
+        // определяет, сколько памяти мы выделяем для кэширования
+        BUFFER_SIZE = PACKETS_PER_BUFFER * MPEG2_TS_PACKET_SIZE
+    };
     // конструктор
     zViewVideo(zStyle* _styles, i32 _id, cstr name, bool isAsset);
     // деструктор
-    virtual ~zViewVideo();
-    virtual cstr typeName() const override { return "zViewVideo"; }
+    virtual ~zViewVideo() { shutdown(); }
+    // воспроизведение/пауза
+    virtual void play(bool _play);
+    // сначала
+    virtual void rewind();
+    // завершение
+    void shutdown();
 protected:
     // габариты
-    virtual void onMeasure(cszm& spec) override { }
+    virtual void onMeasure(cszm& spec) override;
     // позиционирование
-    virtual void onLayout(crti &position, bool changed) override { }
-    // текстура для рендерига кадра
-    zTexture* texture{nullptr};
-*/
+    virtual void onLayout(crti &position, bool changed) override;
+    // создание потока
+    virtual bool createStream();
+    // инициализация буферов
+    bool initBuffers(bool _discontinuity);
+    // подгрузка очередной порции
+    XAresult callbackBuffer(XAAndroidBufferQueueItf caller, void *bufCtx, void *data, XAuint32 size, XAuint32 used,
+                            const XAAndroidBufferItem *items, XAuint32 itemsLen);
+    // изменение параметров потока
+    static void callbackStream(XAStreamInformationItf caller, XAuint32 eventId, XAuint32 idx, void* data);
+    // файл
+    zFile* file{nullptr};
+    // кэш в памяти для воспроизведения
+    char dataCache[BUFFER_SIZE * NB_BUFFERS]{};
+    // признак конца файла
+    bool reachedEof{false};
+    //
+    bool discontinuity{false};
+    // константа для идентификации контекста буфера, который является концом потока для декодирования
+    int kEosBufferCntxt{1980};
+    // движок
+    XAObjectItf             outputMixObject{nullptr};
+    XAObjectItf             engineObject{nullptr};
+    XAEngineItf             engine{nullptr};
+    // интерфейсы потока медиаплеера
+    XAObjectItf             playerObject{nullptr};
+    XAPlayItf               player{nullptr};
+    XAAndroidBufferQueueItf playerBuffer{nullptr};
+    XAStreamInformationItf  playerStream{nullptr};;
+    XAVolumeItf             playerVolume{nullptr};
+    EGLSurface              surface{nullptr};
+    EGLContext              context{nullptr};
 };
 
 class zViewToast : public zViewText {

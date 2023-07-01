@@ -51,7 +51,7 @@ class zViewManager {
 public:
     enum { Z_NONE, Z_ACTIVE, Z_QUIT, Z_SAVE, Z_LOAD, Z_RESUME, Z_ANIM = 16, Z_CHANGE_THEME = 32 };
     // тип переменных шейдера
-    enum { ZSH_APOS, ZSH_ATEX, ZSH_UTEX, ZSH_UFLT, ZSH_UCOL, ZSH_PMTX, ZSH_WMTX };
+    enum { ZSH_APOS, ZSH_ATEX, ZSH_UTEX, ZSH_PMTX, ZSH_WMTX, ZSH_UFLT, ZSH_UCOL };
     // тип цветовых фильтров
     enum { ZCF_NORMAL = 0, ZCF_FOCUSED = 4, ZCF_DISABLED = 5 };
     // конструктор
@@ -214,17 +214,12 @@ private:
     zActionBar* actionBar{nullptr};
     // шейдер
     zShader* program{nullptr};
+    zShader* programOES{nullptr};
     // переменные в шейдере
     i32 shaderVars[7]{};
+    i32 shaderVarsOES[7]{};
     // объем видео памяти
     i32 videoMemory{0};
     // основные пути приложения
     zStringUTF8 basePaths[3];
 };
-
-// менеджер представлений
-extern zViewManager* manager;
-
-inline int operator "" _dp (unsigned long long int i) { return manager->dp(i); }
-inline int z_dp(int v) { return manager->dp(v); }
-

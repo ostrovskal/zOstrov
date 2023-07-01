@@ -18,6 +18,7 @@ zViewText::~zViewText() {
     SAFE_DELETE(defSpan);
     SAFE_DELETE(defPaint);
     SAFE_DELETE(dr);
+    clearCacheSpans(true);
 }
 
 void zViewText::setTextSpecial(czs &_text, cszm &spec) {
@@ -48,6 +49,7 @@ void zViewText::setText(czs& _text, bool force) {
 }
 
 void zViewText::clearCacheSpans(bool del_spans) {
+    urls.clear();
     textCache.clear();
     cacheSpans.clear();
     if(del_spans) {

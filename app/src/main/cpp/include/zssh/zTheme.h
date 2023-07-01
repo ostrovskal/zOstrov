@@ -174,7 +174,7 @@ enum ViewStyles {
     Z_TEXT_BACKGROUND_COLOR		= (62 | ZTT_INT | ZTT_THM),
     Z_TEXT_DISTANCE				= (63 | ZTT_DMN),
     Z_TEXT_BACKGROUND_TILES		= (64 | ZTT_INT | ZTT_THM),
-    Z_TEXT_SHADOW_OFFS			= (65 | ZTT_VEC),
+    Z_TEXT_SHADOW_OFFS			= (65 | ZTT_INT),
     Z_TEXT_SHADOW_COLOR			= (66 | ZTT_INT | ZTT_THM),
     Z_TEXT_HIGHLIGHT_COLOR		= (67 | ZTT_INT | ZTT_THM),
     Z_TEXT_LENGTH               = (68 | ZTT_INT),
@@ -183,15 +183,14 @@ enum ViewStyles {
     Z_SPACING_CELL				= (70 | ZTT_DMN),
     Z_SPACING_LINE				= (71 | ZTT_DMN),
     Z_CELL_SIZE					= (72 | ZTT_DMN),
-    Z_CHART_FLAGS               = (73 | ZTT_INT),
+    Z_SPEED_TRACK				= (73 | ZTT_FLT),
     Z_PRIMARY                   = (74 | ZTT_INT | ZTT_THM),
     Z_STYLES                    = (75 | ZTT_INT),
     Z_FOREGROUND_TILE1          = (76 | ZTT_INT | ZTT_THM),
     Z_FOREGROUND_TILE2          = (77 | ZTT_INT | ZTT_THM),
     Z_FOREGROUND_TILE3          = (78 | ZTT_INT | ZTT_THM),
     Z_FOREGROUND_TILE4          = (79 | ZTT_INT | ZTT_THM),
-    Z_SPEED_TRACK				= (80 | ZTT_FLT),
-    Z_TEXT_ELLIPSIS             = (81 | ZTT_INT)
+    Z_TEXT_ELLIPSIS             = (80 | ZTT_INT)
 };
 
 // значения для темы

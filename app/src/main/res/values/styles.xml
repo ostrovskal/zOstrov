@@ -201,7 +201,8 @@
         <item name="icon">?attr/themeIcons</item>
         <item name="fkGravity">center</item>
         <item name="textDistance">3dp</item>
-        <item name="fkScale">0.75</item>
+        <item name="fkScale">0.5</item>
+        <item name="textShadowOffset">2,2</item>
         <item name="pad">3dp</item>
         <item name="gravity">center</item>
         <item name="icGravity">end|center_vertical</item>
@@ -365,7 +366,7 @@
         <item name="pad">5dp</item>
         <item name="gravity">start|center_vertical</item>
         <item name="fkGravity">end|center_vertical</item>
-        <item name="duration">20</item>
+        <item name="duration">30</item>
         <item name="fkScale">1.0</item>
     </style>
     <style name="llinear">

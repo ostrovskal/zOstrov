@@ -209,6 +209,7 @@ struct MENUITEM {
 #include "zstandard/zGL.h"
 #include "zstandard/zJniHelper.h"
 #include "zstandard/zInterpolator.h"
+#include "zstandard/zStringUTF8.h"
 #include "zTexture.h"
 #include "zDrawable.h"
 #include "zTheme.h"
@@ -216,5 +217,10 @@ struct MENUITEM {
 #include "zHandler.h"
 #include "zView.h"
 #include "zViewManager.h"
-#include "zstandard/zStringUTF8.h"
+
+// менеджер представлений
+extern zViewManager* manager;
+
+inline int operator "" _dp (unsigned long long int i) { return manager->dp(i); }
+inline int z_dp(int v) { return manager->dp(v); }
 

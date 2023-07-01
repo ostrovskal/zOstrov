@@ -29,7 +29,7 @@ void zParamDrawable::setDefaults() {
     // прокрутка
     zView::drParams[DR_SCL].size = -1; zView::drParams[DR_SCL].type = -1; zView::drParams[DR_SCL].tiles = -1;
     // шрифт по умолчанию
-    zView::drParams[DR_TXT].texture = theme->styles->_int(Z_THEME_FONT, z.R.drawable.font_default );
+    zView::drParams[DR_TXT].texture = theme->styles->_int(Z_THEME_FONT, z.R.drawable.font_def );
     drDef[DR_TXT].texture = zView::drParams[DR_TXT].texture;
     // цвет текста по умолчанию
     zView::drParams[DR_TXT].color = theme->styles->_int(Z_THEME_COLOR_TEXT_TEXT, 0xffaabbcc);
@@ -277,12 +277,14 @@ void zDrawable::makeDebug(cszi &cell) {
 
 int zDrawable::makeText(cstr text, int len, zTextPaint* paint) {
     auto tmp(0), stx(0); rti _pos, tex; count = 0;
+    zTexture::TILE_TTL* glp;
     while(len-- > 0 && z_isUTF8(text)) {
-        if(paint->getBoundChar(z_decodeUTF8(z_charUTF8(text, &tmp)), tex, _pos)) {
-            _pos.x += stx;
+        auto ch(z_decodeUTF8(z_charUTF8(text, &tmp)));
+        if((glp = paint->getBoundChar(ch, tex, _pos))) {
+            _pos.x += stx + glp->l;
             // нарисовать
             count += makeTriangle(_pos, tex, &vertices[count], paint->getItalic());
-            stx += _pos.w; text += tmp;
+            stx += _pos.w + glp->l + glp->r; text += tmp;
         }
     }
     paint->getBoundChar('_', tex, _pos); tex = tex.padding(4, 0);

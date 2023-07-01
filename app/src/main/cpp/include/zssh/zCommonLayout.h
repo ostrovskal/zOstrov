@@ -138,3 +138,79 @@ protected:
     // событие смены вкладки
     std::function<void(zView*, int)> onTabChange{nullptr};
 };
+
+class zViewChart : public zFrameLayout {
+public:
+    // конструктор
+    zViewChart(zStyle* _styles, i32 _id, u32 chartGravity);
+    ~zViewChart() { values.clear(); colors.clear(); }
+    // загрузка стилей
+    virtual void onInit(bool _theme) override;
+    // вернуть имя типа
+    virtual cstr typeName() const override { return "zViewChart"; }
+    // установка режима
+    void setMode(u32 _mode) { if(mode != _mode) { mode = _mode; requestLayout(); } }
+    // установка данных
+    bool addData(i32* value, int countValues, u32* colors, int countColors);
+    void delData(int idx);
+    // установка первого видимого
+    void setFirstVisible(int _first);
+    // вернуть первый видимый
+    int getFirstVisible() const { return fChart; }
+    // вернуть количество видимых
+    int getCountVisible() const { return maxCharts; }
+    // вернуть общее количество
+    int getCount() const { return cCharts; }
+    // вернуть вычисленный размер диаграммы
+    float getSizeDiagramm() const { return sizeChart; }
+    // вернуть значение по индексу из определенного набора
+    int getValue(int idx, int kit) const;
+    // установка события выделения
+    void setOnChangeSelected(std::function<void(zView*, int)> _selected) { onChangeSelected = _selected; }
+protected:
+    struct CHART_DATA {
+        CHART_DATA() { }
+        const CHART_DATA& set(i32* _data, i32 _count) { data = _data; count = _count; return *this; }
+        ~CHART_DATA() { SAFE_DELETE(data); }
+        i32* data{nullptr}; i32 count{0};
+    };
+    // событие габаритов
+    virtual void onMeasure(cszm& spec) override;
+    // событие позиционирования
+    virtual void onLayout(crti &position, bool changed) override;
+    // параметры прокруток
+    virtual int computeScrollOffset(bool _vert) const override { return fChart * (int)sizeChart; }
+    virtual int computeScrollRange(bool _vert) const override { return cCharts * (int)sizeChart; }
+    virtual int computeScrollExtent(bool _vert) const override { return (_vert ? rclient.h : rclient.w); }
+    // событие касания
+    i32 onTouchEvent(zTouch *touch) override;
+    // прокрутка
+    virtual bool scrolling(int _delta) override;
+    // отрисовка
+    virtual void onDraw() override;
+    void makeDiagramm(float x, float y, float dy);
+    void makeCircular(float x, float y, float dy);
+    void makeGraph(float x, float y, float dy);
+    int itemFromPoint(cptf& pt) const;
+    // макс значение
+    int maxVal{0};
+    // первый видимый/всего/всего видимых
+    int fChart{0}, cCharts{0}, maxCharts{0};
+    // размер одной диаграммы
+    float sizeChart{1};
+    // тайл диаграммы
+    u32 tileChart{z.R.integer.rect};
+    // входные данные - цвета/значения
+    zArray<CHART_DATA> colors{};
+    zArray<CHART_DATA> values{};
+    // режим отображения
+    u32 mode{ZS_CHART_DIAGRAMM};
+    // массив ректов диаграмм
+    zArray<rtf> rects{};
+    // гравитация диаграмм
+    u32 grav{ZS_GRAVITY_TOP};
+    // дельта
+    int delta{0}, clickItem{-1}, selectItem{-1};
+    // событие выделения
+    std::function<void(zView*, int)> onChangeSelected;
+};

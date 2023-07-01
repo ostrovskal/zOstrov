@@ -147,10 +147,12 @@ void zViewPopup::show(cpti& _offs) {
 }
 
 i32 zViewPopup::touchEvent(AInputEvent *event) {
-    auto action(zTouch::getEventAction(event));
-    if(action == AMOTION_EVENT_ACTION_POINTER_DOWN || action == AMOTION_EVENT_ACTION_DOWN) {
-        if(!zTouch::intersect(event, rview)) {
-            dismiss(); return TOUCH_STOP;
+    if(isVisibled()) {
+        auto action(zTouch::getEventAction(event));
+        if(action == AMOTION_EVENT_ACTION_POINTER_DOWN || action == AMOTION_EVENT_ACTION_DOWN) {
+            if(!zTouch::intersect(event, rview)) {
+                dismiss(); return TOUCH_STOP;
+            }
         }
     }
     return zViewGroup::touchEvent(event);

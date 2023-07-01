@@ -10,20 +10,26 @@ zSensorManager::zSensorManager() {
         ASensorList sensorList;
         int numSensors(ASensorManager_getSensorList(engine, &sensorList));
         DLOG("************Sensors Available********************");
-        for(int count = 0 ; count < numSensors ; count++ ){
-            DLOG("%s(%s)", ASensor_getName(sensorList[count]), ASensor_getVendor(sensorList[count]));
+        for(int count = 0 ; count < numSensors ; count++ ) {
+            auto sens(sensorList[count]);
+            DLOG("%s(%s-%i)", ASensor_getName(sens), ASensor_getVendor(sens), ASensor_getType(sens));
         }
     }
 }
 
-zSensor* zSensorManager::enableSensor(int type, int id, ALooper* looper) {
+int sensProc(int, int, void* _sens) {
+    auto sens((zSensor*)_sens);
+    return sens->process();
+}
+
+zSensor* zSensorManager::enableSensor(int type, int id, int rate, ALooper* looper, const std::function<int(zSensor*)>& act) {
     zSensor* sens(nullptr);
     if(engine) {
         auto sensor((ASensor*)ASensorManager_getDefaultSensor(engine, type));
         if(sensor) {
-            sens = new zSensor(sensor, type, id);
-            if((sens->queue = ASensorManager_createEventQueue(engine, looper, id, nullptr, nullptr))) {
-                sens->settings();
+            sens = new zSensor(sensor, type, id, act);
+            if((sens->queue = ASensorManager_createEventQueue(engine, looper, id, sensProc, sens))) {
+                sens->settings(rate);
                 sensors += sens;
             } else {
                 SAFE_DELETE(sens);
@@ -49,18 +55,14 @@ void zSensorManager::processSensor(int id) const {
     if(sens) sens->process();
 }
 
-void zSensor::process() {
+int zSensor::process() {
     while(ASensorEventQueue_getEvents(queue, &event, 1) > 0) { }
-/*
-    if(type == ASENSOR_TYPE_ACCELEROMETER) {
-        DLOG("accelerometer: x=%f y=%f z=%f", event.acceleration.x, event.acceleration.y, event.acceleration.z);
-    }
-*/
+    return (onChange ? onChange(this) : 0);
 }
 
-void zSensor::settings() const {
+void zSensor::settings(int rate) const {
     ASensorEventQueue_enableSensor(queue, sensor);
-    ASensorEventQueue_setEventRate(queue, sensor, 20000);
+    ASensorEventQueue_setEventRate(queue, sensor, rate);
 }
 
 /*

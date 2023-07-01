@@ -13,6 +13,8 @@ public:
     // конструктор
     zViewForm(zStyle* _styles, i32 _id, zStyle* _styles_caption, zStyle* _styles_footer, u32 _caption, bool _modal);
     virtual ~zViewForm() { delete shade; }
+    // обработка касания
+    virtual i32 touchEvent(AInputEvent *event) override;
     // тип
     virtual cstr typeName() const override { return "zViewForm"; }
     // событие кнопки

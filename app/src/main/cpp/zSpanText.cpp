@@ -7,7 +7,7 @@
 #include "zssh/zViewText.h"
 
 zTextPaint::zTextPaint() {
-    font = manager->loadResourceTexture(theme->styles->_int(Z_THEME_FONT, z.R.drawable.font_default), nullptr);
+    font = manager->loadResourceTexture(theme->styles->_int(Z_THEME_FONT, z.R.drawable.font_def), nullptr);
     setStyle(ZS_TEXT_NORMAL);
     setSize(theme->styles->_int(Z_THEME_SIZE_TEXT_TEXT, 20_dp));
 }
@@ -52,16 +52,16 @@ void zTextPaint::setStyle(u32 _style) {
     yBold   = getSizeFont() * (bold != 0);
 }
 
-bool zTextPaint::getBoundChar(int ch, rti& tex, rti& bound) const {
+zTexture::TILE_TTL* zTextPaint::getBoundChar(int ch, rti& tex, rti& bound) const {
     if(ch < '!') ch = ' ';
     auto glyph(font->paramGlyph(ch + bold));
     if(glyph) {
         tex = glyph->rect;
-        auto cw(ch == ' ' ? 10 : (int)round((float)tex.w * factor));
+        auto cw((int)round((float)tex.w * factor));
         bound.set(0, (int)round((float)(tex.y - yBold) * factor), cw, (int)round((float)tex.h * factor));
         tex.w += tex.x; tex.h += tex.y;
     }
-    return glyph != nullptr;
+    return glyph;
 }
 
 int zTextPaint::correctBaseline(int _size) const {
@@ -311,7 +311,10 @@ bool zViewText::setHtmlText(czs& text, const std::function<bool(cstr tag, bool e
                 // h1 - h6
                 case 0xc7ada38: case 0xc7c22dd: case 0xc7d9a75:
                 case 0xc7aa490: case 0xc7cf97d: case 0xc79a5b2:
-                    if(_html->text[pos] != '\n') {_html->text += "\n"; pos += !end; }
+                    if(_html->text[pos] != '\n') {
+                        _html->text += "\n"; pos++;
+                        if(end) _html->text += "\n", pos++;
+                    }
                     span = new zTextSpanRelativeSize(htmlHeaderSize[tag[1] - '1']);
                     break;
                 // b strong
@@ -391,7 +394,7 @@ szi zViewText::textWrapSpan(cstr _text, int widthRect) {
     // массив спанов
     mergeSpans(z_countUTF8(_text));
     // идти по всем спанам
-    int width(0), height(0), _i(0), offs(0);
+    int width(0), height(0), _i(0);
     for(int i = 0; i < cacheSpans.size(); i++) {
         auto sp(cacheSpans[i]); auto paint(sp->paint); auto _pos(sp->s);
         height = z_max(height, paint->getSize());
@@ -409,14 +412,14 @@ szi zViewText::textWrapSpan(cstr _text, int widthRect) {
             // добавить подстроку в массив
             if(separator) _text = separator, width = sepWidth, _pos = sepPos, sp = _sp, i = _i, separator = nullptr;
             _text = addCacheSubString(_stext, _text, width, height, true);
-            widthRectCache = z_max(width, widthRectCache); maxHeight += height + offs;
-            _stext = _text; width = paint->getItalic(); height = paint->getSize();
+            widthRectCache = z_max(width, widthRectCache); maxHeight += height;
+            _stext = _text; width = defPaint->getItalic(); height = defPaint->getSize();
         }
     }
     // последняя подстрока
     if(_stext < _text) {
         addCacheSubString(_stext, _text, width, height, true);
-        widthRectCache = z_max(width, widthRectCache); maxHeight += height + offs;
+        widthRectCache = z_max(width, widthRectCache); maxHeight += height;
     }
     return { widthRectCache, maxHeight };
 }

@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Thu Jun 29 15:49:24 2023
+// Sat Jul  1 06:37:43 2023
 
 #pragma once
 
@@ -10,7 +10,7 @@ struct _z {
 	struct _R {
 		struct _drawable {
 			enum { 
-				font_default	= 0x00100000, 	znull	= 0x00100001, 	zssh	= 0x00100002, 
+				font_def	= 0x00100000, 	znull	= 0x00100001, 	zssh	= 0x00100002, 
 				zx_icons	= 0x00100003, 			};
 		}; 
 		_drawable drawable;
@@ -186,8 +186,8 @@ struct _z {
 				zviewbutton1	= 0x00100038, 	zscrolllayout1	= 0x00100039, 
 				tv1	= 0x0010003A, 	zviewedit1	= 0x0010003B, 	grid1	= 0x0010003C, 
 				radiodark	= 0x0010003D, 	chkbox	= 0x0010003E, 	radiolight	= 0x0010003F, 
-				zviewbutton2	= 0x00100040, 	zviewswitch1	= 0x00100041, 	button2	= 0x00100042, 
-				switch2	= 0x00100043, 	switch3	= 0x00100044, 	zviewslider1	= 0x00100045, 
+				zviewbutton2	= 0x00100040, 	button2	= 0x00100041, 	switch2	= 0x00100042, 
+				switch3	= 0x00100043, 	button3	= 0x00100044, 	zviewslider1	= 0x00100045, 
 				seek1	= 0x00100046, 	button11	= 0x00100047, 	seek2	= 0x00100048, 
 				edit2	= 0x00100049, 	formsettings	= 0x0010004A, 	zlinearlayout2	= 0x0010004B, 
 				zviewtext1	= 0x0010004C, 	zlinearlayout3	= 0x0010004D, 	ztabwidget1	= 0x0010004E, 
@@ -269,10 +269,10 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::chkbox, styles_z_chkbox },
 		{ _z::_R::_style::radiolight, styles_z_radiolight },
 		{ _z::_R::_style::zviewbutton2, styles_z_zviewbutton2 },
-		{ _z::_R::_style::zviewswitch1, styles_z_zviewswitch1 },
 		{ _z::_R::_style::button2, styles_z_button2 },
 		{ _z::_R::_style::switch2, styles_z_switch2 },
 		{ _z::_R::_style::switch3, styles_z_switch3 },
+		{ _z::_R::_style::button3, styles_z_button3 },
 		{ _z::_R::_style::zviewslider1, styles_z_zviewslider1 },
 		{ _z::_R::_style::seek1, styles_z_seek1 },
 		{ _z::_R::_style::button11, styles_z_button11 },
@@ -289,7 +289,7 @@ static zStyles z_styles[] = {
 static zResource z_resources[] = {
 		{ 0, "" },
 		/* drawable */
-		{ _z::_R::_drawable::font_default, "font_default" },
+		{ _z::_R::_drawable::font_def, "font_def" },
 		{ _z::_R::_drawable::znull, "znull" },
 		{ _z::_R::_drawable::zssh, "zssh" },
 		{ _z::_R::_drawable::zx_icons, "zx_icons" },

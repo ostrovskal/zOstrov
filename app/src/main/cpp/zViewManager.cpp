@@ -18,6 +18,23 @@ static float filterMtxs[6][16] = {
         {   0.213f, 0.715f, 0.072f, 0.0f, 0.213f, 0.715f, 0.072f, 0.0f, 0.213f, 0.715f, 0.072f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f }, // disabled
 };
 
+static cstr vertShaderOES = "uniform mat4 wmtx;\n"
+                            "uniform mat4 pmtx;\n"
+                            "uniform mat4 smtx;\n"
+                            "attribute vec4 pos;\n"
+                            "attribute vec4 tex;\n"
+                            "varying vec2 v_Texture;\n"
+                            "void main() {\n"
+                            "  gl_Position = pmtx * wmtx * pos;\n"
+                            "  v_Texture = (smtx * tex).xy;\n}";
+
+static cstr fragShaderOES = "#extension GL_OES_EGL_image_external : require\n"
+                            "precision mediump float;\n"
+                            "varying vec2 v_Texture;\n"
+                            "uniform samplerExternalOES u_TextureUnit;\n"
+                            "void main() {\n"
+                            "  gl_FragColor = texture2D(u_TextureUnit, v_Texture);\n}";
+
 static cstr vertShader = "attribute vec4 pos;\n"
                          "attribute vec2 tex;\n"
                          "varying vec2 v_Texture;\n"
@@ -107,12 +124,15 @@ bool zViewManager::displayInit() {
         return false;
     //eglSwapInterval(0);
     // шейдеры
+    programOES  = new zShader(new zShader(vertShaderOES, GL_VERTEX_SHADER), new zShader(fragShaderOES, GL_FRAGMENT_SHADER));
     program  = new zShader(new zShader(vertShader, GL_VERTEX_SHADER), new zShader(fragShader, GL_FRAGMENT_SHADER));
     // параметры шейдеров
-    program->linkVariables(shaderVars, "apos;atex;uu_TextureUnit;ucflt;utcolor;upmtx;uwmtx");
+    programOES->linkVariables(shaderVarsOES, "apos;atex;uu_TextureUnit;upmtx;uwmtx;usmtx");
+    program->linkVariables(shaderVars, "apos;atex;uu_TextureUnit;upmtx;uwmtx;ucflt;utcolor");
     glEnableVertexAttribArray(shaderVars[ZSH_APOS]);
     glEnableVertexAttribArray(shaderVars[ZSH_ATEX]);
     glUniform4fv(shaderVars[ZSH_UCOL], 1, zColor::white);
+    glUniform1i(shaderVars[ZSH_UTEX], 0);
     glUniform1i(shaderVars[ZSH_UTEX], 0);
     // параметры по умолчанию
     glActiveTexture(GL_TEXTURE0);
@@ -136,6 +156,7 @@ void zViewManager::displayDestroy() {
     zGL::instance()->invalidate();
     // уничтожить шейдер
     SAFE_DELETE(program);
+    SAFE_DELETE(programOES);
     DLOG("displayDestroy!");
     status = Z_QUIT;
 }
@@ -306,9 +327,9 @@ void zViewManager::stateAllViews(u32 action, u8** _ptr, u32* _size) {
             z_memcpy(&_bufStates, vs.data.get_data(), vs.data.size() * 4);
         }
         viewStates.free();
-        DLOG("Сохранение состояния представлений %i!", _sizeStates);
+        DLOG("Сохранение состояния представлений (размер: %i)!", _sizeStates);
     } else if(action == Z_LOAD && bufViewStates) {
-        DLOG("Восстановление состояния представлений %i!", sizeViewStates);
+        DLOG("Восстановление состояния представлений (размер: %i)!", sizeViewStates);
         auto _bufStates(bufViewStates);
         auto keybStatus(dwordLE(&_bufStates)), countViews(dwordLE(&_bufStates));
         for(u32 i = 0 ; i < countViews; i++) {

@@ -30,8 +30,10 @@ add_library(zssh SHARED
 		zActionBar.cpp
 		zSoundManager.cpp
 		zSensorManager.cpp
+		zViewChart.cpp
+		zViewVideo.cpp
 )
 
 find_package(zstandard REQUIRED CONFIG)
 target_include_directories(zssh PUBLIC include)
-target_link_libraries(zssh android EGL GLESv2 OpenSLES z log zstandard::zstandard)
+target_link_libraries(zssh android EGL GLESv2 OpenSLES z log openMAXAL zstandard::zstandard)

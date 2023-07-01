@@ -121,9 +121,9 @@ void zTexture::makeTexture(u8* ptr, u32 size) {
 }
 
 int zTexture::widthGlyph(int ch, float factor) const {
-    if(ch == 32 || ch == (getCountTiles() / 2 + 32)) return 10;
+//    if(ch == 32 || ch == (getCountTiles() / 2 + 32)) return 10;
     auto ptr(paramGlyph(ch));
-    return ptr ? (int)round((float)ptr->rect.w * factor) : 0;
+    return ptr ? (int)round((float)ptr->rect.w * factor) + ptr->l + ptr->r : 0;
 }
 
 u32 zTexture::makeEmpty(int internalFormat, int format, int width, int height) {
