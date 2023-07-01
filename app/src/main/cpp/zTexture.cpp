@@ -103,7 +103,7 @@ void zTexture::makeTexture(u8* ptr, u32 size) {
             auto img(new u8[sizeAlpha * 2]); image = img;
             for(int i = 0; i < sizeAlpha; i++) {
                 *img++ = alpha[i];
-                *img++ = alpha[i] <= 64 ? 0 : 0xff;
+                *img++ = alpha[i];// < 32 ? 0 : 0xff;
             }
             type = GL_LUMINANCE_ALPHA;
         }
@@ -121,9 +121,8 @@ void zTexture::makeTexture(u8* ptr, u32 size) {
 }
 
 int zTexture::widthGlyph(int ch, float factor) const {
-//    if(ch == 32 || ch == (getCountTiles() / 2 + 32)) return 10;
     auto ptr(paramGlyph(ch));
-    return ptr ? (int)round((float)ptr->rect.w * factor) + ptr->l + ptr->r : 0;
+    return ptr ? (int)round((float)ptr->rect.w * factor + 0.5f) + ptr->getLeft() + ptr->getRight() : 0;
 }
 
 u32 zTexture::makeEmpty(int internalFormat, int format, int width, int height) {

@@ -57,8 +57,8 @@ zTexture::TILE_TTL* zTextPaint::getBoundChar(int ch, rti& tex, rti& bound) const
     auto glyph(font->paramGlyph(ch + bold));
     if(glyph) {
         tex = glyph->rect;
-        auto cw((int)round((float)tex.w * factor));
-        bound.set(0, (int)round((float)(tex.y - yBold) * factor), cw, (int)round((float)tex.h * factor));
+        auto cw((int)round((float)tex.w * factor + 0.5f));
+        bound.set(0, (int)round((float)(tex.y - yBold) * factor + 0.5f), cw, (int)round((float)tex.h * factor + 0.5f));
         tex.w += tex.x; tex.h += tex.y;
     }
     return glyph;

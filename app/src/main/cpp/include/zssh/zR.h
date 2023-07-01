@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Sat Jul  1 06:37:43 2023
+// Sat Jul  1 17:12:37 2023
 
 #pragma once
 
@@ -121,12 +121,12 @@ struct _z {
 				edit1	= 0x0010100F, 	button1	= 0x00101010, 	switch1	= 0x00101011, 
 				seek	= 0x00101012, 	progress1	= 0x00101013, 	formOpen	= 0x00101014, 
 				choiceSource	= 0x00101015, 	catalog	= 0x00101016, 	chkReadOnly	= 0x00101017, 
-				tv1	= 0x00101018, 	spans	= 0x00101019, 	select	= 0x0010101A, 
-				grid1	= 0x0010101B, 	radioDark	= 0x0010101C, 	chkbox	= 0x0010101D, 
-				radioLight	= 0x0010101E, 	button2	= 0x0010101F, 	switch2	= 0x00101020, 
-				switch3	= 0x00101021, 	button3	= 0x00101022, 	seek1	= 0x00101023, 
-				button11	= 0x00101024, 	seek2	= 0x00101025, 	button4	= 0x00101026, 
-				edit2	= 0x00101027, 	progress2	= 0x00101028, 	formSettings	= 0x00101029, 
+				progress2	= 0x00101018, 	tv1	= 0x00101019, 	spans	= 0x0010101A, 
+				select	= 0x0010101B, 	grid1	= 0x0010101C, 	radioDark	= 0x0010101D, 
+				chkbox	= 0x0010101E, 	radioLight	= 0x0010101F, 	button2	= 0x00101020, 
+				switch2	= 0x00101021, 	switch3	= 0x00101022, 	button3	= 0x00101023, 
+				seek1	= 0x00101024, 	button11	= 0x00101025, 	seek2	= 0x00101026, 
+				button4	= 0x00101027, 	edit2	= 0x00101028, 	formSettings	= 0x00101029, 
 			};
 		}; 
 		_id id;

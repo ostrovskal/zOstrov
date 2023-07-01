@@ -54,6 +54,8 @@ public:
     enum { ZSH_APOS, ZSH_ATEX, ZSH_UTEX, ZSH_PMTX, ZSH_WMTX, ZSH_UFLT, ZSH_UCOL };
     // тип цветовых фильтров
     enum { ZCF_NORMAL = 0, ZCF_FOCUSED = 4, ZCF_DISABLED = 5 };
+    // базовые пути
+    enum { PATH_EXTERNAL, PATH_INTERNAL, PATH_OBB };
     // конструктор
     zViewManager(ANativeActivity* activity, int size_cache);
     // деструктор

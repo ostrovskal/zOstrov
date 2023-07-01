@@ -50,7 +50,7 @@ zViewCheck::zViewCheck(zStyle *_styles, i32 _id, u32 _text) : zViewText(_styles,
 
 i32 zViewCheck::onTouchEvent(zTouch *touch) {
     i32 ret;
-    if((ret = zView::onTouchEvent(touch)) == TOUCH_ACTION) checked(!isChecked());
+    if((ret = zViewText::onTouchEvent(touch)) == TOUCH_ACTION) checked(!isChecked());
     return ret;
 }
 

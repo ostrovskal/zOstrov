@@ -12,11 +12,10 @@ public:
         TILE_TTL() { }
         TILE_TTL(u16* ptr) : rect(ptr), patch9(*(int*)(ptr + 4)), name((char*)(ptr + 6)) { }
         bool operator == (cstr _name) const { return _name == name; }
+        int getLeft() const { return (signed char)(patch9 & 0xff); }
+        int getRight() const { return (signed char)((patch9 >> 8) & 0xff); }
         rti rect{};
-        union {
-            int patch9{0};
-            struct { char l, r; };
-        };
+        int patch9{0};
         zStringUTF8 name{};
     };
     struct HEAD_TTL {

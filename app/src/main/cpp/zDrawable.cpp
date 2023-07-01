@@ -74,11 +74,18 @@ int zDrawable::makeQuad(crti& pos, crti& tex, zVertex2D* v, int _italic, bool _s
     auto _tex(texture->getReverseSize()); auto offs((float)_italic);
     auto px1((float)pos.x), py1((float)pos.y), px2(px1 + (float)pos.w), py2(py1 + (float)pos.h);
     auto tx1((float)tex.x * _tex.w), ty1((float)tex.y * _tex.h), tx2((float)tex.w * _tex.w), ty2((float)tex.h * _tex.h);
-    v->x = px1 + offs;  v->y = py1; v->u = tx1; v->v = ty1; v++;
-    v->x = px1;         v->y = py2; v->u = tx1; v->v = ty2; v++;
-    v->x = px2 + offs;  v->y = py1; v->u = tx2; v->v = ty1; v++;
-    v->x = px2;         v->y = py2; v->u = tx2; v->v = ty2;
-    if(_strip) { v++; v->x = px2;  v->y = py2; }
+/*
+    px1 = (px1 / ((float)manager->screen.w / 2) - 1.0f);
+    px2 = (px2 / ((float)manager->screen.w / 2) - 1.0f);
+    py1 = (py1 / ((float)manager->screen.h / 2) - 1.0f);
+    py2 = (py2 / ((float)manager->screen.h / 2) - 1.0f);
+    DLOG("%f %f %f %f", px1, py1, px2, py2);
+*/
+    v->x = px1 + offs;  v->y = py1; v->z = 1.0f; v->u = tx1; v->v = ty1; v++;
+    v->x = px1;         v->y = py2; v->z = 1.0f; v->u = tx1; v->v = ty2; v++;
+    v->x = px2 + offs;  v->y = py1; v->z = 1.0f; v->u = tx2; v->v = ty1; v++;
+    v->x = px2;         v->y = py2; v->z = 1.0f; v->u = tx2; v->v = ty2;
+    if(_strip) { v++; v->x = px2;  v->y = py2; v->z = 1.0f; }
     return 4 + _strip;
 }
 
@@ -86,13 +93,33 @@ int zDrawable::makeTriangle(crti& pos, crti& tex, zVertex2D* v, int _italic) con
     auto _tex(texture->getReverseSize()); auto offs((float)_italic);
     auto px1((float)pos.x), py1((float)pos.y), px2((float)px1 + (float)pos.w), py2((float)py1 + (float)pos.h);
     auto tx1((float)tex.x * _tex.w), ty1((float)tex.y * _tex.h), tx2((float)tex.w * _tex.w), ty2((float)tex.h * _tex.h);
-    v->x = px1 + offs;  v->y = py1; v->u = tx1; v->v = ty1; v++;
-    v->x = px1;         v->y = py2; v->u = tx1; v->v = ty2; v++;
-    v->x = px2 + offs;  v->y = py1; v->u = tx2; v->v = ty1; v++;
-    v->x = px2 + offs;  v->y = py1; v->u = tx2; v->v = ty1; v++;
-    v->x = px1;         v->y = py2; v->u = tx1; v->v = ty2; v++;
-    v->x = px2;         v->y = py2; v->u = tx2; v->v = ty2;
+    v->x = px1 + offs;  v->y = py1; v->z = 1.0f; v->u = tx1; v->v = ty1; v++;
+    v->x = px1;         v->y = py2; v->z = 1.0f; v->u = tx1; v->v = ty2; v++;
+    v->x = px2 + offs;  v->y = py1; v->z = 1.0f; v->u = tx2; v->v = ty1; v++;
+    v->x = px2 + offs;  v->y = py1; v->z = 1.0f; v->u = tx2; v->v = ty1; v++;
+    v->x = px1;         v->y = py2; v->z = 1.0f; v->u = tx1; v->v = ty2; v++;
+    v->x = px2;         v->y = py2; v->z = 1.0f; v->u = tx2; v->v = ty2;
     return 6;
+}
+
+static zVertex2D* makeDebugRect(float x, float y, float w, float h, zVertex2D* v) {
+    auto x1(x), x2(x + w), y1(y), y2(y + h);
+/*
+    x1 = (x1 / ((float)manager->screen.w / 2) - 1.0f);
+    x2 = (x2 / ((float)manager->screen.w / 2) - 1.0f);
+    y1 = (y1 / ((float)manager->screen.h / 2) - 1.0f);
+    y2 = (y2 / ((float)manager->screen.h / 2) - 1.0f);
+    DLOG("%f %f %f %f", x1, y1, x2, y2);
+*/
+    v->x = x1; v->y = y1; v->z = 0.0f; v++;
+    v->x = x2; v->y = y1; v->z = 0.0f; v++;	// top
+    v->x = x1; v->y = y1; v->z = 0.0f; v++;
+    v->x = x1; v->y = y2; v->z = 0.0f; v++;	// left
+    v->x = x2; v->y = y1; v->z = 0.0f; v++;
+    v->x = x2; v->y = y2; v->z = 0.0f; v++;	// right
+    v->x = x1; v->y = y2; v->z = 0.0f; v++;
+    v->x = x2; v->y = y2; v->z = 0.0f; v++; // bottom
+    return v;
 }
 
 enum { VX, VY, VW, VH };
@@ -124,20 +151,18 @@ static void calcPatch9(int idx, crti& p9, crti& p, crti& t) {
 int zDrawable::makePatch9(crti& pos, crti& tex, crti& p9) const {
     int _count(0); rti p, t;
     static zVertex2D tmpVerts[36];
-    static u8 vnum[] = {0, 1, 2, 3, 6, 7, 10, 11, 11, 12,15, 13, 19,
-                        17, 17, 22, 21, 20, 25, 24, 24, 28, 31, 30, 35, 34};
-    auto p9w(p9.extent(false)), p9h(p9.extent(true));
-    rti _pos(0, 0, pos.w < p9w ? p9w : pos.w, pos.h < p9h ? p9h : pos.h);
-    float sh((float)pos.h / (float)_pos.h), sw((float)pos.w / (float)_pos.w);
+    static u8 vnum[] = {0, 1, 2, 3, 6, 7, 10, 11, 11, 12,15, 13, 19, 17, 17, 22, 21, 20, 25, 24, 24, 28, 31, 30, 35, 34};
+    rti _pos(0, 0, z_max(pos.w, tex.w - tex.x), z_max(pos.h, tex.h - tex.y));
+    float sh(((float)pos.h / (float)_pos.h)), sw(((float)pos.w / (float)_pos.w));
+    auto _h((1.0f - sh) > Z_EPSILON), _w((1.0f - sw) > Z_EPSILON);
     for(int i = 0; i < 9 * 8; i += 8) {
         calcPatch9(i + 0, p9, _pos, tex); t.x = y9; p.x = x9;
         calcPatch9(i + 2, p9, _pos, tex); t.y = y9; p.y = x9;
         calcPatch9(i + 4, p9, _pos, tex); t.w = y9; p.w = x9 - p.x;
         calcPatch9(i + 6, p9, _pos, tex); t.h = y9; p.h = x9 - p.y;
-        p.y = (int)round((float)p.y * sh); p.h = (int)round((float)p.h * sh);
-        p.x = (int)round((float)p.x * sw); p.w = (int)round((float)p.w * sw);
-        p.offset(pos.x, pos.y);
-        _count += makeQuad(p, t, &tmpVerts[i / 2]);
+        if(_h) { p.y = (int)roundf((float)p.y * sh + 0.5f); p.h = (int)roundf((float)p.h * sh + 0.5f); }
+        if(_w) { p.x = (int)roundf((float)p.x * sw + 0.5f); p.w = (int)roundf((float)p.w * sw + 0.5f); }
+        p.offset(pos.x, pos.y); _count += makeQuad(p, t, &tmpVerts[i / 2]);
     }
     // переделать в стрип
     for(int i = 0; i < 26; i++) vertices[i] = tmpVerts[vnum[i]];
@@ -167,7 +192,7 @@ void zDrawable::draw(rti *rect) {
             } else {
                 m.identity();
             }
-            m *= t.translate(offs.x, offs.y, 1);
+            m *= t.translate(offs.x, offs.y, 0);
             drawCommon(clip, m, fbo);
             color.a = _a;
         }
@@ -236,18 +261,6 @@ void zDrawable::measure(int width, int height, int pivot, bool isSave) {
     }
 }
 
-static zVertex2D* makeDebugRect(float x, float y, float w, float h, zVertex2D* v) {
-    v->x = x;	  v->y = y;     v++;
-    v->x = x + w; v->y = y;     v++;	// top
-    v->x = x;	  v->y = y;     v++;
-    v->x = x;	  v->y = y + h; v++;	// left
-    v->x = x + w; v->y = y;     v++;
-    v->x = x + w; v->y = y + h; v++;	// right
-    v->x = x;     v->y = y + h; v++;
-    v->x = x + w; v->y = y + h; v++;    // bottom
-    return v;
-}
-
 void zDrawable::makeDebug(cszi &cell) {
     SAFE_DELETE(vertices);
     // определить размер массива линий
@@ -281,23 +294,23 @@ int zDrawable::makeText(cstr text, int len, zTextPaint* paint) {
     while(len-- > 0 && z_isUTF8(text)) {
         auto ch(z_decodeUTF8(z_charUTF8(text, &tmp)));
         if((glp = paint->getBoundChar(ch, tex, _pos))) {
-            _pos.x += stx + glp->l;
+            _pos.x += stx + glp->getLeft();
             // нарисовать
             count += makeTriangle(_pos, tex, &vertices[count], paint->getItalic());
-            stx += _pos.w + glp->l + glp->r; text += tmp;
+            stx += _pos.w + glp->getLeft() + glp->getRight(); text += tmp;
         }
     }
     paint->getBoundChar('_', tex, _pos); tex = tex.padding(4, 0);
     stx += paint->getItalic();
     // strike
     if(paint->isStrike()) {
-        _pos.set(0, paint->getSize() / 2 + 1, stx - 2, paint->getFactor(2.0f));
+        _pos.set(0, paint->getSize() / 2 + 1, stx, paint->getFactor(2.0f));
         count += makeTriangle(_pos, tex, &vertices[count], 0);
     }
     // underline
     if(paint->isUnderline()) {
-        auto bs(paint->getFactor(texture->descent) + 0.5f);
-        _pos.set(0, paint->getSize() - bs, stx - 2, paint->getFactor(2.0f));
+        auto bs((int)roundf(paint->getFactor(paint->getBaseline())));
+        _pos.set(0, paint->getSize() - bs + 1, stx, paint->getFactor(2.0f));
         count += makeTriangle(_pos, tex, &vertices[count], 0);
     }
     return stx;

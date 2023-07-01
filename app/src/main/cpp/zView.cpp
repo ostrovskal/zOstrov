@@ -312,9 +312,9 @@ void zView::onLayout(crti &position, bool changed) {
     rclip = z_clipRect(parent->rclip, rclient);
     if(changed) {
         // позиционирование базовых отображателей
-        drw[DRW_BK]->measure(rview.w, rview.h, 3, false);
-        drw[DRW_FBO]->measure(rview.w, rview.h, 3, false);
-        drw[DRW_MSK]->measure(rview.w, rview.h, 3, false);
+        drw[DRW_BK]->measure(rview.w, rview.h, PIVOT_ALL, false);
+        drw[DRW_FBO]->measure(rview.w, rview.h, PIVOT_ALL, false);
+        drw[DRW_MSK]->measure(rview.w, rview.h, PIVOT_ALL, false);
     }
 }
 
@@ -387,9 +387,8 @@ void zView::setAlpha(float _alpha) {
 
 void zView::setScale(float _x, float _y) {
     // установка масштаба
-    scale.set(_x, _y, 0); mtx.scale(scale);
+    scale.set(_x, _y, 1); mtx.scale(scale);
     mtx *= mtxTmp.rotate(rot);
-    //mtx = mtxScale * mtxRot;
     invalidate();
 }
 

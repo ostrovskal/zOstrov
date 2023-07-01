@@ -3,6 +3,8 @@
 			VIEW_MATCH, VIEW_MATCH)); 
 	auto grp01((zLinearLayout*)grp->attach(new zLinearLayout(styles_z_llinear, 0, true), 
 			VIEW_MATCH, VIEW_WRAP)); 
+	grp01->attach(new zViewProgress(styles_z_linearprogress, z.R.id.progress2, z.R.string.progress, szi(0, 170), 150, false), 
+			ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP);
 	grp01->attach(new zViewText(styles_z_tv1, z.R.id.tv1, z.R.string.serg), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp01->attach(new zViewCheck(styles_z_checkbox, z.R.id.spans, z.R.string.changeSpans), 
@@ -51,5 +53,3 @@
 			ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP);
 	grp01->attach(new zViewEdit(styles_z_edit2, z.R.id.edit2, z.R.string.enter_family), 
 			VIEW_MATCH, VIEW_WRAP);
-	grp01->attach(new zViewProgress(styles_z_linearprogress, z.R.id.progress2, z.R.string.progress, szi(0, 170), 150, false), 
-			ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP);

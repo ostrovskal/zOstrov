@@ -218,7 +218,7 @@ public:
     // обновление состояния
     void updateState(zTextPaint *paint) override {
         paint->setSize((int)roundf((float)paint->getSize() * 0.66f));
-        paint->setBaseline(paint->getBaseline() - paint->getSize() / 2);
+        paint->setBaseline(paint->getBaseline() - paint->getSize());
     }
     // вернуть тип спана
     virtual int typeId() const override { return spans::SPAN_SUBSCRIPT; }

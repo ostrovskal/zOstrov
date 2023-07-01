@@ -12,6 +12,10 @@
         z:styles="@style/llinear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <ProgressBar
+            android:id="@+id/progress2" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="@string/progress" z:layout_gravity="center"  z:styles="@style/linearProgress"
+            z:range="0,170" z:progress="150" z:orientation="horizontal" />
         <TextView
             android:id="@+id/tv1"
             android:layout_width="match_parent"
@@ -172,9 +176,5 @@
         <EditText
             android:id="@+id/edit2" android:layout_width="match_parent" android:layout_height="wrap_content"
             z:styles="@style/edittext" z:inputMode="text" z:hint="@string/enter_family" z:textStyle="normal"  z:textLines="1" />
-        <ProgressBar
-            android:id="@+id/progress2" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="@string/progress" z:layout_gravity="center"  z:styles="@style/linearProgress"
-            z:range="0,170" z:progress="150" z:orientation="horizontal" />
     </LinearLayout>
 </ScrollView>

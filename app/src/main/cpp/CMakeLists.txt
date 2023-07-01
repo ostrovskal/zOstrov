@@ -35,5 +35,7 @@ add_library(zssh SHARED
 )
 
 find_package(zstandard REQUIRED CONFIG)
+add_library(curl STATIC IMPORTED)
+set_target_properties(curl PROPERTIES IMPORTED_LOCATION d:/Dev/Lib/${ANDROID_ABI}/libcurl.a)
 target_include_directories(zssh PUBLIC include)
-target_link_libraries(zssh android EGL GLESv2 OpenSLES z log openMAXAL zstandard::zstandard)
+target_link_libraries(zssh android EGL GLESv2 curl OpenSLES z log openMAXAL zstandard::zstandard)

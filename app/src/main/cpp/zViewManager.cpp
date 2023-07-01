@@ -35,14 +35,14 @@ static cstr fragShaderOES = "#extension GL_OES_EGL_image_external : require\n"
                             "void main() {\n"
                             "  gl_FragColor = texture2D(u_TextureUnit, v_Texture);\n}";
 
-static cstr vertShader = "attribute vec4 pos;\n"
+static cstr vertShader = "attribute vec3 pos;\n"
                          "attribute vec2 tex;\n"
                          "varying vec2 v_Texture;\n"
                          "uniform mat4 wmtx;\n"
                          "uniform mat4 pmtx;\n"
                          "void main() {\n"
                          "    v_Texture = tex;\n"
-                         "    gl_Position = pmtx * wmtx * pos;\n}";
+                         "    gl_Position = (pmtx * wmtx) * vec4(pos, 1);\n}";
 
 static cstr fragShader = "precision mediump float;\n"
                          "uniform mat4 cflt;\n"
@@ -61,9 +61,9 @@ zViewManager::zViewManager(ANativeActivity* _activity, int size_cache) {
     if(!cache) cache = new zImageCache(size_cache);
     manager      = this;
     assets       = _activity->assetManager;
-    basePaths[0] = _activity->externalDataPath; basePaths[0].slash();
-    basePaths[1] = _activity->internalDataPath; basePaths[1].slash();
-    basePaths[2] = _activity->obbPath; basePaths[2].slash();
+    basePaths[PATH_EXTERNAL] = _activity->externalDataPath; basePaths[PATH_EXTERNAL].slash();
+    basePaths[PATH_INTERNAL] = _activity->internalDataPath; basePaths[PATH_INTERNAL].slash();
+    basePaths[PATH_OBB]      = _activity->obbPath; basePaths[PATH_OBB].slash();
 }
 
 zViewManager::~zViewManager() {
@@ -181,12 +181,46 @@ void zViewManager::redrawNativeWindow() {
 }
 
 void zViewManager::prepareRender(zVertex2D* vertices, crti& scissor, const zMatrix& wmtx) {
-    glVertexAttribPointer(shaderVars[ZSH_APOS], 2, GL_FLOAT, GL_FALSE, sizeof(zVertex2D), &vertices->x);
+    glVertexAttribPointer(shaderVars[ZSH_APOS], 3, GL_FLOAT, GL_FALSE, sizeof(zVertex2D), &vertices->x);
     glVertexAttribPointer(shaderVars[ZSH_ATEX], 2, GL_FLOAT, GL_FALSE, sizeof(zVertex2D), &vertices->u);
     //glDisable(GL_SCISSOR_TEST);
     glScissor(scissor.x, zView::fbo ? scissor.y : (screen.h - scissor.extent(true)), scissor.w, scissor.h);
     glUniformMatrix4fv(shaderVars[ZSH_WMTX], 1, false, wmtx);
 }
+
+/*
+static void perspectiveFov(zMatrix& m, float fovy, float aspect, float zn, float zf) {
+    memset(&m, 0, sizeof(zMatrix));
+
+    float tanHalfFovy = tan(fovy * 0.5f);
+    m._11 = 1 / (aspect * tanHalfFovy);
+    m._22 = 1 / tanHalfFovy;
+    m._33 = -(zf + zn) / (zf - zn);
+    m._34 = -1.0f;
+    m._43 = -(2.0 * zf * zn) / (zf - zn);
+
+*/
+/*
+    float tanHalfFovy = tan(fovy / 2.0f);
+    m._11 = 1 / (aspect * tanHalfFovy);
+    m._22 = 1 / tanHalfFovy;
+    m._33 = zf / (zn - zf);
+    m._34 = -1.0f;
+    m._43 = -(zf * zn) / (zf - zn);
+
+    float D2R = M_PI / 180.0f;
+    float yScale = 1.0f / tan(D2R * fovy / 2.0f);
+    float xScale = yScale / aspect;
+    float nearmfar = zn - zf;
+    m._11 = xScale;
+    m._22 = yScale;
+    m._33 = (zf + zn) / nearmfar;
+    m._34 = -1.0f;
+    m._43 = (2.0F * zf * zn) / nearmfar;
+*//*
+
+}
+*/
 
 void zViewManager::setMainMatrix(int ww, int hh, bool invert) {
     static zMatrix mtx;
@@ -195,6 +229,10 @@ void zViewManager::setMainMatrix(int ww, int hh, bool invert) {
     } else {
         mtx.ortho(0, ww, 0, hh);
     }
+    //vv.view(zVec3(ww / 2, hh / 2, -1), zVec3(ww / 2, hh / 2, 1), zVec3(0, 1, 0));
+//    perspectiveFov(mtx, 1.4f, (float)ww / (float)hh, 0.1f, 100.0f);
+//    mtx.perspective(ww, hh, 1, 100.0f);
+//    glUniformMatrix4fv(shaderVars[ZSH_PMTX], 1, false, mtx);
     glUniformMatrix4fv(shaderVars[ZSH_PMTX], 1, false, mtx);
     glViewport(0, 0, ww, hh);
 }

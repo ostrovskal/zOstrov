@@ -366,3 +366,24 @@ public:
     bool start(zTouch* touch, int delta);
     void stop();
 };
+
+static zStyle styles_z_view1[] = {
+        { Z_BACKGROUND, 0xffffffff },
+        { Z_PADDING | ZT_END, 0 }
+};
+
+class zView1 : public zView {
+public:
+    zView1() : zView(styles_z_view1, 0) { }
+    virtual void onInit(bool _theme) override {
+        zView::onInit(_theme);
+
+    }
+protected:
+    virtual void onMeasure(cszm& spec) override {
+        setMeasuredDimension(spec.w.size(), spec.h.size());
+    }
+    virtual void onLayout(crti& pos, bool changed) override {
+        zView::onLayout(pos, changed);
+    }
+};

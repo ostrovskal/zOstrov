@@ -60,10 +60,6 @@ sshApp::sshApp(android_app* _android) : zViewManager(_android->activity, 8) {
 }
 
 void sshApp::run() {
-    sensor.enableSensor(ASENSOR_TYPE_ACCELEROMETER, 1000, 20000, android->looper, [](zSensor* s) {
-        DLOG("process sensor");
-        return 0;
-    });
     while(true) {
         i32 events;
         android_poll_source* source;
@@ -76,6 +72,7 @@ void sshApp::run() {
 }
 
 #include "zssh/zViewRibbons.h"
+#include "zstandard/zCloud.h"
 
 void sshApp::setContent() {
     //debug = true;
