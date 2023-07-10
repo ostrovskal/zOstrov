@@ -17,6 +17,8 @@
 			VIEW_MATCH, VIEW_WRAP);
 	grp01->attach(new zViewGrid(styles_z_grid1, z.R.id.grid1, false), 
 			VIEW_WRAP, VIEW_WRAP);
+	grp01->attach(new zViewEdit(styles_z_edit2, z.R.id.edit2, z.R.string.enter_family), 
+			VIEW_MATCH, VIEW_WRAP);
 	auto grp12((zLinearLayout*)grp01->attach(new zLinearLayout(styles_z_zlinearlayout1, 0, false), 
 			VIEW_MATCH, VIEW_MATCH)); 
 	grp12->attach(new zViewRadio(styles_z_radiodark, z.R.id.radioDark, z.R.string.radio_dark, 1), 
@@ -51,5 +53,3 @@
 			VIEW_MATCH, VIEW_WRAP);
 	grp01->attach(new zViewProgress(styles_z_linearprogress, z.R.id.progress1, z.R.string.sergey, szi(0, 70), 10, false), 
 			ZS_GRAVITY_CENTER, 0, VIEW_MATCH, VIEW_WRAP);
-	grp01->attach(new zViewEdit(styles_z_edit2, z.R.id.edit2, z.R.string.enter_family), 
-			VIEW_MATCH, VIEW_WRAP);

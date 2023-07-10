@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Sat Jul  1 17:12:37 2023
+// Mon Jul 10 19:48:16 2023
 
 #pragma once
 
@@ -122,11 +122,11 @@ struct _z {
 				seek	= 0x00101012, 	progress1	= 0x00101013, 	formOpen	= 0x00101014, 
 				choiceSource	= 0x00101015, 	catalog	= 0x00101016, 	chkReadOnly	= 0x00101017, 
 				progress2	= 0x00101018, 	tv1	= 0x00101019, 	spans	= 0x0010101A, 
-				select	= 0x0010101B, 	grid1	= 0x0010101C, 	radioDark	= 0x0010101D, 
-				chkbox	= 0x0010101E, 	radioLight	= 0x0010101F, 	button2	= 0x00101020, 
-				switch2	= 0x00101021, 	switch3	= 0x00101022, 	button3	= 0x00101023, 
-				seek1	= 0x00101024, 	button11	= 0x00101025, 	seek2	= 0x00101026, 
-				button4	= 0x00101027, 	edit2	= 0x00101028, 	formSettings	= 0x00101029, 
+				select	= 0x0010101B, 	grid1	= 0x0010101C, 	edit2	= 0x0010101D, 
+				radioDark	= 0x0010101E, 	chkbox	= 0x0010101F, 	radioLight	= 0x00101020, 
+				button2	= 0x00101021, 	switch2	= 0x00101022, 	switch3	= 0x00101023, 
+				button3	= 0x00101024, 	seek1	= 0x00101025, 	button11	= 0x00101026, 
+				seek2	= 0x00101027, 	button4	= 0x00101028, 	formSettings	= 0x00101029, 
 			};
 		}; 
 		_id id;
@@ -185,11 +185,11 @@ struct _z {
 				progress1	= 0x00100035, 	formopen	= 0x00100036, 	zlinearlayout1	= 0x00100037, 
 				zviewbutton1	= 0x00100038, 	zscrolllayout1	= 0x00100039, 
 				tv1	= 0x0010003A, 	zviewedit1	= 0x0010003B, 	grid1	= 0x0010003C, 
-				radiodark	= 0x0010003D, 	chkbox	= 0x0010003E, 	radiolight	= 0x0010003F, 
-				zviewbutton2	= 0x00100040, 	button2	= 0x00100041, 	switch2	= 0x00100042, 
-				switch3	= 0x00100043, 	button3	= 0x00100044, 	zviewslider1	= 0x00100045, 
-				seek1	= 0x00100046, 	button11	= 0x00100047, 	seek2	= 0x00100048, 
-				edit2	= 0x00100049, 	formsettings	= 0x0010004A, 	zlinearlayout2	= 0x0010004B, 
+				edit2	= 0x0010003D, 	radiodark	= 0x0010003E, 	chkbox	= 0x0010003F, 
+				radiolight	= 0x00100040, 	zviewbutton2	= 0x00100041, 	button2	= 0x00100042, 
+				switch2	= 0x00100043, 	switch3	= 0x00100044, 	button3	= 0x00100045, 
+				zviewslider1	= 0x00100046, 	seek1	= 0x00100047, 	button11	= 0x00100048, 
+				seek2	= 0x00100049, 	formsettings	= 0x0010004A, 	zlinearlayout2	= 0x0010004B, 
 				zviewtext1	= 0x0010004C, 	zlinearlayout3	= 0x0010004D, 	ztabwidget1	= 0x0010004E, 
 	};
 		};
@@ -265,6 +265,7 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::tv1, styles_z_tv1 },
 		{ _z::_R::_style::zviewedit1, styles_z_zviewedit1 },
 		{ _z::_R::_style::grid1, styles_z_grid1 },
+		{ _z::_R::_style::edit2, styles_z_edit2 },
 		{ _z::_R::_style::radiodark, styles_z_radiodark },
 		{ _z::_R::_style::chkbox, styles_z_chkbox },
 		{ _z::_R::_style::radiolight, styles_z_radiolight },
@@ -277,7 +278,6 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::seek1, styles_z_seek1 },
 		{ _z::_R::_style::button11, styles_z_button11 },
 		{ _z::_R::_style::seek2, styles_z_seek2 },
-		{ _z::_R::_style::edit2, styles_z_edit2 },
 		{ _z::_R::_style::formsettings, styles_z_formsettings },
 		{ _z::_R::_style::zlinearlayout2, styles_z_zlinearlayout2 },
 		{ _z::_R::_style::zviewtext1, styles_z_zviewtext1 },

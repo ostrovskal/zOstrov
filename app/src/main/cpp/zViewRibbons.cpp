@@ -265,7 +265,6 @@ void zViewBaseRibbon::onLayout(crti &position, bool changed) {
 
 szi zViewBaseRibbon::measureChildrenSize(cszm& spec) {
     int limit(spec[vert].size()), i; szi _max;
-    auto hSize(&_max[vert]), wSize(&_max[!vert]);
     for(i = 0 ; i < countItem; i++) {
         auto child(obtainView(i));
         if(!child) continue;
@@ -282,10 +281,10 @@ szi zViewBaseRibbon::measureChildrenSize(cszm& spec) {
                 if(_limit > limit) limit = _limit;
             }
         }
-        *wSize = z_max(*wSize, rv[3 - vert]);
-        auto _size(*hSize + rv[vert + 2]);
+        _max[!vert] = z_max(_max[!vert], rv[3 - vert]);
+        auto _size(_max[vert] + rv[vert + 2]);
         if(_size >= limit) break;
-        *hSize = _size;
+        _max[vert] = _size;
     }
     _max[vert] += (div && div->resolve(i, false));
     return _max;

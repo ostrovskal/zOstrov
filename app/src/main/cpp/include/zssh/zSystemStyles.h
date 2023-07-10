@@ -178,7 +178,7 @@ static zStyle styles_z_list_item[] = {
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_TEXT_LINES, 1 },
-	{ Z_TEXT_ELLIPSIS, ZS_ELLIPSIS_START },
+	{ Z_TEXT_ELLIPSIS, ZS_ELLIPSIS_MIDDLE },
 	{ Z_IPADDING, 0x03030303 },
 	{ Z_FOREGROUND_TILES | ZT_END, z.R.integer.selectItem }
 };
@@ -670,10 +670,17 @@ static zStyle styles_z_grid1[] = {
 	{ Z_BACKGROUND_TILES | ZT_END, z.R.integer.selectDrop }
 };
 
+static zStyle styles_z_edit2[] = {
+	{ Z_STYLES, z.R.style.edittext },
+	{ Z_MODE, ZS_EDIT_TEXT },
+	{ Z_TEXT_STYLE, ZS_TEXT_NORMAL },
+	{ Z_TEXT_LINES | ZT_END, 1 }
+};
+
 static zStyle styles_z_radiodark[] = {
 	{ Z_STYLES, z.R.style.radiobutton },
 	{ Z_DECORATE, ZS_CHECKED },
-	{ Z_TEXT_ELLIPSIS, ZS_ELLIPSIS_START },
+	{ Z_TEXT_ELLIPSIS, ZS_ELLIPSIS_MIDDLE },
 	{ Z_TEXT_LINES | ZT_END, 1 }
 };
 
@@ -684,7 +691,7 @@ static zStyle styles_z_chkbox[] = {
 
 static zStyle styles_z_radiolight[] = {
 	{ Z_DECORATE, ZS_CHECKED },
-	{ Z_TEXT_ELLIPSIS, ZS_ELLIPSIS_END },
+	{ Z_TEXT_ELLIPSIS, ZS_ELLIPSIS_MIDDLE },
 	{ Z_STYLES | ZT_END, z.R.style.radiobutton }
 };
 
@@ -744,13 +751,6 @@ static zStyle styles_z_seek2[] = {
 	{ Z_MODE, ZS_SLIDER_SCALE },
 	{ Z_DECORATE, ZS_TIPS },
 	{ Z_PADDING | ZT_END, 0x01010101 }
-};
-
-static zStyle styles_z_edit2[] = {
-	{ Z_STYLES, z.R.style.edittext },
-	{ Z_MODE, ZS_EDIT_TEXT },
-	{ Z_TEXT_STYLE, ZS_TEXT_NORMAL },
-	{ Z_TEXT_LINES | ZT_END, 1 }
 };
 
 static zStyle styles_z_formsettings[] = {

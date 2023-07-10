@@ -91,10 +91,15 @@ void sshApp::setContent() {
 //        DLOG("grid sel %i", sel);
     });
     auto edt(idView<zViewEdit>(z.R.id.edit1));
-    edt->setOnChangeText([adapter, edt](zView*, int m) {
+    auto edt2(idView<zViewEdit>(z.R.id.edit2));
+    edt->setOnChangeText([adapter, edt, edt2](zView*, int m) {
         if(m == MSG_EDIT_FINISH) {
-            adapter->add(edt->getText());
-            edt->setText("", true);
+            auto txt(edt->getText());
+            if(txt.isNotEmpty()) {
+                adapter->add(txt);
+                edt->setText("", true);
+            }
+            edt2->setText(txt, false);
         }
     });
     auto sel(idView<zViewSelect>(z.R.id.choiceSource));
@@ -158,4 +163,14 @@ void sshApp::setContent() {
     auto lst1(idView<zViewRibbon>(z.R.id.list1));
     auto adapter1(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
     lst1->setAdapter(adapter1);
+    edt2->setOnChangeText([adapter1, edt, edt2](zView*, int m) {
+        if(m == MSG_EDIT_FINISH) {
+            auto txt(edt2->getText());
+            if(txt.isNotEmpty()) {
+                adapter1->add(txt);
+                edt2->setText("", true);
+            }
+            edt->setText(txt, false);
+        }
+    });
 }

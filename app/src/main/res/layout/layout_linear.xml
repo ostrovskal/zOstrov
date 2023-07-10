@@ -57,6 +57,9 @@
             z:styles="@style/grid"
             z:orientation="horizontal"
             z:bkTiles="@integer/selectDrop" />
+        <EditText
+            android:id="@+id/edit2" android:layout_width="match_parent" android:layout_height="wrap_content"
+            z:styles="@style/edittext" z:inputMode="text" z:hint="@string/enter_family" z:textStyle="normal"  z:textLines="1" />
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -69,7 +72,7 @@
                 z:layout_group="1" z:text="@string/radio_dark"
                 z:styles="@style/radiobutton"
                 z:decorate="checked"
-                z:textEllipsis="start"
+                z:textEllipsis="middle"
                 z:textLines="1" />
             <CheckBox
                 android:layout_width="wrap_content" android:layout_weight="2"
@@ -83,7 +86,7 @@
                 android:layout_height="match_parent"
                 z:layout_group="1" z:text="@string/radio_light"
                 z:decorate="checked"
-                z:textEllipsis="end"
+                z:textEllipsis="middle"
                 z:styles="@style/radiobutton" />
         </LinearLayout>
         <ListView
@@ -173,8 +176,5 @@
             android:id="@+id/progress1" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:text="@string/sergey" z:layout_gravity="center"  z:styles="@style/linearProgress"
             z:range="0,70" z:progress="10" z:orientation="horizontal" />
-        <EditText
-            android:id="@+id/edit2" android:layout_width="match_parent" android:layout_height="wrap_content"
-            z:styles="@style/edittext" z:inputMode="text" z:hint="@string/enter_family" z:textStyle="normal"  z:textLines="1" />
     </LinearLayout>
 </ScrollView>
