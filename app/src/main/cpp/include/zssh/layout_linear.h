@@ -27,7 +27,7 @@
 			0, 2, VIEW_WRAP, VIEW_MATCH);
 	grp12->attach(new zViewRadio(styles_z_radiolight, z.R.id.radioLight, z.R.string.radio_light, 1), 
 			0, 1, VIEW_WRAP, VIEW_MATCH);
-	grp01->attach(new zViewRibbon(styles_z_list1, z.R.id.list1, false), 
+	grp01->attach(new zViewRibbon(styles_z_zviewribbon1, z.R.id.list1, false), 
 			VIEW_WRAP, 120_dp);
 	grp01->attach(new zViewButton(styles_z_zviewbutton2, z.R.id.button1, z.R.string.press_me, z.R.integer.iconCancel), 
 			VIEW_MATCH, VIEW_WRAP);

@@ -160,7 +160,7 @@
         <item name="foreground">@drawable/zssh</item>
         <item name="fkGravity">center</item>
         <item name="textLines">1</item>
-        <item name="textEllipsis">start</item>
+        <item name="textEllipsis">middle</item>
         <item name="ipad">3dp</item>
         <item name="fkTiles">@integer/selectItem</item>
     </style>

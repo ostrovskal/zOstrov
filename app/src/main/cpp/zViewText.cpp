@@ -31,11 +31,11 @@ void zViewText::updateText() {
     clearCacheSpans(false);
     auto changed(rview.isNotEmpty());
     if(changed) {
-        auto rv(rview);
+        auto rv(rclient); auto count(drw[DRW_TXT]->bound.h);
         szm spec(zMeasure(lps.w == VIEW_WRAP ? MEASURE_UNDEF : MEASURE_EXACT, measureSpec.w.size()),
                  zMeasure(lps.h == VIEW_WRAP ? MEASURE_UNDEF : MEASURE_EXACT, measureSpec.h.size()));
         onMeasure(spec);
-        changed = (rv != rview);
+        changed = (rv != rclient || count != drw[DRW_TXT]->bound.h);
     }
     if(changed) {
 //        DLOG("changed");
@@ -297,7 +297,7 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
     if(textCache.isNotEmpty() && lines == 1 && ellipsis != ZS_ELLIPSIS_NONE) {
         auto pt3(defPaint->widthText("...", 3));
         auto c(textCache[0]); auto w(c->width - widthRect);
-        if(w >= 0) {
+        if(w > 0) {
             w += pt3;
             zStringUTF8 tmp;
             auto _c(c->text.count()), _c1(_c / 2), l(0), ll(0);

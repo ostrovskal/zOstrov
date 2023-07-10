@@ -695,6 +695,12 @@ static zStyle styles_z_radiolight[] = {
 	{ Z_STYLES | ZT_END, z.R.style.radiobutton }
 };
 
+static zStyle styles_z_zviewribbon1[] = {
+	{ Z_STYLES, z.R.style.ribbon },
+	{ Z_DECORATE, ZS_GLOW },
+	{ Z_BACKGROUND_TILES | ZT_END, z.R.integer.selectDrop }
+};
+
 static zStyle styles_z_zviewbutton2[] = {
 	{ Z_STYLES, z.R.style.button },
 	{ Z_TEXT_SIZE, 25 },

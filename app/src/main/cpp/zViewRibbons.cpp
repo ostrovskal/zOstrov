@@ -170,25 +170,25 @@ bool zViewBaseRibbon::scrolling(int _delta) {
 int zViewBaseRibbon::computeScrollOffset(bool _vert) const {
     if(children.isNotEmpty()) {
         auto view(atView(0));
-        auto s((view->edges(_vert, false) - edge.w) * 100);
-        return z_max(0, firstItem / linesGrid * 100 - s / view->sizes(_vert));
+        auto s((view->edges(_vert, false) - edge.w) * 1000);
+        return z_max(0, firstItem / linesGrid * 1000 - s / view->sizes(_vert));
     }
     return 0;
 }
 
 int zViewBaseRibbon::computeScrollRange(bool _vert) const {
-    return ((countItem + linesGrid - 1) / linesGrid) * 100;
+    return ((countItem + linesGrid - 1) / linesGrid) * 1000;
 }
 
 int zViewBaseRibbon::computeScrollExtent(bool _vert) const {
     auto count(children.size());
     if(count > 0) {
-        auto extent(((count + linesGrid - 1) / linesGrid) * 100);
+        auto extent(((count + linesGrid - 1) / linesGrid) * 1000);
         auto view(atView(0));
-        auto s((view->edges(_vert, false) - edge.w) * 100);
+        auto s((view->edges(_vert, false) - edge.w) * 1000);
         extent += s / view->sizes(_vert);
         view = atView(count - 1); s = view->edges(_vert, true) - edge.w;
-        extent -= (s - (edge.h - edge.w)) * 100 / view->sizes(_vert);
+        extent -= (s - (edge.h - edge.w)) * 1000 / view->sizes(_vert);
         return extent;
     }
     return 0;
@@ -249,7 +249,7 @@ void zViewBaseRibbon::onLayout(crti &position, bool changed) {
     edge.set(rclient[vert], rclient.extent(vert));
     // скорректировать первый видимый
     auto pos(firstItem), _count(countChildren() - 1);
-    if(_count == 0) _count = countItem;
+    if(_count < 0) _count = countItem;
     if(pos + _count >= countItem) pos = countItem - _count;
     if(pos < 0) pos = 0;
     if(firstItem != pos) deltaItem = 0, firstItem = pos;

@@ -187,7 +187,8 @@ i32 zViewEdit::keyEvent(int key, bool sysKey) {
         }
         auto caretPos(caretIndex);
         if(key == '\b') {
-            if(caretPos > 0) removeText(--caretPos, 1);
+            if(caretPos > 0)
+                removeText(--caretPos, 1);
         } else if(realText.count() < maxLength) {
             insertText(caretPos++, (char*)&key);
         }
@@ -207,9 +208,7 @@ bool zViewEdit::clearSelected(bool del_text) {
     bool ret(false);
     if(del_text && bkgSpan && bkgSpan->length()) {
         removeText(bkgSpan->s, bkgSpan->length());
-        if(caretIndex >= bkgSpan->s) {
-            caretIndex = correct(bkgSpan->s);
-        }
+        if(caretIndex >= bkgSpan->s) caretIndex = correct(bkgSpan->s);
         ret = true;
     }
     spans.clear(); cacheSpans.clear(); bkgSpan = nullptr;

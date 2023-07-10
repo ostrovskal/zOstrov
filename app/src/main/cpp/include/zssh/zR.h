@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Mon Jul 10 19:48:16 2023
+// Tue Jul 11 00:15:30 2023
 
 #pragma once
 
@@ -186,12 +186,12 @@ struct _z {
 				zviewbutton1	= 0x00100038, 	zscrolllayout1	= 0x00100039, 
 				tv1	= 0x0010003A, 	zviewedit1	= 0x0010003B, 	grid1	= 0x0010003C, 
 				edit2	= 0x0010003D, 	radiodark	= 0x0010003E, 	chkbox	= 0x0010003F, 
-				radiolight	= 0x00100040, 	zviewbutton2	= 0x00100041, 	button2	= 0x00100042, 
-				switch2	= 0x00100043, 	switch3	= 0x00100044, 	button3	= 0x00100045, 
-				zviewslider1	= 0x00100046, 	seek1	= 0x00100047, 	button11	= 0x00100048, 
-				seek2	= 0x00100049, 	formsettings	= 0x0010004A, 	zlinearlayout2	= 0x0010004B, 
-				zviewtext1	= 0x0010004C, 	zlinearlayout3	= 0x0010004D, 	ztabwidget1	= 0x0010004E, 
-	};
+				radiolight	= 0x00100040, 	zviewribbon1	= 0x00100041, 	zviewbutton2	= 0x00100042, 
+				button2	= 0x00100043, 	switch2	= 0x00100044, 	switch3	= 0x00100045, 
+				button3	= 0x00100046, 	zviewslider1	= 0x00100047, 	seek1	= 0x00100048, 
+				button11	= 0x00100049, 	seek2	= 0x0010004A, 	formsettings	= 0x0010004B, 
+				zlinearlayout2	= 0x0010004C, 	zviewtext1	= 0x0010004D, 	zlinearlayout3	= 0x0010004E, 
+				ztabwidget1	= 0x0010004F, 	};
 		};
 		_style style;
 	};
@@ -269,6 +269,7 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::radiodark, styles_z_radiodark },
 		{ _z::_R::_style::chkbox, styles_z_chkbox },
 		{ _z::_R::_style::radiolight, styles_z_radiolight },
+		{ _z::_R::_style::zviewribbon1, styles_z_zviewribbon1 },
 		{ _z::_R::_style::zviewbutton2, styles_z_zviewbutton2 },
 		{ _z::_R::_style::button2, styles_z_button2 },
 		{ _z::_R::_style::switch2, styles_z_switch2 },
