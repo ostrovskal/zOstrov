@@ -24,11 +24,6 @@ zViewBaseRibbon::~zViewBaseRibbon() {
     }
 }
 
-void zViewBaseRibbon::requestLayout() {
-    auto drop(dynamic_cast<zViewDropdown*>(this));
-    if(drop) zViewGroup::requestLayout();
-}
-
 zViewBaseRibbon* zViewBaseRibbon::setAdapter(zBaseAdapter* _adapter) {
     reset();
     if(adapter) {
@@ -201,7 +196,7 @@ int zViewBaseRibbon::computeScrollExtent(bool _vert) const {
 
 void zViewBaseRibbon::notifyAdapter(zBaseAdapter* _adapter) {
     countItem = _adapter->getCount();
-    requestLayout();
+    requestPosition();
 }
 
 void zViewBaseRibbon::stateView(STATE &state, bool save, int &index) {
@@ -302,6 +297,7 @@ void zViewBaseRibbon::onMeasure(cszm& spec) {
     // дивидер
     if(div) div->measure(0, 0, 0, false);
     cacheViews.clear();
+    DLOG("onMeasure");
 }
 
 i32 zViewBaseRibbon::onTouchEvent(zTouch *touch) {

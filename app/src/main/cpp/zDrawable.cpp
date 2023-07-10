@@ -74,18 +74,11 @@ int zDrawable::makeQuad(crti& pos, crti& tex, zVertex2D* v, int _italic, bool _s
     auto _tex(texture->getReverseSize()); auto offs((float)_italic);
     auto px1((float)pos.x), py1((float)pos.y), px2(px1 + (float)pos.w), py2(py1 + (float)pos.h);
     auto tx1((float)tex.x * _tex.w), ty1((float)tex.y * _tex.h), tx2((float)tex.w * _tex.w), ty2((float)tex.h * _tex.h);
-/*
-    px1 = (px1 / ((float)manager->screen.w / 2) - 1.0f);
-    px2 = (px2 / ((float)manager->screen.w / 2) - 1.0f);
-    py1 = (py1 / ((float)manager->screen.h / 2) - 1.0f);
-    py2 = (py2 / ((float)manager->screen.h / 2) - 1.0f);
-    DLOG("%f %f %f %f", px1, py1, px2, py2);
-*/
-    v->x = px1 + offs;  v->y = py1; v->z = 1.0f; v->u = tx1; v->v = ty1; v++;
-    v->x = px1;         v->y = py2; v->z = 1.0f; v->u = tx1; v->v = ty2; v++;
-    v->x = px2 + offs;  v->y = py1; v->z = 1.0f; v->u = tx2; v->v = ty1; v++;
-    v->x = px2;         v->y = py2; v->z = 1.0f; v->u = tx2; v->v = ty2;
-    if(_strip) { v++; v->x = px2;  v->y = py2; v->z = 1.0f; }
+    v->x = px1 + offs;  v->y = py1; v->u = tx1; v->v = ty1; v++;
+    v->x = px1;         v->y = py2; v->u = tx1; v->v = ty2; v++;
+    v->x = px2 + offs;  v->y = py1; v->u = tx2; v->v = ty1; v++;
+    v->x = px2;         v->y = py2; v->u = tx2; v->v = ty2;
+    if(_strip) { v++; v->x = px2;  v->y = py2; }
     return 4 + _strip;
 }
 
@@ -93,32 +86,25 @@ int zDrawable::makeTriangle(crti& pos, crti& tex, zVertex2D* v, int _italic) con
     auto _tex(texture->getReverseSize()); auto offs((float)_italic);
     auto px1((float)pos.x), py1((float)pos.y), px2((float)px1 + (float)pos.w), py2((float)py1 + (float)pos.h);
     auto tx1((float)tex.x * _tex.w), ty1((float)tex.y * _tex.h), tx2((float)tex.w * _tex.w), ty2((float)tex.h * _tex.h);
-    v->x = px1 + offs;  v->y = py1; v->z = 1.0f; v->u = tx1; v->v = ty1; v++;
-    v->x = px1;         v->y = py2; v->z = 1.0f; v->u = tx1; v->v = ty2; v++;
-    v->x = px2 + offs;  v->y = py1; v->z = 1.0f; v->u = tx2; v->v = ty1; v++;
-    v->x = px2 + offs;  v->y = py1; v->z = 1.0f; v->u = tx2; v->v = ty1; v++;
-    v->x = px1;         v->y = py2; v->z = 1.0f; v->u = tx1; v->v = ty2; v++;
-    v->x = px2;         v->y = py2; v->z = 1.0f; v->u = tx2; v->v = ty2;
+    v->x = px1 + offs;  v->y = py1; v->u = tx1; v->v = ty1; v++;
+    v->x = px1;         v->y = py2; v->u = tx1; v->v = ty2; v++;
+    v->x = px2 + offs;  v->y = py1; v->u = tx2; v->v = ty1; v++;
+    v->x = px2 + offs;  v->y = py1; v->u = tx2; v->v = ty1; v++;
+    v->x = px1;         v->y = py2; v->u = tx1; v->v = ty2; v++;
+    v->x = px2;         v->y = py2; v->u = tx2; v->v = ty2;
     return 6;
 }
 
 static zVertex2D* makeDebugRect(float x, float y, float w, float h, zVertex2D* v) {
     auto x1(x), x2(x + w), y1(y), y2(y + h);
-/*
-    x1 = (x1 / ((float)manager->screen.w / 2) - 1.0f);
-    x2 = (x2 / ((float)manager->screen.w / 2) - 1.0f);
-    y1 = (y1 / ((float)manager->screen.h / 2) - 1.0f);
-    y2 = (y2 / ((float)manager->screen.h / 2) - 1.0f);
-    DLOG("%f %f %f %f", x1, y1, x2, y2);
-*/
-    v->x = x1; v->y = y1; v->z = 0.0f; v++;
-    v->x = x2; v->y = y1; v->z = 0.0f; v++;	// top
-    v->x = x1; v->y = y1; v->z = 0.0f; v++;
-    v->x = x1; v->y = y2; v->z = 0.0f; v++;	// left
-    v->x = x2; v->y = y1; v->z = 0.0f; v++;
-    v->x = x2; v->y = y2; v->z = 0.0f; v++;	// right
-    v->x = x1; v->y = y2; v->z = 0.0f; v++;
-    v->x = x2; v->y = y2; v->z = 0.0f; v++; // bottom
+    v->x = x1; v->y = y1; v++;
+    v->x = x2; v->y = y1; v++;	// top
+    v->x = x1; v->y = y1; v++;
+    v->x = x1; v->y = y2; v++;	// left
+    v->x = x2; v->y = y1; v++;
+    v->x = x2; v->y = y2; v++;	// right
+    v->x = x1; v->y = y2; v++;
+    v->x = x2; v->y = y2; v++; // bottom
     return v;
 }
 
@@ -413,7 +399,7 @@ int zDrawableDivider::resolve(int count, bool _visible) const {
     if(type & ZS_DIVIDER_END) _size += size + padBegin;
     if((type & ZS_DIVIDER_MIDDLE) && count > 0) {
         if(_visible) {
-            auto parent((zViewGroup *)view);
+            auto parent((zViewGroup*)view);
             for(int i = 0; i < count; i++) middle += (parent->atView(i)->isVisibled());
         } else middle = count;
         _size += (size + padBegin + padEnd) * middle;

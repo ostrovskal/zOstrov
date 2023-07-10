@@ -84,10 +84,19 @@ void sshApp::setContent() {
     formBrowser->setOnProcess([](zView*) {
     });
     zArray<zStringUTF8> objects(theme->findArray(z.R.array.spinArray));
-    for(int i = 0 ; i < 1000; i += 7) {
-        objects += zStringUTF8(z_ntos(&i, RADIX_HEX, false));
-    }
     attachForm(formBrowser, 280_dp, 300_dp);
+    auto grd(idView<zViewGrid>(z.R.id.grid1));
+    auto adapter(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
+    grd->setAdapter(adapter)->setOnChangeSelected([](zView*, int sel) {
+//        DLOG("grid sel %i", sel);
+    });
+    auto edt(idView<zViewEdit>(z.R.id.edit1));
+    edt->setOnChangeText([adapter, edt](zView*, int m) {
+        if(m == MSG_EDIT_FINISH) {
+            adapter->add(edt->getText());
+            edt->setText("", true);
+        }
+    });
     auto sel(idView<zViewSelect>(z.R.id.choiceSource));
     auto lst(idView<zViewRibbon>(z.R.id.catalog));
     lst->setAdapter(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
@@ -146,11 +155,6 @@ void sshApp::setContent() {
                                         setOnChangeSelected([](zView*, int s) {
                                             DLOG("select sel %i", s);
                                         });
-    auto grd(idView<zViewGrid>(z.R.id.grid1));
-    auto adapter(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
-    grd->setAdapter(adapter)->setOnChangeSelected([](zView*, int sel) {
-//        DLOG("grid sel %i", sel);
-    });
     auto lst1(idView<zViewRibbon>(z.R.id.list1));
     auto adapter1(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
     lst1->setAdapter(adapter1);

@@ -55,12 +55,12 @@ public:
     virtual ~zViewText();
     // событие загрузки стилей
     virtual void onInit(bool theme) override;
+    // установить текст из строки
+    virtual void setText(czs& _text, bool force);
     // вернуть имя типа
     virtual cstr typeName() const override { return "zViewText"; }
     // установить текст по идентификатору из ресурсов
     void setText(u32 _text) { setText(theme->findString(_text), false); }
-    // установить текст из строки
-    void setText(czs& _text, bool force);
     // специальный - для клавиатурных кнопок
     void setTextSpecial(czs& _text, cszm& spec);
     // установка текста парсингом из html
@@ -217,6 +217,8 @@ public:
     virtual void stateView(STATE &state, bool save, int &index) override;
     // событие загрузки стилей
     virtual void onInit(bool theme) override;
+    // установить текст из строки
+    virtual void setText(czs& _text, bool force) override;
     // раскладка клавы по умолчанию
     virtual cstr getDefaultKeyboardLayer() const override { return filter ? filter->getKeboardLayer() : nullptr; }
     // вернуть имя типа
@@ -225,8 +227,6 @@ public:
     void setFilter(u32 inputMode, zFilterEdit* _filter = nullptr);
     // вернуть фильтр
     zFilterEdit* getFilter() const { return filter; }
-    // очистка текста
-    void clearText();
     // вернуть текст подсказки
     czs& getHint() const { return hintText; }
     // установить текст подсказки
@@ -292,7 +292,6 @@ protected:
     pti posSel{INT_MIN, INT_MIN};
     zViewDropdown* dropdown{nullptr};
     zViewPopup* popup{nullptr};
-
     // событие редактирования
     std::function<void(zView*, int)> onChangeText;
     // событие установки каретки

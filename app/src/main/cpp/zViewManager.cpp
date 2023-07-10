@@ -35,14 +35,14 @@ static cstr fragShaderOES = "#extension GL_OES_EGL_image_external : require\n"
                             "void main() {\n"
                             "  gl_FragColor = texture2D(u_TextureUnit, v_Texture);\n}";
 
-static cstr vertShader = "attribute vec3 pos;\n"
+static cstr vertShader = "attribute vec4 pos;\n"
                          "attribute vec2 tex;\n"
                          "varying vec2 v_Texture;\n"
                          "uniform mat4 wmtx;\n"
                          "uniform mat4 pmtx;\n"
                          "void main() {\n"
                          "    v_Texture = tex;\n"
-                         "    gl_Position = (pmtx * wmtx) * vec4(pos, 1);\n}";
+                         "    gl_Position = (pmtx * wmtx) * pos;\n}";
 
 static cstr fragShader = "precision mediump float;\n"
                          "uniform mat4 cflt;\n"
@@ -50,7 +50,7 @@ static cstr fragShader = "precision mediump float;\n"
                          "uniform sampler2D u_TextureUnit;\n"
                          "varying vec2 v_Texture;\n"
                          "void main() {\n"
-                         "vec4 tmp = texture2D(u_TextureUnit, v_Texture);\n"
+                         "    vec4 tmp = texture2D(u_TextureUnit, v_Texture);\n"
                          "    gl_FragColor = (tmp * tcolor) * cflt;\n}";
 
 zViewManager* manager(nullptr);
@@ -92,7 +92,6 @@ i32 zViewManager::processInputEvens(AInputEvent *_event) {
         switch(AInputEvent_getType(_event)) {
             case AINPUT_EVENT_TYPE_MOTION:
                 common->touchEvent(_event);
-//                touch.info();
                 break;
             case AINPUT_EVENT_TYPE_KEY:
                 if(AKeyEvent_getAction(_event) == AKEY_EVENT_ACTION_UP)
@@ -122,7 +121,6 @@ int zViewManager::keyEvent(int key) {
 bool zViewManager::displayInit() {
     if(!zGL::instance()->init(window))
         return false;
-    //eglSwapInterval(0);
     // шейдеры
     programOES  = new zShader(new zShader(vertShaderOES, GL_VERTEX_SHADER), new zShader(fragShaderOES, GL_FRAGMENT_SHADER));
     program  = new zShader(new zShader(vertShader, GL_VERTEX_SHADER), new zShader(fragShader, GL_FRAGMENT_SHADER));
@@ -141,14 +139,7 @@ bool zViewManager::displayInit() {
     glEnable(GL_BLEND);
     glEnable(GL_SCISSOR_TEST);
     glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-//    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    // запускаем тред анимации
-/*
-    pthread_attr_t lAttributes;
-    if(pthread_attr_init(&lAttributes)) abort();
-    if(pthread_create(&threadID, &lAttributes, threadFunc, this)) abort();
-*/
     return true;
 }
 
@@ -188,51 +179,9 @@ void zViewManager::prepareRender(zVertex2D* vertices, crti& scissor, const zMatr
     glUniformMatrix4fv(shaderVars[ZSH_WMTX], 1, false, wmtx);
 }
 
-/*
-static void perspectiveFov(zMatrix& m, float fovy, float aspect, float zn, float zf) {
-    memset(&m, 0, sizeof(zMatrix));
-
-    float tanHalfFovy = tan(fovy * 0.5f);
-    m._11 = 1 / (aspect * tanHalfFovy);
-    m._22 = 1 / tanHalfFovy;
-    m._33 = -(zf + zn) / (zf - zn);
-    m._34 = -1.0f;
-    m._43 = -(2.0 * zf * zn) / (zf - zn);
-
-*/
-/*
-    float tanHalfFovy = tan(fovy / 2.0f);
-    m._11 = 1 / (aspect * tanHalfFovy);
-    m._22 = 1 / tanHalfFovy;
-    m._33 = zf / (zn - zf);
-    m._34 = -1.0f;
-    m._43 = -(zf * zn) / (zf - zn);
-
-    float D2R = M_PI / 180.0f;
-    float yScale = 1.0f / tan(D2R * fovy / 2.0f);
-    float xScale = yScale / aspect;
-    float nearmfar = zn - zf;
-    m._11 = xScale;
-    m._22 = yScale;
-    m._33 = (zf + zn) / nearmfar;
-    m._34 = -1.0f;
-    m._43 = (2.0F * zf * zn) / nearmfar;
-*//*
-
-}
-*/
-
 void zViewManager::setMainMatrix(int ww, int hh, bool invert) {
     static zMatrix mtx;
-    if(invert) {
-        mtx.ortho(0, ww, hh, 0);
-    } else {
-        mtx.ortho(0, ww, 0, hh);
-    }
-    //vv.view(zVec3(ww / 2, hh / 2, -1), zVec3(ww / 2, hh / 2, 1), zVec3(0, 1, 0));
-//    perspectiveFov(mtx, 1.4f, (float)ww / (float)hh, 0.1f, 100.0f);
-//    mtx.perspective(ww, hh, 1, 100.0f);
-//    glUniformMatrix4fv(shaderVars[ZSH_PMTX], 1, false, mtx);
+    if(invert) mtx.ortho(0, ww, hh, 0); else mtx.ortho(0, ww, 0, hh);
     glUniformMatrix4fv(shaderVars[ZSH_PMTX], 1, false, mtx);
     glViewport(0, 0, ww, hh);
 }
@@ -262,7 +211,6 @@ void zViewManager::drawViews() {
     static int oldVideoMem(0);
     countVertices = 0; countLn = 0; countObjs = 0;
 #endif
-//    auto b(z_timeMillis());
     screen = zGL::instance()->getSizeScreen();
     glScissor(0, 0, screen.w, screen.h);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -283,8 +231,6 @@ void zViewManager::drawViews() {
             msg->view->notifyEvent(msg);
         }
     }
-//    auto kadr(z_timeMillis() - b);
-//    z_logBuffer("kadr", 1000 / kadr, 32);
 #ifndef NDEBUG
     if(debug && showTri) {
         if(oldTri != countVertices) {
@@ -481,12 +427,12 @@ void zViewManager::changeFocus(zView* view) {
         if(caret) caret->update(nullptr, 0, 0, 0);
         focus->onChangeFocus(false);
     }
+    focus = view;
     auto isTouchable(false);
     if(view) {
         view->onChangeFocus(true);
         isTouchable = view->isFocusableInTouch();
     }
-    focus = view;
     // вызвать/спрятать клавиатуру
     showSoftKeyboard(view ? view->id : 0, isTouchable);
 }

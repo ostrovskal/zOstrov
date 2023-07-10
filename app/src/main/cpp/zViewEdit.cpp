@@ -241,7 +241,7 @@ i32 zViewEdit::onTouchEvent(zTouch *touch) {
     if(but && (but->testFlags(ZS_TAP) || but->rview.contains((int)touch->cpt.x, (int)touch->cpt.y))) {
         // вызываем событие касания дочернего
         result = but->onEvent(touch);
-        if(result == TOUCH_ACTION) clearText();
+        if(result == TOUCH_ACTION) setText("", true);
         but->updateStatus(ZS_TAP, result == TOUCH_FINISH);
         invalidate(); return result;
     }
@@ -308,8 +308,10 @@ void zViewEdit::stateView(STATE &state, bool save, int &index) {
 }
 
 void zViewEdit::updateCaret() {
-    auto caret(manager->getCaret());
-    caret->update(this, caretScreen.x - rclient.x, caretScreen.y - rclient.y, getTextSize());
+    if(isFocus()) {
+        auto caret(manager->getCaret());
+        caret->update(this, caretScreen.x - rclient.x, caretScreen.y - rclient.y, getTextSize());
+    }
 }
 
 int zViewEdit::correct(int _index) {
@@ -360,16 +362,13 @@ void zViewEdit::onMeasure(cszm& spec) {
     wmax = rclient.w - distance - (butW + 4) - ipad.extent(false);
 }
 
-void zViewEdit::clearText() {
-    if(realText.isNotEmpty()) {
-        visibleIndex = 0;
-        caretIndex = correct(0);
-        clearSelected(false);
-        setText("", true);
-    }
+void zViewEdit::setText(czs& _text, bool force) {
+    clearSelected(false);
+    zViewText::setText(_text, force);
+    visibleIndex = 0;
+    caretIndex = correct(_text.count());
 }
 
 void zViewEdit::onChangeFocus(bool set) {
     if(set) caretIndex = correct(caretIndex);
-    invalidate();
 }

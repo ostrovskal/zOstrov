@@ -37,7 +37,10 @@ void zViewText::updateText() {
         onMeasure(spec);
         changed = (rv != rview);
     }
-    if(changed) requestLayout();
+    if(changed) {
+//        DLOG("changed");
+        requestLayout();
+    }
     invalidate();
 }
 
@@ -291,7 +294,7 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
         widthRectCache = z_max(width, widthRectCache); maxHeight += height;
     }
     // данные ...
-    if(lines == 1 && ellipsis != ZS_ELLIPSIS_NONE) {
+    if(textCache.isNotEmpty() && lines == 1 && ellipsis != ZS_ELLIPSIS_NONE) {
         auto pt3(defPaint->widthText("...", 3));
         auto c(textCache[0]); auto w(c->width - widthRect + pt3);
         if(w >= 0) {
