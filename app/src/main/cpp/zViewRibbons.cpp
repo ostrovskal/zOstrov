@@ -296,7 +296,7 @@ void zViewBaseRibbon::onMeasure(cszm& spec) {
     // дивидер
     if(div) div->measure(0, 0, 0, false);
     cacheViews.clear();
-    DLOG("onMeasure");
+//    DLOG("onMeasure");
 }
 
 i32 zViewBaseRibbon::onTouchEvent(zTouch *touch) {

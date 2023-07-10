@@ -69,6 +69,17 @@ public:
     void scale(zTouch* other, cszi& cell, const std::function<void(float, bool)>& fn);
     // Определение направления
     int direction(cszi& cell, cptf& center, bool is4);
+    // Величина смещения относительно начальной точки с учетом размера ячейки [cell]
+    bool delta(cszi& cell) {
+        sz.set((int)roundf((cpt.x - bpt.x) / (float)cell.w), (int)(roundf((cpt.y - bpt.y) / (float)cell.h)));
+        return (abs(sz.w) > 0 || abs(sz.h) > 0);
+    }
+    // Длина "линии" между начальной [p] и текущей точкой с учетом размера ячейки [cell]
+    float length(cszi& cell, cptf& p) {
+        auto x((cpt.x - p.x) / cell.w); x *= x;
+        auto y((cpt.y - p.y) / cell.h); y *= y;
+        return sqrtf(x + y);
+    }
     // Флаги операций
     u32 flags{0};
     // Тип касания
@@ -92,15 +103,4 @@ public:
     // временный размер
     szi sz{};
 protected:
-    // Величина смещения относительно начальной точки с учетом размера ячейки [cell]
-    bool delta(cszi& cell) {
-        sz.set((int)roundf((cpt.x - bpt.x) / (float)cell.w), (int)(roundf((cpt.y - bpt.y) / (float)cell.h)));
-        return (abs(sz.w) > 0 || abs(sz.h) > 0);
-    }
-    // Длина "линии" между начальной [p] и текущей точкой с учетом размера ячейки [cell]
-    float length(cszi& cell, cptf& p) {
-        auto x((cpt.x - p.x) / cell.w); x *= x;
-        auto y((cpt.y - p.y) / cell.h); y *= y;
-        return sqrtf(x + y);
-    }
 };

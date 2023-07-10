@@ -90,7 +90,8 @@ zViewEdit::zViewEdit(zStyle *_stl, i32 _id, u32 _hint) : zViewText(_stl, _id, 0)
             // paste
             case 1:
                 if((realText.count() + manager->exchangeBuffer.count()) >= maxLength) break;
-                clearSelected(true); setText(realText.insert(x, manager->exchangeBuffer), true);
+                clearSelected(true);
+                zViewText::setText(realText.insert(x, manager->exchangeBuffer), true);
                 caretIndex += manager->exchangeBuffer.count();
                 post(MSG_EDIT, 10, correct(caretIndex));
                 break;
@@ -205,11 +206,10 @@ cstr zViewEdit::getDrawText(bool _real) {
 bool zViewEdit::clearSelected(bool del_text) {
     bool ret(false);
     if(del_text && bkgSpan && bkgSpan->length()) {
-        if(caretIndex > bkgSpan->s) {
-            caretIndex = bkgSpan->s;
-            correctCaretPosition(caretIndex);
-        }
         removeText(bkgSpan->s, bkgSpan->length());
+        if(caretIndex >= bkgSpan->s) {
+            caretIndex = correct(bkgSpan->s);
+        }
         ret = true;
     }
     spans.clear(); cacheSpans.clear(); bkgSpan = nullptr;
@@ -246,6 +246,7 @@ i32 zViewEdit::onTouchEvent(zTouch *touch) {
         invalidate(); return result;
     }
     if(result == TOUCH_FINISH) {
+        if(!touch->delta(szi(5, 5)) && !touch->just()) return result;
         // определить позицию каретки в тексте и на экране
         auto pos(indexFromPosition(pti(touch->cpt.x, touch->cpt.y), true));
         if(touch->isDblClicked()) { posSel.x = 0;  pos = posSel.y = realText.count(); }
