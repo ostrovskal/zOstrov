@@ -8,7 +8,7 @@
 zViewGroup::zViewGroup(zStyle* _styles, i32 _id): zView(_styles, _id) {
     // не принимать фокус и клик
     status &= ~(ZS_FOCUSABLE | ZS_CLICKABLE);
-    sizeTouch.set(5_dp, 5_dp);
+    sizeTouch.set(6_dp, 6_dp);
 }
 
 zViewGroup::~zViewGroup() {

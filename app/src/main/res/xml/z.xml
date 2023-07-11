@@ -124,6 +124,7 @@
         </attr>
         <attr name="decorate" translate="Z_DECORATE" format="flags">
             <item name="glow" value="ZS_GLOW" />
+            <item name="overscroll" value="ZS_OVERSCROLL" />
             <item name="vscrollbar" value="ZS_VSCROLLBAR" />
             <item name="hscrollbar" value="ZS_HSCROLLBAR" />
             <item name="scrollbar" value="ZS_SCROLLBAR" />

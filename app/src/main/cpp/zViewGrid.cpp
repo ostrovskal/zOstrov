@@ -24,12 +24,14 @@ int zViewGrid::getExtra() const {
     return ((div->size + div->padBegin + div->padEnd) - params[GRID_LINES_SPACE]) / 2;
 }
 
-void zViewGrid::fill(int _edge) {
-    firstItem -= firstItem % linesGrid;
-    auto view(atView(0));
-    if(view) fillReverse(firstItem - linesGrid, view->edges(vert, false));
+void zViewGrid::fill(int _edge, bool reverse) {
+    if(reverse) {
+        firstItem -= firstItem % linesGrid;
+        auto view(atView(0));
+        if(view) fillReverse(firstItem - linesGrid, view->edges(vert, false));
+    }
     auto count(children.size());
-    view = atView(count - 1);
+    auto view(atView(count - 1));
     if(firstItem == 0 && div) {
         auto begin(div->getSize(ZS_DIVIDER_BEGIN));
         if(_edge < begin && _edge >= 0) _edge += begin;

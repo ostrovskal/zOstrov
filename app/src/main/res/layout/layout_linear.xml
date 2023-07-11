@@ -94,7 +94,7 @@
             android:layout_width="wrap_content" android:layout_height="120dp"
             z:styles="@style/ribbon"
             z:orientation="horizontal"
-            z:decorate="glow"
+            z:decorate="overscroll"
             z:bkTiles="@integer/selectDrop" />
         <Button
             android:id="@+id/button1"

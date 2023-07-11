@@ -266,6 +266,7 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
     if(spans.isNotEmpty()) return textWrapSpan(_text, widthRect);
     int width(0), lines(getLines()), sepPos(0), sepWidth(0), height(0), _count, _pos;
     // разбить текст по спец. символам по ширине ректа
+    auto _width(widthRect);
     if(lines == 1 || widthRect <= 0) widthRect = INT_MAX;
     textCache.clear();
     auto isEdit(dynamic_cast<zViewEdit*>(this));
@@ -297,7 +298,7 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
     // данные ...
     if(textCache.isNotEmpty() && lines == 1 && ellipsis != ZS_ELLIPSIS_NONE) {
         auto pt3(defPaint->widthText("...", 3));
-        auto c(textCache[0]); auto w(c->width - widthRect);
+        auto c(textCache[0]); auto w(c->width - _width);
         if(w > 0) {
             w += pt3;
             zStringUTF8 tmp;
@@ -320,7 +321,6 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
             }
             c->text = tmp;
         }
-//        DLOG("%s %i %i", c->text.str(), c->width, widthRect);
     }
     return { widthRectCache, maxHeight };
 }

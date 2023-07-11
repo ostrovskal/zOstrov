@@ -455,7 +455,7 @@ void zViewGlow::start(float _delta, bool _vert, bool _flow) {
     // габариты и позиция
     rview.w = drw[DRW_BK]->bound.w; rview.h = drw[DRW_BK]->bound.h;
     // анимация
-    _delta = z_min(2.2f, fabs(_delta * 50.0f));
+    _delta = z_min(2.1f, z_max(0.75f, fabs(_delta * 5.0f)));
     animator.init(0.0f, false);
     animator.add(_delta, zInterpolator::LINEAR, 6);
     animator.add(0.0f, zInterpolator::EASEINCUBIC, 8);
@@ -480,11 +480,11 @@ zFlyng::zFlyng(zView* group) : zView(styles_default, 0) {
 }
 
 bool zFlyng::start(zTouch* touch, int delta) {
-    auto t((int)((touch->ctm - touch->btm) / 2000000));
+    auto t((int)((touch->ctm - touch->btm) / 1350000));
     // если отпустили и время < 15(выбрано экспериментально)
     if(t < 15) {
-        delta *= (15 - t) / 4;
-//        DLOG("fling %i", delta);
+        delta *= (15 - t) / 3;
+//        DLOG("fling d: %i t: %i", delta, t);
         animator.init(delta, false);
         animator.add(0, zInterpolator::EASEOUTQUAD, abs(delta));
         post(MSG_ANIM, duration, 0);

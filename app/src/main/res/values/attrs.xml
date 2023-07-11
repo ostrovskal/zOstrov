@@ -124,13 +124,14 @@
 		</attr>
 		<attr name="decorate" format="flags|string">
 			<flag name="glow" value="1" />
-			<flag name="vscrollbar" value="2" />
-			<flag name="hscrollbar" value="4" />
-			<flag name="scrollbar" value="8" />
-			<flag name="readOnly" value="16" />
-			<flag name="tips" value="32" />
-			<flag name="checked" value="64" />
-			<flag name="disabled" value="128" />
+			<flag name="overscroll" value="2" />
+			<flag name="vscrollbar" value="4" />
+			<flag name="hscrollbar" value="8" />
+			<flag name="scrollbar" value="16" />
+			<flag name="readOnly" value="32" />
+			<flag name="tips" value="64" />
+			<flag name="checked" value="128" />
+			<flag name="disabled" value="256" />
 		</attr>
 		<attr name="mask" format="reference|color|string" />
 		<attr name="mskColor" format="color|string" />

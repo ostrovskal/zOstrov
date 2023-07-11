@@ -45,7 +45,7 @@ protected:
     // отрисовка
     virtual void onDraw() override;
     // Заполнение списка
-    virtual void fill(int edgePos) = 0;
+    virtual void fill(int edgePos, bool reverse) = 0;
     virtual void fillReverse(int pos, int start) = 0;
     virtual void fillForward(int pos, int end) = 0;
     // касание
@@ -72,6 +72,8 @@ protected:
     zView* addView(int x, int y, int pos, bool flow, int where);
     // получить представление из кэша
     zView* getViewCache(int pos);
+    // предыдущее значение анимации
+    float pprev{0.0f};
     // количество линий(для сетки)
     i32 linesGrid{1};
     // количество элементов в адаптере
@@ -101,7 +103,7 @@ public:
     virtual cstr typeName() const override { return "zViewRibbon"; }
 protected:
     // Заполнение списка
-    virtual void fill(int edgePos) override;
+    virtual void fill(int edgePos, bool reverse) override;
     virtual void fillReverse(int pos, int start) override;
     virtual void fillForward(int pos, int end) override;
     // создание дочернего
@@ -129,7 +131,7 @@ protected:
     // вычисление размера
     virtual void onMeasure(cszm& spec) override;
     // Заполнение таблицы
-    virtual void fill(int edgePos) override;
+    virtual void fill(int edgePos, bool reverse) override;
     virtual void fillReverse(int pos, int start) override;
     virtual void fillForward(int pos, int end) override;
     // подсчитать габариты дочерних

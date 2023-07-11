@@ -83,7 +83,7 @@ enum { TOUCH_CONTINUE, TOUCH_FINISH, TOUCH_ACTION, TOUCH_STOP };
 #define ZS_MEASURE_SET              0x10000000U // признак того, что габариты были установлены
 #define ZS_CLICKABLE		        0x08004000U	// признак возможности клика
 #define ZS_LCLICKABLE		        0x08204000U	// признак возможности долгого клика
-//#define ZS_ELLIPSIS                 0x04000000U // признак ... при завершении текста(если он не поместился)
+#define ZS_OVERSCROLL               0x04000000U // альтернатива GLOW
 #define ZS_READ_ONLY 		        0x02000000U	// только для чтения
 #define ZS_TIPS				        0x01000000U	// признак отображени¤ подсказки
 #define ZS_MODAL   			        0x00800000U	// модальный
@@ -126,7 +126,7 @@ enum { TOUCH_CONTINUE, TOUCH_FINISH, TOUCH_ACTION, TOUCH_STOP };
 #define ZS_VSCROLLBAR               2
 #define ZS_HSCROLLBAR               4
 #define ZS_SCROLLBAR                (ZS_VSCROLLBAR | ZS_HSCROLLBAR)
-#define ZS_DECORATE_MASK            (ZS_TIPS | ZS_READ_ONLY | ZS_CHECKED | ZS_DISABLED)
+#define ZS_DECORATE_MASK            (ZS_TIPS | ZS_READ_ONLY | ZS_CHECKED | ZS_DISABLED | ZS_OVERSCROLL)
 
 #define ZS_STATES                   (ZS_DIRTY_LAYER | ZS_VISIBLED | ZS_DISABLED | ZS_CHECKED)
 

@@ -275,7 +275,7 @@
         <item name="fadeScrollBars">false</item>
         <item name="tilesScrollBars">@integer/rect</item>
         <item name="duration">30</item>
-        <item name="decorate">glow|scrollbar</item>
+        <item name="decorate">overscroll|scrollbar</item>
         <item name="bkTiles">@integer/selectDrop</item>
         <item name="pad">5dp</item>
         <item name="divSize">@dimen/divider</item>
@@ -286,7 +286,7 @@
         <item name="selector">?attr/themeColorSelector</item>
         <item name="fadeScrollBars">false</item>
         <item name="duration">30</item>
-        <item name="decorate">glow|scrollbar</item>
+        <item name="decorate">overscroll|scrollbar</item>
         <item name="bkTiles">@integer/selectDrop</item>
         <item name="pad">5dp</item>
         <item name="spacingLine">5dp</item>

@@ -118,7 +118,7 @@ protected:
     // массив дочерних
     zArray<zView*> children{};
     // чувствительность прокрутки
-    szi sizeTouch{8, 8};
+    szi sizeTouch{5, 5};
     // событие прокрутки
     std::function<void(zView*, int)> onChangeScroll;
 };

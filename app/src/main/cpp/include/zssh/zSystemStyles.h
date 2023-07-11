@@ -302,7 +302,7 @@ static zStyle styles_z_ribbon[] = {
 	{ Z_SCROLLBAR_FADE, false },
 	{ Z_SCROLLBAR_TILES, z.R.integer.rect },
 	{ Z_DURATION, 30 },
-	{ Z_DECORATE, ZS_GLOW | ZS_SCROLLBAR },
+	{ Z_DECORATE, ZS_OVERSCROLL | ZS_SCROLLBAR },
 	{ Z_BACKGROUND_TILES, z.R.integer.selectDrop },
 	{ Z_PADDING, 0x05050505 },
 	{ Z_DIVIDER_SIZE | ZT_END, 0x02000202 }
@@ -313,7 +313,7 @@ static zStyle styles_z_grid[] = {
 	{ Z_SELECTOR | ZT_THEME, Z_THEME_COLOR_SELECTOR },
 	{ Z_SCROLLBAR_FADE, false },
 	{ Z_DURATION, 30 },
-	{ Z_DECORATE, ZS_GLOW | ZS_SCROLLBAR },
+	{ Z_DECORATE, ZS_OVERSCROLL | ZS_SCROLLBAR },
 	{ Z_BACKGROUND_TILES, z.R.integer.selectDrop },
 	{ Z_PADDING, 0x05050505 },
 	{ Z_SPACING_LINE, 5 },
@@ -706,7 +706,7 @@ static zStyle styles_z_radiolight[] = {
 
 static zStyle styles_z_zviewribbon1[] = {
 	{ Z_STYLES, z.R.style.ribbon },
-	{ Z_DECORATE, ZS_GLOW },
+	{ Z_DECORATE, ZS_OVERSCROLL },
 	{ Z_BACKGROUND_TILES | ZT_END, z.R.integer.selectDrop }
 };
 

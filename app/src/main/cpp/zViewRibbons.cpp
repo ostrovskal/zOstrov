@@ -14,6 +14,19 @@ zViewBaseRibbon::zViewBaseRibbon(zStyle* _styles, i32 _id, bool _vert) : zViewGr
     vert = _vert;
     flyng = new zFlyng(this);
     setAdapter(new zAdapterList({ "adapter default" }, new zFabricListItem(styles_z_list_item)));
+    setOnAnimation([this](zView*, int) {
+        float p;
+        auto cont(animator.update(p));
+        offsetChildren(p - pprev);
+        if(p < 0) {
+            fill(0, false);
+        } else if(firstItem > 0) {
+            fillReverse(firstItem - linesGrid, atView(0)->edges(vert, false));
+        }
+        pprev = p;
+        invalidate();
+        return cont;
+    });
 }
 
 zViewBaseRibbon::~zViewBaseRibbon() {
@@ -53,7 +66,16 @@ void zViewBaseRibbon::correctBegin(int used) {
         auto _div(div ? div->getSize(ZS_DIVIDER_BEGIN) : 0);
         auto _delta(v->edges(vert, false) - edge.w);
         if(firstItem) _delta -= used; else _delta -= _div;
-        if(_delta > 0) offsetChildren(-_delta);
+        if(_delta > 0) {
+            if(glow || !testFlags(ZS_OVERSCROLL)) {
+                offsetChildren(-_delta);
+            } else if(animator.frame >= animator.frames) {
+                animator.init(0, false);
+                animator.add(-_delta, zInterpolator::EASEINQUAD, 10);
+                pprev = 0;
+                post(MSG_ANIM, duration / 2, 0);
+            }
+        }
     }
 }
 
@@ -66,8 +88,15 @@ void zViewBaseRibbon::correctFinish(int used) {
         auto first(atView(0)); auto start(first->edges(vert, false));
         if(offset > 0 && (firstItem > 0 || start < edge.w)) {
             if(firstItem == 0) offset = z_min(offset, (edge.w - start));
-            offsetChildren(offset);
-            if(firstItem > 0) fillReverse(firstItem - linesGrid, first->edges(vert, false) - used);
+            if(glow || !testFlags(ZS_OVERSCROLL)) {
+                offsetChildren(offset);
+                if(firstItem > 0) fillReverse(firstItem - linesGrid, first->edges(vert, false) - used);
+            } else if(animator.frame >= animator.frames) {
+                animator.init(0, false);
+                animator.add(offset, zInterpolator::EASEINQUAD, 10);
+                pprev = 0;
+                post(MSG_ANIM, duration / 2, 0);
+            }
         }
     }
 }
@@ -152,7 +181,7 @@ bool zViewBaseRibbon::scrolling(int _delta) {
                     }
                 }
                 offsetChildren(_delta);
-                fill(0);
+                fill(0, true);
                 auto v(atView(0));
                 deltaItem = (v ? v->edges(vert, false) - edge.w : 0);
                 requestPosition();
@@ -262,7 +291,7 @@ void zViewBaseRibbon::onLayout(crti &position, bool changed) {
     for(auto child : children) addViewCache(child);
     detachAllViews(false);
     // заполнить
-    if(countItem > 0) fill(deltaItem);
+    if(countItem > 0) fill(deltaItem, true);
     awakenScroll();
     // отображаем/скрываем выделение
     showSelector(clickItem != -1);
@@ -282,8 +311,8 @@ szi zViewBaseRibbon::measureChildrenSize(cszm& spec) {
         if(_max.isEmpty()) {
             if(spec[vert].isNotExact()) {
                 // предел делаем на макс. 5
-                auto _limit(rv[vert + 2] * 5);
-                if(_limit > limit) limit = _limit;
+                auto _limit(rv[vert + 2] * 6);
+                if(_limit < limit) limit = _limit;
             }
         }
         _max[!vert] = z_max(_max[!vert], rv[3 - vert]);
@@ -291,7 +320,7 @@ szi zViewBaseRibbon::measureChildrenSize(cszm& spec) {
         if(_size >= limit) break;
         _max[vert] = _size;
     }
-    _max[vert] += (div && div->resolve(i, false));
+    _max[vert] += (div ? div->resolve(i, false) : 0);
     return _max;
 }
 
@@ -356,11 +385,13 @@ void zViewBaseRibbon::onDraw() {
 //                                                              ЛЕНТА                                                                     //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void zViewRibbon::fill(int _edge) {
-    auto view(atView(0));
-    if(view) fillReverse(firstItem - 1, view->edges(vert, false));
+void zViewRibbon::fill(int _edge, bool reverse) {
+    if(reverse) {
+        auto view(atView(0));
+        if(view) fillReverse(firstItem - 1, view->edges(vert, false));
+    }
     int count(children.size());
-    view = atView( count - 1);
+    auto view(atView(count - 1));
     count += firstItem;
     if(firstItem == 0 && div) {
         auto begin(div->getSize(ZS_DIVIDER_BEGIN));
