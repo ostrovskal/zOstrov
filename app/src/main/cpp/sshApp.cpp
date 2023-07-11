@@ -72,19 +72,66 @@ void sshApp::run() {
 }
 
 #include "zssh/zViewRibbons.h"
-#include "zstandard/zCloud.h"
+#include "zssh/zFileAsset.h"
 
 void sshApp::setContent() {
     //debug = true;
-    #include "zssh/layout_linear.h"
+    #include "zssh/layout_cell.h"
     #include "zssh/layout_tabbed.h"
     #include "zssh/layout_form.h"
     attachForm(formSettings, 300_dp, 300_dp);
     attachForm(formBrowser, 300_dp, 300_dp);
     formBrowser->setOnProcess([](zView*) {
+
     });
     zArray<zStringUTF8> objects(theme->findArray(z.R.array.spinArray));
     attachForm(formBrowser, 280_dp, 300_dp);
+    auto sel(idView<zViewSelect>(z.R.id.choiceSource));
+    auto lst(idView<zViewRibbon>(z.R.id.catalog));
+    lst->setAdapter(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
+    sel->setAdapter(new zAdapterList(objects, new zFabricSelectItem(styles_z_spin_capt), new zFabricSelectItem(styles_z_spin_item)));
+    zFileAsset f; zPlayerParams pp;
+    u8* ptr(nullptr); int size(0);
+    if(f.open("sound/priz.wav", true)) {
+        auto head((HEADER_WAV*)f.readn(nullptr, sizeof(HEADER_WAV)));
+        ptr = (u8*)f.readn(&size, 0, sizeof(HEADER_WAV));
+        pp.bits = head->bitsPerSample;
+        pp.chan = head->NumOfChan;
+        pp.rate = head->SampleRate * 1000;
+        pp.bufSize = size;
+        delete head;
+        f.close();
+    }
+    auto onClick = [this, ptr, size, pp](zView* v, int) {
+        auto id(v->id);
+        zSoundPlayer* pl(nullptr);
+        switch(id) {
+            case z.R.id.bkg:
+                pl = sound.createPlayer(id, TYPE_ASSET, {"sound/background.mp3"});
+                break;
+            case z.R.id.menu:
+                pl = sound.createPlayer(id, TYPE_ASSET, {"sound/menu.mid"});
+                break;
+            case z.R.id.tm:
+                pl = sound.createPlayer(id, TYPE_VIBRA, {});
+                break;
+            case z.R.id.exp:
+                pl = sound.createPlayer(id, TYPE_MEM, pp);
+                if(pl) pl->setData(ptr, size);
+                else DLOG("player not create!");
+                break;
+            case z.R.id.bmb: break;
+            case z.R.id.dth: break;
+        }
+        if(pl) pl->play(true);
+    };
+    idView<zViewButton>(z.R.id.bkg)->setOnClick(onClick);
+    idView<zViewButton>(z.R.id.menu)->setOnClick(onClick);
+    idView<zViewButton>(z.R.id.tm)->setOnClick(onClick);
+    idView<zViewButton>(z.R.id.exp)->setOnClick(onClick);
+    idView<zViewButton>(z.R.id.bmb)->setOnClick(onClick);
+    idView<zViewButton>(z.R.id.dth)->setOnClick(onClick);
+    /*
     auto grd(idView<zViewGrid>(z.R.id.grid1));
     auto adapter(new zAdapterList(objects, new zFabricListItem(styles_z_grid_item)));
     grd->setAdapter(adapter)->setOnChangeSelected([](zView*, int sel) {
@@ -102,10 +149,6 @@ void sshApp::setContent() {
             edt2->setText(txt, false);
         }
     });
-    auto sel(idView<zViewSelect>(z.R.id.choiceSource));
-    auto lst(idView<zViewRibbon>(z.R.id.catalog));
-    lst->setAdapter(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
-    sel->setAdapter(new zAdapterList(objects, new zFabricSelectItem(styles_z_spin_capt), new zFabricSelectItem(styles_z_spin_item)));
     auto chSp(idView(z.R.id.spans));
     auto txt(root->idView<zViewText>(z.R.id.tv1));
     if(chSp) {
@@ -173,4 +216,5 @@ void sshApp::setContent() {
             edt->setText(txt, false);
         }
     });
+     */
 }

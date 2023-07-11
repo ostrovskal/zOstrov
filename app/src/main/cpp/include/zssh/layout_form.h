@@ -1,7 +1,7 @@
 // Автоматическая генерация кода для макета
 	auto formBrowser((zViewForm*)new zViewForm(styles_z_formopen, z.R.id.formOpen, styles_z_formcaption, styles_z_formfooter, z.R.string.Upravlenie_faylami, true));
 	formBrowser->onInit(false);
-	auto formBrowser01((zLinearLayout*)formBrowser->attach(new zLinearLayout(styles_z_zlinearlayout1, 0, false), 
+	auto formBrowser01((zLinearLayout*)formBrowser->attach(new zLinearLayout(styles_z_zlinearlayout3, 0, false), 
 			VIEW_MATCH, VIEW_MATCH)); 
 	auto formBrowser02((zLinearLayout*)formBrowser01->attach(new zLinearLayout(styles_default, 0, true), 
 			VIEW_MATCH, VIEW_MATCH)); 

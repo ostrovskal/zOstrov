@@ -19,17 +19,27 @@ public:
             fd = nullptr;
         }
     }
-    virtual void* read(i32* psize, void* ptr, i32 size = 0, i32 pos = -1, i32 mode = 0) const override {
+    virtual void* readn(i32* psize = nullptr, i32 size = 0, i32 pos = -1, i32 mode = 0) const override {
+        u8* ptr(nullptr); int ret(0);
         if(fd) {
-            auto asize(length());
             if(pos != -1) AAsset_seek(fd, pos, mode);
-            if(size != -1 && asize >= size) asize = size;
-            if(!ptr) ptr = new u8[asize];
-            auto ret(AAsset_read(fd, ptr, asize));
-            if(psize) *psize = ret;
-            return ptr;
+            auto asize(length());
+            if(size && asize >= size) asize = size;
+            ptr = new u8[asize]; ret = AAsset_read(fd, ptr, asize);
         }
-        return nullptr;
+        if(psize) *psize = ret;
+        return ptr;
+    }
+    virtual void* read(i32* psize, void* ptr, i32 size = 0, i32 pos = -1, i32 mode = 0) const override {
+        int ret(0);
+        if(fd) {
+            if(pos != -1) AAsset_seek(fd, pos, mode);
+            auto asize(length());
+            if(size && asize >= size) asize = size;
+            ret = AAsset_read(fd, ptr, asize);
+        }
+        if(psize) *psize = ret;
+        return ptr;
     }
     virtual int length() const override {
         return AAsset_getLength(fd);

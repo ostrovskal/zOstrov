@@ -7,7 +7,7 @@
 			VIEW_WRAP, VIEW_WRAP)); 
 	auto formSettings03((zLinearLayout*)formSettings02->attach(new zLinearLayout(styles_default, 0, false), 
 			VIEW_MATCH, VIEW_MATCH)); 
-	auto formSettings04((zLinearLayout*)formSettings03->attach(new zLinearLayout(styles_z_zlinearlayout2, 0, true), 
+	auto formSettings04((zLinearLayout*)formSettings03->attach(new zLinearLayout(styles_z_zlinearlayout4, 0, true), 
 			0, 1, VIEW_WRAP, VIEW_MATCH)); 
 	formSettings04->attach(new zViewText(styles_z_zviewtext1, 0, z.R.string.CPU), 
 			VIEW_MATCH, VIEW_WRAP);
@@ -17,7 +17,7 @@
 			VIEW_MATCH, VIEW_WRAP);
 	formSettings04->attach(new zViewSlider(styles_z_slider, 0, 0, szi(0, 10), 3, false), 
 			VIEW_MATCH, VIEW_WRAP);
-	auto formSettings14((zLinearLayout*)formSettings03->attach(new zLinearLayout(styles_z_zlinearlayout3, 0, true), 
+	auto formSettings14((zLinearLayout*)formSettings03->attach(new zLinearLayout(styles_z_zlinearlayout2, 0, true), 
 			VIEW_WRAP, VIEW_MATCH)); 
 	formSettings14->attach(new zViewText(styles_z_zviewtext1, 0, z.R.string.JOYSTICK), 
 			VIEW_MATCH, VIEW_WRAP);

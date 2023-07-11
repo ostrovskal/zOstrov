@@ -11,7 +11,7 @@
 			VIEW_MATCH, VIEW_WRAP);
 	auto grp02((zEditLayout*)grp01->attach(new zEditLayout(styles_default, 0), 
 			VIEW_MATCH, VIEW_WRAP)); 
-	grp02->attach(new zViewEdit(styles_z_zviewedit1, z.R.id.edit1, z.R.string.prompt), 
+	grp02->attach(new zViewEdit(styles_z_edit1, z.R.id.edit1, z.R.string.prompt), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp01->attach(new zViewSelect(styles_z_select, z.R.id.select), 
 			VIEW_MATCH, VIEW_WRAP);
@@ -19,7 +19,7 @@
 			VIEW_WRAP, VIEW_WRAP);
 	grp01->attach(new zViewEdit(styles_z_edit2, z.R.id.edit2, z.R.string.enter_family), 
 			VIEW_MATCH, VIEW_WRAP);
-	auto grp12((zLinearLayout*)grp01->attach(new zLinearLayout(styles_z_zlinearlayout1, 0, false), 
+	auto grp12((zLinearLayout*)grp01->attach(new zLinearLayout(styles_z_zlinearlayout3, 0, false), 
 			VIEW_MATCH, VIEW_MATCH)); 
 	grp12->attach(new zViewRadio(styles_z_radiodark, z.R.id.radioDark, z.R.string.radio_dark, 1), 
 			0, 1, VIEW_WRAP, VIEW_MATCH);
@@ -27,9 +27,9 @@
 			0, 2, VIEW_WRAP, VIEW_MATCH);
 	grp12->attach(new zViewRadio(styles_z_radiolight, z.R.id.radioLight, z.R.string.radio_light, 1), 
 			0, 1, VIEW_WRAP, VIEW_MATCH);
-	grp01->attach(new zViewRibbon(styles_z_zviewribbon1, z.R.id.list1, false), 
+	grp01->attach(new zViewRibbon(styles_z_list1, z.R.id.list1, false), 
 			VIEW_WRAP, 120_dp);
-	grp01->attach(new zViewButton(styles_z_zviewbutton2, z.R.id.button1, z.R.string.press_me, z.R.integer.iconCancel), 
+	grp01->attach(new zViewButton(styles_z_button1, z.R.id.button1, z.R.string.press_me, z.R.integer.iconCancel), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp01->attach(new zViewSwitch(styles_z_switchbutton, z.R.id.switch1, z.R.string.mode_already), 
 			VIEW_MATCH, VIEW_WRAP);
@@ -41,7 +41,7 @@
 			VIEW_MATCH, VIEW_WRAP);
 	grp01->attach(new zViewButton(styles_z_button3, z.R.id.button3, z.R.string.press_me, z.R.integer.iconCancel), 
 			VIEW_MATCH, VIEW_WRAP);
-	grp01->attach(new zViewSlider(styles_z_zviewslider1, z.R.id.seek, z.R.string.slider_text, szi(5, 40), 3, false), 
+	grp01->attach(new zViewSlider(styles_z_seek, z.R.id.seek, z.R.string.slider_text, szi(5, 40), 3, false), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp01->attach(new zViewSlider(styles_z_seek1, z.R.id.seek1, 0, szi(50, 170), 130, false), 
 			VIEW_MATCH, VIEW_WRAP);

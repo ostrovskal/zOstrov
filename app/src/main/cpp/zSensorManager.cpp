@@ -12,7 +12,7 @@ zSensorManager::zSensorManager() {
         DLOG("************Sensors Available********************");
         for(int count = 0 ; count < numSensors ; count++ ) {
             auto sens(sensorList[count]);
-            DLOG("%s(%s-%i)", ASensor_getName(sens), ASensor_getVendor(sens), ASensor_getType(sens));
+            DLOG("%s(%s<%i>)", ASensor_getName(sens), ASensor_getVendor(sens), ASensor_getType(sens));
         }
     }
 }

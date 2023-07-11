@@ -1,64 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<CellLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:z="http://schemas.android.com/apk/res-auto"
-    z:layout_cells="2,8" z:layout_space="1dp"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:gravity="start" z:pad="1dp">
-    <ListView
-        android:id="@+id/list1"
-        android:layout_x="0px" android:layout_y="0px" android:layout_width="2px" android:layout_height="3px"
-        z:styles="@style/ribbon"
-        z:orientation="vertical"
-        z:bkTiles="@integer/selectDrop" />
-    <EditText
-        android:id="@+id/edit1" z:inputMode="text"
-        android:layout_x="0px" android:layout_y="3px" android:layout_width="2px" android:layout_height="1px"
-        z:textColor="?attr/themeColorTextText" z:textSize="20sp" z:hint="подсказка" z:fkGravity="center"
-        z:icon="@drawable/zssh" z:icGravity="end" z:icColor="#ffffffff" z:icTiles="@integer/iconEdit" z:textStyle="bold_italic|underline"
-        z:pad="10dp" android:gravity="center_vertical" z:foreground="?attr/themeBitmap" z:fkTiles="@integer/edit"
-        z:textLines="1" />
-    <Button
-        android:id="@+id/button1"
-        android:layout_x="0px" android:layout_y="4px" android:layout_width="2px" android:layout_height="1px"
-        z:fkTiles="@integer/gradientRadial" z:foreground="@drawable/zssh" z:fkGravity="center" z:iconka="@integer/iconCancel"
-        android:gravity="center" z:fkScale="1.0"
-        android:text="@string/themeDark" z:textColor="?attr/themeColorTextText" z:textSize="40sp"
-        z:pad="5dp" z:tap="hovered" />
-    <Switch
-        android:id="@+id/switch1" android:layout_x="0px" android:layout_y="5px" android:layout_width="2px" android:layout_height="1px"
-        z:foreground="?attr/themeBitmap"
-        z:fkGravity="end|center_vertical"
-        z:fkTile1="@integer/switchTrack" z:fkTile2="@integer/switchTrumb"
-        z:text="Переключатель" z:textSize="20sp" z:textColor="?attr/themeColorTextText"
-        z:gravity="start|center_vertical"
-        z:pad="5dp" z:duration="30" />
+    android:orientation="vertical" android:gravity="start" z:pad="1dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/bkg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            z:styles="@style/button"
+            android:text="background"/>
+        <Button
+            android:id="@+id/menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            z:styles="@style/button"
+            android:text="menu"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/dth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            z:styles="@style/button"
+            android:text="droid_death"/>
+        <Button
+            android:id="@+id/bmb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            z:styles="@style/button"
+            android:text="drop_bomb"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/exp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            z:styles="@style/button"
+            android:text="explosive"/>
+        <Button
+            android:id="@+id/tm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            z:styles="@style/button"
+            android:text="time_elapsed"/>
+    </LinearLayout>
     <SeekBar
-        android:id="@+id/seek"
-        android:layout_x="0px" android:layout_y="6px" android:layout_width="2px" android:layout_height="1px"
-        z:foreground="?attr/themeBitmap"
-        z:fkScale="1.0" z:fkGravity="center"
-        z:speedTrack="0.2"
-        z:textSize="50sp" z:textColor="?attr/themeColorTextProgress"
-        z:fkTile1="@integer/sliderTrack1" z:fkTile2="@integer/sliderTrumb1"
-        z:gravity="center" z:sliderMode="?attr/themeModeSlider"
-        z:duration="40" z:orientation="horizontal"
-        z:decorate="tips"
-        z:pad="1dp" z:range="0,70" />
-    <ProgressBar
-        android:id="@+id/progress1"
-        android:layout_x="0px" android:layout_y="7px" android:layout_width="2px" android:layout_height="1px"
-        z:foreground="@drawable/zssh"
-        z:fkTile1="@integer/rectRound" z:fkTile2="@integer/rectRound"
-        z:fkColor="#7fffffff" z:fkGravity="center"
-        z:primary="?attr/themeColorPrimary"
-        z:pad="5dp"
-        z:orientation="horizontal"
-        z:textColor="#ff000000" z:textSize="20sp"
-        z:gravity="center" z:textShadowOffset="0,0"
-        z:padStart="1dp" z:padTop="2dp" z:padEnd="3dp" z:padBottom="4dp"
-        z:range="0,70" z:progress="50"
-        z:decorate="tips"
-        z:fkScale="2.5" />
-</CellLayout>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        z:styles="@style/slider"
+        z:range="0,10" z:progress="10" />
+</LinearLayout>

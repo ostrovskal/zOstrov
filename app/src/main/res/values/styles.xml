@@ -211,6 +211,7 @@
         <item name="fkScale">0.5</item>
         <item name="textShadowOffset">2,2</item>
         <item name="pad">3dp</item>
+        <item name="ipad">5dp</item>
         <item name="gravity">center</item>
         <item name="icGravity">end|center_vertical</item>
         <item name="tap">hovered</item>

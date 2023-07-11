@@ -7,48 +7,6 @@
 
 static SLresult result;
 
-/*
-void setRec() {
-        SLresult result;
-
-        if (pthread_mutex_trylock(&audioEngineLock)) {
-            return;
-        }
-        // in case already recording, stop recording and clear buffer queue
-        result = (*recorderRecord)->SetRecordState(recorderRecord, SL_RECORDSTATE_STOPPED);
-        assert(SL_RESULT_SUCCESS == result);
-        (void)result;
-        result = (*recorderBufferQueue)->Clear(recorderBufferQueue);
-        assert(SL_RESULT_SUCCESS == result);
-        (void)result;
-
-        // the buffer is not valid for playback yet
-        recorderSize = 0;
-
-        // enqueue an empty buffer to be filled by the recorder
-        // (for streaming recording, we would enqueue at least 2 empty buffers to start things off)
-        result = (*recorderBufferQueue)->Enqueue(recorderBufferQueue, recorderBuffer,
-                                                 RECORDER_FRAMES * sizeof(short));
-        // the most likely other result is SL_RESULT_BUFFER_INSUFFICIENT,
-        // which for this code example would indicate a programming error
-        assert(SL_RESULT_SUCCESS == result);
-        (void)result;
-
-        // start recording
-        result = (*recorderRecord)->SetRecordState(recorderRecord, SL_RECORDSTATE_RECORDING);
-        assert(SL_RESULT_SUCCESS == result);
-        (void)result;
-    }
-}
- *
- */
-static void recorderCallback(SLAndroidSimpleBufferQueueItf, void *context) {
-    auto pl((zSoundPlayer*)context);
-    if((result = (*pl->recorder)->SetRecordState(pl->recorder, SL_RECORDSTATE_STOPPED)) == SL_RESULT_SUCCESS) {
-        pl->nextSize = RECORDER_FRAMES * sizeof(u16);
-    }
-}
-
 static void playerCallback(SLAndroidSimpleBufferQueueItf, void* context) {
     auto pl((zSoundPlayer*)context);
     pl->totalSize -= pl->nextSize;
@@ -62,55 +20,45 @@ static void playerCallback(SLAndroidSimpleBufferQueueItf, void* context) {
 }
 
 bool zSoundPlayer::make(SLDataSource& src, SLDataSink& snk, bool play, int _bufSize) {
-    SLInterfaceID ids[3]  = { SL_IID_SEEK, SL_IID_MUTESOLO, SL_IID_VOLUME };
-    SLboolean req[3]      = { SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE };
-    auto isrec(type == TYPE_REC);
-    if(type == TYPE_MEM || isrec) ids[0] = SL_IID_ANDROIDSIMPLEBUFFERQUEUE;
+    SLInterfaceID ids[3]  = { type == TYPE_MEM ? SL_IID_ANDROIDSIMPLEBUFFERQUEUE : SL_IID_SEEK, SL_IID_VOLUME };
+    SLboolean req[3]      = { SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE };
     auto engine(mgr->getEngine());
     shutdown();
-    if((result = (*engine)->CreateAudioPlayer(engine, &object, &src, &snk, 3, ids, req)) == SL_RESULT_SUCCESS) {
+    if((result = (*engine)->CreateAudioPlayer(engine, &object, &src, &snk, 2, ids, req)) == SL_RESULT_SUCCESS) {
         (*object)->Realize(object, SL_BOOLEAN_FALSE);
-        if(isrec) {
-            (*object)->GetInterface(object, SL_IID_RECORD, &recorder);
-        } else {
-            (*object)->GetInterface(object, SL_IID_PLAY, &player);
-        }
         (*object)->GetInterface(object, SL_IID_VOLUME, &volume);
-        (*object)->GetInterface(object, SL_IID_MUTESOLO, &mute);
+        (*object)->GetInterface(object, SL_IID_PLAY, &player);
         if(ids[0] == SL_IID_SEEK) {
-            (*object)->GetInterface(object, SL_IID_SEEK, &seek);
+            (*object)->GetInterface(object, ids[0], &seek);
         } else {
-            (*object)->GetInterface(object, SL_IID_ANDROIDSIMPLEBUFFERQUEUE, &queue);
+            (*object)->GetInterface(object, ids[0], &queue);
+            (*queue)->RegisterCallback(queue, playerCallback, this);
             (*player)->SetCallbackEventsMask(player, SL_PLAYEVENT_HEADMOVING);
-            (*queue)->RegisterCallback(queue, isrec ? recorderCallback : playerCallback, this);
-            if(_bufSize != -1) {
-                bufSize = (_bufSize ? _bufSize : (isrec ? RECORDER_FRAMES : PLAYER_FRAMES));
-            }
+            bufSize = (_bufSize ? _bufSize : PLAYER_FRAMES);
         }
-        if(!isrec) (*player)->SetPlayState(player, play ? SL_PLAYSTATE_PLAYING : SL_PLAYSTATE_STOPPED);
+        (*player)->SetPlayState(player, play ? SL_PLAYSTATE_PLAYING : SL_PLAYSTATE_STOPPED);
     }
     return result == SL_RESULT_SUCCESS;
 }
 
 bool zSoundPlayerVibra::create(const zPlayerParams& p, bool play) {
-    return false;
-}
-
-bool zSoundPlayerRec::create(const zPlayerParams& p, bool play) {
-    SLDataLocator_AndroidSimpleBufferQueue loc = { SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE, 2 };
-    SLDataLocator_IODevice dev  = { SL_DATALOCATOR_IODEVICE, SL_IODEVICE_AUDIOINPUT, SL_DEFAULTDEVICEID_AUDIOINPUT, nullptr };
-    SLDataFormat_PCM fmt        = { SL_DATAFORMAT_PCM, p.chan, p.rate,
-                                    SL_PCMSAMPLEFORMAT_FIXED_16, SL_PCMSAMPLEFORMAT_FIXED_16,
-                                    SL_SPEAKER_FRONT_CENTER, SL_BYTEORDER_LITTLEENDIAN };
-    SLDataSource src            = { &dev, nullptr };
-    SLDataSink snk              = { &loc, &fmt };
-    return make(src, snk, play, p.bufSize);
+    auto engine(mgr->getEngine()); auto caps(mgr->getCaps());
+    shutdown(); result = SL_RESULT_IO_ERROR;
+    if(caps) {
+        u32 idxVibra(0), idVibra(SL_DEFAULTDEVICEID_VIBRA);
+        (*caps)->QueryVibraCapabilities(caps, &idxVibra, &idxVibra, nullptr);
+        if((result = (*engine)->CreateVibraDevice(engine, &object, idVibra, 0, nullptr, nullptr)) == SL_RESULT_SUCCESS) {
+            (*object)->Realize(object, SL_BOOLEAN_FALSE);
+            (*object)->GetInterface(object, SL_IID_VIBRA, &vibrator);
+            DLOG("vibra :%x", vibrator);
+        }
+    }
+    return result == SL_RESULT_SUCCESS;
 }
 
 bool zSoundPlayerMem::create(const zPlayerParams& p, bool play) {
     SLDataLocator_AndroidSimpleBufferQueue loc = { SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE, 2 };
-    SLDataFormat_PCM fmt         = { SL_DATAFORMAT_PCM, p.chan, p.rate,
-                                     SL_PCMSAMPLEFORMAT_FIXED_16, SL_PCMSAMPLEFORMAT_FIXED_16,
+    SLDataFormat_PCM fmt         = { SL_DATAFORMAT_PCM, p.chan, p.rate, p.bits, p.bits,
                                      p.chan == 1 ? SL_SPEAKER_FRONT_CENTER : (SL_SPEAKER_FRONT_LEFT | SL_SPEAKER_FRONT_RIGHT),
                                      SL_BYTEORDER_LITTLEENDIAN };
     SLDataLocator_OutputMix mix  = { SL_DATALOCATOR_OUTPUTMIX, mgr->getMixer() };
@@ -155,26 +103,10 @@ bool zSoundPlayerAsset::create(const zPlayerParams& p, bool play) {
     return make(src, snk, play, -1);
 }
 
-bool zSoundPlayer::setSolo(int chan, bool set) const {
-    return (mute && (*mute)->SetChannelSolo(mute, chan, set));
-}
-
-bool zSoundPlayer::setMute(int chan, bool set) const {
-    return (mute && (*mute)->SetChannelMute(mute, chan, set));
-}
-
 u32 zSoundPlayer::getStatus() const {
     u32 status(0);
     if(player) (*player)->GetPlayState(player, &status);
     return status;
-}
-
-int zSoundPlayer::getChannels() const {
-    u8 num(0);
-    if(mute && (*mute)->GetNumChannels(mute, &num) != SL_RESULT_SUCCESS) {
-        num = 0;
-    }
-    return num;
 }
 
 bool zSoundPlayer::setVolume(SLmillibel vol) const {
@@ -214,9 +146,9 @@ bool zSoundPlayer::loop(bool set) const {
 void zSoundPlayer::shutdown() {
     if(object) {
         (*object)->Destroy(object);
-        object = nullptr; player = nullptr; recorder = nullptr;
+        object = nullptr; player = nullptr;
         queue  = nullptr; seek   = nullptr;
-        mute   = nullptr; volume = nullptr;
+        volume = nullptr; recorder = nullptr;
     }
     nextBuffer = nullptr;
     nextSize = totalSize = nextCount = 0;
@@ -224,8 +156,9 @@ void zSoundPlayer::shutdown() {
 
 zSoundManager::zSoundManager() {
     // создаем движек
-    if((result = slCreateEngine(&object, 0, nullptr, 0, nullptr, nullptr)) == SL_RESULT_SUCCESS) {
+    if(slCreateEngine(&object, 0, nullptr, 0, nullptr, nullptr) == SL_RESULT_SUCCESS) {
         (*object)->Realize(object, SL_BOOLEAN_FALSE);
+        (*object)->GetInterface(object, SL_IID_ENGINECAPABILITIES, &capEngine);
         (*object)->GetInterface(object, SL_IID_ENGINE, &engine);
         (*engine)->CreateOutputMix(engine, &mixer, 0, nullptr, nullptr);
         (*mixer)->Realize(mixer, SL_BOOLEAN_FALSE);
@@ -261,7 +194,6 @@ zSoundPlayer* zSoundManager::createPlayer(int id, int type, const zPlayerParams&
             case TYPE_URI:  pl = new zSoundPlayerUri(this, id); break;
             case TYPE_MEM:  pl = new zSoundPlayerMem(this, id); break;
             case TYPE_ASSET:pl = new zSoundPlayerAsset(this, id); break;
-            case TYPE_REC:  pl = new zSoundPlayerRec(this, id); break;
             case TYPE_VIBRA:pl = new zSoundPlayerVibra(this, id); break;
             default:        return nullptr;
         }

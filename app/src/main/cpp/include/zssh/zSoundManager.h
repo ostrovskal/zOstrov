@@ -6,16 +6,17 @@
 
 enum { PLAYER_FRAMES = 16384, RECORDER_FRAMES = 16000 * 5 };
 // типы проигрывателей
-enum { TYPE_UNK, TYPE_ASSET, TYPE_URI, TYPE_MEM, TYPE_REC, TYPE_VIBRA };
+enum { TYPE_UNK, TYPE_ASSET, TYPE_URI, TYPE_MEM, TYPE_VIBRA };
 
 struct zPlayerParams {
-    union {
-        cstr uri;
-        struct {
-            u32 rate;
-            u32 chan;
-            int bufSize;
-        };
+    // для ASSET/URI - путь к ресурсу
+    cstr uri;
+    struct {
+        // для MEM - частота/число каналов
+        u32 rate{0};
+        u32 chan{2};
+        u32 bits{8};
+        int bufSize{0};
     };
 };
 
@@ -29,13 +30,9 @@ public:
     virtual void setData(u8* data, int size) { }
     void shutdown();
     bool operator == (int _id) const { return id == _id; }
-    bool setSolo(int chan, bool set) const;
-    bool setMute(int chan, bool set) const;
     bool isPlay() const { return getStatus() == SL_PLAYSTATE_PLAYING; }
     // получить статус
     u32 getStatus() const;
-    // вернуть количество каналов
-    int getChannels() const;
     // установка громкости
     bool setVolume(SLmillibel vol) const;
     // получение громкости
@@ -58,12 +55,12 @@ public:
     SLPlayItf player{nullptr};
     // интферфейс рекордера
     SLRecordItf recorder{nullptr};
-    //
-    SLMuteSoloItf mute{nullptr};
     // звук
     SLVolumeItf volume{nullptr};
     // поиск
     SLSeekItf seek{nullptr};
+    // вибратор
+    SLVibraItf vibrator{nullptr};
     // буфер
     SLAndroidSimpleBufferQueueItf queue{nullptr};
     // буфер
@@ -97,12 +94,6 @@ public:
     virtual bool create(const zPlayerParams& p, bool play) override;
 };
 
-class zSoundPlayerRec : public zSoundPlayer {
-public:
-    zSoundPlayerRec(zSoundManager* mgr, int id) : zSoundPlayer(mgr, id, TYPE_REC) { }
-    virtual bool create(const zPlayerParams& p, bool play) override;
-};
-
 class zSoundPlayerVibra : public zSoundPlayer {
 public:
     zSoundPlayerVibra(zSoundManager* mgr, int id) : zSoundPlayer(mgr, id, TYPE_VIBRA) { }
@@ -129,10 +120,13 @@ public:
     SLEngineItf getEngine() const { return engine; }
     // вернуть миксер
     SLObjectItf getMixer() const { return mixer; }
+    // вернуть капсы
+    SLEngineCapabilitiesItf getCaps() const { return capEngine; }
 protected:
     // движок
     SLObjectItf object{nullptr};
     SLEngineItf engine{nullptr};
+    SLEngineCapabilitiesItf capEngine{nullptr};
     // миксер
     SLObjectItf mixer{nullptr};
     // проигрыватели
