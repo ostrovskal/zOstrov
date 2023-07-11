@@ -22,8 +22,8 @@
         <item name="themeColorTextTabbed">@color/textTabbedDark</item>
         <item name="themeColorTextProgress">@color/textProgressDark</item>
         <item name="themeColorTextMenu">@color/textMenuDark</item>
-        <item name="themeTile1Progress">@integer/rectRound</item>
-        <item name="themeTile2Progress">@integer/rectRound</item>
+        <item name="themeTile1Progress">@integer/gradientSm</item>
+        <item name="themeTile2Progress">@integer/gradientSm</item>
         <item name="themeTile1Slider">@integer/sliderTrack1</item>
         <item name="themeTile2Slider">@integer/sliderTrumb1</item>
         <item name="themeTilesForm">@integer/formBackground</item>
@@ -53,8 +53,8 @@
         <item name="themeColorTextTabbed">@color/textTabbedLight</item>
         <item name="themeColorTextProgress">@color/textProgressLight</item>
         <item name="themeColorTextMenu">@color/textMenuLight</item>
-        <item name="themeTile1Progress">@integer/gradientRadial</item>
-        <item name="themeTile2Progress">@integer/gradientRadial</item>
+        <item name="themeTile1Progress">@integer/gradientRadialSm</item>
+        <item name="themeTile2Progress">@integer/gradientRadialSm</item>
         <item name="themeTile1Slider">@integer/sliderTrack2</item>
         <item name="themeTile2Slider">@integer/sliderTrumb2</item>
         <item name="themeTilesForm">@integer/formBackground</item>

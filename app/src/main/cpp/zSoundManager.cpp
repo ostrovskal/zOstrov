@@ -92,6 +92,10 @@ bool zSoundPlayer::make(SLDataSource& src, SLDataSink& snk, bool play, int _bufS
     return result == SL_RESULT_SUCCESS;
 }
 
+bool zSoundPlayerVibra::create(const zPlayerParams& p, bool play) {
+    return false;
+}
+
 bool zSoundPlayerRec::create(const zPlayerParams& p, bool play) {
     SLDataLocator_AndroidSimpleBufferQueue loc = { SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE, 2 };
     SLDataLocator_IODevice dev  = { SL_DATALOCATOR_IODEVICE, SL_IODEVICE_AUDIOINPUT, SL_DEFAULTDEVICEID_AUDIOINPUT, nullptr };
@@ -258,6 +262,7 @@ zSoundPlayer* zSoundManager::createPlayer(int id, int type, const zPlayerParams&
             case TYPE_MEM:  pl = new zSoundPlayerMem(this, id); break;
             case TYPE_ASSET:pl = new zSoundPlayerAsset(this, id); break;
             case TYPE_REC:  pl = new zSoundPlayerRec(this, id); break;
+            case TYPE_VIBRA:pl = new zSoundPlayerVibra(this, id); break;
             default:        return nullptr;
         }
     }

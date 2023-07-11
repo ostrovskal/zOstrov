@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Tue Jul 11 00:15:30 2023
+// Tue Jul 11 13:22:43 2023
 
 #pragma once
 
@@ -55,17 +55,19 @@ struct _z {
 				ccontrolD	= 7, 	acontrol	= 8, 	acontrolY	= 9, 	acontrolX	= 10, 
 				acontrolA	= 11, 	acontrolB	= 12, 	horzGlow	= 13, 	vertGlow	= 14, 
 				progressWait	= 15, 	iconEdit	= 16, 	iconGroup	= 17, 	rect	= 18, 
-				rectRound	= 19, 	gradient	= 20, 	gradientDiag	= 21, 	gradientRadial	= 22, 
-				iconBullet	= 23, 	edit	= 24, 	toolsTriLimit	= 25, 	toolsTri	= 26, 
-				tools	= 27, 	header	= 28, 	button1	= 29, 	button2	= 30, 	button3	= 31, 
-				button4	= 32, 	switchTrack	= 33, 	switchTrumb	= 34, 	selectDrop	= 35, 
-				selectItem	= 36, 	selectCapt	= 37, 	radioOff	= 38, 	radioOn	= 39, 
-				checkOff	= 40, 	checkOn	= 41, 	sliderTrumb2	= 42, 	sliderTrumb1	= 43, 
-				sliderTrack2	= 44, 	sliderTrack1	= 45, 	formBackground	= 46, 
-				butKeyboardSmall	= 47, 	iconLang	= 48, 	iconSelf_round	= 49, 
-				iconDelete	= 50, 	iconShiftFix	= 51, 	iconShift	= 52, 	iconShiftPress	= 53, 
-				iconSelf	= 54, 	iconOk	= 55, 	iconCancel	= 56, 	iconNo	= 57, 
-				iconYes	= 58, 	iconMenu	= 59, 	iconDef	= 60, 			};
+				rectRound	= 19, 	rectRoundSm	= 20, 	gradient	= 21, 	gradientSm	= 22, 
+				gradientDiag	= 23, 	gradientDiagSm	= 24, 	gradientRadial	= 25, 
+				gradientRadialSm	= 26, 	iconBullet	= 27, 	edit	= 28, 	toolsTriLimit	= 29, 
+				toolsTri	= 30, 	tools	= 31, 	header	= 32, 	button1	= 33, 
+				button2	= 34, 	button3	= 35, 	button4	= 36, 	switchTrack	= 37, 
+				switchTrumb	= 38, 	selectDrop	= 39, 	selectItem	= 40, 	selectCapt	= 41, 
+				radioOff	= 42, 	radioOn	= 43, 	checkOff	= 44, 	checkOn	= 45, 
+				sliderTrumb2	= 46, 	sliderTrumb1	= 47, 	sliderTrack2	= 48, 
+				sliderTrack1	= 49, 	formBackground	= 50, 	butKeyboardSmall	= 51, 
+				iconLang	= 52, 	iconSelf_round	= 53, 	iconDelete	= 54, 	iconShiftFix	= 55, 
+				iconShift	= 56, 	iconShiftPress	= 57, 	iconSelf	= 58, 	iconOk	= 59, 
+				iconCancel	= 60, 	iconNo	= 61, 	iconYes	= 62, 	iconMenu	= 63, 
+				iconDef	= 64, 			};
 		}; 
 		_integer integer;
 		struct _color {

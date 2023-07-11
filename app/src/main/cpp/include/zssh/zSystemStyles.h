@@ -370,7 +370,8 @@ static zStyle styles_z_linearprogress[] = {
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_THEME_COLOR_TEXT_PROGRESS },
 	{ Z_MODE, ZS_SLIDER_NONE },
 	{ Z_DECORATE, ZS_TIPS },
-	{ Z_FOREGROUND_SCALE | ZT_END, 111409 }
+	{ Z_FOREGROUND_SCALE, 111409 },
+	{ Z_TEXT_SHADOW_OFFS | ZT_END, 0x0202 }
 };
 
 static zStyle styles_z_circularprogress[] = {
@@ -500,8 +501,8 @@ static zStyle styles_z_themedark[] = {
 	{ Z_THEME_COLOR_TEXT_TABBED, z.R.color.textTabbedDark },
 	{ Z_THEME_COLOR_TEXT_PROGRESS, z.R.color.textProgressDark },
 	{ Z_THEME_COLOR_TEXT_MENU, z.R.color.textMenuDark },
-	{ Z_THEME_TILE1_PROGRESS, z.R.integer.rectRound },
-	{ Z_THEME_TILE2_PROGRESS, z.R.integer.rectRound },
+	{ Z_THEME_TILE1_PROGRESS, z.R.integer.gradientSm },
+	{ Z_THEME_TILE2_PROGRESS, z.R.integer.gradientSm },
 	{ Z_THEME_TILE1_SLIDER, z.R.integer.sliderTrack1 },
 	{ Z_THEME_TILE2_SLIDER, z.R.integer.sliderTrumb1 },
 	{ Z_THEME_TILES_FORM, z.R.integer.formBackground },
@@ -532,8 +533,8 @@ static zStyle styles_z_themelight[] = {
 	{ Z_THEME_COLOR_TEXT_TABBED, z.R.color.textTabbedLight },
 	{ Z_THEME_COLOR_TEXT_PROGRESS, z.R.color.textProgressLight },
 	{ Z_THEME_COLOR_TEXT_MENU, z.R.color.textMenuLight },
-	{ Z_THEME_TILE1_PROGRESS, z.R.integer.gradientRadial },
-	{ Z_THEME_TILE2_PROGRESS, z.R.integer.gradientRadial },
+	{ Z_THEME_TILE1_PROGRESS, z.R.integer.gradientRadialSm },
+	{ Z_THEME_TILE2_PROGRESS, z.R.integer.gradientRadialSm },
 	{ Z_THEME_TILE1_SLIDER, z.R.integer.sliderTrack2 },
 	{ Z_THEME_TILE2_SLIDER, z.R.integer.sliderTrumb2 },
 	{ Z_THEME_TILES_FORM, z.R.integer.formBackground },

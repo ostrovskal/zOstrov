@@ -17,7 +17,6 @@ zTextPaint::~zTextPaint() {
 }
 
 void zTextPaint::init(zTextPaint* _paint) {
-    margin  = _paint->margin;
     fkColor = _paint->fkColor;
     bkColor = _paint->bkColor;
     italic  = _paint->italic;
@@ -37,7 +36,7 @@ void zTextPaint::reset(zViewText* _tv) {
 }
 
 zStringUTF8 zTextPaint::info() const {
-    return z_fmt("fk:%x bk:%x sts:%x sz:%i marg:%i bs:%i wdt:%i", fkColor, bkColor, getStyle(), getSize(), getMargin(), baseLine, width).str();
+    return z_fmt("fk:%x bk:%x sts:%x sz:%i bs:%i wdt:%i", fkColor, bkColor, getStyle(), getSize(), baseLine, width).str();
 }
 
 void zTextPaint::setSize(i32 _size) {
@@ -150,7 +149,7 @@ void zTextSpanBullet::updateState(zTextPaint *paint) {
         paint->setSize(12_dp);
         dr.texture = paint->getFont();
     }
-    paint->setMargin(25_dp);
+    //paint->setMargin(25_dp);
 }
 
 void zTextSpanBullet::draw(int x, int y, int hmax, zTextPaint *paint, crti& clip) {
@@ -178,7 +177,17 @@ void zTextSpanMask::draw(int x, int y, int hmax, zTextPaint *paint, crti &clip) 
 }
 
 void zTextSpanParagraph::updateState(zTextPaint *paint) {
-    paint->setMargin(15_dp);
+    paint->width = 14_dp;
+}
+
+void zTextSpanGravity::margin(zViewText* vt, zTextPaint* paint, cstr str) {
+    auto w(paint->widthText(str, INT_MAX)), wc(vt->rclient.w);
+    switch(grav) {
+        case ZS_GRAVITY_START:  w = vt->ipad.x; break;
+        case ZS_GRAVITY_END:    w = wc - vt->ipad.w - w; break;
+        case ZS_GRAVITY_HCENTER:w = (wc - vt->ipad.extent(false) - w) / 2; break;
+    }
+    paint->width = w;
 }
 
 void zViewText::infoSpans() {
@@ -303,7 +312,7 @@ bool zViewText::setHtmlText(czs& text, const std::function<bool(cstr tag, bool e
                 case 0x3ee0e: case 0x79832919:
                     if(!end) {
                         pos += (_html->text[pos] == '\n');
-                        _html->text += "!";
+                        _html->text += "\t";
                         span = new zTextSpanParagraph();
                         flags = SPAN_FLAGS_SPECIFIC;
                     }
@@ -311,9 +320,11 @@ bool zViewText::setHtmlText(czs& text, const std::function<bool(cstr tag, bool e
                 // h1 - h6
                 case 0xc7ada38: case 0xc7c22dd: case 0xc7d9a75:
                 case 0xc7aa490: case 0xc7cf97d: case 0xc79a5b2:
-                    if(_html->text[pos] != '\n') {
-                        _html->text += "\n"; pos++;
-                        if(end) _html->text += "\n", pos++;
+                    if(_html->text[pos - 1] != '\n') { _html->text += "\n"; pos++; }
+                    if(end) { _html->text += "\n", pos++; }
+                    else {
+                        _html->text += "\t";
+                        setSpan(new zTextSpanGravity(ZS_GRAVITY_HCENTER), pos, pos + 1, SPAN_FLAGS_SPECIFIC);
                     }
                     span = new zTextSpanRelativeSize(htmlHeaderSize[tag[1] - '1']);
                     break;
@@ -331,7 +342,7 @@ bool zViewText::setHtmlText(czs& text, const std::function<bool(cstr tag, bool e
                     span = new zTextSpanStrikeline(); break;
                 // img
                 case 0x9ae16064:
-                    _html->text += " ";
+                    _html->text += "\t";
                     span = new zTextSpanImage(_html->getStringAttr("src", "znull"), _html->getStringAttr("t", "rect"),
                                               _html->getFloatAttr("s", 1.0f), _html->getColorAttr("c", 0xffffffff));
                     flags = SPAN_FLAGS_SPECIFIC;
@@ -358,18 +369,19 @@ bool zViewText::setHtmlText(czs& text, const std::function<bool(cstr tag, bool e
                     if(end) {
                         if(_html->text[pos] != '\n') _html->text += "\n";
                     } else {
-                        _html->text += "!";
+                        _html->text += "\t"; flags = SPAN_FLAGS_SPECIFIC;
+                        setSpan(new zTextSpanParagraph(), pos, pos + 1, flags);
+                        _html->text += "\t"; pos++;
                         span = new zTextSpanBullet(listOrdered, listNum);
-                        flags = SPAN_FLAGS_SPECIFIC;
                         listNum += !listRev * 2 - 1;
                     }
                     break;
                 // bkg background
                 case 0xc9b77622:
-                case 0x1aaadb91: span = new zTextSpanBackgroundColor(end ? 0 : _html->getColorAttr("value", -1)); break;
+                case 0x1aaadb91: span = new zTextSpanBackgroundColor(end ? 0 : _html->getColorAttr("v", -1)); break;
                 // c color
                 case 0xdbf89687:
-                case 0x4595e:   span = new zTextSpanForegrounColor(end ? 0 : _html->getColorAttr("value", -1)); break;
+                case 0x4595e:   span = new zTextSpanForegrounColor(end ? 0 : _html->getColorAttr("v", -1)); break;
             }
             if(span) setSpan(span, pos, pos + (flags == SPAN_FLAGS_SPECIFIC), flags);
         }
@@ -398,7 +410,7 @@ szi zViewText::textWrapSpan(cstr _text, int widthRect) {
     for(int i = 0; i < cacheSpans.size(); i++) {
         auto sp(cacheSpans[i]); auto paint(sp->paint); auto _pos(sp->s);
         height = z_max(height, paint->getSize());
-        width += paint->getMargin() + paint->getItalic() + paint->width;
+        width += paint->getItalic() + paint->width;
         while(_pos < sp->e) {
             auto _ch(ch); if(!(ch = z_decodeUTF8(z_charUTF8(_text, &_count)))) break;
             // если это не начало подстроки и есть разделитель - запоминаем его
@@ -407,14 +419,15 @@ szi zViewText::textWrapSpan(cstr _text, int widthRect) {
                 // определить новую ширину строки
                 auto ln(paint->getWidthChar(ch) + width);
                 // если длина подстроки меньше ширины ректа и символ не "новая строка" = дальше
-                if(_stext == _text || ln < widthRect) { width = ln; _text += _count; _pos++; continue; }
-            } else { separator = nullptr; _text++; }
+                if(_stext == _text || ln <= widthRect) { width = ln; _text += _count; _pos++; continue; }
+            } else { separator = nullptr; _text++; _pos++; }
             // добавить подстроку в массив
             if(separator) _text = separator, width = sepWidth, _pos = sepPos, sp = _sp, i = _i, separator = nullptr;
             _text = addCacheSubString(_stext, _text, width, height, true);
             widthRectCache = z_max(width, widthRectCache); maxHeight += height;
-            _stext = _text; width = defPaint->getItalic(); height = defPaint->getSize();
+            _stext = _text; height = defPaint->getSize(); width = paint->getItalic();
         }
+        if(_stext == _text) width = 0;
     }
     // последняя подстрока
     if(_stext < _text) {
@@ -434,10 +447,9 @@ void zViewText::drawTextSpan(crti& clip) {
     if(!cacheStr) return;
     for(auto sp: cacheSpans) {
         auto paint(sp->paint); auto posSpan(sp->s);
-        coord.x += paint->getMargin();
-        if(sp->span->isSkip()) { indexText++; continue; }
         // корректировать вертикальную позицию, относительно базовой линии шрифта
         auto subH(paint->correctBaseline(cacheStr->size));
+        sp->span->margin(this, paint, cacheStr->text);
         while(posSpan < sp->e) {
             // сдвинуть по верт. относительно общей высоты строки
             coord.y += subH;

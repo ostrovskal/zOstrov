@@ -6,7 +6,7 @@
 
 BETTER_ENUM(spans, int, SPAN_DEFAULT, SPAN_BK_COLOR, SPAN_FK_COLOR, SPAN_ABSOLUTE_SIZE, SPAN_RELATIVE_SIZE,
                         SPAN_SUBSCRIPT, SPAN_SUPERSCRIPT, SPAN_STYLE, SPAN_UNDERLINE, SPAN_STRIKELINE,
-                        SPAN_PARAGRAPH, SPAN_IMAGE, SPAN_BULLET, SPAN_MASK, SPAN_URL )
+                        SPAN_PARAGRAPH, SPAN_GRAVITY, SPAN_IMAGE, SPAN_BULLET, SPAN_MASK, SPAN_URL )
 
 #define SPAN_FLAGS_DEFAULT  0
 #define SPAN_FLAGS_SPECIFIC 1
@@ -23,14 +23,12 @@ public:
     void init(zTextPaint* _paint);
     void setStyle(u32 _style);
     void setSize(i32 _size);
-    void setMargin(i32 _margin) { margin = _margin; }
     void setBaseline(i32 _bs) { baseLine = _bs; }
     auto getBold() const { return bold; }
     auto getItalic() const { return italic * factor; }
     auto getSize() const { return size; }
     auto getStyle() const { return style; }
     auto getBaseline() const { return baseLine; }
-    auto getMargin() const { return margin; }
     auto getAscent() const { return font->ascent; }
     auto getWidthChar(int ch) const { return font->widthGlyph(ch + bold, factor); }
     auto getFactor(float _mul) const { return (int)round(_mul * factor); }
@@ -55,8 +53,8 @@ protected:
     // фактор масштабирования
     float factor{1.0f};
     i32 yBold{0};
-    // размер/отступ
-    i32 size{20}, margin{0};
+    // размер
+    i32 size{20};
     //
     i32 italic{0}, bold{0}, baseLine{0};
     // стиль
@@ -71,8 +69,8 @@ public:
     virtual ~zTextSpan() { }
     // обновление состояния
     virtual void updateState(zTextPaint* paint) { }
-    // пропускать
-    virtual bool isSkip() const { return false; }
+    // вычисление
+    virtual void margin(zViewText* vt, zTextPaint* paint, cstr str) { }
     // позиционирование
     virtual void draw(int x, int y, int hmax, zTextPaint *paint, crti& clip) { }
     // установка изображения(для ссылки)
@@ -179,12 +177,20 @@ public:
 
 class zTextSpanParagraph : public zTextSpan {
 public:
-    // обновление состояния
-    virtual void updateState(zTextPaint *paint) override;
-    // пропускать
-    virtual bool isSkip() const override { return true; }
+    // отступ
+    virtual void updateState(zTextPaint* paint) override;
     // вернуть тип спана
     virtual int typeId() const override { return spans::SPAN_PARAGRAPH; }
+};
+
+class zTextSpanGravity : public zTextSpan {
+public:
+    zTextSpanGravity(int type) : grav(type) { }
+    // отступ
+    virtual void margin(zViewText* vt, zTextPaint* paint, cstr str) override;
+    // вернуть тип спана
+    virtual int typeId() const override { return spans::SPAN_GRAVITY; }
+    int grav{ZS_GRAVITY_START};
 };
 
 class zTextSpanUrl : public zTextSpan {

@@ -6,7 +6,7 @@
 
 enum { PLAYER_FRAMES = 16384, RECORDER_FRAMES = 16000 * 5 };
 // типы проигрывателей
-enum { TYPE_UNK, TYPE_ASSET, TYPE_URI, TYPE_MEM, TYPE_REC };
+enum { TYPE_UNK, TYPE_ASSET, TYPE_URI, TYPE_MEM, TYPE_REC, TYPE_VIBRA };
 
 struct zPlayerParams {
     union {
@@ -50,7 +50,7 @@ public:
     bool stop() const;
     // установка признака зацикленности(например, для музыки)
     bool loop(bool set) const;
-    // фомирование
+    // формирование
     bool make(SLDataSource& src, SLDataSink& snk, bool play, int _bufSize);
     // главный объект плеера
     SLObjectItf object{nullptr};
@@ -100,6 +100,12 @@ public:
 class zSoundPlayerRec : public zSoundPlayer {
 public:
     zSoundPlayerRec(zSoundManager* mgr, int id) : zSoundPlayer(mgr, id, TYPE_REC) { }
+    virtual bool create(const zPlayerParams& p, bool play) override;
+};
+
+class zSoundPlayerVibra : public zSoundPlayer {
+public:
+    zSoundPlayerVibra(zSoundManager* mgr, int id) : zSoundPlayer(mgr, id, TYPE_VIBRA) { }
     virtual bool create(const zPlayerParams& p, bool play) override;
 };
 

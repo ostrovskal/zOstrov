@@ -346,6 +346,7 @@
         <item name="sliderMode">none</item>
         <item name="decorate">tips</item>
         <item name="fkScale">1.7</item>
+        <item name="textShadowOffset">2,2</item>
     </style>
     <style name="circularProgress">
         <item name="gravity">center</item>
