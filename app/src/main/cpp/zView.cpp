@@ -483,7 +483,7 @@ bool zFlyng::start(zTouch* touch, int delta) {
     auto t((int)((touch->ctm - touch->btm) / 1350000));
     // если отпустили и время < 15(выбрано экспериментально)
     if(t < 15) {
-        delta *= (15 - t) / 3;
+        delta *= (24 - t) / 4;
 //        DLOG("fling d: %i t: %i", delta, t);
         animator.init(delta, false);
         animator.add(0, zInterpolator::EASEOUTQUAD, abs(delta));

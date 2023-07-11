@@ -155,7 +155,7 @@ i32 zViewKeyboard::onTouchEvent(zTouch *touch) {
 }
 
 void zViewKeyboard::onMeasure(cszm& spec) {
-    auto heightSize(z_percent(zGL::instance()->getSizeScreen(true), minHeight + 10 * manager->isLandscape()));
+    auto heightSize(z_percent(zGL::instance()->getSizeScreen(true), minHeight + 17 * manager->isLandscape()));
     auto widthSize(z_min(spec.w.size(), (int)roundf((float)heightSize * 2.5f)));
     auto sz(current ? current->size : szi(1, 1));
     deltaHeight = ((float)heightSize / (float)sz.h);
