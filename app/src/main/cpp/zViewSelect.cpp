@@ -162,10 +162,10 @@ void zViewPopup::onLayout(crti &position, bool changed) {
     rview.x = owner->rview.x + offs.x;
     rview.y = owner->edges(true, false) + offs.y;
     // проверка по гор.
-    auto wScreen(zGL::instance()->getSizeScreen(false) - 5_dp);
+    auto wScreen(zGL::instance()->getSizeScreen(false) - 2_dp);
     if(rview.extent(false) > wScreen) rview.x = wScreen - rview.w;
     // проверка по верт.
-    auto hScreen(zGL::instance()->getSizeScreen(true) - 5_dp);
+    auto hScreen(zGL::instance()->getSizeScreen(true) - 2_dp);
     if(rview.extent(true) > hScreen) {
         auto sub(rview.extent(true) - hScreen);
         // вниз - за пределы экрана

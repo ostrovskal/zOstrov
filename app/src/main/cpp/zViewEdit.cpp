@@ -121,30 +121,31 @@ void zViewEdit::setFilter(u32 inputMode, zFilterEdit* _filter) {
 
 pti zViewEdit::positionFromIndex(int _indexText) {
     auto bound(&drw[DRW_TXT]->bound); pti pos;
-    auto x(bound->x), y(bound->y), i(0); _indexText -= visibleIndex;
+    auto x(bound->x), y(bound->y), size(textCache.size()); _indexText -= visibleIndex;
     // определить вертикальную позицию
-    for(auto& c : textCache) {
-        auto idx(_indexText - c->text.count());
-        if(idx <= 0) {
+    for(int i = 0 ; i < size; i++) {
+        auto c(textCache[i]); auto idx(_indexText - c->text.count());
+        if(idx < 0 || (i + 1 >= size)) {
             getStringFromCache(i, bound, pos);
             x = pos.x + defPaint->widthText(c->text.str(), _indexText);
             break;
         }
-        _indexText = idx; y += c->size; i++;
+        _indexText = idx; y += c->size;
     }
     return {x, y};
 }
 
 int zViewEdit::indexFromPosition(cpti& screen, bool exact) {
     auto bound(&drw[DRW_TXT]->bound); pti pos(0, bound->y);
-    auto idx(0), i(0);
-    for(auto& c : textCache) {
-        if(screen.y < (pos.y + c->size)) {
+    auto idx(0), size(textCache.size());
+    for(int i = 0 ; i < size; i++) {
+        auto c(textCache[i]);
+        if(screen.y < (pos.y + c->size) || (i + 1 >= size)) {
             getStringFromCache(i, bound, pos);
             idx += visibleIndex + defPaint->indexOf(c->text.str(), INT_MAX, screen.x, pos.x, exact);
             break;
         }
-        pos.y += c->size; idx += c->text.count(); i++;
+        pos.y += c->size; idx += c->text.count();
     }
     return idx;
 }
@@ -187,8 +188,7 @@ i32 zViewEdit::keyEvent(int key, bool sysKey) {
         }
         auto caretPos(caretIndex);
         if(key == '\b') {
-            if(caretPos > 0)
-                removeText(--caretPos, 1);
+            if(caretPos > 0) removeText(--caretPos, 1);
         } else if(realText.count() < maxLength) {
             insertText(caretPos++, (char*)&key);
         }
@@ -235,8 +235,7 @@ void zViewEdit::notifyEvent(HANDLER_MESSAGE* msg) {
 
 i32 zViewEdit::onTouchEvent(zTouch *touch) {
     auto result(zViewText::onTouchEvent(touch));
-    if(!isFocus()) return result;
-    result = touch->isCaptured();
+//    result = touch->isCaptured();
     if(but && (but->testFlags(ZS_TAP) || but->rview.contains((int)touch->cpt.x, (int)touch->cpt.y))) {
         // вызываем событие касания дочернего
         result = but->onEvent(touch);
@@ -245,7 +244,7 @@ i32 zViewEdit::onTouchEvent(zTouch *touch) {
         invalidate(); return result;
     }
     if(result == TOUCH_FINISH) {
-        if(!touch->delta(szi(5, 5)) && !touch->just()) return result;
+        if(!touch->delta(sizeTouch) && !touch->just()) return result;
         // определить позицию каретки в тексте и на экране
         auto pos(indexFromPosition(pti(touch->cpt.x, touch->cpt.y), true));
         if(touch->isDblClicked()) { posSel.x = 0;  pos = posSel.y = realText.count(); }

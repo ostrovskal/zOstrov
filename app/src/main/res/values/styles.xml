@@ -117,7 +117,6 @@
     <style name="barPopup">
         <item name="fbo">true</item>
         <item name="divSize">@dimen/divider</item>
-        <item name="divType">begin|middle|end</item>
         <item name="background">?attr/themeColorMenu</item>
         <item name="gravity">center</item>
         <item name="fadeScrollBars">true</item>
@@ -128,7 +127,6 @@
     <style name="menuPopup">
         <item name="fbo">true</item>
         <item name="divSize">@dimen/divider</item>
-        <item name="divType">middle</item>
         <item name="background">?attr/themeColorMenu</item>
         <item name="gravity">center</item>
         <item name="selector">?attr/themeColorSelector</item>
@@ -160,7 +158,16 @@
         <item name="foreground">@drawable/zssh</item>
         <item name="fkGravity">center</item>
         <item name="textLines">1</item>
-        <item name="textEllipsis">middle</item>
+        <item name="ipad">3dp</item>
+        <item name="fkTiles">@integer/selectItem</item>
+    </style>
+    <style name="grid_item">
+        <item name="fbo">true</item>
+        <item name="textStyle">bold_italic</item>
+        <item name="gravity">center</item>
+        <item name="foreground">@drawable/zssh</item>
+        <item name="fkGravity">center</item>
+        <item name="textLines">100</item>
         <item name="ipad">3dp</item>
         <item name="fkTiles">@integer/selectItem</item>
     </style>

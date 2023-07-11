@@ -176,6 +176,11 @@ int zViewBaseRibbon::computeScrollOffset(bool _vert) const {
     return 0;
 }
 
+void zViewBaseRibbon::requestLayout() {
+    auto drop(dynamic_cast<zViewDropdown*>(this));
+    if(drop) zViewGroup::requestLayout();
+}
+
 int zViewBaseRibbon::computeScrollRange(bool _vert) const {
     return ((countItem + linesGrid - 1) / linesGrid) * 1000;
 }

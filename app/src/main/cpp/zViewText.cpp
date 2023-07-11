@@ -255,17 +255,18 @@ cstr zViewText::addCacheSubString(cstr _stext, cstr _text, int& width, int heigh
 }
 
 szi zViewText::textWrap(cstr _text, int widthRect) {
-    int maxHeight(0); widthRectCache = 0;
+    int maxHeight(0);
     // проверить на кэшированные значения
     if(textCache.isNotEmpty() && widthRect == widthRectCache) {
         DLOG("from cache %s", textCache[0]->text.str());
         for(auto& cache : textCache) maxHeight += cache->size;
         return { widthRectCache, maxHeight };
     }
+    widthRectCache = 0;
     if(spans.isNotEmpty()) return textWrapSpan(_text, widthRect);
     int width(0), lines(getLines()), sepPos(0), sepWidth(0), height(0), _count, _pos;
     // разбить текст по спец. символам по ширине ректа
-    if(widthRect <= 0) widthRect = INT_MAX;
+    if(lines == 1 || widthRect <= 0) widthRect = INT_MAX;
     textCache.clear();
     auto isEdit(dynamic_cast<zViewEdit*>(this));
     // адрес последнего разделителя/начало подстроки/текущий символ
@@ -280,7 +281,7 @@ szi zViewText::textWrap(cstr _text, int widthRect) {
             // определить новую ширину строки
             auto ln(defPaint->getWidthChar(ch) + width);
             // если длина подстроки меньше ширины ректа и символ не "новая строка" = дальше
-            if(_stext == _text || lines == 1 || ln < widthRect) { width = ln; _text += _count; _pos++; continue; }
+            if(_stext == _text || lines == 1 || ln <= widthRect) { width = ln; _text += _count; _pos++; continue; }
         } else { separator = nullptr; _text++; }
         // добавить подстроку в массив
         if(separator) _text = separator, width = sepWidth, _pos = sepPos, separator = nullptr;

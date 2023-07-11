@@ -22,7 +22,7 @@ public:
     virtual int computeScrollRange(bool _vert) const override;
     virtual int computeScrollExtent(bool _vert) const override;
     // отключить обновление размера
-    virtual void requestLayout() override { }
+    virtual void requestLayout() override;
     // вернуть имя типа
     virtual cstr typeName() const override { return "zViewBaseRibbon"; }
     // установка адаптера

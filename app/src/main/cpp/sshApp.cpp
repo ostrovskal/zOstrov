@@ -86,7 +86,7 @@ void sshApp::setContent() {
     zArray<zStringUTF8> objects(theme->findArray(z.R.array.spinArray));
     attachForm(formBrowser, 280_dp, 300_dp);
     auto grd(idView<zViewGrid>(z.R.id.grid1));
-    auto adapter(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
+    auto adapter(new zAdapterList(objects, new zFabricListItem(styles_z_grid_item)));
     grd->setAdapter(adapter)->setOnChangeSelected([](zView*, int sel) {
 //        DLOG("grid sel %i", sel);
     });

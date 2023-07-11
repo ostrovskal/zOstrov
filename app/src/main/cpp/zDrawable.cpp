@@ -34,17 +34,18 @@ void zParamDrawable::setDefaults() {
     // цвет текста по умолчанию
     zView::drParams[DR_TXT].color = theme->styles->_int(Z_THEME_COLOR_TEXT_TEXT, 0xffaabbcc);
     drDef[DR_TXT].color = zView::drParams[DR_TXT].color;
-    // иконка по умолчанию
-    drDef[DR_ICON].texture = theme->styles->_int(Z_THEME_ICONS, z.R.drawable.zssh);
     // divider
     drDef[DR_DIV].texture = theme->styles->_int(Z_THEME_COLOR_DIVIDER, 0xff7f7f7f);
     drDef[DR_DIV].type = ZS_DIVIDER_MIDDLE;
     // цвет фона текста
     zView::drParams[DR_BTXT].texture = 0x01000000;
     zView::drParams[DR_BTXT].tiles = z.R.integer.rect;
+    // иконка по умолчанию
+    drDef[DR_ICON].texture = z.R.drawable.zssh;
     // источник fk/bk/msk
-    drDef[DR_BK].texture = theme->styles->_int(Z_THEME_BITMAP, z.R.drawable.zssh );
-    drDef[DR_FK].texture = drDef[DR_BK].texture; drDef[DR_MSK].texture = drDef[DR_BK].texture;
+    drDef[DR_BK].texture = z.R.drawable.zssh;
+    drDef[DR_FK].texture = z.R.drawable.zssh;
+    drDef[DR_MSK].texture= z.R.drawable.zssh;
 }
 
 void zDrawable::release() {

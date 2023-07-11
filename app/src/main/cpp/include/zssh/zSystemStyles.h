@@ -131,7 +131,6 @@ static zStyle styles_z_menuimage[] = {
 static zStyle styles_z_barpopup[] = {
 	{ Z_FBO, true },
 	{ Z_DIVIDER_SIZE, 0x00000002 },
-	{ Z_DIVIDER_TYPE, ZS_DIVIDER_BEGIN | ZS_DIVIDER_MIDDLE | ZS_DIVIDER_END },
 	{ Z_BACKGROUND | ZT_THEME, Z_THEME_COLOR_MENU },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_SCROLLBAR_FADE, true },
@@ -143,7 +142,6 @@ static zStyle styles_z_barpopup[] = {
 static zStyle styles_z_menupopup[] = {
 	{ Z_FBO, true },
 	{ Z_DIVIDER_SIZE, 0x00000002 },
-	{ Z_DIVIDER_TYPE, ZS_DIVIDER_MIDDLE },
 	{ Z_BACKGROUND | ZT_THEME, Z_THEME_COLOR_MENU },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_SELECTOR | ZT_THEME, Z_THEME_COLOR_SELECTOR },
@@ -178,7 +176,17 @@ static zStyle styles_z_list_item[] = {
 	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_TEXT_LINES, 1 },
-	{ Z_TEXT_ELLIPSIS, ZS_ELLIPSIS_MIDDLE },
+	{ Z_IPADDING, 0x03030303 },
+	{ Z_FOREGROUND_TILES | ZT_END, z.R.integer.selectItem }
+};
+
+static zStyle styles_z_grid_item[] = {
+	{ Z_FBO, true },
+	{ Z_TEXT_STYLE, ZS_TEXT_BOLD_ITALIC },
+	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
+	{ Z_FOREGROUND, z.R.drawable.zssh },
+	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
+	{ Z_TEXT_LINES, 100 },
 	{ Z_IPADDING, 0x03030303 },
 	{ Z_FOREGROUND_TILES | ZT_END, z.R.integer.selectItem }
 };

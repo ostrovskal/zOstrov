@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Tue Jul 11 13:22:43 2023
+// Tue Jul 11 13:57:10 2023
 
 #pragma once
 
@@ -172,28 +172,28 @@ struct _z {
 				formContentLyt	= 0x00100009, 	toast	= 0x0010000A, 	bar	= 0x0010000B, 
 				barButton	= 0x0010000C, 	barOverflow	= 0x0010000D, 	menuImage	= 0x0010000E, 
 				barPopup	= 0x0010000F, 	menuPopup	= 0x00100010, 	formFooter	= 0x00100011, 
-				spin_item	= 0x00100012, 	list_item	= 0x00100013, 	menu_item	= 0x00100014, 
-				edit_menu_item	= 0x00100015, 	spin_capt	= 0x00100016, 	button	= 0x00100017, 
-				tools	= 0x00100018, 	checkbox	= 0x00100019, 	radiobutton	= 0x0010001A, 
-				edittext	= 0x0010001B, 	ribbon	= 0x0010001C, 	grid	= 0x0010001D, 
-				select	= 0x0010001E, 	msgForm	= 0x0010001F, 	slider	= 0x00100020, 
-				linearProgress	= 0x00100021, 	circularProgress	= 0x00100022, 
-				switchButton	= 0x00100023, 	llinear	= 0x00100024, 	tabWidget	= 0x00100025, 
-				tabHost	= 0x00100026, 	ccontroller	= 0x00100027, 	acontroller	= 0x00100028, 
-				form	= 0x00100029, 	chart	= 0x0010002A, 	chartDiagramm	= 0x0010002B, 
-				chartGraph	= 0x0010002C, 	themeDark	= 0x0010002D, 	themeLight	= 0x0010002E, 
-				zcelllayout1	= 0x0010002F, 	list1	= 0x00100030, 	edit1	= 0x00100031, 
-				button1	= 0x00100032, 	switch1	= 0x00100033, 	seek	= 0x00100034, 
-				progress1	= 0x00100035, 	formopen	= 0x00100036, 	zlinearlayout1	= 0x00100037, 
-				zviewbutton1	= 0x00100038, 	zscrolllayout1	= 0x00100039, 
-				tv1	= 0x0010003A, 	zviewedit1	= 0x0010003B, 	grid1	= 0x0010003C, 
-				edit2	= 0x0010003D, 	radiodark	= 0x0010003E, 	chkbox	= 0x0010003F, 
-				radiolight	= 0x00100040, 	zviewribbon1	= 0x00100041, 	zviewbutton2	= 0x00100042, 
-				button2	= 0x00100043, 	switch2	= 0x00100044, 	switch3	= 0x00100045, 
-				button3	= 0x00100046, 	zviewslider1	= 0x00100047, 	seek1	= 0x00100048, 
-				button11	= 0x00100049, 	seek2	= 0x0010004A, 	formsettings	= 0x0010004B, 
-				zlinearlayout2	= 0x0010004C, 	zviewtext1	= 0x0010004D, 	zlinearlayout3	= 0x0010004E, 
-				ztabwidget1	= 0x0010004F, 	};
+				spin_item	= 0x00100012, 	list_item	= 0x00100013, 	grid_item	= 0x00100014, 
+				menu_item	= 0x00100015, 	edit_menu_item	= 0x00100016, 	spin_capt	= 0x00100017, 
+				button	= 0x00100018, 	tools	= 0x00100019, 	checkbox	= 0x0010001A, 
+				radiobutton	= 0x0010001B, 	edittext	= 0x0010001C, 	ribbon	= 0x0010001D, 
+				grid	= 0x0010001E, 	select	= 0x0010001F, 	msgForm	= 0x00100020, 
+				slider	= 0x00100021, 	linearProgress	= 0x00100022, 	circularProgress	= 0x00100023, 
+				switchButton	= 0x00100024, 	llinear	= 0x00100025, 	tabWidget	= 0x00100026, 
+				tabHost	= 0x00100027, 	ccontroller	= 0x00100028, 	acontroller	= 0x00100029, 
+				form	= 0x0010002A, 	chart	= 0x0010002B, 	chartDiagramm	= 0x0010002C, 
+				chartGraph	= 0x0010002D, 	themeDark	= 0x0010002E, 	themeLight	= 0x0010002F, 
+				zcelllayout1	= 0x00100030, 	list1	= 0x00100031, 	edit1	= 0x00100032, 
+				button1	= 0x00100033, 	switch1	= 0x00100034, 	seek	= 0x00100035, 
+				progress1	= 0x00100036, 	formopen	= 0x00100037, 	zlinearlayout1	= 0x00100038, 
+				zviewbutton1	= 0x00100039, 	zscrolllayout1	= 0x0010003A, 
+				tv1	= 0x0010003B, 	zviewedit1	= 0x0010003C, 	grid1	= 0x0010003D, 
+				edit2	= 0x0010003E, 	radiodark	= 0x0010003F, 	chkbox	= 0x00100040, 
+				radiolight	= 0x00100041, 	zviewribbon1	= 0x00100042, 	zviewbutton2	= 0x00100043, 
+				button2	= 0x00100044, 	switch2	= 0x00100045, 	switch3	= 0x00100046, 
+				button3	= 0x00100047, 	zviewslider1	= 0x00100048, 	seek1	= 0x00100049, 
+				button11	= 0x0010004A, 	seek2	= 0x0010004B, 	formsettings	= 0x0010004C, 
+				zlinearlayout2	= 0x0010004D, 	zviewtext1	= 0x0010004E, 	zlinearlayout3	= 0x0010004F, 
+				ztabwidget1	= 0x00100050, 	};
 		};
 		_style style;
 	};
@@ -226,6 +226,7 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::formFooter, styles_z_formfooter },
 		{ _z::_R::_style::spin_item, styles_z_spin_item },
 		{ _z::_R::_style::list_item, styles_z_list_item },
+		{ _z::_R::_style::grid_item, styles_z_grid_item },
 		{ _z::_R::_style::menu_item, styles_z_menu_item },
 		{ _z::_R::_style::edit_menu_item, styles_z_edit_menu_item },
 		{ _z::_R::_style::spin_capt, styles_z_spin_capt },

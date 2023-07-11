@@ -278,6 +278,8 @@ protected:
     int wmax{0};
     // позиция каретки на экране
     pti caretScreen{};
+    // чувствительность указателя
+    szi sizeTouch{8, 8};
     // фейковый текст(hint)
     zStringUTF8 hintText;
     // цвет hint
