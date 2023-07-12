@@ -435,15 +435,14 @@
     </style>
     <style name="chart">
         <item name="fbo">true</item>
-        <item name="background">@drawable/zssh</item>
         <item name="bkTiles">@integer/selectDrop</item>
-        <item name="foreground">@drawable/zssh</item>
         <item name="fkTiles">@integer/rect</item>
         <item name="fkColor">#ffffff</item>
         <item name="decorate">scrollbar</item>
         <item name="fadeScrollBars">false</item>
         <item name="gravity">center</item>
         <item name="pad">5dp</item>
+        <item name="ipad">1dp</item>
     </style>
     <style name="chartDiagramm">
         <item name="styles">@style/chart</item>

@@ -173,12 +173,12 @@ void zDrawable::draw(rti *rect) {
             auto _bound = (rect ? *rect : bound) - manager->screen;
             ptf offs((float)_bound.x - vertices->x, (float)_bound.y - vertices->y);
             auto fbo(!view->isFBO() || index == DRW_FBO);
-            if(fbo) {
+  //          if(fbo) {
                 offs.x += view->trans.x; offs.y += view->trans.y;
                 m = view->mtx; color.a *= view->alpha;
-            } else {
-                m.identity();
-            }
+    //        } else {
+      //          m.identity();
+        //    }
             m *= t.translate(offs.x, offs.y, 0);
             drawCommon(clip, m, fbo);
             color.a = _a;

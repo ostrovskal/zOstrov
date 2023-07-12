@@ -19,7 +19,7 @@
 			VIEW_WRAP, VIEW_WRAP);
 	grp01->attach(new zViewEdit(styles_z_edit2, z.R.id.edit2, z.R.string.enter_family), 
 			VIEW_MATCH, VIEW_WRAP);
-	auto grp12((zLinearLayout*)grp01->attach(new zLinearLayout(styles_z_zlinearlayout3, 0, false), 
+	auto grp12((zLinearLayout*)grp01->attach(new zLinearLayout(styles_z_zlinearlayout2, 0, false), 
 			VIEW_MATCH, VIEW_MATCH)); 
 	grp12->attach(new zViewRadio(styles_z_radiodark, z.R.id.radioDark, z.R.string.radio_dark, 1), 
 			0, 1, VIEW_WRAP, VIEW_MATCH);

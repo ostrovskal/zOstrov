@@ -44,8 +44,10 @@ constexpr int PIVOT_ALL             = 3;
 #define DRW_BK                      1   // background
 #define DRW_FK                      2   // foreground
 #define DRW_SEL                     3   // selector
+#define DRW_CHART1                  3
 #define DRW_TXT                     3   // text
 #define DRW_SHADE                   3   // shade
+#define DRW_CHART2                  4
 #define DRW_ICON                    4   // icon
 #define DRW_DIV                     4   // divider
 #define DRW_FBO                     5   // fbo

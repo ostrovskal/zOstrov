@@ -31,20 +31,28 @@ bool zViewChart::addData(i32* _values, int _countValues, u32* _colors, int _coun
     }
     if(!_values || !_countValues) return false;
     auto cc(z_max(cCharts, _countValues));
+    // сформировать значения
     auto vdata(new i32[_countValues]); memcpy(vdata, _values, _countValues * 4);
+    // сформировать цвет
     if(!_countColors) _countColors++;
     auto cdata(new i32[_countColors]);
     if(_colors) memcpy(cdata, _colors, _countColors * 4); else cdata[0] = -1;
+    // добавить в набор
     values += cd.set(vdata, _countValues);
     colors += cd.set(cdata, _countColors);
+    // определить максимальный/все наборы сделать одного размера
     maxVal = INT_MIN;
     for(auto& v : values) {
         int i(-1), count(v.count);
+        // если текущий меньше максимального
         if(count < cc) {
+            // создать временный по макс. из нулей
             auto data(new i32[cc]); memset(data, 0, cc * 4);
+            // скопировать в него текущий набор значений
             memcpy(data, v.data, count * 4);
             delete v.data; v.data = data;
         }
+        // определить максимыльный среди всех
         while(++i < count) maxVal = z_max(maxVal, v.data[i]);
     }
     cCharts = cc;
@@ -54,36 +62,31 @@ bool zViewChart::addData(i32* _values, int _countValues, u32* _colors, int _coun
 
 void zViewChart::onMeasure(cszm& spec) {
     zFrameLayout::onMeasure(spec);
-    auto ws(spec.w.size()), hs(spec.h.size());
-    auto wm(spec.w.mode()), hm(spec.h.mode());
-    int width(0), height(0), cc(z_max(1, cCharts)), cpad(ipad.extent(vert)), sz;
-    auto _w(vert ? &height : &width), _h(vert ? &width : &height);
-    auto _ws(vert ? hs : ws), _wm(vert ? hm : wm);
-    auto _hs(vert ? ws : hs), _hm(vert ? wm : hm);
-    if(_ws && _wm == MEASURE_EXACT) {
-        *_w = _ws;
+    szi _max; int cc(z_max(5, z_max(1, cCharts))), sz;
+    auto _ws(spec[vert].size()), _hs(spec[!vert].size());
+    if(_ws && spec[vert].isExact()) {
+        _max[vert] = _ws;
     } else {
-        cc = z_min(cc, 20);
-        sz = z_min(minMaxSize.x, _ws / cc) + cpad;
-        *_w += sz * cc;
-        *_w += pad.extent(vert);
-        if(_ws) *_w = z_min(*_w, _ws);
+        sz = z_max(minMaxSize[vert * 2], _ws / cc);
+        _max[vert] = sz * cc + pad.extent(vert);
+        if(_ws) _max[vert] = z_min(_max[vert], _ws);
     }
-    sz = z_max(minMaxSize.x, (*_w - pad.extent(vert)) / cc);
-    if(_hs && _hm == MEASURE_EXACT) {
-        *_h = _hs;
+    // размер одной диаграммы(ширина/высота в зависимости от ориентации)
+    sz = z_max(minMaxSize[vert * 2], (_max[vert] - pad.extent(vert)) / cc);
+    if(_hs && spec[!vert].isExact()) {
+        _max[!vert] = _hs;
     } else {
-        *_h += pad.extent(!vert);
-        *_h += sz * minMaxSize.w;
-        if(_hs) *_h = z_min(*_h, _hs);
+        _max[!vert] = z_max(sz * 3, minMaxSize[2 - vert * 2] + pad.extent(!vert));
+        if(_hs) _max[!vert] = z_min(_max[!vert], _hs);
     }
-    setMeasuredDimension(width, height);
+    setMeasuredDimension(_max.w, _max.h);
     sizeChart = (float)sz;
-    maxCharts = (cCharts ? (int)round((float)(vert ? rclient.h : rclient.w) / sizeChart) : 0);
+    maxCharts = (cCharts ? (int)round((float)rclient[vert + 2] / sizeChart) : 0);
     maxCharts = z_min(cCharts, maxCharts);
 }
 
 void zViewChart::onDraw() {
+    zViewGroup::onDraw();
     int idx(0);
     switch(mode) {
         case ZS_CHART_DIAGRAMM:
@@ -93,66 +96,57 @@ void zViewChart::onDraw() {
                 for(int i = 0; i < count; i++) {
                     auto r(&rects[idx++]);
                     setScale(r->w / 100.0f, r->h / 100.0f);
-//                    setTranslate((int) round(r->x), (int) round(r->y));
-                    drw[DRW_FK]->color.set(i < _count ? c[i] : c[_count - 1]);
-                    drw[DRW_FK]->draw(nullptr);
+                    drw[DRW_FK]->color.set(c[i < _count ? i : _count - 1]);
+                    drw[DRW_FK]->draw(r);
                 }
             }
+            setScale(1, 1);
             break;
         case ZS_CHART_GRAPH:
-            for(int i = 0 ; i < values.size(); i++) {
-//                drw[DRW_IDX_BUT1 + i]->draw();
-            }
+            for(int i = 0 ; i < values.size(); i++) dr[i].draw(nullptr);
             break;
     }
-//    for(auto v : children) v->draw();
 }
 
 void zViewChart::onLayout(crti &position, bool changed) {
     zFrameLayout::onLayout(position, changed);
     setFirstVisible(fChart);
     auto x((float)rclient.x), y((float)rclient.y);
-    auto dy((float)((vert ? rclient.w : rclient.h) - ipad.extent(vert)) / (float)maxVal);
+    auto dy((float)rclient[3 - vert] / (float)maxVal);
     switch(mode) {
         case ZS_CHART_CIRCULAR: makeCircular(x, y, dy); break;
         case ZS_CHART_GRAPH:    makeGraph(x, y, dy); break;
         default:
         case ZS_CHART_DIAGRAMM: makeDiagramm(x, y, dy); break;
     }
-    awakenScroll();
+//    awakenScroll();
 }
 
 void zViewChart::makeDiagramm(float x, float y, float dy) {
-    float yy, xx;
-    auto w((float)rclient.w), h((float)rclient.h);
-    rects.free();
+    rects.free(); rti r;
     auto wpad((float)ipad.extent(false)), hpad((float)ipad.extent(true));
     for(auto& v : values) {
         auto data(v.data);
-        auto px(x + (float)ipad.x), py(y + (float)ipad.y);
-        if(vert) py -= (float)delta; else px -= (float)delta;
+        ptf pt(x, y); auto p(pt);
+        pt[vert] -= (float)delta;
         auto count(maxCharts + (delta != 0));
         for(int i = 0 ; i < count; i++) {
             auto size(dy * (float)data[fChart + i]);
-            if(vert) {
-                switch(grav & ZS_GRAVITY_HORZ) {
-                    default:
-                    case ZS_GRAVITY_START:   xx = px + (w - size); break;
-                    case ZS_GRAVITY_HCENTER: xx = px + ((w - size) / 2.0f); break;
-                    case ZS_GRAVITY_END:     xx = px; break;
-                }
-                rects += rtf(xx, py, size, sizeChart - hpad);
-                py += sizeChart;
-            } else {
-                switch(grav & ZS_GRAVITY_VERT) {
-                    default:
-                    case ZS_GRAVITY_TOP:     yy = py + (h - size); break;
-                    case ZS_GRAVITY_VCENTER: yy = py + ((h - size) / 2.0f); break;
-                    case ZS_GRAVITY_BOTTOM:  yy = py; break;
-                }
-                rects += rtf(px, yy, sizeChart - wpad, size);
-                px += sizeChart;
+            switch(grav >> (!vert * 2)) {
+                default:
+                // start/top
+                case 1: p[!vert] = pt[!vert]; break;
+                // end/bottom
+                case 2: p[!vert] = pt[!vert] + (rclient[3 - vert] - size); break;
+                // center
+                case 3: p[!vert] = pt[!vert] + ((rclient[3 - vert] - size) / 2.0f); break;
             }
+            r.x = p.x + !vert * ipad.x;
+            r.y = p.y + vert * ipad.y;
+            r.w = vert ? size : sizeChart - wpad;
+            r.h = vert ? sizeChart - hpad : size;
+            p[vert] += sizeChart;
+            rects += r;
         }
     }
     drw[DRW_FK]->measure(100, 100, 0, false);
@@ -208,13 +202,14 @@ void zViewChart::setFirstVisible(int _first) {
 }
 
 i32 zViewChart::onTouchEvent(zTouch *touch) {
+    return 0;
     bool drag(false);
     touch->drag(sizeTouch, [this, &drag, &touch](cszi& offs, bool event) {
         // если сдвинули - определяем дельту в зависимости от ориентации
         auto _delta(offs[vert]);
         if(_delta) {
             // определяем время сдвига
-            auto t((int)((touch->ctm - touch->btm) / 50000000));
+            auto t((int)((touch->ctm - touch->btm) / 2000000));
             // если отпустили и время < 10(выбрано экспериментально)
             if(event && t < 15) {
                 // запускаем флинг

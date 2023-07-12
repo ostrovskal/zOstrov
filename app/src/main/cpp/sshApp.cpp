@@ -90,6 +90,14 @@ void sshApp::setContent() {
     auto lst(idView<zViewRibbon>(z.R.id.catalog));
     lst->setAdapter(new zAdapterList(objects, new zFabricListItem(styles_z_list_item)));
     sel->setAdapter(new zAdapterList(objects, new zFabricSelectItem(styles_z_spin_capt), new zFabricSelectItem(styles_z_spin_item)));
+    auto chart1(idView<zViewChart>(z.R.id.chart1));
+    auto chart2(idView<zViewChart>(z.R.id.chart2));
+    i32 vals1[10] = { 100, 200, 20, 400, 190, 323, 55, 110, 350, 20 }; u32 cols1[1] = { 0xff00ff00 };
+    i32 vals2[10] = { 50, 20, 120, 60, 390, 223, 155, 60, 250, 210 }; u32 cols2[1] = { 0xff00ffff };
+    chart1->addData(vals1, 10, cols1, 1);
+    chart1->addData(vals2, 10, cols2, 1);
+    chart2->addData(vals1, 10, cols1, 1);
+    chart2->addData(vals2, 10, cols2, 1);
     zFileAsset f; zPlayerParams pp;
     u8* ptr(nullptr); int size(0);
     if(f.open("sound/priz.wav", true)) {

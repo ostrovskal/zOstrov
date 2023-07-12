@@ -13,11 +13,15 @@
 			VIEW_MATCH, VIEW_WRAP);
 	grp11->attach(new zViewButton(styles_z_button, z.R.id.bmb, z.R.string.drop_bomb, -1), 
 			VIEW_MATCH, VIEW_WRAP);
-	auto grp21((zLinearLayout*)grp->attach(new zLinearLayout(styles_z_zlinearlayout2, 0, false), 
+	auto grp21((zLinearLayout*)grp->attach(new zLinearLayout(styles_default, 0, false), 
 			VIEW_MATCH, VIEW_WRAP)); 
 	grp21->attach(new zViewButton(styles_z_button, z.R.id.exp, z.R.string.explosive, -1), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp21->attach(new zViewButton(styles_z_button, z.R.id.tm, z.R.string.time_elapsed, -1), 
 			VIEW_MATCH, VIEW_WRAP);
 	grp->attach(new zViewSlider(styles_z_slider, 0, 0, szi(0, 10), 10, false), 
+			VIEW_MATCH, VIEW_WRAP);
+	grp->attach(new zViewChart(styles_z_chartdiagramm, z.R.id.chart1, ZS_GRAVITY_END), 
+			VIEW_MATCH, VIEW_WRAP);
+	grp->attach(new zViewChart(styles_z_chartdiagramm, z.R.id.chart2, ZS_GRAVITY_BOTTOM), 
 			VIEW_MATCH, VIEW_WRAP);

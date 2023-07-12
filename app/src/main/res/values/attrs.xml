@@ -295,6 +295,9 @@
 			<enum name="top" value="1" />
 			<enum name="bottom" value="2" />
 			<enum name="center_vertical" value="4" />
+			<enum name="start" value="8" />
+			<enum name="end" value="16" />
+			<enum name="center_horizontal" value="32" />
 		</attr>
 		<attr name="tabGravity" format="enum|string">
 			<enum name="top" value="1" />

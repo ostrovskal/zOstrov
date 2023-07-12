@@ -294,10 +294,13 @@
         <attr name="count" translate="0" format="integer" />
         <attr name="styleCaption" translate="" format="reference" />
         <attr name="styleFooter" translate="" format="reference" />
-        <attr name="chartGravity" translate="0" format="enum">
+        <attr name="chartGravity" translate="bottom" format="enum">
             <item name="top" value="ZS_GRAVITY_TOP" />
             <item name="bottom" value="ZS_GRAVITY_BOTTOM" />
             <item name="center_vertical" value="ZS_GRAVITY_VCENTER" />
+            <item name="start" value="ZS_GRAVITY_START" />
+            <item name="end" value="ZS_GRAVITY_END" />
+            <item name="center_horizontal" value="ZS_GRAVITY_HCENTER" />
         </attr>
         <attr name="tabGravity" translate="ZS_GRAVITY_TOP" format="enum">
             <item name="top" value="ZS_GRAVITY_TOP" />

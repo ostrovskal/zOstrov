@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:z="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical" android:gravity="start" z:pad="1dp">
+    android:orientation="vertical" android:gravity="center_horizontal" z:pad="1dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,7 +41,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:orientation="horizontal">
         <Button
             android:id="@+id/exp"
@@ -61,4 +60,16 @@
         android:layout_height="wrap_content"
         z:styles="@style/slider"
         z:range="0,10" z:progress="10" />
+    <RatingBar
+        android:id="@+id/chart1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        z:chartGravity="end"
+        z:styles="@style/chartDiagramm" />
+    <RatingBar
+        android:id="@+id/chart2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        z:chartGravity="bottom"
+        z:styles="@style/chartDiagramm" />
 </LinearLayout>

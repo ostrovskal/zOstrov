@@ -467,15 +467,14 @@ static zStyle styles_z_form[] = {
 
 static zStyle styles_z_chart[] = {
 	{ Z_FBO, true },
-	{ Z_BACKGROUND, z.R.drawable.zssh },
 	{ Z_BACKGROUND_TILES, z.R.integer.selectDrop },
-	{ Z_FOREGROUND, z.R.drawable.zssh },
 	{ Z_FOREGROUND_TILES, z.R.integer.rect },
 	{ Z_FOREGROUND_COLOR, 0xffffffff },
 	{ Z_DECORATE, ZS_SCROLLBAR },
 	{ Z_SCROLLBAR_FADE, false },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
-	{ Z_PADDING | ZT_END, 0x05050505 }
+	{ Z_PADDING, 0x05050505 },
+	{ Z_IPADDING | ZT_END, 0x01010101 }
 };
 
 static zStyle styles_z_chartdiagramm[] = {
@@ -553,12 +552,8 @@ static zStyle styles_z_themelight[] = {
 };
 
 static zStyle styles_z_zlinearlayout1[] = {
-	{ Z_GRAVITY, ZS_GRAVITY_START },
+	{ Z_GRAVITY, ZS_GRAVITY_HCENTER },
 	{ Z_PADDING | ZT_END, 0x01010101 }
-};
-
-static zStyle styles_z_zlinearlayout2[] = {
-	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_CENTER }
 };
 
 static zStyle styles_z_formopen[] = {
@@ -567,7 +562,7 @@ static zStyle styles_z_formopen[] = {
 	{ Z_MODE | ZT_END, ZS_FORM_NONE }
 };
 
-static zStyle styles_z_zlinearlayout3[] = {
+static zStyle styles_z_zlinearlayout2[] = {
 	{ Z_PADDING | ZT_END, 0x03030303 }
 };
 
@@ -700,12 +695,16 @@ static zStyle styles_z_formsettings[] = {
 	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_CENTER }
 };
 
-static zStyle styles_z_zlinearlayout4[] = {
+static zStyle styles_z_zlinearlayout3[] = {
 	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_VCENTER }
 };
 
 static zStyle styles_z_zviewtext1[] = {
 	{ Z_TEXT_STYLE | ZT_END, ZS_TEXT_BOLD }
+};
+
+static zStyle styles_z_zlinearlayout4[] = {
+	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_CENTER }
 };
 
 static zStyle styles_z_ztabwidget1[] = {

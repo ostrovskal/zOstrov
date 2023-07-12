@@ -206,11 +206,13 @@ protected:
     // режим отображения
     u32 mode{ZS_CHART_DIAGRAMM};
     // массив ректов диаграмм
-    zArray<rtf> rects{};
+    zArray<rti> rects{};
     // гравитация диаграмм
     u32 grav{ZS_GRAVITY_TOP};
     // дельта
     int delta{0}, clickItem{-1}, selectItem{-1};
+    // отрисовщики
+    zDrawable dr[3];
     // событие выделения
     std::function<void(zView*, int)> onChangeSelected;
 };
