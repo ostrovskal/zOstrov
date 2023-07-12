@@ -96,14 +96,12 @@ void sshApp::setContent() {
        DLOG("chart sel %i", it);
     });
     i32 vals1[10] = { 100, 200, 20, 400, 190, 323, 55, 110, 350, 20 }; u32 cols1[1] = { z.R.color.lime };
-    i32 vals2[] = { 50, 20, 120, 60, 390, 223, 155, 60, 250, 210, 50, 20, 120, 60, 390, 223, 155, 60, 250, 210,
-                    50, 20, 120, 60, 390, 223, 155, 60, 250, 210, 50, 20, 120, 60, 390, 223, 155, 60, 250, 210
-    };
+    i32 vals2[] = { 50, 20, 120, 60, 390, 223, 155, 60, 250, 210};
     u32 cols2[1] = { z.R.color.olive };
     chart1->addData(vals1, 10, cols1, 1);
-    chart1->addData(vals2, 40, cols2, 1);
+    chart1->addData(vals2, 10, cols2, 1);
     chart2->addData(vals1, 10, cols1, 1);
-    chart2->addData(vals2, 40, cols2, 1);
+    chart2->addData(vals2, 10, cols2, 1);
     zFileAsset f; zPlayerParams pp;
     u8* ptr(nullptr); int size(0);
     if(f.open("sound/priz.wav", true)) {

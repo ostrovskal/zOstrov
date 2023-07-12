@@ -147,7 +147,9 @@ public:
     // вернуть тип спана
     virtual int typeId() const override { return spans::SPAN_IMAGE; }
     // изображение для спана
-    zDrawable dr{nullptr, DRW_FK};
+    zDrawable dr{ nullptr, DRW_FK };
+    // временная матрица
+    static zMatrix m;
 };
 
 class zTextSpanMask : public zTextSpanImage {

@@ -195,7 +195,6 @@ const zViewText::CACHE* zViewText::getStringFromCache(int i, rti* tbound, pti& p
 }
 
 int zViewText::drawFragment(cstr txt, int count, zTextPaint* paint, const CACHE* cache, cpti& coord, crti& clip, int subH) {
-    static zMatrix m;
     // сформировать фрагмент
     auto wpix(paint->width ? paint->width : drw[DRW_TXT]->makeText(txt, count, paint));
     auto screenX(manager->screen.x), screenY(manager->screen.y);

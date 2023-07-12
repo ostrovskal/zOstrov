@@ -9,7 +9,7 @@
 zDrawableFake zView::fake;
 zView* zView::fbo(nullptr);
 zParamDrawable zView::drParams[DR_COUNT]{};
-static zMatrix mtxTmp{};
+zMatrix zView::m;
 
 zView::zView(zStyle* _styles, i32 _id) : styles(_styles), id(_id) {
     for(auto& d : drw) d = &fake;
@@ -388,7 +388,7 @@ void zView::setAlpha(float _alpha) {
 void zView::setScale(float _x, float _y) {
     // установка масштаба
     scale.set(_x, _y, 1); mtx.scale(scale);
-    mtx *= mtxTmp.rotate(rot);
+    mtx *= m.rotate(rot);
     invalidate();
 }
 

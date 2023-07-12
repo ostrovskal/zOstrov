@@ -466,7 +466,6 @@ static zStyle styles_z_form[] = {
 };
 
 static zStyle styles_z_chart[] = {
-	{ Z_FBO, true },
 	{ Z_BACKGROUND_TILES, z.R.integer.selectDrop },
 	{ Z_FOREGROUND_TILES, z.R.integer.rect },
 	{ Z_FOREGROUND_COLOR, 0xffffffff },
@@ -554,6 +553,11 @@ static zStyle styles_z_themelight[] = {
 static zStyle styles_z_zlinearlayout1[] = {
 	{ Z_GRAVITY, ZS_GRAVITY_HCENTER },
 	{ Z_PADDING | ZT_END, 0x01010101 }
+};
+
+static zStyle styles_z_chart2[] = {
+	{ Z_DECORATE, ZS_SCROLLBAR },
+	{ Z_STYLES | ZT_END, z.R.style.chartGraph }
 };
 
 static zStyle styles_z_formopen[] = {

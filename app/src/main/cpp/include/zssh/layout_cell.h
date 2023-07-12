@@ -21,7 +21,7 @@
 			VIEW_MATCH, VIEW_WRAP);
 	grp->attach(new zViewSlider(styles_z_slider, 0, 0, szi(0, 10), 10, false), 
 			VIEW_MATCH, VIEW_WRAP);
-	grp->attach(new zViewChart(styles_z_chartdiagramm, z.R.id.chart2, ZS_GRAVITY_BOTTOM), 
+	grp->attach(new zViewChart(styles_z_chart2, z.R.id.chart2, ZS_GRAVITY_BOTTOM), 
 			VIEW_MATCH, VIEW_WRAP);
-	grp->attach(new zViewChart(styles_z_chartdiagramm, z.R.id.chart1, ZS_GRAVITY_END), 
+	grp->attach(new zViewChart(styles_z_chart2, z.R.id.chart1, ZS_GRAVITY_END), 
 			VIEW_MATCH, VIEW_MATCH);

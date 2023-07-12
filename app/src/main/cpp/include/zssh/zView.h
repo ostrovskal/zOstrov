@@ -309,6 +309,8 @@ protected:
     static zDrawableFake fake;
     // текущая FBO
     static zView* fbo;
+    // временная матрица
+    static zMatrix m;
 };
 
 // глоу эффект

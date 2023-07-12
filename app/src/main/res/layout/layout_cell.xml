@@ -65,11 +65,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         z:chartGravity="bottom"
-        z:styles="@style/chartDiagramm" />
+        z:decorate="scrollbar"
+        z:styles="@style/chartGraph" />
     <RatingBar
         android:id="@+id/chart1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         z:chartGravity="end"
-        z:styles="@style/chartDiagramm" />
+        z:decorate="scrollbar"
+        z:styles="@style/chartGraph" />
 </LinearLayout>

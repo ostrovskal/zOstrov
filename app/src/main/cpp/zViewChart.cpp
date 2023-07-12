@@ -9,11 +9,25 @@ zViewChart::zViewChart(zStyle* _styles, i32 _id, u32 _chartGravity) : zFrameLayo
     minMaxSize.set(z_dp(z.R.dimen.chartMinWidth), 0, z_dp(z.R.dimen.chartMinHeight), 0);
     sizeTouch.set(3_dp, 3_dp); vert = (_chartGravity & ZS_GRAVITY_HORZ);
     flyng = new zFlyng(this);
+    dr[0] = new zDrawable(this, DRW_FK);
+    dr[1] = new zDrawable(this, DRW_FK);
+    dr[2] = new zDrawable(this, DRW_FK);
+}
+
+zViewChart::~zViewChart() {
+    values.clear();
+    colors.clear();
+    SAFE_DELETE(dr[0]);
+    SAFE_DELETE(dr[1]);
+    SAFE_DELETE(dr[2]);
 }
 
 void zViewChart::onInit(bool _theme) {
     zFrameLayout::onInit(_theme);
     setMode(styles->_int(Z_MODE, ZS_CHART_DIAGRAMM));
+    dr[0]->init(drw[DRW_FK], drw[DRW_FK]->tile);
+    dr[1]->init(drw[DRW_FK], drw[DRW_FK]->tile);
+    dr[2]->init(drw[DRW_FK], drw[DRW_FK]->tile);
 }
 
 void zViewChart::delData(int idx) {
@@ -67,16 +81,16 @@ void zViewChart::onMeasure(cszm& spec) {
     if(_ws && spec[vert].isExact()) {
         _max[vert] = _ws;
     } else {
-        sz = z_max(minMaxSize[vert * 2], _ws / cc);
+        sz = z_max(minMaxSize.x, _ws / cc);
         _max[vert] = sz * cc + pad.extent(vert);
         if(_ws) _max[vert] = z_min(_max[vert], _ws);
     }
     // размер одной диаграммы(ширина/высота в зависимости от ориентации)
-    sz = z_max(minMaxSize[vert * 2], (_max[vert] - pad.extent(vert)) / cc);
+    sz = z_max(minMaxSize.x, (_max[vert] - pad.extent(vert)) / cc);
     if(_hs && spec[!vert].isExact()) {
         _max[!vert] = _hs;
     } else {
-        _max[!vert] = z_max(sz * 3, minMaxSize[2 - vert * 2] + pad.extent(!vert));
+        _max[!vert] = z_max(sz * 5, minMaxSize.w + pad.extent(!vert));
         if(_hs) _max[!vert] = z_min(_max[!vert], _hs);
     }
     setMeasuredDimension(_max.w, _max.h);
@@ -86,18 +100,30 @@ void zViewChart::onMeasure(cszm& spec) {
 }
 
 void zViewChart::onDraw() {
+    auto scr(manager->screen);
     switch(mode) {
         case ZS_CHART_DIAGRAMM:
+            m.identity();
             for(int j = 0 ; j < cols.size(); j++) {
                 auto r(&rects[j]);
-                setScale(r->w / 100.0f, r->h / 100.0f);
-                drw[DRW_FK]->color.set(cols[j]);
-                drw[DRW_FK]->draw(r);
+                m.scale2(r->w / 100.0f, r->h / 100.0f, 1.0f);
+                m.translate2(r->x - scr.x, r->y - scr.y, 0);
+                dr[0]->color.set(cols[j]);
+                dr[0]->drawCommon(rclip, m, true);
             }
-            setScale(1, 1);
             break;
         case ZS_CHART_GRAPH:
-            for(int i = 0 ; i < values.size(); i++) dr[i].draw(nullptr);
+            for(int i = 0 ; i < values.size(); i++) {
+                // установить текстуру
+                glBindTexture(GL_TEXTURE_2D, dr[i]->texture->id);
+                // параметры шейдера и обрезка
+                manager->prepareRender(dr[i]->vertices, manager->screen, zMatrix::_identity);
+                // фильтр
+                manager->setColorFilter(this, colors[i].data[0]);
+                // нарисовать линии
+                glLineWidth(5);
+                glDrawArrays(GL_LINE_STRIP, 0, dr[i]->count);
+            }
             break;
     }
     zViewGroup::onDraw();
@@ -114,40 +140,21 @@ void zViewChart::onLayout(crti &position, bool changed) {
         default:
         case ZS_CHART_DIAGRAMM: makeDiagramm(x, y, dy); break;
     }
-//    awakenScroll();
-}
-
-int zViewChart::getMaxValue(int _j, int _i, int& c) {
-    static int mx[3]; static int cl[3];
-    // перенести во временный массив
-    for(int j = 0 ; j < values.size(); j++) {
-        mx[j] = values[j].data[_i];
-        auto col(colors[j].data); auto count(colors[j].count);
-        cl[j] = col[_i < count ? _i : count - 1];
-    }
-/*
-    // отсортировать 3 значения по убывающей
-    for(int j = 0 ; j < 2; j++) {
-        if(mx[j] < mx[j + 1]) {
-            std::swap(mx[j], mx[j + 1]);
-            std::swap(cl[j], cl[j + 1]);
-        }
-    }
-*/
-    c = cl[_j];
-    return mx[_j];
+    awakenScroll();
 }
 
 void zViewChart::makeDiagramm(float x, float y, float dy) {
-    rects.free(); cols.free(); rti r; int c;
+    rects.free(); cols.free(); rti r;
     auto wpad((float)ipad.extent(false)), hpad((float)ipad.extent(true));
     for(int j = 0 ; j < values.size(); j++) {
+        auto _vals(values[j].data);
+        auto _cols(colors[j].data);
+        auto _count(colors[j].count);
         ptf pt(x, y); auto p(pt);
         pt[vert] -= (float)delta;
         auto count(maxCharts + (delta != 0));
         for(int i = 0 ; i < count; i++) {
-            auto val(getMaxValue(j, fChart + i, c));
-            auto size(dy * (float)val);
+            auto size(dy * (float)_vals[i + fChart]);
             switch(grav >> (!vert * 2)) {
                 default:
                 // start/top
@@ -162,45 +169,51 @@ void zViewChart::makeDiagramm(float x, float y, float dy) {
             r.w = vert ? size : sizeChart - wpad;
             r.h = vert ? sizeChart - hpad : size;
             p[vert] += sizeChart;
-            rects += r; cols += c;
+            rects += r;
+            cols += _cols[_count > (i + fChart) ? (i + fChart) : (_count - 1)];
         }
     }
-    drw[DRW_FK]->measure(100, 100, 0, false);
+    dr[0]->measure(100, 100, 0, false);
 }
 
 void zViewChart::makeCircular(float, float, float) {
 }
 
+#include <zstandard/zSpline.h>
+
 void zViewChart::makeGraph(float x, float y, float dy) {
-    float h((float)rclient.h), py1, py2;
     for(int j = 0 ; j < values.size(); j++) {
-        auto diag(&dr[j]);
-        auto data(values[j].data); auto x1(x);
-        auto count(maxCharts + (delta != 0));
-        diag->make(4 + count * 2);
-        auto _tex(diag->texture->getReverseSize()); rti tex(diag->texture->getTile(z.R.integer.rect)->rect);
-        tex.w += tex.x; tex.h += tex.y;
-        auto tw(_tex.w), th(_tex.h), tx1((float)tex.x * tw), ty1((float)tex.y * th), tx2((float)tex.w * tw), ty2((float)tex.h * th);
-        auto v(diag->vertices); bool top((grav & ZS_GRAVITY_VERT) == ZS_GRAVITY_TOP);
+        auto _vals(values[j].data);
+        ptf pt(x, y); auto p(pt);
+        zArray<ptf> path;
+        pt[vert] -= (float)delta;
+        auto count(maxCharts);
         for(int i = 0 ; i < count; i++) {
-            auto h2(dy * (float)data[fChart + i]), x2(x1 + sizeChart);
-            if(top) py2 = y + (h - h2); else py2 = (y + h2), h2 = -h2;
-            if(i == 0) {
-                auto h1(fChart ? dy * (float)data[fChart + i - 1] : 0);
-                if(top) py1 = y + (h - h1); else py2 = (y + h1), h1 = -h1;
-                v->x = x1; v->y = py1;     v->u = tx1; v->v = ty1; v++;
-                v->x = x1; v->y = py1 + h1;v->u = tx1; v->v = ty2; v++;
-                v->x = x2; v->y = py2;     v->u = tx2; v->v = ty1; v++;
-                v->x = x2; v->y = py2 + h2;v->u = tx2; v->v = ty2; v++;
+            auto size(dy * (float)_vals[i + fChart]);
+            switch(grav >> (!vert * 2)) {
+                default:
+                // start/top
+                case 1: p[!vert] = pt[!vert]; break;
+                // end/bottom
+                case 2: p[!vert] = pt[!vert] + (rclient[3 - vert] - size); break;
+                // center
+                case 3: p[!vert] = pt[!vert] + ((rclient[3 - vert] - size) / 2.0f); break;
             }
-            v->x = x2; v->y = py2;     v->u = tx2; v->v = ty1; v++;
-            v->x = x2; v->y = py2 + h2;v->u = tx2; v->v = ty2; v++;
-            x1 += sizeChart;
+            path += ptf(p.x + !vert * ipad.x, p.y + vert * ipad.y);
+            p[vert] += sizeChart;
         }
-        //diag->layout();
-        //diag->setTranslate(rclient.x - delta, (int)py1);
-        diag->measure(100, 100, 0, false);
-        diag->color.set(colors[j].data[0]);
+        path += ptf(p.x, p.y);
+        smoothPath(path, 5, true);
+        dr[j]->make(path.size());
+        //dr[j]->typeTri = GL_LINE_STRIP;
+        dr[j]->texture = manager->cache->get("znull", dr[j]->texture);
+        auto vert(dr[j]->vertices);
+        for(int ii = 0; ii < path.size(); ii++) {
+            auto& _p(path[ii]);
+            //PTF_LOG("_p", _p);
+            vert->x = _p.x; vert->y = _p.y;
+            vert++;
+        }
     }
 }
 
@@ -235,7 +248,7 @@ i32 zViewChart::onTouchEvent(zTouch *touch) {
                 // определяем индекс куда тапнули
                 if((clickItem = itemFromPoint(touch->cpt)) != -1) {
                     // вызов события
-                    post(MSG_SELECTED, duration, clickItem + fChart);
+                    post(MSG_SELECTED, duration, clickItem);
                     // запоминаем выделенный
                     selectItem = clickItem;
                 }
@@ -243,7 +256,7 @@ i32 zViewChart::onTouchEvent(zTouch *touch) {
         } else {
             if(touch->isReleased() && selectItem == itemFromPoint(touch->cpt)) {
                 // отправляем клик
-                if(onClick) onClick(atView(selectItem), selectItem + fChart);
+                if(onClick) onClick(atView(selectItem), selectItem);
             }
             clickItem = -1;
         }

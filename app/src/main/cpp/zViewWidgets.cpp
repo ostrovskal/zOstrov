@@ -199,7 +199,7 @@ void zViewSlider::showTips() {
 
 void zViewSlider::onDraw() {
     // нарисовать трек
-    static zMatrix m, r;
+    static zMatrix r;
     auto clip(drawableClip());
     if(clip.isNotEmpty()) {
         ptf offs;
@@ -302,7 +302,6 @@ zViewProgress::zViewProgress(zStyle *_styles, i32 _id, u32 _text, cszi &_range, 
 }
 
 void zViewProgress::onDraw() {
-    static zMatrix m;
     // фон
     if(!mode) drw[DRW_FK]->draw(nullptr);
     // ползунок

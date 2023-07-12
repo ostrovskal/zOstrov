@@ -143,7 +143,7 @@ class zViewChart : public zFrameLayout {
 public:
     // конструктор
     zViewChart(zStyle* _styles, i32 _id, u32 chartGravity);
-    ~zViewChart() { values.clear(); colors.clear(); }
+    virtual ~zViewChart();
     // загрузка стилей
     virtual void onInit(bool _theme) override;
     // вернуть имя типа
@@ -172,7 +172,6 @@ protected:
         ~CHART_DATA() { SAFE_DELETE(data); }
         i32* data{nullptr}; i32 count{0};
     };
-    int getMaxValue(int j, int i, int& c);
     // событие габаритов
     virtual void onMeasure(cszm& spec) override;
     // событие позиционирования
@@ -197,8 +196,6 @@ protected:
     int fChart{0}, cCharts{0}, maxCharts{0};
     // размер одной диаграммы
     float sizeChart{1};
-    // тайл диаграммы
-//    u32 tileChart{z.R.integer.rect};
     // входные данные - цвета/значения
     zArray<CHART_DATA> colors{};
     zArray<CHART_DATA> values{};
@@ -212,5 +209,5 @@ protected:
     // дельта
     int delta{0}, clickItem{-1}, selectItem{-1};
     // отрисовщики
-    zDrawable dr[3];
+    zDrawable* dr[3];
 };

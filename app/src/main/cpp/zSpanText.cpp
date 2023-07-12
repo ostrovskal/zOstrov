@@ -6,6 +6,8 @@
 #include "zssh/zSpanText.h"
 #include "zssh/zViewText.h"
 
+zMatrix zTextSpanImage::m;
+
 zTextPaint::zTextPaint() {
     font = manager->loadResourceTexture(theme->styles->_int(Z_THEME_FONT, z.R.drawable.font_def), nullptr);
     setStyle(ZS_TEXT_NORMAL);
@@ -118,7 +120,6 @@ zTextSpanImage::zTextSpanImage(cstr image, cstr tile, float factor, int _color) 
 }
 
 void zTextSpanImage::draw(int x, int y, int hmax, zTextPaint *paint, crti& clip) {
-    static zMatrix m;
     rti r(x + 2_dp, y, paint->width - 4_dp, paint->getSize());
     auto screenX(manager->screen.x), screenY(manager->screen.y);
     m.translate(r.x - screenX, r.y - screenY, 0);
@@ -154,7 +155,6 @@ void zTextSpanBullet::updateState(zTextPaint *paint) {
 
 void zTextSpanBullet::draw(int x, int y, int hmax, zTextPaint *paint, crti& clip) {
     if(ordered) {
-        static zMatrix m;
         // выровнять по базовой линии
         auto len(_idx.count()); dr.make(len * 6); dr.makeText(_idx.str(), len, paint);
         auto screenX(manager->screen.x), screenY(manager->screen.y);
