@@ -86,19 +86,13 @@ void zViewChart::onMeasure(cszm& spec) {
 }
 
 void zViewChart::onDraw() {
-    zViewGroup::onDraw();
-    int idx(0);
     switch(mode) {
         case ZS_CHART_DIAGRAMM:
-            for(int j = 0 ; j < values.size(); j++) {
-                auto c(colors[j].data); auto _count(colors[j].count);
-                auto count(maxCharts + (delta != 0));
-                for(int i = 0; i < count; i++) {
-                    auto r(&rects[idx++]);
-                    setScale(r->w / 100.0f, r->h / 100.0f);
-                    drw[DRW_FK]->color.set(c[i < _count ? i : _count - 1]);
-                    drw[DRW_FK]->draw(r);
-                }
+            for(int j = 0 ; j < cols.size(); j++) {
+                auto r(&rects[j]);
+                setScale(r->w / 100.0f, r->h / 100.0f);
+                drw[DRW_FK]->color.set(cols[j]);
+                drw[DRW_FK]->draw(r);
             }
             setScale(1, 1);
             break;
@@ -106,6 +100,7 @@ void zViewChart::onDraw() {
             for(int i = 0 ; i < values.size(); i++) dr[i].draw(nullptr);
             break;
     }
+    zViewGroup::onDraw();
 }
 
 void zViewChart::onLayout(crti &position, bool changed) {
@@ -122,16 +117,37 @@ void zViewChart::onLayout(crti &position, bool changed) {
 //    awakenScroll();
 }
 
+int zViewChart::getMaxValue(int _j, int _i, int& c) {
+    static int mx[3]; static int cl[3];
+    // перенести во временный массив
+    for(int j = 0 ; j < values.size(); j++) {
+        mx[j] = values[j].data[_i];
+        auto col(colors[j].data); auto count(colors[j].count);
+        cl[j] = col[_i < count ? _i : count - 1];
+    }
+/*
+    // отсортировать 3 значения по убывающей
+    for(int j = 0 ; j < 2; j++) {
+        if(mx[j] < mx[j + 1]) {
+            std::swap(mx[j], mx[j + 1]);
+            std::swap(cl[j], cl[j + 1]);
+        }
+    }
+*/
+    c = cl[_j];
+    return mx[_j];
+}
+
 void zViewChart::makeDiagramm(float x, float y, float dy) {
-    rects.free(); rti r;
+    rects.free(); cols.free(); rti r; int c;
     auto wpad((float)ipad.extent(false)), hpad((float)ipad.extent(true));
-    for(auto& v : values) {
-        auto data(v.data);
+    for(int j = 0 ; j < values.size(); j++) {
         ptf pt(x, y); auto p(pt);
         pt[vert] -= (float)delta;
         auto count(maxCharts + (delta != 0));
         for(int i = 0 ; i < count; i++) {
-            auto size(dy * (float)data[fChart + i]);
+            auto val(getMaxValue(j, fChart + i, c));
+            auto size(dy * (float)val);
             switch(grav >> (!vert * 2)) {
                 default:
                 // start/top
@@ -141,12 +157,12 @@ void zViewChart::makeDiagramm(float x, float y, float dy) {
                 // center
                 case 3: p[!vert] = pt[!vert] + ((rclient[3 - vert] - size) / 2.0f); break;
             }
-            r.x = p.x + !vert * ipad.x;
-            r.y = p.y + vert * ipad.y;
+            r.x = (int)roundf(p.x + 0.5f + !vert * ipad.x);
+            r.y = (int)roundf(p.y + 0.5f + vert * ipad.y);
             r.w = vert ? size : sizeChart - wpad;
             r.h = vert ? sizeChart - hpad : size;
             p[vert] += sizeChart;
-            rects += r;
+            rects += r; cols += c;
         }
     }
     drw[DRW_FK]->measure(100, 100, 0, false);
@@ -158,15 +174,7 @@ void zViewChart::makeCircular(float, float, float) {
 void zViewChart::makeGraph(float x, float y, float dy) {
     float h((float)rclient.h), py1, py2;
     for(int j = 0 ; j < values.size(); j++) {
-        //auto dr(drs[DR_IDX_BUT1 + j]);
-/*
-        if(!dr) {
-            dr = new zDrawable(this, DRW_FK);
-            dr->set(drw[DRW_FK], z.R.integer.rect);
-            //drs[DR_IDX_BUT1 + j] = dr;
-        }
-*/
-        auto diag(drw[DRW_FK]);//drs[DR_IDX_BUT1 + j]);
+        auto diag(&dr[j]);
         auto data(values[j].data); auto x1(x);
         auto count(maxCharts + (delta != 0));
         diag->make(4 + count * 2);
@@ -191,6 +199,7 @@ void zViewChart::makeGraph(float x, float y, float dy) {
         }
         //diag->layout();
         //diag->setTranslate(rclient.x - delta, (int)py1);
+        diag->measure(100, 100, 0, false);
         diag->color.set(colors[j].data[0]);
     }
 }
@@ -202,51 +211,41 @@ void zViewChart::setFirstVisible(int _first) {
 }
 
 i32 zViewChart::onTouchEvent(zTouch *touch) {
-    return 0;
     bool drag(false);
     touch->drag(sizeTouch, [this, &drag, &touch](cszi& offs, bool event) {
         // если сдвинули - определяем дельту в зависимости от ориентации
-        auto _delta(offs[vert]);
+        auto _delta(offs[vert] * sizeTouch[vert]);
         if(_delta) {
+            flyng->stop();
             // определяем время сдвига
-            auto t((int)((touch->ctm - touch->btm) / 2000000));
-            // если отпустили и время < 10(выбрано экспериментально)
-            if(event && t < 15) {
-                // запускаем флинг
-//                flyng->pull((float)_delta / (float)sizes(vert), _delta > 0, vert);
-  //              flyng->setVisible(true);
-                // отправляем событие флинга
-    //            post(MSG_FLYNG, nullptr);
-            } else {
+            if(event && flyng->start(touch, _delta)) clickItem = -1;
                 // иначе - просто скроллим на дельту
-                scrolling(_delta);
-                // отправляем событие скролла
-                if(onChangeScroll) onChangeScroll(this, _delta);
-            }
+            else scrolling(_delta);
+            // признак перетаскивания
             drag = true;
-            clickItem = selectItem = -1;
         }
     });
+    // если не было перетаскивания
     if(!drag) {
+        // если тап
         if(touch->isCaptured()) {
+            // останавливаем флинг
             flyng->stop();
             if(clickItem == -1) {
                 // определяем индекс куда тапнули
-                clickItem = itemFromPoint(touch->cpt);
-                // вызов события
-                if(clickItem != -1 && selectItem == -1) {
-                    if(onChangeSelected) onChangeSelected(this, clickItem);
+                if((clickItem = itemFromPoint(touch->cpt)) != -1) {
+                    // вызов события
+                    post(MSG_SELECTED, duration, clickItem + fChart);
+                    // запоминаем выделенный
+                    selectItem = clickItem;
                 }
-                // запоминаем выделенный
-                selectItem = clickItem;
             }
         } else {
-            if(touch->isReleased() && selectItem != -1) {
+            if(touch->isReleased() && selectItem == itemFromPoint(touch->cpt)) {
                 // отправляем клик
-                post(MSG_CLICK, 50, selectItem);
+                if(onClick) onClick(atView(selectItem), selectItem + fChart);
             }
-            // если тапа нет - сбрасываем
-            selectItem = clickItem = -1;
+            clickItem = -1;
         }
     }
     return drag | touch->isCaptured();
@@ -261,27 +260,18 @@ bool zViewChart::scrolling(int _delta) {
     setFirstVisible(dx / (int)sizeChart);
     auto sz((int)sizeChart); delta = dx % sz;
     auto upd(d != delta || f != fChart);
-    if(!upd) updateGlow(_delta); else invalidate();
+    if(!upd) updateGlow(_delta); else requestPosition();
     return !upd;
 }
 
 int zViewChart::itemFromPoint(cptf& pt) const {
-    float s;
-    auto x((float)rclient.x), y((float)rclient.y);
+    szf _sz(rclient.x, rclient.y);
     int idx(fChart), count(maxCharts + (delta != 0));
-    if(vert) y -= (float)delta; else x -= (float)delta;
-    auto xx(pt.x), yy(pt.y);
+    _sz[vert] -= (float)delta;
     for(int i = 0; i < count; i++) {
-        if(vert) {
-            s = y + sizeChart;
-            if(yy >= y && yy < s) return idx;
-            y = s;
-        } else {
-            s = x + sizeChart;
-            if(xx >= x && xx < s) return idx;
-            x = s;
-        }
-        idx++;
+        auto s(_sz[vert] + sizeChart);
+        if(pt[vert] > _sz[vert] && pt[vert] < s) return idx;
+        _sz[vert] = s; idx++;
     }
     return -1;
 }
@@ -293,5 +283,5 @@ int zViewChart::getValue(int idx, int kit) const {
             return data[idx];
         }
     }
-    return -1;
+    return INT_MIN;
 }

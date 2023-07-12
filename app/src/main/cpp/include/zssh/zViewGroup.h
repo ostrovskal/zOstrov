@@ -93,6 +93,8 @@ public:
     static zMeasure makeChildMeasureSpec(const zMeasure& spec, int padding, zMeasure childDimension);
     // установка события прокрутки
     zViewGroup* setOnChangeScrolling(std::function<void(zView*, int)> _scroll) { onChangeScroll = _scroll; return this; }
+    // установка события выделения
+    zViewGroup* setOnChangeSelected(std::function<void(zView*, int)> _selected) { onChangeSelected = _selected; return this; }
 protected:
     void onDraw() override;
     // уведомление о событии
@@ -121,4 +123,6 @@ protected:
     szi sizeTouch{5, 5};
     // событие прокрутки
     std::function<void(zView*, int)> onChangeScroll;
+    // событие выделения
+    std::function<void(zView*, int)> onChangeSelected;
 };

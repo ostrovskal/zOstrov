@@ -272,12 +272,6 @@ void zViewBaseRibbon::setItemSelected(int item) {
     requestPosition();
 }
 
-void zViewBaseRibbon::notifyEvent(HANDLER_MESSAGE* msg) {
-    if(msg->what == MSG_SELECTED && onChangeSelected)
-        onChangeSelected(this, msg->arg);
-    zViewGroup::notifyEvent(msg);
-}
-
 void zViewBaseRibbon::onLayout(crti &position, bool changed) {
     zView::onLayout(position, changed);
     edge.set(rclient[vert], rclient.extent(vert));

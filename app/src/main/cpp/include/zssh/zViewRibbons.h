@@ -33,11 +33,7 @@ public:
     int getItemSelected() const { return selectItem; }
     // вернуть первый видимый
     int getFirstItem() const { return firstItem; }
-    // установка события выделения
-    zViewBaseRibbon* setOnChangeSelected(std::function<void(zView*, int)> _selected) { onChangeSelected = _selected; return this; }
 protected:
-    // уведомление о событии
-    virtual void notifyEvent(HANDLER_MESSAGE* msg) override;
     // позиционирование
     virtual void onLayout(crti &position, bool changed) override;
     // размер
@@ -92,8 +88,6 @@ protected:
     zBaseAdapter* adapter{nullptr};
     // кэш представлений
     zArray<zView*> cacheViews{};
-    // событие выделения
-    std::function<void(zView*, int)> onChangeSelected;
 };
 
 class zViewRibbon : public zViewBaseRibbon {

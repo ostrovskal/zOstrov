@@ -165,8 +165,6 @@ public:
     float getSizeDiagramm() const { return sizeChart; }
     // вернуть значение по индексу из определенного набора
     int getValue(int idx, int kit) const;
-    // установка события выделения
-    void setOnChangeSelected(std::function<void(zView*, int)> _selected) { onChangeSelected = _selected; }
 protected:
     struct CHART_DATA {
         CHART_DATA() { }
@@ -174,6 +172,7 @@ protected:
         ~CHART_DATA() { SAFE_DELETE(data); }
         i32* data{nullptr}; i32 count{0};
     };
+    int getMaxValue(int j, int i, int& c);
     // событие габаритов
     virtual void onMeasure(cszm& spec) override;
     // событие позиционирования
@@ -199,7 +198,7 @@ protected:
     // размер одной диаграммы
     float sizeChart{1};
     // тайл диаграммы
-    u32 tileChart{z.R.integer.rect};
+//    u32 tileChart{z.R.integer.rect};
     // входные данные - цвета/значения
     zArray<CHART_DATA> colors{};
     zArray<CHART_DATA> values{};
@@ -207,12 +206,11 @@ protected:
     u32 mode{ZS_CHART_DIAGRAMM};
     // массив ректов диаграмм
     zArray<rti> rects{};
+    zArray<u32> cols{};
     // гравитация диаграмм
     u32 grav{ZS_GRAVITY_TOP};
     // дельта
     int delta{0}, clickItem{-1}, selectItem{-1};
     // отрисовщики
     zDrawable dr[3];
-    // событие выделения
-    std::function<void(zView*, int)> onChangeSelected;
 };

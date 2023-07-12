@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Wed Jul 12 03:34:54 2023
+// Wed Jul 12 04:52:55 2023
 
 #pragma once
 
@@ -121,8 +121,8 @@ struct _z {
 				actionBar	= 0x00101009, 	wndPopup	= 0x0010100A, 	root	= 0x0010100B, 
 				common	= 0x0010100C, 	keyboard	= 0x0010100D, 	bkg	= 0x0010100E, 
 				menu	= 0x0010100F, 	dth	= 0x00101010, 	bmb	= 0x00101011, 
-				exp	= 0x00101012, 	tm	= 0x00101013, 	chart1	= 0x00101014, 
-				chart2	= 0x00101015, 	formOpen	= 0x00101016, 	choiceSource	= 0x00101017, 
+				exp	= 0x00101012, 	tm	= 0x00101013, 	chart2	= 0x00101014, 
+				chart1	= 0x00101015, 	formOpen	= 0x00101016, 	choiceSource	= 0x00101017, 
 				catalog	= 0x00101018, 	chkReadOnly	= 0x00101019, 	progress2	= 0x0010101A, 
 				tv1	= 0x0010101B, 	spans	= 0x0010101C, 	edit1	= 0x0010101D, 
 				select	= 0x0010101E, 	grid1	= 0x0010101F, 	edit2	= 0x00101020, 
