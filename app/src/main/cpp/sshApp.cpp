@@ -95,13 +95,20 @@ void sshApp::setContent() {
     chart1->setOnChangeSelected([](zView*, int it) {
        DLOG("chart sel %i", it);
     });
-    i32 vals1[10] = { 100, 200, 20, 400, 190, 323, 55, 110, 350, 20 }; u32 cols1[1] = { z.R.color.lime };
-    i32 vals2[] = { 50, 20, 120, 60, 390, 223, 155, 60, 250, 210};
-    u32 cols2[1] = { z.R.color.olive };
-    chart1->addData(vals1, 10, cols1, 1);
-    chart1->addData(vals2, 10, cols2, 1);
-    chart2->addData(vals1, 10, cols1, 1);
-    chart2->addData(vals2, 10, cols2, 1);
+    auto vals1(new i32[256]);
+    auto vals2(new i32[256]);
+    auto cols1(new u32[256]);
+    auto cols2(new u32[256]);
+    for(int i = 0 ; i < 256; i++) {
+        vals1[i] = zRand::nextInt(300);
+        cols1[i] = zRand::nextColor(255);
+        vals2[i] = zRand::nextInt(300);
+        cols2[i] = zRand::nextColor(255);
+    }
+    chart1->addData(vals1, 16, cols1, 16);
+    //chart1->addData(vals2, 16, cols2, 16);
+    chart2->addData(vals1, 256, cols1, 256);
+    chart2->addData(vals2, 256, cols2, 256);
     zFileAsset f; zPlayerParams pp;
     u8* ptr(nullptr); int size(0);
     if(f.open("sound/priz.wav", true)) {

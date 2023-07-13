@@ -59,6 +59,8 @@ public:
     int makeTriangle(crti& pos, crti& tex, zVertex2D* v, int _italic = 0) const;
     // сформировать квад
     int makeQuad(crti& pos, crti& tex, zVertex2D* v, int _italic = 0, bool _strip = false) const;
+    // сформировать путь
+    int makePath(const zArray<ptf>& pth, crti& tex, ptf b, int pivot);
     // сформировать отладочную сетку
     void makeDebug(cszi& cell);
     // реализация
@@ -70,6 +72,12 @@ public:
     virtual szi resolveSize(int wmax, int hmax, u32 gravity) const;
     // вычислить фактор масштабирования
     float scaleFactor(u32 value, bool text) const;
+    // вернуть рекст тайла
+    rti getRectTile(bool tex) const {
+        auto r(texture->getTile(tile)->rect);
+        if(tex) r.w += r.x, r.h += r.y;
+        return r;
+    }
     // информация о объекте
     void info() const;
     // фактор масштабирования

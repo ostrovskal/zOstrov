@@ -34,8 +34,8 @@
     <dimen name="sliderMaxHeight">35dp</dimen>
     <dimen name="selectMinWidth">60dp</dimen>
     <dimen name="selectMinHeight">30dp</dimen>
-    <dimen name="chartMinWidth">12dp</dimen>
-    <dimen name="chartMinHeight">36dp</dimen>
+    <dimen name="chartMinWidth">10dp</dimen>
+    <dimen name="chartMinHeight">48dp</dimen>
     <dimen name="editMinWidth">110dp</dimen>
     <dimen name="editMinHeight">30dp</dimen>
     <dimen name="divider">2dp</dimen>

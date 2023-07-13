@@ -71,6 +71,21 @@ void zDrawable::make(i32 _count) {
     count = _count;
 }
 
+int zDrawable::makePath(const zArray<ptf>& pth, crti& tex, ptf b, int pivot) {
+    make(pth.size() * 2 + 1);
+    auto _tex(texture->getReverseSize());
+    rtf t((float)tex.x * _tex.w, (float)tex.y * _tex.h, (float)tex.w * _tex.w, (float)tex.h * _tex.h);
+    auto v(vertices);
+    for(int i = 0 ; i < pth.size() ; i++) {
+        auto p(pth[i]); auto tx((i & 1) ? t.w : t.x);
+        v->x = p.x; v->y = p.y; v->u = tx; v->v = t.y; v++;
+        v->x = b.x; v->y = b.y; v->u = tx; v->v = t.h; v++;
+        if(pivot & PIVOT_X) b.x = p.x;
+        if(pivot & PIVOT_Y) b.y = p.y;
+    }
+    v->x = b.x; v->y = b.y; v->u = t.x; v->v = t.h;
+    return count;
+}
 int zDrawable::makeQuad(crti& pos, crti& tex, zVertex2D* v, int _italic, bool _strip) const {
     auto _tex(texture->getReverseSize()); auto offs((float)_italic);
     auto px1((float)pos.x), py1((float)pos.y), px2(px1 + (float)pos.w), py2(py1 + (float)pos.h);

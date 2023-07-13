@@ -41,6 +41,7 @@ static cstr vertShader = "attribute vec4 pos;\n"
                          "uniform mat4 wmtx;\n"
                          "uniform mat4 pmtx;\n"
                          "void main() {\n"
+                         " gl_PointSize = 5.0;\n"
                          "    v_Texture = tex;\n"
                          "    gl_Position = (pmtx * wmtx) * pos;\n}";
 

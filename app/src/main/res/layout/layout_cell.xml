@@ -64,14 +64,14 @@
         android:id="@+id/chart2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        z:chartGravity="bottom"
+        z:chartGravity="top"
         z:decorate="scrollbar"
         z:styles="@style/chartGraph" />
     <RatingBar
         android:id="@+id/chart1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        z:chartGravity="end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        z:chartGravity="center_horizontal"
         z:decorate="scrollbar"
-        z:styles="@style/chartGraph" />
+        z:styles="@style/chartCircular" />
 </LinearLayout>

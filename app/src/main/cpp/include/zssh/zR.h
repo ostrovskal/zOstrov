@@ -2,7 +2,7 @@
 // Автоматически генерируемый файл ресурсов.
 // Не редактируйте его.
 // Автор: Шаталов С.В.
-// Wed Jul 12 17:39:12 2023
+// Fri Jul 14 01:05:20 2023
 
 #pragma once
 
@@ -72,24 +72,24 @@ struct _z {
 		_integer integer;
 		struct _color {
 			enum { 
-				black	= 0xFF000000, 	silver	= 0xFFC0C0C0, 	maroon	= 0xFF000080, 
-				red	= 0xFF0000FF, 	navy	= 0xFF800000, 	blue	= 0xFFFF0000, 
+				black	= 0xFF000000, 	silver	= 0xFFC0C0C0, 	maroon	= 0xFF800000, 
+				red	= 0xFFFF0000, 	navy	= 0xFF000080, 	blue	= 0xFF0000FF, 
 				purple	= 0xFF800080, 	fuchsia	= 0xFFFF00FF, 	green	= 0xFF008000, 
-				lime	= 0xFF00FF00, 	olive	= 0xFF008080, 	yellow	= 0xFF00F0F0, 
-				teal	= 0xFF808000, 	aqua	= 0xFFFFFF00, 	gray	= 0xFF808080, 
-				white	= 0xFFFFFFFF, 	themeDark	= 0xFFED2E4A, 	themeLight	= 0xFF2376B8, 
-				selectorDark	= 0xFF930A93, 	selectorLight	= 0xFFBD272C, 	dividerDark	= 0xFF755C5C, 
-				dividerLight	= 0xFF4F4F4F, 	textHighlightDark	= 0xFFF17056, 
-				textHighlightLight	= 0xFF283EAA, 	textMessageDark	= 0xFFD2FA64, 
-				textMessageLight	= 0xFFD2FA64, 	textHeaderDark	= 0xFF58F790, 
-				textHeaderLight	= 0xFFEA678A, 	textUrlDark	= 0xFF216AB8, 
-				textUrlLight	= 0xFF5D028A, 	textDark	= 0xFF9599F7, 	textLight	= 0xFFEA5191, 
+				lime	= 0xFF00FF00, 	olive	= 0xFF808000, 	yellow	= 0xFFF0F000, 
+				teal	= 0xFF008080, 	aqua	= 0xFF00FFFF, 	gray	= 0xFF808080, 
+				white	= 0xFFFFFFFF, 	themeDark	= 0xFF4A2EED, 	themeLight	= 0xFFB87623, 
+				selectorDark	= 0xFF930A93, 	selectorLight	= 0xFF2C27BD, 	dividerDark	= 0xFF5C5C75, 
+				dividerLight	= 0xFF4F4F4F, 	textHighlightDark	= 0xFF5670F1, 
+				textHighlightLight	= 0xFFAA3E28, 	textMessageDark	= 0xFF64FAD2, 
+				textMessageLight	= 0xFF64FAD2, 	textHeaderDark	= 0xFF90F758, 
+				textHeaderLight	= 0xFF8A67EA, 	textUrlDark	= 0xFFB86A21, 
+				textUrlLight	= 0xFF8A025D, 	textDark	= 0xFFF79995, 	textLight	= 0xFF9151EA, 
 				textShadowDark	= 0xFF101010, 	textShadowLight	= 0xFF101010, 
-				tabbedDark	= 0xFFA0A000, 	tabbedLight	= 0xFF00A0A0, 	textTabbedDark	= 0xFFB0B000, 
-				textTabbedLight	= 0xFF007070, 	progressDark	= 0xAF303030, 
-				progressLight	= 0xAF505050, 	primaryDark	= 0xFFFF7000, 	primaryLight	= 0xFF00FF00, 
+				tabbedDark	= 0xFF00A0A0, 	tabbedLight	= 0xFFA0A000, 	textTabbedDark	= 0xFF00B0B0, 
+				textTabbedLight	= 0xFF707000, 	progressDark	= 0xAF303030, 
+				progressLight	= 0xAF505050, 	primaryDark	= 0xFF0070FF, 	primaryLight	= 0xFF00FF00, 
 				textProgressDark	= 0xFFB0B0B0, 	textProgressLight	= 0xFFFFFFFF, 
-				menuDark	= 0xFFAF4001, 	menuLight	= 0xFF00406F, 	textMenuDark	= 0xFFFFFFFF, 
+				menuDark	= 0xFF0140AF, 	menuLight	= 0xFF6F4000, 	textMenuDark	= 0xFFFFFFFF, 
 				textMenuLight	= 0xFFFFFFFF, 	textHintDark	= 0xFF606060, 	textHintLight	= 0xFF606060, 
 			};
 		}; 
@@ -107,7 +107,7 @@ struct _z {
 				progressMinWidth	= 70, 	progressMinHeight	= 22, 	progressMaxWidth	= 150, 
 				progressMaxHeight	= 22, 	sliderMinWidth	= 90, 	sliderMinHeight	= 25, 
 				sliderMaxWidth	= 150, 	sliderMaxHeight	= 35, 	selectMinWidth	= 60, 
-				selectMinHeight	= 30, 	chartMinWidth	= 12, 	chartMinHeight	= 36, 
+				selectMinHeight	= 30, 	chartMinWidth	= 10, 	chartMinHeight	= 48, 
 				editMinWidth	= 110, 	editMinHeight	= 30, 	divider	= 2, 	menuText	= 15, 
 				hintText	= 12, 	textText	= 14, 	messageText	= 22, 	headerText	= 15, 
 			};
@@ -185,18 +185,18 @@ struct _z {
 				switchButton	= 0x00100024, 	llinear	= 0x00100025, 	tabWidget	= 0x00100026, 
 				tabHost	= 0x00100027, 	ccontroller	= 0x00100028, 	acontroller	= 0x00100029, 
 				form	= 0x0010002A, 	chart	= 0x0010002B, 	chartDiagramm	= 0x0010002C, 
-				chartGraph	= 0x0010002D, 	themeDark	= 0x0010002E, 	themeLight	= 0x0010002F, 
-				zlinearlayout1	= 0x00100030, 	chart2	= 0x00100031, 	formopen	= 0x00100032, 
-				zlinearlayout2	= 0x00100033, 	zviewbutton1	= 0x00100034, 
-				zscrolllayout1	= 0x00100035, 	tv1	= 0x00100036, 	edit1	= 0x00100037, 
-				grid1	= 0x00100038, 	edit2	= 0x00100039, 	radiodark	= 0x0010003A, 
-				chkbox	= 0x0010003B, 	radiolight	= 0x0010003C, 	list1	= 0x0010003D, 
-				button1	= 0x0010003E, 	button2	= 0x0010003F, 	switch2	= 0x00100040, 
-				switch3	= 0x00100041, 	button3	= 0x00100042, 	seek	= 0x00100043, 
-				seek1	= 0x00100044, 	button11	= 0x00100045, 	seek2	= 0x00100046, 
-				formsettings	= 0x00100047, 	zlinearlayout3	= 0x00100048, 
-				zviewtext1	= 0x00100049, 	zlinearlayout4	= 0x0010004A, 	ztabwidget1	= 0x0010004B, 
-	};
+				chartGraph	= 0x0010002D, 	chartCircular	= 0x0010002E, 	themeDark	= 0x0010002F, 
+				themeLight	= 0x00100030, 	zlinearlayout1	= 0x00100031, 	chart2	= 0x00100032, 
+				chart1	= 0x00100033, 	formopen	= 0x00100034, 	zlinearlayout2	= 0x00100035, 
+				zviewbutton1	= 0x00100036, 	zscrolllayout1	= 0x00100037, 
+				tv1	= 0x00100038, 	edit1	= 0x00100039, 	grid1	= 0x0010003A, 
+				edit2	= 0x0010003B, 	radiodark	= 0x0010003C, 	chkbox	= 0x0010003D, 
+				radiolight	= 0x0010003E, 	list1	= 0x0010003F, 	button1	= 0x00100040, 
+				button2	= 0x00100041, 	switch2	= 0x00100042, 	switch3	= 0x00100043, 
+				button3	= 0x00100044, 	seek	= 0x00100045, 	seek1	= 0x00100046, 
+				button11	= 0x00100047, 	seek2	= 0x00100048, 	formsettings	= 0x00100049, 
+				zlinearlayout3	= 0x0010004A, 	zviewtext1	= 0x0010004B, 	zlinearlayout4	= 0x0010004C, 
+				ztabwidget1	= 0x0010004D, 	};
 		};
 		_style style;
 	};
@@ -255,10 +255,12 @@ static zStyles z_styles[] = {
 		{ _z::_R::_style::chart, styles_z_chart },
 		{ _z::_R::_style::chartDiagramm, styles_z_chartdiagramm },
 		{ _z::_R::_style::chartGraph, styles_z_chartgraph },
+		{ _z::_R::_style::chartCircular, styles_z_chartcircular },
 		{ _z::_R::_style::themeDark, styles_z_themedark },
 		{ _z::_R::_style::themeLight, styles_z_themelight },
 		{ _z::_R::_style::zlinearlayout1, styles_z_zlinearlayout1 },
 		{ _z::_R::_style::chart2, styles_z_chart2 },
+		{ _z::_R::_style::chart1, styles_z_chart1 },
 		{ _z::_R::_style::formopen, styles_z_formopen },
 		{ _z::_R::_style::zlinearlayout2, styles_z_zlinearlayout2 },
 		{ _z::_R::_style::zviewbutton1, styles_z_zviewbutton1 },

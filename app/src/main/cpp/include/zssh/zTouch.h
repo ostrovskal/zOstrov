@@ -33,7 +33,8 @@ public:
     // Вычисление угла между центральной [center] и заданной [p] точками
     float rotate(ptf center, cptf& p) {
         auto a(atan2f((center.y - p.y), (center.x - p.x)) / 3.1415926535897932385f * 180.0f);
-        return (a < 0.0f ? a + 360.0f : a);
+//        auto a(atan2f((p.y - center.y), (p.x - center.x)) / 3.1415926535897932385f * 180.0f);
+        return a;//(a < 0.0f ? a + 360.0f : a);
     }
     // Вернуть координату точки [p] с учетом чувствительности [cell] и записать ее в [ret]
     ptf point(szi cell, ptf p) {

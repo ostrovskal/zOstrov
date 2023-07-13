@@ -434,6 +434,7 @@
         <item name="mskTiles">@integer/rectRound</item>
     </style>
     <style name="chart">
+        <item name="fbo">true</item>
         <item name="bkTiles">@integer/selectDrop</item>
         <item name="fkTiles">@integer/rect</item>
         <item name="fkColor">#ffffff</item>
@@ -450,5 +451,9 @@
     <style name="chartGraph">
         <item name="styles">@style/chart</item>
         <item name="chartMode">graph</item>
+    </style>
+    <style name="chartCircular">
+        <item name="styles">@style/chart</item>
+        <item name="chartMode">circular</item>
     </style>
 </resources>

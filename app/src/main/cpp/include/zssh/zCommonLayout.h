@@ -177,9 +177,9 @@ protected:
     // событие позиционирования
     virtual void onLayout(crti &position, bool changed) override;
     // параметры прокруток
-    virtual int computeScrollOffset(bool _vert) const override { return fChart * (int)sizeChart; }
+    virtual int computeScrollOffset(bool _vert) const override { return fChart * (int)sizeChart + delta; }
     virtual int computeScrollRange(bool _vert) const override { return cCharts * (int)sizeChart; }
-    virtual int computeScrollExtent(bool _vert) const override { return (_vert ? rclient.h : rclient.w); }
+    virtual int computeScrollExtent(bool _vert) const override { return rclient[_vert + 2]; }
     // событие касания
     i32 onTouchEvent(zTouch *touch) override;
     // прокрутка
@@ -196,6 +196,10 @@ protected:
     int fChart{0}, cCharts{0}, maxCharts{0};
     // размер одной диаграммы
     float sizeChart{1};
+    // центр
+    ptf center{};
+    // начальный угол
+    float startAngle{0.0f};
     // входные данные - цвета/значения
     zArray<CHART_DATA> colors{};
     zArray<CHART_DATA> values{};
@@ -209,5 +213,5 @@ protected:
     // дельта
     int delta{0}, clickItem{-1}, selectItem{-1};
     // отрисовщики
-    zDrawable* dr[3];
+    zDrawable* dr[3]{nullptr};
 };

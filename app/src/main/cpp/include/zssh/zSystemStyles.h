@@ -18,7 +18,7 @@ static zStyle styles_z_formcaption[] = {
 static zStyle styles_z_keyboardbase[] = {
 	{ Z_FOREGROUND_TILES, z.R.integer.butKeyboardSmall },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
-	{ Z_TEXT_FOREGROUND_COLOR, 0xffffffff },
+	{ Z_TEXT_FOREGROUND_COLOR, 0xFFFFFFFF },
 	{ Z_TEXT_STYLE, ZS_TEXT_BOLD },
 	{ Z_TEXT_SIZE, 23 },
 	{ Z_TEXT_LINES, 1 },
@@ -28,7 +28,7 @@ static zStyle styles_z_keyboardbase[] = {
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_ICON, z.R.drawable.zssh },
 	{ Z_ICON_GRAVITY, ZS_GRAVITY_CENTER },
-	{ Z_ICON_COLOR, 0xffffffff },
+	{ Z_ICON_COLOR, 0xFFFFFFFF },
 	{ Z_ICON_SCALE | ZT_END, 26214 }
 };
 
@@ -36,7 +36,7 @@ static zStyle styles_z_keyboardalt[] = {
 	{ Z_VISIBLED, false },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_TEXT_LINES, 1 },
-	{ Z_TEXT_FOREGROUND_COLOR, 0xffafafaf },
+	{ Z_TEXT_FOREGROUND_COLOR, 0xFFAFAFAF },
 	{ Z_TEXT_STYLE, ZS_TEXT_BOLD },
 	{ Z_TEXT_SIZE, 14 },
 	{ Z_PADDING, 0x00000101 },
@@ -45,18 +45,18 @@ static zStyle styles_z_keyboardalt[] = {
 };
 
 static zStyle styles_z_scrollbar[] = {
-	{ Z_BACKGROUND, 0xffafafaf },
+	{ Z_BACKGROUND, 0xFFAFAFAF },
 	{ Z_BACKGROUND_TILES, z.R.integer.rect },
 	{ Z_SCROLLBAR_SIZE, 2 },
 	{ Z_SCROLLBAR_FADE | ZT_END, true }
 };
 
 static zStyle styles_z_glow[] = {
-	{ Z_BACKGROUND | ZT_END, 0xffffffff }
+	{ Z_BACKGROUND | ZT_END, 0xFFFFFFFF }
 };
 
 static zStyle styles_z_caret[] = {
-	{ Z_BACKGROUND, 0xffffffff },
+	{ Z_BACKGROUND, 0xFFFFFFFF },
 	{ Z_DURATION | ZT_END, 500 }
 };
 
@@ -103,12 +103,12 @@ static zStyle styles_z_bar[] = {
 static zStyle styles_z_barbutton[] = {
 	{ Z_SIZE, 0x18001800 },
 	{ Z_FOREGROUND, z.R.drawable.zx_icons },
-	{ Z_FOREGROUND_COLOR, 0xffffffff },
+	{ Z_FOREGROUND_COLOR, 0xFFFFFFFF },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_TEXT_SIZE, 15 },
 	{ Z_TEXT_STYLE, ZS_TEXT_NORMAL },
-	{ Z_TEXT_FOREGROUND_COLOR, 0xffffffff },
+	{ Z_TEXT_FOREGROUND_COLOR, 0xFFFFFFFF },
 	{ Z_FOREGROUND_SCALE, 32767 },
 	{ Z_PADDING | ZT_END, 0x01010101 }
 };
@@ -120,7 +120,7 @@ static zStyle styles_z_baroverflow[] = {
 
 static zStyle styles_z_menuimage[] = {
 	{ Z_FOREGROUND, z.R.drawable.zx_icons },
-	{ Z_FOREGROUND_COLOR, 0xffffffff },
+	{ Z_FOREGROUND_COLOR, 0xFFFFFFFF },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_BEHAVIOR, 0 },
@@ -246,7 +246,7 @@ static zStyle styles_z_tools[] = {
 	{ Z_FBO, true },
 	{ Z_SIZE, 0x20002000 },
 	{ Z_ICON | ZT_THEME, Z_THEME_ICONS },
-	{ Z_ICON_COLOR, 0xffffffff },
+	{ Z_ICON_COLOR, 0xFFFFFFFF },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_TEXT_DISTANCE, 0 },
 	{ Z_FOREGROUND_SCALE, 32767 },
@@ -340,7 +340,7 @@ static zStyle styles_z_select[] = {
 static zStyle styles_z_msgform[] = {
 	{ Z_FBO, true },
 	{ Z_FOREGROUND, z.R.drawable.zssh },
-	{ Z_FOREGROUND_COLOR, 0xffffffff },
+	{ Z_FOREGROUND_COLOR, 0xFFFFFFFF },
 	{ Z_FOREGROUND_TILES | ZT_THEME, Z_THEME_TILES_FORM },
 	{ Z_TEXT_SIZE, z.R.dimen.messageText },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_THEME_COLOR_TEXT_MESSAGE },
@@ -385,7 +385,7 @@ static zStyle styles_z_linearprogress[] = {
 
 static zStyle styles_z_circularprogress[] = {
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
-	{ Z_FOREGROUND_COLOR, 0xffffffff },
+	{ Z_FOREGROUND_COLOR, 0xFFFFFFFF },
 	{ Z_FOREGROUND_TILES | ZT_THEME, Z_THEME_TILES_WAIT },
 	{ Z_MODE, ZS_SLIDER_ROTATE },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER | ZS_SCALE_HEIGHT },
@@ -420,7 +420,7 @@ static zStyle styles_z_tabwidget[] = {
 	{ Z_SIZE, 0x10001000 },
 	{ Z_ICON_SCALE, 32767 },
 	{ Z_ICON_GRAVITY, ZS_GRAVITY_CENTER },
-	{ Z_ICON_COLOR, 0xffffffff },
+	{ Z_ICON_COLOR, 0xFFFFFFFF },
 	{ Z_TEXT_SIZE, z.R.dimen.textText },
 	{ Z_TEXT_FOREGROUND_COLOR | ZT_THEME, Z_THEME_COLOR_TEXT_TABBED },
 	{ Z_PADDING, 0x06020602 },
@@ -442,7 +442,7 @@ static zStyle styles_z_ccontroller[] = {
 	{ Z_FOREGROUND_TILE2, z.R.integer.ccontrolL },
 	{ Z_FOREGROUND_TILE3, z.R.integer.ccontrolR },
 	{ Z_FOREGROUND_TILE4, z.R.integer.ccontrolD },
-	{ Z_FOREGROUND_COLOR | ZT_END, 0xffffffff }
+	{ Z_FOREGROUND_COLOR | ZT_END, 0xFFFFFFFF }
 };
 
 static zStyle styles_z_acontroller[] = {
@@ -452,23 +452,24 @@ static zStyle styles_z_acontroller[] = {
 	{ Z_FOREGROUND_TILE2, z.R.integer.acontrolA },
 	{ Z_FOREGROUND_TILE3, z.R.integer.acontrolX },
 	{ Z_FOREGROUND_TILE4, z.R.integer.acontrolB },
-	{ Z_FOREGROUND_COLOR | ZT_END, 0xffffffff }
+	{ Z_FOREGROUND_COLOR | ZT_END, 0xFFFFFFFF }
 };
 
 static zStyle styles_z_form[] = {
 	{ Z_FBO, true },
-	{ Z_BACKGROUND_COLOR, 0xffffffff },
+	{ Z_BACKGROUND_COLOR, 0xFFFFFFFF },
 	{ Z_BACKGROUND_TILES | ZT_THEME, Z_THEME_TILES_FORM },
 	{ Z_MODE, ZS_FORM_YES_NO_DEF },
 	{ Z_MASK, z.R.drawable.zssh },
-	{ Z_MASK_COLOR, 0xff7f7f7f },
+	{ Z_MASK_COLOR, 0xFF7F7F7F },
 	{ Z_MASK_TILES | ZT_END, z.R.integer.rectRound }
 };
 
 static zStyle styles_z_chart[] = {
+	{ Z_FBO, true },
 	{ Z_BACKGROUND_TILES, z.R.integer.selectDrop },
 	{ Z_FOREGROUND_TILES, z.R.integer.rect },
-	{ Z_FOREGROUND_COLOR, 0xffffffff },
+	{ Z_FOREGROUND_COLOR, 0xFFFFFFFF },
 	{ Z_DECORATE, ZS_SCROLLBAR },
 	{ Z_SCROLLBAR_FADE, false },
 	{ Z_GRAVITY, ZS_GRAVITY_CENTER },
@@ -484,6 +485,11 @@ static zStyle styles_z_chartdiagramm[] = {
 static zStyle styles_z_chartgraph[] = {
 	{ Z_STYLES, z.R.style.chart },
 	{ Z_MODE | ZT_END, ZS_CHART_GRAPH }
+};
+
+static zStyle styles_z_chartcircular[] = {
+	{ Z_STYLES, z.R.style.chart },
+	{ Z_MODE | ZT_END, ZS_CHART_CIRCULAR }
 };
 
 static zStyle styles_z_themedark[] = {
@@ -558,6 +564,11 @@ static zStyle styles_z_zlinearlayout1[] = {
 static zStyle styles_z_chart2[] = {
 	{ Z_DECORATE, ZS_SCROLLBAR },
 	{ Z_STYLES | ZT_END, z.R.style.chartGraph }
+};
+
+static zStyle styles_z_chart1[] = {
+	{ Z_DECORATE, ZS_SCROLLBAR },
+	{ Z_STYLES | ZT_END, z.R.style.chartCircular }
 };
 
 static zStyle styles_z_formopen[] = {

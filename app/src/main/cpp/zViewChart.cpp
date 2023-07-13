@@ -4,10 +4,11 @@
 
 #include "zssh/zCommon.h"
 #include "zssh/zViewGroup.h"
+#include <zstandard/zSpline.h>
 
 zViewChart::zViewChart(zStyle* _styles, i32 _id, u32 _chartGravity) : zFrameLayout(_styles, _id), grav(_chartGravity) {
     minMaxSize.set(z_dp(z.R.dimen.chartMinWidth), 0, z_dp(z.R.dimen.chartMinHeight), 0);
-    sizeTouch.set(3_dp, 3_dp); vert = (_chartGravity & ZS_GRAVITY_HORZ);
+    sizeTouch.set(4_dp, 4_dp); vert = (_chartGravity & ZS_GRAVITY_HORZ);
     flyng = new zFlyng(this);
     dr[0] = new zDrawable(this, DRW_FK);
     dr[1] = new zDrawable(this, DRW_FK);
@@ -78,11 +79,16 @@ void zViewChart::onMeasure(cszm& spec) {
     zFrameLayout::onMeasure(spec);
     szi _max; int cc(z_max(5, z_max(1, cCharts))), sz;
     auto _ws(spec[vert].size()), _hs(spec[!vert].size());
+    auto circ(mode == ZS_CHART_CIRCULAR);
     if(_ws && spec[vert].isExact()) {
         _max[vert] = _ws;
     } else {
-        sz = z_max(minMaxSize.x, _ws / cc);
-        _max[vert] = sz * cc + pad.extent(vert);
+        if(circ) {
+            _max[vert] = z_max(256_dp, cc * 12_dp);
+        } else {
+            sz = z_max(minMaxSize.x, _ws / cc);
+            _max[vert] = sz * cc + pad.extent(vert);
+        }
         if(_ws) _max[vert] = z_min(_max[vert], _ws);
     }
     // размер одной диаграммы(ширина/высота в зависимости от ориентации)
@@ -90,9 +96,14 @@ void zViewChart::onMeasure(cszm& spec) {
     if(_hs && spec[!vert].isExact()) {
         _max[!vert] = _hs;
     } else {
-        _max[!vert] = z_max(sz * 5, minMaxSize.w + pad.extent(!vert));
+        if(circ) {
+            _max[!vert] = z_max(256_dp, cc * 12_dp);
+        } else {
+            _max[!vert] = z_max(sz * 3, minMaxSize.w + pad.extent(!vert));
+        }
         if(_hs) _max[!vert] = z_min(_max[!vert], _hs);
     }
+    if(circ) _max.w = z_min(_max.w, _max.h);
     setMeasuredDimension(_max.w, _max.h);
     sizeChart = (float)sz;
     maxCharts = (cCharts ? (int)round((float)rclient[vert + 2] / sizeChart) : 0);
@@ -112,17 +123,30 @@ void zViewChart::onDraw() {
                 dr[0]->drawCommon(rclip, m, true);
             }
             break;
-        case ZS_CHART_GRAPH:
-            for(int i = 0 ; i < values.size(); i++) {
-                // установить текстуру
-                glBindTexture(GL_TEXTURE_2D, dr[i]->texture->id);
-                // параметры шейдера и обрезка
-                manager->prepareRender(dr[i]->vertices, manager->screen, zMatrix::_identity);
-                // фильтр
-                manager->setColorFilter(this, colors[i].data[0]);
-                // нарисовать линии
-                glLineWidth(5);
-                glDrawArrays(GL_LINE_STRIP, 0, dr[i]->count);
+        case ZS_CHART_GRAPH: {
+            auto sc((float) rclient[vert + 2] / (float) (rclient[vert + 2] - sizeChart));
+            m.scale(vert ? 1.0f : sc, vert ? sc : 1.0f, 1.0f);
+            m.translate2(rclient.x - scr.x, rclient.y - scr.y, 0);
+            for(int i = 0; i < values.size(); i++) {
+                dr[i]->color.set(colors[i].data[0]);
+                dr[i]->drawCommon(rclip, m, true);
+            }
+            break;
+        }
+        case ZS_CHART_CIRCULAR:
+            if(values.isEmpty()) break;
+            m.translate(rclient.x - scr.x, rclient.y - scr.y, 0); int offs(0);
+            // устанавливаем текстуру
+            glBindTexture(GL_TEXTURE_2D, dr[0]->texture->id);
+            manager->prepareRender(dr[0]->vertices, rclip - manager->screen, m);
+            for(int j = 0; j < cols.size(); j += 2) {
+                // устанавливаем цветовой фильтр
+                manager->setColorFilter(this, cols[j]);
+                // запускаем отрисовку
+                int c(cols[j + 1]);
+                // устанавливаем параметры шейдеров и обрезки
+                glDrawArrays(GL_TRIANGLE_STRIP, offs, c + 1);
+                offs += c;
             }
             break;
     }
@@ -135,8 +159,8 @@ void zViewChart::onLayout(crti &position, bool changed) {
     auto x((float)rclient.x), y((float)rclient.y);
     auto dy((float)rclient[3 - vert] / (float)maxVal);
     switch(mode) {
-        case ZS_CHART_CIRCULAR: makeCircular(x, y, dy); break;
-        case ZS_CHART_GRAPH:    makeGraph(x, y, dy); break;
+        case ZS_CHART_CIRCULAR: makeCircular(((float)rclient.w / 2.0f), ((float)rclient.h / 2.0f), dy); break;
+        case ZS_CHART_GRAPH:    makeGraph(0, 0, dy); break;
         default:
         case ZS_CHART_DIAGRAMM: makeDiagramm(x, y, dy); break;
     }
@@ -176,24 +200,20 @@ void zViewChart::makeDiagramm(float x, float y, float dy) {
     dr[0]->measure(100, 100, 0, false);
 }
 
-void zViewChart::makeCircular(float, float, float) {
-}
-
-#include <zstandard/zSpline.h>
-
 void zViewChart::makeGraph(float x, float y, float dy) {
+    ptf pt; float size;
     for(int j = 0 ; j < values.size(); j++) {
         auto _vals(values[j].data);
-        ptf pt(x, y); auto p(pt);
+        pt.set(x, y); auto p(pt);
         zArray<ptf> path;
         pt[vert] -= (float)delta;
-        auto count(maxCharts);
+        auto count(maxCharts + (delta != 0));
         for(int i = 0 ; i < count; i++) {
-            auto size(dy * (float)_vals[i + fChart]);
+            size = (dy * (float)_vals[i + fChart]);
             switch(grav >> (!vert * 2)) {
                 default:
                 // start/top
-                case 1: p[!vert] = pt[!vert]; break;
+                case 1: p[!vert] = pt[!vert] + size; break;
                 // end/bottom
                 case 2: p[!vert] = pt[!vert] + (rclient[3 - vert] - size); break;
                 // center
@@ -202,19 +222,46 @@ void zViewChart::makeGraph(float x, float y, float dy) {
             path += ptf(p.x + !vert * ipad.x, p.y + vert * ipad.y);
             p[vert] += sizeChart;
         }
-        path += ptf(p.x, p.y);
         smoothPath(path, 5, true);
-        dr[j]->make(path.size());
-        //dr[j]->typeTri = GL_LINE_STRIP;
-        dr[j]->texture = manager->cache->get("znull", dr[j]->texture);
-        auto vert(dr[j]->vertices);
-        for(int ii = 0; ii < path.size(); ii++) {
-            auto& _p(path[ii]);
-            //PTF_LOG("_p", _p);
-            vert->x = _p.x; vert->y = _p.y;
-            vert++;
+        path.reverse(); size = (float)rclient[3 - vert];
+        switch(grav >> (!vert * 2)) {
+            default:
+            case 1: pt.set(0, 0); break;
+            case 2: pt.set(vert * size, !vert * size); break;
+            case 3: pt.set(vert * (size / 2.0f), !vert * (size / 2.0f));
+                auto v(!vert); auto c(path.size()); path += path[c - 1];
+                for(int n = c - 1 ; n >= 0; n--) { p = path[n]; p[v] = pt[v] + (pt[v] - p[v]); path += p; }
         }
+        dr[j]->makePath(path, dr[j]->getRectTile(true).padding(5, 5), pt, vert + 1);
     }
+}
+
+static float d2r(float a) { return a * (Z_PI / 180.0f); }
+
+void zViewChart::makeCircular(float x, float y, float) {
+    ptf pt(x, y); cols.free(); zArray<ptf> path;
+    float radius((float)z_min(rclient.h, rclient.w) / 2.0f);
+    if(values.isEmpty()) return;
+    auto _vals(values[0].data), _cols(colors[0].data);
+    auto count(values[0].count), _count(colors[0].count);
+    // подсчитать сумму
+    float sum(0), angle1(startAngle); for(int i = 0 ; i < count; i++) sum += _vals[i];
+    sum = (360.0f / sum);
+    for(int i = 0 ; i < count; i++) {
+        auto angle2(angle1 + (float)_vals[i] * sum);
+        if(i + 1 >= count) angle2 = startAngle + 360.5f;
+        auto c((int)roundf((angle2 - angle1) / 5.0f)); c = z_max(1, c);
+        auto a1(angle1); cols += _cols[i < _count ? i : _count - 1]; cols += c * 2;
+        while(c-- > 0) {
+            auto angle(d2r(a1));
+            path += ptf(x + sinf(angle) * radius, y - cosf(angle) * radius);
+            a1 += 5.0f;
+        }
+        angle1 = angle2;
+    }
+    path += ptf(x + sinf(d2r(angle1)) * radius, y - cosf(d2r(angle1)) * radius);
+    dr[0]->makePath(path, dr[0]->getRectTile(true), pt, 0);
+    center.set(pt.x + rclient.x, pt.y + rclient.y);
 }
 
 void zViewChart::setFirstVisible(int _first) {
@@ -225,21 +272,29 @@ void zViewChart::setFirstVisible(int _first) {
 
 i32 zViewChart::onTouchEvent(zTouch *touch) {
     bool drag(false);
-    touch->drag(sizeTouch, [this, &drag, &touch](cszi& offs, bool event) {
-        // если сдвинули - определяем дельту в зависимости от ориентации
-        auto _delta(offs[vert] * sizeTouch[vert]);
-        if(_delta) {
-            flyng->stop();
-            // определяем время сдвига
-            if(event && flyng->start(touch, _delta)) clickItem = -1;
-                // иначе - просто скроллим на дельту
-            else scrolling(_delta);
-            // признак перетаскивания
+    if(mode == ZS_CHART_CIRCULAR) {
+        touch->rotate(sizeTouch, center, [this, &drag](float a, bool event) {
+            startAngle += (a - startAngle);
+            requestPosition();
             drag = true;
-        }
-    });
+        });
+    } else {
+        touch->drag(sizeTouch, [this, &drag, &touch](cszi &offs, bool event) {
+            // если сдвинули - определяем дельту в зависимости от ориентации
+            auto _delta(offs[vert] * sizeTouch[vert]);
+            if(_delta) {
+                flyng->stop();
+                // определяем время сдвига
+                if(event && flyng->start(touch, _delta)) clickItem = -1;
+                    // иначе - просто скроллим на дельту
+                else scrolling(_delta);
+                // признак перетаскивания
+                drag = true;
+            }
+        });
+    }
     // если не было перетаскивания
-    if(!drag) {
+    if(!drag && mode != ZS_CHART_CIRCULAR) {
         // если тап
         if(touch->isCaptured()) {
             // останавливаем флинг
