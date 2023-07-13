@@ -273,8 +273,8 @@ void zViewChart::setFirstVisible(int _first) {
 i32 zViewChart::onTouchEvent(zTouch *touch) {
     bool drag(false);
     if(mode == ZS_CHART_CIRCULAR) {
-        touch->rotate(sizeTouch, center, [this, &drag](float a, bool event) {
-            startAngle += (a - startAngle);
+        touch->rotate(sizeTouch, center, [this, &drag](float, float a, bool event) {
+            startAngle += a;
             requestPosition();
             drag = true;
         });

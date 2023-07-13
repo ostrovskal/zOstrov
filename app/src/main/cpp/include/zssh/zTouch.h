@@ -33,8 +33,8 @@ public:
     // Вычисление угла между центральной [center] и заданной [p] точками
     float rotate(ptf center, cptf& p) {
         auto a(atan2f((center.y - p.y), (center.x - p.x)) / 3.1415926535897932385f * 180.0f);
-//        auto a(atan2f((p.y - center.y), (p.x - center.x)) / 3.1415926535897932385f * 180.0f);
-        return a;//(a < 0.0f ? a + 360.0f : a);
+        a -= 90.0f;
+        return (a < 0.0f ? a + 360.0f : a);
     }
     // Вернуть координату точки [p] с учетом чувствительности [cell] и записать ее в [ret]
     ptf point(szi cell, ptf p) {
@@ -63,7 +63,7 @@ public:
     // Клик в области [rc]
     bool click() const;
     // Ротация вокруг центральной точки [center] и чувствительностью [cell]
-    void rotate(cszi& cell, cptf& center, const std::function<void(float, bool)>& fn);
+    void rotate(cszi& cell, cptf& center, const std::function<void(float, float, bool)>& fn);
     // Перетаскивание для касания с чувствительностью [cell]
     void drag(cszi& cell, const std::function<void(cszi& offs, bool)>& fn);
     // Масштабирование для касаний с чувствительностью [cell]
@@ -104,4 +104,6 @@ public:
     // временный размер
     szi sz{};
 protected:
+    // старый угол
+    float oldAngle{10000.0f};
 };

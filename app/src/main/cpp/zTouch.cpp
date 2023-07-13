@@ -89,7 +89,7 @@ bool zTouch::event(AInputEvent* event, crti& r) {
 }
 
 void zTouch::reset() {
-    btm = ctm = 0UL; id = -1;
+    btm = ctm = 0UL; id = -1; oldAngle = 10000.0f;
     bpt.empty(); cpt.empty();
     flags &= TOUCH_INIT_DOUBLE_PRESSED; act = AMOTION_EVENT_ACTION_CANCEL;
 }
@@ -102,10 +102,13 @@ bool zTouch::click() const {
     return false;
 }
 
-void zTouch::rotate(cszi& cell, cptf& center, const std::function<void(float, bool)>& fn) {
+void zTouch::rotate(cszi& cell, cptf& center, const std::function<void(float, float, bool)>& fn) {
     auto released(isReleased());
     if(delta(cell) || released) {
-        fn(rotate(center, cpt), !released);
+        auto a(rotate(center, cpt));
+        if(abs(oldAngle - 10000.0f) < Z_EPSILON) oldAngle = a;
+        fn(a, a - oldAngle, !released);
+        oldAngle = released ? 10000.0f : a;
         resetPosition();
     }
 }
