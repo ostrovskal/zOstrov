@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="formCaption">
+        <item name="sizeMinW">@dimen/headerMinWidth</item>
+        <item name="sizeMinH">@dimen/headerMinHeight</item>
+        <item name="gravity">center</item>
+        <item name="pad">1dp</item>
+        <item name="ipadVert">4dp</item>
+        <item name="textStyle">italic</item>
+        <item name="fkTiles">@integer/header</item>
+        <item name="fkGravity">center</item>
+        <item name="fkScale">0.33</item>
+        <item name="textSize">@dimen/headerText</item>
+        <item name="textColor">?attr/themeColorTextHeader</item>
+    </style>
+    <style name="keyboardBase">
+        <item name="fkTiles">@integer/butKeyboardSmall</item>
+        <item name="fkGravity">center</item>
+        <item name="textColor">#ffffffff</item>
+        <item name="textStyle">bold</item>
+        <item name="textSize">25sp</item>
+        <item name="textLines">1</item>
+        <item name="padEnd">1dp</item>
+        <item name="padBottom">2dp</item>
+        <item name="ipad">3dp</item>
+        <item name="visibled">false</item>
+        <item name="gravity">center</item>
+        <item name="icGravity">center</item>
+        <item name="icColor">#ffffff</item>
+        <item name="icScale">0.4</item>
+    </style>
+    <style name="keyboardAlt">
+        <item name="visibled">false</item>
+        <item name="fkGravity">center</item>
+        <item name="textLines">1</item>
+        <item name="textColor">#ffafafaf</item>
+        <item name="textStyle">bold</item>
+        <item name="textSize">16sp</item>
+        <item name="padEnd">2dp</item>
+        <item name="padBottom">2dp</item>
+        <item name="ipad">2dp</item>
+        <item name="gravity">end|bottom</item>
+    </style>
+    <style name="scrollbar">
+        <item name="background">#ffafafaf</item>
+        <item name="bkTiles">@integer/rect</item>
+        <item name="sizeScrollBars">4dp</item>
+        <item name="fadeScrollBars">true</item>
+    </style>
+    <style name="glow">
+        <item name="background">#ffffffff</item>
+    </style>
+    <style name="caret">
+        <item name="background">#ffffffff</item>
+        <item name="duration">500</item>
+    </style>
+    <style name="editButClear">
+        <item name="foreground">@drawable/zssh</item>
+        <item name="fkGravity">center</item>
+        <item name="tap">hovered</item>
+    </style>
+    <style name="tabContent">
+        <item name="pad">2dp</item>
+        <item name="background">#50000000</item>
+    </style>
+    <style name="formFooterLyt">
+        <item name="pad">2dp</item>
+        <item name="gravity">center</item>
+    </style>
+    <style name="formContentLyt">
+        <item name="gravity">center</item>
+        <item name="pad">1dp</item>
+    </style>
+    <style name="toast">
+        <item name="fbo">true</item>
+        <item name="background">?attr/themeColorMenu</item>
+        <item name="bkTiles">@integer/rectRoundSm</item>
+        <item name="textColor">?attr/themeColorTextMenu</item>
+        <item name="behavior">none</item>
+        <item name="duration">30</item>
+        <item name="textLines">2</item>
+        <item name="pad">6dp</item>
+        <item name="ipad">0dp</item>
+        <item name="gravity">center</item>
+        <item name="marginBottom">5dp</item>
+    </style>
+    <style name="bar">
+        <item name="fbo">true</item>
+        <item name="background">?attr/themeColorMenu</item>
+        <item name="gravity">center</item>
+        <item name="duration">40</item>
+    </style>
+    <style name="barButton">
+        <item name="sizeMinW">32dp</item>
+        <item name="sizeMinH">32dp</item>
+        <item name="foreground">?attr/themeIcons</item>
+        <item name="fkColor">#ffffff</item>
+        <item name="gravity">center</item>
+        <item name="fkGravity">center</item>
+        <item name="textSize">20sp</item>
+        <item name="textStyle">normal</item>
+        <item name="textColor">#ffffff</item>
+        <item name="fkScale">0.5</item>
+        <item name="pad">2dp</item>
+    </style>
+    <style name="barOverflow">
+        <item name="styles">@style/barButton</item>
+        <item name="foreground">@drawable/zssh</item>
+    </style>
+    <style name="menuImage">
+        <item name="foreground">?attr/themeIcons</item>
+        <item name="fkColor">#ffffff</item>
+        <item name="gravity">center</item>
+        <item name="fkGravity">center</item>
+        <item name="behavior">none</item>
+        <item name="fkScale">0.66</item>
+        <item name="pad">4dp</item>
+    </style>
+    <style name="barPopup">
+        <item name="fbo">true</item>
+        <item name="divSize">@dimen/divider</item>
+        <item name="background">?attr/themeColorMenu</item>
+        <item name="gravity">center</item>
+        <item name="fadeScrollBars">true</item>
+        <item name="decorate">vscrollbar</item>
+        <item name="selector">?attr/themeColorSelector</item>
+        <item name="pad">3dp</item>
+    </style>
+    <style name="menuPopup">
+        <item name="fbo">true</item>
+        <item name="divSize">@dimen/divider</item>
+        <item name="background">?attr/themeColorMenu</item>
+        <item name="gravity">center</item>
+        <item name="selector">?attr/themeColorSelector</item>
+        <item name="pad">4dp</item>
+        <item name="ipad">4dp</item>
+    </style>
+    <style name="formFooter">
+        <item name="fkTiles">@integer/button2</item>
+        <item name="icScale">0.66</item>
+        <item name="fkGravity">center</item>
+        <item name="tap">pressed</item>
+        <item name="padHorz">6dp</item>
+        <item name="padVert">2dp</item>
+        <item name="fkScale">0.6</item>
+        <item name="icGravity">center|height</item>
+    </style>
+    <style name="spin_item">
+        <item name="textColor">?attr/themeColorTextText</item>
+        <item name="gravity">center</item>
+        <item name="textLines">1</item>
+        <item name="textSize">20sp</item>
+        <item name="fkGravity">center</item>
+        <item name="tap">hovered</item>
+        <item name="ipad">4dp</item>
+        <item name="icon">?attr/themeIcons</item>
+        <item name="icGravity">center</item>
+        <item name="icScale">0.5</item>
+        <item name="icColor">#fff</item>
+        <item name="fkTiles">@integer/selectItem</item>
+    </style>
+    <style name="list_item">
+        <item name="fbo">true</item>
+        <item name="textStyle">bold_italic</item>
+        <item name="gravity">center</item>
+        <item name="fkGravity">center</item>
+        <item name="textLines">1</item>
+        <item name="textSize">20sp</item>
+        <item name="ipad">4dp</item>
+        <item name="icon">?attr/themeIcons</item>
+        <item name="icGravity">center</item>
+        <item name="icScale">0.5</item>
+        <item name="icColor">#fff</item>
+        <item name="fkTiles">@integer/selectItem</item>
+    </style>
+    <style name="grid_item">
+        <item name="fbo">true</item>
+        <item name="textSize">20sp</item>
+        <item name="gravity">center</item>
+        <item name="fkGravity">center</item>
+        <item name="textLines">100</item>
+        <item name="ipad">4dp</item>
+        <item name="icon">?attr/themeIcons</item>
+        <item name="icGravity">center</item>
+        <item name="icScale">0.5</item>
+        <item name="icColor">#fff</item>
+        <item name="fkTiles">@integer/selectItem</item>
+    </style>
+    <style name="menu_item">
+        <item name="textColor">?attr/themeColorTextMenu</item>
+        <item name="textSize">@dimen/menuText</item>
+        <item name="gravity">start|center_vertical</item>
+        <item name="textStyle">bold</item>
+        <item name="fkTile1">@integer/iconGroup</item>
+        <item name="fkTile2">@integer/iconGroup</item>
+        <item name="textLines">1</item>
+        <item name="fkGravity">end|center_vertical</item>
+        <item name="fkScale">0.75</item>
+        <item name="textDistance">8dp</item>
+        <item name="pad">2dp</item>
+        <item name="ipad">4dp</item>
+    </style>
+    <style name="edit_menu_item">
+        <item name="textColor">?attr/themeColorTextMenu</item>
+        <item name="textSize">@dimen/menuText</item>
+        <item name="gravity">center</item>
+        <item name="textStyle">bold</item>
+        <item name="textLines">1</item>
+        <item name="fkScale">0.5</item>
+        <item name="pad">3dp</item>
+        <item name="ipad">4dp</item>
+    </style>
+    <style name="spin_capt">
+        <item name="textLines">1</item>
+        <item name="fkGravity">center</item>
+        <item name="fkTiles">@integer/selectCapt</item>
+        <item name="textSize">23sp</item>
+        <item name="ipadVert">5dp</item>
+        <item name="ipadStart">10dp</item>
+        <item name="ipadEnd">22dp</item>
+        <item name="textColor">?attr/themeColorTextHighlight</item>
+        <item name="fkScale">0.75</item>
+        <item name="icon">?attr/themeIcons</item>
+        <item name="icGravity">center</item>
+        <item name="icScale">0.5</item>
+        <item name="icColor">#fff</item>
+        <item name="gravity">center</item>
+    </style>
+    <style name="button">
+        <item name="fbo">true</item>
+        <item name="fkGravity">center</item>
+        <item name="textDistance">5dp</item>
+        <item name="fkScale">0.5</item>
+        <item name="textShadowOffset">2,2</item>
+        <item name="pad">4dp</item>
+        <item name="ipad">5dp</item>
+        <item name="gravity">center</item>
+        <item name="icGravity">end|center_vertical</item>
+        <item name="tap">hovered</item>
+        <item name="fkTiles">@integer/gradientRadial</item>
+        <item name="icScale">0.65</item>
+    </style>
+    <style name="tools">
+        <item name="fbo">true</item>
+        <item name="sizeMinH">32dp</item>
+        <item name="sizeMinW">32dp</item>
+        <item name="icColor">#ffffff</item>
+        <item name="fkGravity">center</item>
+        <item name="textDistance">0dp</item>
+        <item name="fkScale">0.6</item>
+        <item name="pad">5dp</item>
+        <item name="gravity">center</item>
+        <item name="icGravity">center</item>
+        <item name="tap">hovered</item>
+        <item name="fkTiles">@integer/tools</item>
+        <item name="icScale">0.5</item>
+    </style>
+    <style name="checkbox">
+        <item name="fbo">true</item>
+        <item name="fkTile1">@integer/checkOff</item>
+        <item name="fkTile2">@integer/checkOn</item>
+        <item name="fkScale">0.75</item>
+        <item name="textDistance">5dp</item>
+        <item name="fkGravity">center_vertical|start</item>
+        <item name="pad">3dp</item>
+        <item name="gravity">center_vertical|start</item>
+    </style>
+    <style name="radiobutton">
+        <item name="fbo">true</item>
+        <item name="fkTile1">@integer/radioOff</item>
+        <item name="fkTile2">@integer/radioOn</item>
+        <item name="fkScale">0.75</item>
+        <item name="textDistance">5dp</item>
+        <item name="fkGravity">end|center_vertical</item>
+        <item name="gravity">center_vertical|end</item>
+        <item name="pad">3dp</item>
+    </style>
+    <style name="edittext">
+        <item name="fbo">true</item>
+        <item name="fkTiles">@integer/edit</item>
+        <item name="fkScale">0.75</item>
+        <item name="icGravity">end|center_vertical</item>
+        <item name="icTiles">@integer/iconEditEx</item>
+        <item name="icScale">0.75</item>
+        <item name="textDistance">3dp</item>
+        <item name="fkGravity">center</item>
+        <item name="pad">3dp</item>
+        <item name="ipad">5dp</item>
+        <item name="autofillHints">text</item>
+        <item name="textLines">1</item>
+        <item name="gravity">start|center_vertical</item>
+    </style>
+    <style name="edittext_multi">
+        <item name="styles">@style/edittext</item>
+        <item name="textLines">10000</item>
+    </style>
+    <style name="ribbon">
+        <item name="fbo">true</item>
+        <item name="selector">?attr/themeColorSelector</item>
+        <item name="fadeScrollBars">false</item>
+        <item name="tilesScrollBars">@integer/rect</item>
+        <item name="duration">30</item>
+        <item name="decorate">overscroll|scrollbar</item>
+        <item name="bkTiles">@integer/selectDrop</item>
+        <item name="pad">5dp</item>
+        <item name="divSize">@dimen/divider</item>
+        <item name="divPadHorz">3dp</item>
+    </style>
+    <style name="grid">
+        <item name="fbo">true</item>
+        <item name="selector">?attr/themeColorSelector</item>
+        <item name="fadeScrollBars">false</item>
+        <item name="duration">30</item>
+        <item name="decorate">overscroll|scrollbar</item>
+        <item name="bkTiles">@integer/selectDrop</item>
+        <item name="pad">6dp</item>
+        <item name="spacingLine">6dp</item>
+        <item name="spacingCell">6dp</item>
+        <item name="cellSize">160dp</item>
+        <item name="gridMode">uniform</item>
+        <item name="lines">0</item>
+        <item name="divSize">@dimen/divider</item>
+        <item name="divPadHorz">4dp</item>
+        <item name="tilesScrollBars">@integer/rect</item>
+    </style>
+    <style name="spinner">
+        <item name="fbo">true</item>
+        <item name="divSize">@dimen/divider</item>
+        <item name="divPadHorz">2dp</item>
+        <item name="gravity">center</item>
+        <item name="bkTiles">@integer/selectDrop</item>
+        <item name="fadeScrollBars">false</item>
+        <item name="decorate">vscrollbar|glow</item>
+        <item name="margin">5dp</item>
+        <item name="pad">4dp</item>
+        <item name="selector">?attr/themeColorSelector</item>
+    </style>
+    <style name="slider">
+        <item name="fbo">true</item>
+        <item name="fkTile1">?attr/themeTile1Slider</item>
+        <item name="fkTile2">?attr/themeTile2Slider</item>
+        <item name="gravity">center</item>
+        <item name="fkScale">1.0</item>
+        <item name="textSize">@dimen/hintText</item>
+        <item name="textColor">?attr/themeColorTextProgress</item>
+        <item name="duration">40</item>
+        <item name="fkGravity">center</item>
+        <item name="ipad">5dp</item>
+        <item name="sliderMode">?attr/themeModeSlider</item>
+        <item name="speedTrack">2.0</item>
+        <item name="decorate">tips</item>
+    </style>
+    <style name="circularProgress">
+        <item name="gravity">center</item>
+        <item name="fkColor">#ffffff</item>
+        <item name="fkTile1">?attr/themeTilesWait</item>
+        <item name="fkTile2">?attr/themeTilesWait</item>
+        <item name="sliderMode">rotate</item>
+        <item name="speedTrack">1.0</item>
+        <item name="fkGravity">center</item>
+        <item name="fkScale">2.0</item>
+        <item name="textColor">?attr/themeColorTextProgress</item>
+        <item name="textSize">@dimen/hintText</item>
+    </style>
+    <style name="linearProgress">
+        <item name="fbo">true</item>
+        <item name="fkTile1">?attr/themeTile1Progress</item>
+        <item name="fkTile2">?attr/themeTile2Progress</item>
+        <item name="fkColor">?attr/themeColorProgress</item>
+        <item name="primary">?attr/themeColorPrimary</item>
+        <item name="pad">3dp</item>
+        <item name="fkGravity">center</item>
+        <item name="gravity">center</item>
+        <item name="textSize">@dimen/hintText</item>
+        <item name="textColor">?attr/themeColorTextProgress</item>
+        <item name="sliderMode">none</item>
+        <item name="decorate">tips</item>
+        <item name="fkScale">2.0</item>
+        <item name="textShadowOffset">2,2</item>
+    </style>
+    <style name="switchButton">
+        <item name="fbo">true</item>
+        <item name="textSize">@dimen/textText</item>
+        <item name="fkTile1">@integer/switchTrack</item>
+        <item name="fkTile2">@integer/switchTrumb</item>
+        <item name="pad">4dp</item>
+        <item name="gravity">start|center_vertical</item>
+        <item name="fkGravity">end|center_vertical</item>
+        <item name="duration">30</item>
+        <item name="fkScale">1.5</item>
+    </style>
+    <style name="llinear">
+        <item name="divPadHorz">3dp</item>
+        <item name="divType">begin|middle|end</item>
+        <item name="divSize">3dp</item>
+        <item name="pad">3dp</item>
+        <item name="gravity">center</item>
+    </style>
+    <style name="tabWidget">
+        <item name="icon">?attr/themeIcons</item>
+        <item name="sizeMinW">40dp</item>
+        <item name="sizeMinH">40dp</item>
+        <item name="icScale">0.5</item>
+        <item name="icGravity">center</item>
+        <item name="icColor">#ffffffff</item>
+        <item name="textSize">@dimen/textText</item>
+        <item name="textColor">?attr/themeColorTextTabbed</item>
+        <item name="padHorz">6dp</item>
+        <item name="padVert">3dp</item>
+        <item name="ipad">2dp</item>
+        <item name="gravity">center</item>
+    </style>
+    <style name="tabHost">
+        <item name="background">?attr/themeColorTabbed</item>
+        <item name="bkTiles">@integer/gradientDiag</item>
+        <item name="selector">?attr/themeColorSelector</item>
+        <item name="selTiles">@integer/rect</item>
+    </style>
+    <style name="butController">
+        <item name="icon">?attr/themeIcons</item>
+        <item name="icColor">#fff</item>
+        <item name="icScale">0.75</item>
+        <item name="icGravity">center</item>
+        <item name="textSize">15sp</item>
+        <item name="textStyle">bold</item>
+        <item name="textColor">#fff</item>
+        <item name="textLines">1</item>
+        <item name="visibled">false</item>
+        <item name="fkGravity">center</item>
+        <item name="gravity">center</item>
+    </style>
+    <style name="ccontroller">
+        <item name="fbo">true</item>
+        <item name="visibled">false</item>
+        <item name="fkTile1">@integer/ccontrolL</item>
+        <item name="fkTile2">@integer/ccontrolU</item>
+        <item name="fkTile3">@integer/ccontrolR</item>
+        <item name="fkTile4">@integer/ccontrolD</item>
+        <item name="fkColor">#A0ffffff</item>
+    </style>
+    <style name="acontroller">
+        <item name="fbo">true</item>
+        <item name="visibled">false</item>
+        <item name="fkTile1">@integer/acontrolY</item>
+        <item name="fkTile2">@integer/acontrolX</item>
+        <item name="fkTile3">@integer/acontrolA</item>
+        <item name="fkTile4">@integer/acontrolB</item>
+        <item name="fkColor">#A0ffffff</item>
+    </style>
+    <style name="msgForm">
+        <item name="fbo">true</item>
+        <item name="pad">2dp</item>
+        <item name="bkColor">#ffffff</item>
+        <item name="bkTiles">?attr/themeTilesForm</item>
+        <item name="textSize">@dimen/messageText</item>
+        <item name="textLines">100</item>
+        <item name="textColor">?attr/themeColorTextMessage</item>
+        <item name="gravity">center</item>
+        <item name="formMode">ok|terminate</item>
+        <item name="mskColor">#7f7f7f</item>
+        <item name="mskTiles">@integer/rectRound</item>
+    </style>
+    <style name="form">
+        <item name="fbo">true</item>
+        <item name="bkColor">#ffffff</item>
+        <item name="bkTiles">?attr/themeTilesForm</item>
+        <item name="formMode">yes_no_def</item>
+        <item name="mskColor">#7f7f7f</item>
+        <item name="mskTiles">@integer/rectRound</item>
+        <item name="pad">2dp</item>
+    </style>
+    <style name="chart">
+        <item name="fbo">true</item>
+        <item name="bkTiles">@integer/selectDrop</item>
+        <item name="fkTiles">@integer/rect</item>
+        <item name="fkColor">#ffffff</item>
+        <item name="decorate">scrollbar</item>
+        <item name="fadeScrollBars">false</item>
+        <item name="gravity">center</item>
+        <item name="pad">3dp</item>
+        <item name="ipad">2dp</item>
+    </style>
+    <style name="chartDiagramm">
+        <item name="styles">@style/chart</item>
+        <item name="chartMode">diagramm</item>
+    </style>
+    <style name="chartGraph">
+        <item name="styles">@style/chart</item>
+        <item name="chartMode">graph</item>
+    </style>
+    <style name="chartCircular">
+        <item name="styles">@style/chart</item>
+        <item name="chartMode">circular</item>
+    </style>
+</resources>

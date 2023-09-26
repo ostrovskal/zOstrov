@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root name="z">
+    <attributes>
+        <attr name="styles" translate="Z_STYLES" format="reference" />
+        <attr name="alpha" translate="Z_ALPHA" format="float" />
+        <attr name="scaleX" translate="Z_SCALE_X" format="float" />
+        <attr name="scaleY" translate="Z_SCALE_Y" format="float" />
+        <attr name="rotate" translate="Z_ROTATE" format="float" />
+        <attr name="rotateX" translate="Z_ROTATE_X" format="float" />
+        <attr name="rotateY" translate="Z_ROTATE_Y" format="float" />
+        <attr name="translateX" translate="Z_TRANSLATE_X" format="float" />
+        <attr name="translateY" translate="Z_TRANSLATE_Y" format="float" />
+        <attr name="sizeMinW" translate="Z_SIZE" format="complexX" />
+        <attr name="sizeMinH" translate="Z_SIZE" format="complexW" />
+        <attr name="sizeMaxW" translate="Z_SIZE" format="complexY" />
+        <attr name="sizeMaxH" translate="Z_SIZE" format="complexH" />
+        <attr name="pad" translate="Z_PADDING" format="complex" />
+        <attr name="padStart" translate="Z_PADDING" format="complexX" />
+        <attr name="padEnd" translate="Z_PADDING" format="complexW" />
+        <attr name="padTop" translate="Z_PADDING" format="complexY" />
+        <attr name="padBottom" translate="Z_PADDING" format="complexH" />
+        <attr name="padHorz" translate="Z_PADDING" format="complexXW" />
+        <attr name="padVert" translate="Z_PADDING" format="complexYH" />
+        <attr name="bkPad" translate="Z_BACKGROUND_PADDING" format="complex" />
+        <attr name="bkPadStart" translate="Z_BACKGROUND_PADDING" format="complexX" />
+        <attr name="bkPadEnd" translate="Z_BACKGROUND_PADDING" format="complexW" />
+        <attr name="bkPadTop" translate="Z_BACKGROUND_PADDING" format="complexY" />
+        <attr name="bkPadBottom" translate="Z_BACKGROUND_PADDING" format="complexH" />
+        <attr name="bkPadHorz" translate="Z_BACKGROUND_PADDING" format="complexXW" />
+        <attr name="bkPadVert" translate="Z_BACKGROUND_PADDING" format="complexYH" />
+        <attr name="fkPad" translate="Z_FOREGROUND_PADDING" format="complex" />
+        <attr name="fkPadStart" translate="Z_FOREGROUND_PADDING" format="complexX" />
+        <attr name="fkPadEnd" translate="Z_FOREGROUND_PADDING" format="complexW" />
+        <attr name="fkPadTop" translate="Z_FOREGROUND_PADDING" format="complexY" />
+        <attr name="fkPadBottom" translate="Z_FOREGROUND_PADDING" format="complexH" />
+        <attr name="fkPadHorz" translate="Z_FOREGROUND_PADDING" format="complexXW" />
+        <attr name="fkPadVert" translate="Z_FOREGROUND_PADDING" format="complexYH" />
+        <attr name="selPad" translate="Z_SELECTOR_PADDING" format="complex" />
+        <attr name="selPadStart" translate="Z_SELECTOR_PADDING" format="complexX" />
+        <attr name="selPadEnd" translate="Z_SELECTOR_PADDING" format="complexW" />
+        <attr name="selPadTop" translate="Z_SELECTOR_PADDING" format="complexY" />
+        <attr name="selPadBottom" translate="Z_SELECTOR_PADDING" format="complexH" />
+        <attr name="selPadHorz" translate="Z_SELECTOR_PADDING" format="complexXW" />
+        <attr name="selPadVert" translate="Z_SELECTOR_PADDING" format="complexYH" />
+        <attr name="divPad" translate="Z_DIVIDER_PADDING" format="complex" />
+        <attr name="divPadHorz" translate="Z_DIVIDER_SIZE" format="complexXW" />
+        <attr name="divPadStart" translate="Z_DIVIDER_SIZE" format="complexX" />
+        <attr name="divPadEnd" translate="Z_DIVIDER_SIZE" format="complexW" />
+        <attr name="ipad" translate="Z_IPADDING" format="complex" />
+        <attr name="ipadStart" translate="Z_IPADDING" format="complexX" />
+        <attr name="ipadEnd" translate="Z_IPADDING" format="complexW" />
+        <attr name="ipadTop" translate="Z_IPADDING" format="complexY" />
+        <attr name="ipadBottom" translate="Z_IPADDING" format="complexH" />
+        <attr name="ipadHorz" translate="Z_IPADDING" format="complexXW" />
+        <attr name="ipadVert" translate="Z_IPADDING" format="complexYH" />
+        <attr name="margin" translate="Z_MARGINS" format="complex" />
+        <attr name="marginStart" translate="Z_MARGINS" format="complexX" />
+        <attr name="marginEnd" translate="Z_MARGINS" format="complexW" />
+        <attr name="marginTop" translate="Z_MARGINS" format="complexY" />
+        <attr name="marginBottom" translate="Z_MARGINS" format="complexH" />
+        <attr name="marginHorz" translate="Z_MARGINS" format="complexXW" />
+        <attr name="marginVert" translate="Z_MARGINS" format="complexYH" />
+        <attr name="fbo" translate="Z_FBO" format="boolean" />
+        <attr name="background" translate="Z_BACKGROUND" format="drawable" />
+        <attr name="bkColor" translate="Z_BACKGROUND_COLOR" format="color" />
+        <attr name="bkTiles" translate="Z_BACKGROUND_TILES" format="integer" />
+        <attr name="foreground" translate="Z_FOREGROUND" format="drawable" />
+        <attr name="fkColor" translate="Z_FOREGROUND_COLOR" format="color" />
+        <attr name="fkScale" translate="Z_FOREGROUND_SCALE" format="float" />
+        <attr name="fkTiles" translate="Z_FOREGROUND_TILES" format="integer" />
+        <attr name="fkTile1" translate="Z_FOREGROUND_TILE1" format="integer" />
+        <attr name="fkTile2" translate="Z_FOREGROUND_TILE2" format="integer" />
+        <attr name="fkTile3" translate="Z_FOREGROUND_TILE3" format="integer" />
+        <attr name="fkTile4" translate="Z_FOREGROUND_TILE4" format="integer" />
+        <attr name="duration" translate="Z_DURATION" format="integer" />
+        <attr name="gravity" translate="Z_GRAVITY" format="flags">
+            <item name="start" value="ZS_GRAVITY_START" />
+            <item name="end" value="ZS_GRAVITY_END" />
+            <item name="top" value="ZS_GRAVITY_TOP" />
+            <item name="bottom" value="ZS_GRAVITY_BOTTOM" />
+            <item name="center_vertical" value="ZS_GRAVITY_VCENTER" />
+            <item name="center_horizontal" value="ZS_GRAVITY_HCENTER" />
+            <item name="center" value="ZS_GRAVITY_CENTER" />
+        </attr>
+        <attr name="fkGravity" translate="Z_FOREGROUND_GRAVITY" format="flags">
+            <item name="start" value="ZS_GRAVITY_START" />
+            <item name="end" value="ZS_GRAVITY_END" />
+            <item name="top" value="ZS_GRAVITY_TOP" />
+            <item name="bottom" value="ZS_GRAVITY_BOTTOM" />
+            <item name="center_vertical" value="ZS_GRAVITY_VCENTER" />
+            <item name="center_horizontal" value="ZS_GRAVITY_HCENTER" />
+            <item name="center" value="ZS_GRAVITY_CENTER" />
+            <item name="min" value="ZS_SCALE_MIN" />
+            <item name="max" value="ZS_SCALE_MAX" />
+            <item name="width" value="ZS_SCALE_WIDTH" />
+            <item name="height" value="ZS_SCALE_HEIGHT" />
+        </attr>
+        <attr name="icGravity" translate="Z_ICON_GRAVITY" format="flags">
+            <item name="start" value="ZS_GRAVITY_START" />
+            <item name="end" value="ZS_GRAVITY_END" />
+            <item name="top" value="ZS_GRAVITY_TOP" />
+            <item name="bottom" value="ZS_GRAVITY_BOTTOM" />
+            <item name="center_vertical" value="ZS_GRAVITY_VCENTER" />
+            <item name="center_horizontal" value="ZS_GRAVITY_HCENTER" />
+            <item name="center" value="ZS_GRAVITY_CENTER" />
+            <item name="min" value="ZS_SCALE_MIN" />
+            <item name="max" value="ZS_SCALE_MAX" />
+            <item name="width" value="ZS_SCALE_WIDTH" />
+            <item name="height" value="ZS_SCALE_HEIGHT" />
+        </attr>
+        <attr name="behavior" translate="Z_BEHAVIOR" format="flags">
+            <item name="none" value="0" />
+            <item name="clickable" value="ZS_CLICKABLE" />
+            <item name="longClickable" value="ZS_LCLICKABLE" />
+            <item name="focusable" value="ZS_FOCUSABLE" />
+            <item name="focusableInTouch" value="ZS_FOCUSABLE_IN_TOUCH" />
+            <item name="touchable" value="ZS_TOUCHABLE" />
+        </attr>
+        <attr name="visibled" translate="Z_VISIBLED" format="boolean" />
+        <attr name="tap" translate="Z_TAP" format="enum">
+            <item name="pressed" value="ZS_PRESSED" />
+            <item name="inverted" value="ZS_INVERTED" />
+            <item name="hovered" value="ZS_HOVERED" />
+        </attr>
+        <attr name="decorate" translate="Z_DECORATE" format="flags">
+            <item name="glow" value="ZS_GLOW" />
+            <item name="overscroll" value="ZS_OVERSCROLL" />
+            <item name="vscrollbar" value="ZS_VSCROLLBAR" />
+            <item name="hscrollbar" value="ZS_HSCROLLBAR" />
+            <item name="scrollbar" value="ZS_SCROLLBAR" />
+            <item name="readOnly" value="ZS_READ_ONLY" />
+            <item name="tips" value="ZS_TIPS" />
+            <item name="alwaysSel" value="ZS_ALWAYS_SEL" />
+            <item name="checked" value="ZS_CHECKED" />
+            <item name="disabled" value="ZS_DISABLED" />
+        </attr>
+        <attr name="mask" translate="Z_MASK" format="drawable" />
+        <attr name="mskColor" translate="Z_MASK_COLOR" format="color" />
+        <attr name="mskTiles" translate="Z_MASK_TILES" format="integer" />
+        <attr name="mskGravity" translate="Z_MASK_GRAVITY" format="enum">
+            <item name="min" value="ZS_SCALE_MIN" />
+            <item name="max" value="ZS_SCALE_MAX" />
+            <item name="width" value="ZS_SCALE_WIDTH" />
+            <item name="height" value="ZS_SCALE_HEIGHT" />
+        </attr>
+        <attr name="bkText" translate="Z_TEXT_BACKGROUND" format="drawable" />
+        <attr name="bkTextColor" translate="Z_TEXT_BACKGROUND_COLOR" format="color" />
+        <attr name="font" translate="Z_TEXT_FONT" format="drawable" />
+        <attr name="textStyle" translate="Z_TEXT_STYLE" format="flags">
+            <item name="normal" value="ZS_TEXT_NORMAL" />
+            <item name="bold" value="ZS_TEXT_BOLD" />
+            <item name="italic" value="ZS_TEXT_ITALIC" />
+            <item name="bold_italic" value="ZS_TEXT_BOLD_ITALIC" />
+            <item name="strike" value="ZS_TEXT_STRIKE" />
+            <item name="underline" value="ZS_TEXT_UNDERLINE" />
+            <item name="mono" value="ZS_TEXT_MONO" />
+        </attr>
+        <attr name="textColor" translate="Z_TEXT_FOREGROUND_COLOR" format="color" />
+        <attr name="textSize" translate="Z_TEXT_SIZE" format="dimension" />
+        <attr name="textLines" translate="Z_TEXT_LINES" format="integer" />
+        <attr name="textLength" translate="Z_TEXT_LENGTH" format="integer" />
+        <attr name="textDistance" translate="Z_TEXT_DISTANCE" format="dimension" />
+        <attr name="textShadowColor" translate="Z_TEXT_SHADOW_COLOR" format="color" />
+        <attr name="textHighlightColor" translate="Z_TEXT_HIGHLIGHT_COLOR" format="color" />
+        <attr name="textShadowOffset" translate="Z_TEXT_SHADOW_OFFS" format="dsize" />
+        <attr name="textEllipsis" translate="Z_TEXT_ELLIPSIS" format="enum">
+            <item name="none" value="ZS_ELLIPSIS_NONE" />
+            <item name="start" value="ZS_ELLIPSIS_START" />
+            <item name="middle" value="ZS_ELLIPSIS_MIDDLE" />
+            <item name="end" value="ZS_ELLIPSIS_END" />
+        </attr>
+        <attr name="formMode" translate="Z_MODE" format="flags">
+            <item name="none" value="ZS_FORM_NONE" />
+            <item name="ok" value="ZS_FORM_OK" />
+            <item name="yes_no" value="ZS_FORM_YES_NO" />
+            <item name="yes_no_def" value="ZS_FORM_YES_NO_DEF" />
+            <item name="close" value="ZS_FORM_CLOSE" />
+            <item name="terminate" value="ZS_FORM_TERMINATE" />
+        </attr>
+        <attr name="icon" translate="Z_ICON" format="drawable" />
+        <attr name="icScale" translate="Z_ICON_SCALE" format="float" />
+        <attr name="icColor" translate="Z_ICON_COLOR" format="color" />
+        <attr name="icTiles" translate="Z_ICON_TILES" format="integer" />
+        <attr name="chartMode" translate="Z_MODE" format="flags">
+            <item name="diagramm" value="ZS_CHART_DIAGRAMM" />
+            <item name="graph" value="ZS_CHART_GRAPH" />
+            <item name="circular" value="ZS_CHART_CIRCULAR" />
+            <item name="stretch" value="ZS_CHART_STRETCH" />
+            <item name="scroll" value="ZS_CHART_SCROLL" />
+        </attr>
+        <attr name="autofillHints" translate="Z_MODE" format="enum">
+            <item name="text" value="ZS_EDIT_TEXT" />
+            <item name="number" value="ZS_EDIT_NUMERIC" />
+            <item name="phone" value="ZS_EDIT_PHONE" />
+            <item name="mail" value="ZS_EDIT_MAIL" />
+            <item name="password" value="ZS_EDIT_PASSWORD" />
+            <item name="zx" value="ZS_EDIT_ZX_DATA" />
+        </attr>
+        <attr name="speedTrack" translate="Z_SPEED_TRACK" format="float" />
+        <attr name="sliderMode" translate="Z_MODE" format="flags">
+            <item name="none" value="ZS_SLIDER_NONE" />
+            <item name="rotate" value="ZS_SLIDER_ROTATE" />
+            <item name="scale" value="ZS_SLIDER_SCALE" />
+        </attr>
+        <attr name="lines" translate="Z_LINES" format="integer" />
+        <attr name="spacingLine" translate="Z_SPACING_LINE" format="dimension" />
+        <attr name="spacingCell" translate="Z_SPACING_CELL" format="dimension" />
+        <attr name="cellSize" translate="Z_CELL_SIZE" format="dimension" />
+        <attr name="gridMode" translate="Z_MODE" format="enum">
+            <item name="cell" value="ZS_GRID_CELL" />
+            <item name="spacing" value="ZS_GRID_SPACING" />
+            <item name="uniform" value="ZS_GRID_UNIFORM" />
+        </attr>
+        <attr name="primary" translate="Z_PRIMARY" format="color" />
+        <attr name="selector" translate="Z_SELECTOR" format="drawable" />
+        <attr name="selColor" translate="Z_SELECTOR_COLOR" format="color" />
+        <attr name="selTiles" translate="Z_SELECTOR_TILES" format="integer" />
+        <attr name="divider" translate="Z_DIVIDER" format="drawable" />
+        <attr name="divColor" translate="Z_DIVIDER_COLOR" format="color" />
+        <attr name="divTiles" translate="Z_DIVIDER_TILES" format="integer" />
+        <attr name="divSize" translate="Z_DIVIDER_SIZE" format="complexH" />
+        <attr name="divType" translate="Z_DIVIDER_TYPE" format="flags">
+            <item name="begin" value="ZS_DIVIDER_BEGIN" />
+            <item name="middle" value="ZS_DIVIDER_MIDDLE" />
+            <item name="end" value="ZS_DIVIDER_END" />
+        </attr>
+        <attr name="sizeScrollBars" translate="Z_SCROLLBAR_SIZE" format="dimension" />
+        <attr name="fadeScrollBars" translate="Z_SCROLLBAR_FADE" format="boolean" />
+        <attr name="tilesScrollBars" translate="Z_SCROLLBAR_TILES" format="integer" />
+        <attr name="shaderScrollBars" translate="Z_SCROLLBAR_SHADER" format="string" />
+        <attr name="sizeTouch" translate="Z_SIZE_TOUCH" format="dsize" />
+        <attr name="nameView" translate="Z_NAME_VIEW" format="string" />
+        <attr name="typeView" translate="Z_TYPE_VIEW" format="string" />
+        <attr name="adapterData" translate="Z_ADAPTER_DATA" format="string" />
+        <attr name="asset" translate="Z_ASSET" format="string" />
+        <attr name="stylesItem" translate="Z_STYLES_ITEM" format="reference" />
+        <attr name="bkShader" translate="Z_BACKGROUND_SHADER" format="string" />
+        <attr name="fkShader" translate="Z_FOREGROUND_SHADER" format="string" />
+        <attr name="textShader" translate="Z_TEXT_SHADER" format="string" />
+        <attr name="mskShader" translate="Z_MASK_SHADER" format="string" />
+        <attr name="divShader" translate="Z_DIVIDER_SHADER" format="string" />
+        <attr name="selShader" translate="Z_SELECTOR_SHADER" format="string" />
+        <attr name="icShader" translate="Z_ICON_SHADER" format="string" />
+        <!-- атрибуты темы -->
+        <attr name="themeName" translate="Z_THEME_NAME" format="string" />
+        <attr name="themeFont" translate="Z_THEME_FONT" format="drawable" />
+        <attr name="themeBitmap" translate="Z_THEME_BITMAP" format="drawable" />
+        <attr name="themeIcons" translate="Z_THEME_ICONS" format="drawable" />
+        <attr name="themeColor" translate="Z_THEME_COLOR" format="color" />
+        <attr name="themeColorDivider" translate="Z_THEME_COLOR_DIVIDER" format="color" />
+        <attr name="themeColorSelector" translate="Z_THEME_COLOR_SELECTOR" format="color" />
+        <attr name="themeColorProgress" translate="Z_THEME_COLOR_PROGRESS" format="color" />
+        <attr name="themeColorPrimary" translate="Z_THEME_COLOR_PRIMARY" format="color" />
+        <attr name="themeColorMenu" translate="Z_THEME_COLOR_MENU" format="color" />
+        <attr name="themeColorTabbed" translate="Z_THEME_COLOR_TABBED" format="color" />
+        <attr name="themeColorTextText" translate="Z_THEME_COLOR_TEXT_TEXT" format="color" />
+        <attr name="themeColorTextHighlight" translate="Z_THEME_COLOR_TEXT_HIGHLIGHT" format="color" />
+        <attr name="themeColorTextShadow" translate="Z_THEME_COLOR_TEXT_SHADOW" format="color" />
+        <attr name="themeColorTextMessage" translate="Z_THEME_COLOR_TEXT_MESSAGE" format="color" />
+        <attr name="themeColorTextHint" translate="Z_THEME_COLOR_TEXT_HINT" format="color" />
+        <attr name="themeColorTextHeader" translate="Z_THEME_COLOR_TEXT_HEADER" format="color" />
+        <attr name="themeColorTextUrl" translate="Z_THEME_COLOR_TEXT_URL" format="color" />
+        <attr name="themeColorTextTabbed" translate="Z_THEME_COLOR_TEXT_TABBED" format="color" />
+        <attr name="themeColorTextProgress" translate="Z_THEME_COLOR_TEXT_PROGRESS" format="color" />
+        <attr name="themeColorTextMenu" translate="Z_THEME_COLOR_TEXT_MENU" format="color" />
+        <attr name="themeColorBackgroundHighlight" translate="Z_THEME_COLOR_BK_HIGHLIGHT" format="color" />
+        <attr name="themeTile1Progress" translate="Z_THEME_TILE1_PROGRESS" format="integer" />
+        <attr name="themeTile2Progress" translate="Z_THEME_TILE2_PROGRESS" format="integer" />
+        <attr name="themeTile1Slider" translate="Z_THEME_TILE1_SLIDER" format="integer" />
+        <attr name="themeTile2Slider" translate="Z_THEME_TILE2_SLIDER" format="integer" />
+        <attr name="themeTilesForm" translate="Z_THEME_TILES_FORM" format="integer" />
+        <attr name="themeTilesWait" translate="Z_THEME_TILES_WAIT" format="integer" />
+        <attr name="themeSizeTextText" translate="Z_THEME_SIZE_TEXT_TEXT" format="dimension" />
+        <attr name="themeLayoutKeyboard" translate="Z_THEME_LAYOUT_KEYBOARD" format="string" />
+        <attr name="themeActionBar" translate="Z_THEME_ACTION_BAR" format="reference" />
+        <attr name="themeModeSlider" translate="Z_THEME_MODE_SLIDER" format="flags">
+            <item name="none" value="ZS_SLIDER_NONE" />
+            <item name="rotate" value="ZS_SLIDER_ROTATE" />
+            <item name="scale" value="ZS_SLIDER_SCALE" />
+        </attr>
+    </attributes>
+    <constructors>
+        <attr name="layout_x" translate="0" format="x" />
+        <attr name="layout_y" translate="0" format="y" />
+        <attr name="layout_width" translate="VIEW_MATCH" format="width" />
+        <attr name="layout_height" translate="VIEW_WRAP" format="height" />
+        <attr name="layout_gravity" translate="0" format="gravity">
+            <item name="start" value="ZS_GRAVITY_START" />
+            <item name="end" value="ZS_GRAVITY_END" />
+            <item name="top" value="ZS_GRAVITY_TOP" />
+            <item name="bottom" value="ZS_GRAVITY_BOTTOM" />
+            <item name="center_vertical" value="ZS_GRAVITY_VCENTER" />
+            <item name="center_horizontal" value="ZS_GRAVITY_HCENTER" />
+            <item name="center" value="ZS_GRAVITY_CENTER" />
+        </attr>
+        <attr name="layout_weight" translate="0" format="y" />
+        <attr name="id" translate="0" format="id" />
+        <attr name="layout_group" translate="0" format="integer" />
+        <attr name="layout_space" translate="0" format="dimension" />
+        <attr name="layout_cells" translate="szi(1, 1)" format="dsize" />
+        <attr name="text" translate="0" format="string" />
+        <attr name="iconka" translate="-1" format="integer" />
+        <attr name="hint" translate="0" format="string" />
+        <attr name="range" translate="szi(0, 1)" format="size" />
+        <attr name="size" translate="szi(1, 1)" format="size" />
+        <attr name="orientation" translate="false" format="enum">
+            <item name="vertical" value="true" />
+            <item name="horizontal" value="false" />
+        </attr>
+        <attr name="progress" translate="0" format="integer" />
+        <attr name="count" translate="0" format="integer" />
+        <attr name="styleCaption" translate="nullptr" format="reference" />
+        <attr name="styleFooter" translate="nullptr" format="reference" />
+        <attr name="chartGravity" translate="bottom" format="enum">
+            <item name="top" value="ZS_GRAVITY_TOP" />
+            <item name="bottom" value="ZS_GRAVITY_BOTTOM" />
+            <item name="center_vertical" value="ZS_GRAVITY_VCENTER" />
+            <item name="start" value="ZS_GRAVITY_START" />
+            <item name="end" value="ZS_GRAVITY_END" />
+            <item name="center_horizontal" value="ZS_GRAVITY_HCENTER" />
+        </attr>
+        <attr name="tabGravity" translate="ZS_GRAVITY_TOP" format="enum">
+            <item name="top" value="ZS_GRAVITY_TOP" />
+            <item name="start" value="ZS_GRAVITY_START" />
+            <item name="end" value="ZS_GRAVITY_END" />
+            <item name="bottom" value="ZS_GRAVITY_BOTTOM" />
+        </attr>
+        <attr name="message" translate="" format="integer" />
+        <attr name="modal" translate="false" format="boolean" />
+    </constructors>
+    <widgets>
+        <attr name="LinearLayout" translate="zLinearLayout" format="orientation" layout="1" remark="0" />
+        <attr name="AbsoluteLayout" translate="zAbsoluteLayout" format="" layout="1" remark="0" />
+        <attr name="FrameLayout" translate="zFrameLayout" format="" layout="1" remark="0" />
+        <attr name="CellLayout" translate="zCellLayout" format="layout_cells|layout_space" layout="1" remark="0" />
+        <attr name="SurfaceView" translate="zViewSurface" format="size" layout="1" remark="0" />
+        <attr name="TabHost" translate="zTabLayout" format="styleCaption|tabGravity" layout="1" remark="0" />
+        <attr name="RelativeLayout" translate="zViewForm" format="styleCaption|styleFooter|text|modal" layout="1" remark="1" />
+        <attr name="FormMsg" translate="zViewFormMessage" format="styleCaption|styleFooter|text|message|modal" layout="1" remark="1" />
+        <attr name="ScrollView" translate="zScrollLayout" format="orientation" layout="1" remark="0" />
+        <attr name="EditLayout" translate="zEditLayout" format="" layout="1" remark="0" />
+        <attr name="TextView" translate="zViewText" format="text" />
+        <attr name="SeekBar" translate="zViewSlider" format="text|range|progress|orientation" />
+        <attr name="ProgressBar" translate="zViewProgress" format="text|range|progress|orientation" />
+        <attr name="Switch" translate="zViewSwitch" format="text" />
+        <attr name="Button" translate="zViewButton" format="text|iconka" />
+        <attr name="CheckBox" translate="zViewCheck" format="text" />
+        <attr name="RadioButton" translate="zViewRadio" format="text|layout_group" />
+        <attr name="RatingBar" translate="zViewChart" format="chartGravity" />
+        <attr name="EditText" translate="zViewEdit" format="hint" />
+        <attr name="ListView" translate="zViewRibbon" format="orientation" />
+        <attr name="Spinner" translate="zViewSelect" format="" />
+        <attr name="GridView" translate="zViewGrid" format="orientation" />
+        <attr name="NavigationView" translate="zViewController" format="file" />
+        <attr name="TabWidget" translate="zTabWidget" format="text|iconka" layout="1" remark="0" />
+        <attr name="VideoView" translate="zViewVideo" format="file|assets" />
+        <attr name="ImageView" translate="zViewImage" format="iconka" />
+    </widgets>
+</root>

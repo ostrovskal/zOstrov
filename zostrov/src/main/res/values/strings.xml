@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">zOstrov</string>
+    <string name="themeDark">_dark</string>
+    <string name="themeLight">_light</string>
+    <string name="acontrollerMap">acontrollerMap.xml</string>
+    <string name="ccontrollerMap">ccontrollerMap.xml</string>
+    <string-array name="menuEditor">
+        <item>Copy</item>
+        <item>Paste</item>
+        <item>Cut</item>
+        <item>Delete</item>
+    </string-array>
+</resources>

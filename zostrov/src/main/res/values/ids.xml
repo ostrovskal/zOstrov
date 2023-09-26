@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="ccontroller" type="id"/>
+    <item name="acontroller" type="id"/>
+    <item name="menuApp" type="id" />
+    <item name="menuOverflow" type="id" />
+    <item name="ok" type="id" />
+    <item name="yes" type="id" />
+    <item name="no" type="id" />
+    <item name="def" type="id" />
+    <item name="toast" type="id" />
+    <item name="actionBar" type="id" />
+    <item name="wndPopup" type="id" />
+    <item name="root" type="id" />
+    <item name="common" type="id" />
+    <item name="keyboard" type="id" />
+    <item name="wait" type="id" />
+</resources>
