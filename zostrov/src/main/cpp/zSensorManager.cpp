@@ -6,15 +6,17 @@
 #include "zostrov/zSensorManager.h"
 
 zSensorManager::zSensorManager() {
+    DLOG("************Sensors Available********************");
+/*
     if((engine = ASensorManager_getInstance())) {
         ASensorList sensorList;
         int numSensors(ASensorManager_getSensorList(engine, &sensorList));
-        DLOG("************Sensors Available********************");
         for(int count = 0 ; count < numSensors ; count++ ) {
             auto sens(sensorList[count]);
             DLOG("%s(%s<%i>)", ASensor_getName(sens), ASensor_getVendor(sens), ASensor_getType(sens));
         }
     }
+*/
 }
 
 int sensProc(int, int, void* _sens) {

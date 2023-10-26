@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<keyboards default="en_large_abc" minHeight="35">
+<keyboards default="en_large_abc" minHeight="25">
 	<layout name="en_little_abc" shift="en_large_abc"  spec="digit123" lang="ru_little_abc" width="631" height="193">
 	<button x="1" y="145" width="92" height="47" spec="SPEC" com="?123" alt="?123"/>
 	<button x="94" y="145" width="62" height="47" spec="LANG" icon="iconLang"/>

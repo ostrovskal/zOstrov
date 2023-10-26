@@ -52,7 +52,7 @@ struct _z {
 				sliderMinHeight	= 32, 	sliderMaxWidth	= 70, 	sliderMaxHeight	= 42, 
 				waitMaxWidth	= 80, 	waitMaxHeight	= 80, 	selectMinWidth	= 60, 
 				selectMinHeight	= 32, 	chartMinWidth	= 5, 	chartMinHeight	= 32, 
-				editMinWidth	= 90, 	editMinHeight	= 40, 	divider	= 4, 	menuText	= 28, 
+				editMinWidth	= 90, 	editMinHeight	= 40, 	divider	= 4, 	menuText	= 26,
 				hintText	= 16, 	textText	= 20, 	messageText	= 26, 	headerText	= 24, 
 			};
 		}; 

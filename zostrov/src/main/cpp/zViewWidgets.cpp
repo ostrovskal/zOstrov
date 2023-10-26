@@ -386,22 +386,40 @@ zViewController::zViewController(zStyle *_styles, i32 _id, i32 _base, u32 _fileM
     if(xml.isValid()) {
         auto root(xml.getRoot());
         if(root->getName() == "controller") {
-            auto count(root->getCountNodes() / 2);
-            for(int i = 0; i < count; i++) {
-                auto s1(root->getTag(i * 2)->getVal()), s2(root->getTag(i * 2 + 1)->getVal());
-                if(!map) {
-                    cellDebug.set(s1.count() / 2, count);
-                    map = new u8[count * cellDebug.w];
+            // габариты кнопок + массив декораций
+            auto keys(root->getTag("keys"));
+            if(keys) {
+                auto count(keys->getCountNodes());
+                for(int i = 0 ; i < count; i++) {
+                    auto k(keys->getTag(i));
+                    if(k->getName() != "key") continue;
+                    decors += new DECORATE(
+                            z_ston(k->getAttrVal("x", "0"), RADIX_DEC),
+                            z_ston(k->getAttrVal("y", "0"), RADIX_DEC),
+                            z_ston(k->getAttrVal("w", "32"), RADIX_DEC),
+                            z_ston(k->getAttrVal("h", "32"), RADIX_DEC));
                 }
-                for(int j = 0; j < cellDebug.w; j++) {
-                    u8 bits(0);
-                    auto _11(s1[j * 2]), _12(s1[j * 2 + 1]);
-                    auto _21(s2[j * 2]), _22(s2[j * 2 + 1]);
-                    if(_11 != '_') bits |= 1 << (_11 - '0');
-                    if(_12 != '_') bits |= 1 << (_12 - '0');
-                    if(_21 != '_') bits |= 1 << (_21 - '0');
-                    if(_22 != '_') bits |= 1 << (_22 - '0');
-                    map[i * cellDebug.w + j] = bits;
+            }
+            // карта контроллера
+            auto maps(root->getTag("map"));
+            if(maps) {
+                auto count(maps->getCountNodes() / 2);
+                for(int i = 0; i < count; i++) {
+                    auto s1(maps->getTag(i * 2)->getVal()), s2(maps->getTag(i * 2 + 1)->getVal());
+                    if(!map) {
+                        cellDebug.set(s1.count() / 2, count);
+                        map = new u8[count * cellDebug.w];
+                    }
+                    for(int j = 0; j < cellDebug.w; j++) {
+                        u8 bits(0);
+                        auto _11(s1[j * 2]), _12(s1[j * 2 + 1]);
+                        auto _21(s2[j * 2]), _22(s2[j * 2 + 1]);
+                        if(_11 != '_') bits |= 1 << (_11 - '0');
+                        if(_12 != '_') bits |= 1 << (_12 - '0');
+                        if(_21 != '_') bits |= 1 << (_21 - '0');
+                        if(_22 != '_') bits |= 1 << (_22 - '0');
+                        map[i * cellDebug.w + j] = bits;
+                    }
                 }
             }
             setSize(szi(lps.w, lps.h));
@@ -433,44 +451,33 @@ i32 zViewController::onTouchEvent() {
 }
 
 void zViewController::setDecorateKey(int idx, cstr text, int icon) {
-    if(idx >= 0 && idx < 4) {
-        decors[idx].icon = icon;
-        decors[idx].text = text;
+    if(idx >= 0 && idx < decors.size()) {
+        decors[idx]->icon = icon;
+        decors[idx]->text = text;
     }
     invalidate();
 }
 
 void zViewController::onDraw() {
-    static int rects[] = {  0, 32, 54, 62,
-                           32,  0, 62, 54,
-                           74, 32, 54, 62,
-                           32, 74, 62, 54,
-                            0, 38, 50, 50,
-                           38,  0, 50, 50,
-                           76, 38, 50, 50,
-                           38, 76, 50, 50 };
     // базовый тайл
     auto but(buttons);
     drw[DRW_FK]->draw(&rview);
     // нарисовать надписи/иконки
-    rti r; float xx((float)rview.w / 128.0f), yy((float)rview.h / 128.0f);
+    float xx((float)rview.w / 128.0f), yy((float)rview.h / 128.0f);
     button->updateStatus(ZS_VISIBLED, true);
-    int offs((id == z.R.id.acontroller) * 16);
     for(int i = 0 ; i < decors.size(); i++) {
-        auto& d(decors[i]); auto is(but & 1);
-        auto color(is ? z.R.color.red : z.R.color.white);
-        if(is) dr[i]->draw(&rview);
-        r.set(rects[offs + i * 4 + 0] + is * 2, rects[offs + i * 4 + 1] + is * 2,
-              rects[offs + i * 4 + 2], rects[offs + i * 4 + 3]);
+        auto& d(decors[i]); auto pressed((but & 1) << 1);
+        auto color(pressed ? z.R.color.red : z.R.color.white);
+        if(pressed) dr[i]->draw(&rview);
+        auto r(d->rect); r.offset(pressed, pressed);
         r.x = rview.x + z_round((float)r.x * xx); r.w = z_round((float)r.w * xx);
         r.y = rview.y + z_round((float)r.y * yy); r.h = z_round((float)r.h * yy);
         szm spec(zMeasure(MEASURE_EXACT, r.w), zMeasure(MEASURE_EXACT, r.h));
-        button->setIcon(d.icon); button->setTextSpecial(d.text, spec);
+        button->setIcon(d->icon); button->setTextSpecial(d->text, spec);
         button->setTextColorForeground(color);
         button->setTextColorIcon(color);
         button->setTextSize(z_round((float)22_dp * xx));
-        button->layout(r);
-        button->draw(); but >>= 1;
+        button->layout(r); button->draw(); but >>= 1;
     }
     button->updateStatus(ZS_VISIBLED, false);
 }

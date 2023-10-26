@@ -16,14 +16,14 @@ zViewKeyboard::zViewKeyboard(cstr nameLayouts, zStyle* _styles_base, zStyle* _st
     auto root(xml.getRoot());
     if(root->getName() != "keyboards") { ILOG("Недопустимый XML формат клавиатуры!"); return; }
     // основные
-    minHeight= z_ston(root->getAttrVal("minHeight", "40"), RADIX_DEC);
+    minHeight= z_ston(root->getAttrVal("minHeight", "25"), RADIX_DEC);
     const zXml::zNode* nodeLyt, *nodeBut;
     BUTTON but; idx = 0; auto tex(manager->cache->get(theme->findString(styles_base->_int(Z_ICON, z.R.drawable.zssh)), nullptr));
     while((nodeLyt = root->getTag(idx++))) {
         if(nodeLyt->getName() != "layout") continue;
         auto lyt(new LAYOUT());
         // размер
-        auto bs(z_dp(z_ston(nodeLyt->getAttrVal("baseSize", "25"), RADIX_DEC)));
+        auto bs(z_dp(z_ston(nodeLyt->getAttrVal("baseSize", "20"), RADIX_DEC)));
         lyt->size.w = z_ston(nodeLyt->getAttrVal("width", "1"), RADIX_DEC);
         lyt->size.h = z_ston(nodeLyt->getAttrVal("height", "1"), RADIX_DEC);
         // переключатели

@@ -190,7 +190,12 @@ public:
     void setOnChangeButton(std::function<void(zView*, int)> _button) { onChangeButton = _button; }
     virtual void requestLayout() override;
 protected:
-    struct DECORATE { int icon{-1}; zString8 text{}; };
+    struct DECORATE {
+        DECORATE(int x, int y, int w, int h) : rect(x, y, w, h) { }
+        rti rect{};
+        int icon{-1};
+        zString8 text{};
+    };
     // отрисовка
     virtual void onDraw() override;
     // габариты
@@ -213,7 +218,7 @@ protected:
     // событие
     std::function<void(zView*, int)> onChangeButton;
     // декорации для кнопок
-    zArray<DECORATE> decors{4};
+    zArray<DECORATE*> decors{};
     // для отрисовки текста
     zViewButton* button{nullptr};
 };

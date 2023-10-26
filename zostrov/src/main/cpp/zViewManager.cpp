@@ -127,11 +127,13 @@ bool zViewManager::displayInit() {
 }
 
 void zViewManager::displayDestroy() {
-    zGL::instance()->invalidate();
-    // уничтожить шейдер
-    shaders.clear();
-    DLOG("displayDestroy!");
-    status = Z_QUIT;
+    if(status != Z_QUIT) {
+        zGL::instance()->invalidate();
+        // уничтожить шейдер
+        shaders.clear();
+        DLOG("displayDestroy!");
+        status = Z_QUIT;
+    }
 }
 
 void zViewManager::refreshConfig(AConfiguration* config) {
