@@ -210,14 +210,12 @@ void zDrawable::measure(int width, int height, int pivot, bool isSave) {
     zTexture::TILE_TTL* _tile;
     if(index >= DRW_FBO) {
         // проверить на текстуру
-        if(!(texture && texture->isEqual(width, height))) {
-            if(!texture) texture = new zTexture();
-            if(!texture->makeFBO(width, height)) {
-                ILOG("error makeFBO %s(%i) %ix%i", view->typeName(), view->id, width, height);
-                release(); return;
-            }
-            manager->volumeVideoMemory(width * height * 4, true);
+        if(!texture) texture = new zTexture();
+        if(!texture->makeFBO(width, height)) {
+            ILOG("error makeFBO %s(%i) %ix%i", view->typeName(), view->id, width, height);
+            release(); return;
         }
+        manager->volumeVideoMemory(width * height * 4, true);
     }
     if(texture && (_tile = texture->getTile(tile))) {
         rti tex(_tile->rect);
