@@ -106,13 +106,6 @@ void zViewForm::stateView(STATE& state, bool save, int& index) {
 	}
 }
 
-void zViewForm::onLayout(crti& pos, bool changed) {
-	if(drw[DRW_MSK]->isValid()) {
-		int x = 0;
-	}
-	zLinearLayout::onLayout(pos, changed);
-}
-
 i32 zViewForm::touchEventDispatch(AInputEvent *event) {
 	if(isVisibled()) {
 		auto action(zTouch::getEventAction(event));

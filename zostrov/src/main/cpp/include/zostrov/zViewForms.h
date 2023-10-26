@@ -25,14 +25,13 @@ public:
     virtual int updateVisible(bool set) override;
     // добавление дочерних
     virtual zView* attach(zView *v, int width, int height, int where = -1) override;
+    // закрыть форму
+    virtual void close(int code);
     // установка события закрытия формы
     void setOnClose(std::function<int(zViewForm*, int code)> _close) { onClose = std::move(_close); }
-    // закрыть форму
-    void close(int code);
     // добавить элемент в контент
     zView* setContent(zView* view);
 protected:
-    virtual void onLayout(crti& pos, bool changed) override;
     // обработка касания
     virtual i32 touchEventDispatch(AInputEvent *event) override;
     // область обрезки

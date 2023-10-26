@@ -52,7 +52,7 @@
     <!-- цвет прогресса и текста подсказки прогресса -->
     <color name="progressDark">#af303030</color>
     <color name="progressLight">#af505050</color>
-    <color name="primaryDark">#0070ff</color>
+    <color name="primaryDark">#F31302</color>
     <color name="primaryLight">#00ff00</color>
     <color name="textProgressDark">#b0b0b0</color>
     <color name="textProgressLight">#ffffff</color>

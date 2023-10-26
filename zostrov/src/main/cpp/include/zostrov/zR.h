@@ -31,7 +31,7 @@ struct _z {
 				textShadowDark	= 0xFF101010, 	textShadowLight	= 0xFF101010, 
 				tabbedDark	= 0xFF00A0A0, 	tabbedLight	= 0xFFA0A000, 	textTabbedDark	= 0xFF00B0B0, 
 				textTabbedLight	= 0xFF707000, 	progressDark	= 0xAF303030, 
-				progressLight	= 0xAF505050, 	primaryDark	= 0xFF0070FF, 	primaryLight	= 0xFF00FF00, 
+				progressLight	= 0xAF505050, 	primaryDark	= 0xFFF31302, 	primaryLight	= 0xFF00FF00,
 				textProgressDark	= 0xFFB0B0B0, 	textProgressLight	= 0xFFFFFFFF, 
 				menuDark	= 0xFF0140AF, 	menuLight	= 0xFF6F4000, 	textMenuDark	= 0xFFFFFFFF, 
 				textMenuLight	= 0xFFFFFFFF, 	textHintDark	= 0xFF606060, 	textHintLight	= 0xFF606060, 

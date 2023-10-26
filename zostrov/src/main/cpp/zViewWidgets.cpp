@@ -476,7 +476,7 @@ void zViewController::onDraw() {
         button->setIcon(d->icon); button->setTextSpecial(d->text, spec);
         button->setTextColorForeground(color);
         button->setTextColorIcon(color);
-        button->setTextSize(z_round((float)22_dp * xx));
+        button->setTextSize(z_round((float)20_dp * xx));
         button->layout(r); button->draw(); but >>= 1;
     }
     button->updateStatus(ZS_VISIBLED, false);
