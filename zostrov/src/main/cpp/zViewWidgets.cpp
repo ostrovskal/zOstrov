@@ -201,6 +201,11 @@ void zViewSlider::setRange(cszi& r) {
     }
 }
 
+void zViewSlider::disable(bool set) {
+    zViewText::disable(set);
+    updateLayout(false);
+}
+
 void zViewSlider::onInit(bool _theme) {
     zViewText::onInit(_theme);
     // режим
@@ -368,10 +373,8 @@ void zViewProgress::updateTrumb() {
 }
 
 void zViewProgress::showTips() {
-    if(isTips()) {
-        auto _pos(z_round((float)pos / (float)range.interval() * 100.0f));
-        setText(z_fmt8("%s%i%%", tips.str(), _pos), false);
-    }
+    percent = z_round((float)pos / (float)range.interval() * 100.0f);
+    if(isTips()) setText(z_fmt8("%s%i%%", tips.str(), percent), false);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

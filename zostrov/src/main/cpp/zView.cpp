@@ -62,7 +62,6 @@ void zView::onInit(bool _theme) {
             case Z_TRANSLATE_X:   		trans.x     = v->f; break;
             case Z_TRANSLATE_Y:   		trans.y     = v->f; break;
             case Z_ALPHA:				alpha 	    = v->f; break;
-            case Z_FBO:                 setDrawable(nullptr, DRW_FBO); break;
             case Z_BEHAVIOR:            updateStatus(ZS_BEHAVIOR_MASK, val, true); break;
             case Z_VISIBLED:            updateStatus(ZS_VISIBLED, val); break;
             case Z_TAP:			        updateStatus(ZS_TAP_MASK, val, true); break;
@@ -97,6 +96,7 @@ void zView::onInit(bool _theme) {
             case Z_BACKGROUND_COLOR:
             case Z_BACKGROUND_TILES:
             case Z_BACKGROUND_PADDING:  drParams[DR_BK].set(Z_BACKGROUND, attr, val); break;
+            case Z_FBO:                 if(val) setDrawable(nullptr, DRW_FBO); else removeDrawable(DRW_FBO); break;
         }
     });
     // базовые отображатели

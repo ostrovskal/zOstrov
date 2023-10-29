@@ -42,7 +42,7 @@ public:
         return ptf(p.x / cell.w, p.y / cell.h);
     }
     // Вернуть признак времени задержки, с учетом максимального времени [limit] */
-    bool delayed(u64 limit) const { return ((ctm - btm) / 1000000) >= limit; }
+    bool delayed(u64 limit) const { return getDelay() >= limit; }
     // Вернуть признак того, что нажатие было только что */
     bool just() const { return (ctm - dtm) < 5; }
     // Найти индекс области в который попадает точка [p] из массива областей [rcElems]
@@ -62,6 +62,8 @@ public:
     // Клик в области [rc]
     bool click(crti& r) const;
     bool click() const;
+    // время нажатия
+    int getDelay() const { return (ctm - btm) / 1000000; }
     // Ротация вокруг центральной точки [center] и чувствительностью [cell]
     void rotate(cszi& cell, cptf& center, const std::function<void(float, float, bool)>& fn);
     // Перетаскивание для касания с чувствительностью [cell]

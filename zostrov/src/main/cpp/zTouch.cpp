@@ -77,7 +77,7 @@ bool zTouch::event(AInputEvent* event, crti& r) {
 
 void zTouch::reset() {
     btm = ctm = 0UL; id = -1; oldAngle = 10000.0f; own = nullptr;
-    bpt.set(MAXFLOAT, MAXFLOAT); cpt.set(MAXFLOAT, MAXFLOAT);
+    //bpt.set(MAXFLOAT, MAXFLOAT); cpt.set(MAXFLOAT, MAXFLOAT);
     act = AMOTION_EVENT_ACTION_CANCEL; flags = 0;
 }
 

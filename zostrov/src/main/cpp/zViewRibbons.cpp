@@ -30,6 +30,9 @@ void zViewBaseRibbon::notifyEvent(HANDLER_MESSAGE *msg) {
         } else post(MSG_ANIM, duration);
         showSelector(clickItem != -1);
         invalidate();
+    } else if(msg->what == MSG_ITEMS && countChildren()) {
+        // чтобы не вызывать до бесконечности(если нет элементов)
+        setItemSelected(msg->arg1);
     }
     zViewGroup::notifyEvent(msg);
 }
@@ -288,15 +291,19 @@ void zViewBaseRibbon::showSelector(bool show) {
 void zViewBaseRibbon::setItemSelected(int item) {
     flyng->stop();
     auto _count(countChildren() - 1);
-    if(item >= countItem) item = countItem - 1;
-    if(item < 0) item = 0;
-    firstItem = item - _count / 2;
-    if(selectItem != item) {
-        selectItem = item;
-        // вызов события
-        post(MSG_SELECTED, duration, selectItem);
+    if(_count < 0) {
+        post(MSG_ITEMS, 20, item);
+    } else {
+        if(item >= countItem) item = countItem - 1;
+        if(item < 0) item = 0;
+        firstItem = item - _count / 2;
+        if(selectItem != item) {
+            selectItem = item;
+            // вызов события
+            post(MSG_SELECTED, duration, selectItem);
+        }
+        requestPosition();
     }
-    requestPosition();
 }
 
 void zViewBaseRibbon::onLayout(crti &position, bool changed) {
@@ -313,6 +320,7 @@ void zViewBaseRibbon::onLayout(crti &position, bool changed) {
     detachAllViews(false);
     // заполнить
     if(countItem > 0) fill(deltaItem, true);
+    // показать прокрутку
     awakenScroll();
     // отображаем/скрываем выделение
     showSelector(clickItem != -1);

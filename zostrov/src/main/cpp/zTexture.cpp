@@ -174,11 +174,19 @@ void zTexture::setFBO(bool set, bool clear) {
     if(set) {
         // устанавливаем активный FBO
         glBindFramebuffer(GL_FRAMEBUFFER, idFBO);
+        GLenum fboStatus;
+        if((fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE) {
+            ILOG("glCheckFramebufferStatus error 0x%X", fboStatus);
+            release();
+            return;
+        }
         sz = tiles[0].rect.size();
         // производим очистку буфера цвета
         if(clear) {
             glDisable(GL_SCISSOR_TEST);
+//            glClearColor(1,1,1,1);
             glClear(GL_COLOR_BUFFER_BIT);
+  //          glClearColor(0,0,0,0);
             glEnable(GL_SCISSOR_TEST);
         }
     } else {

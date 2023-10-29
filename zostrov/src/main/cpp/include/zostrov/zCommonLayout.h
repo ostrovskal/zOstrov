@@ -61,6 +61,7 @@ public:
     virtual int computeScrollExtent(bool _vert) const override { return sizes(_vert) - pad.extent(_vert); }
     virtual cstr typeName() const override { return "zScrollLayout"; }
 protected:
+    virtual pti applyGravity(crti& sizeParent, crti& sizeChild, u32 _gravity) override;
     virtual void onMeasure(cszm& spec) override;
     virtual void onLayout(crti &position, bool changed) override;
     virtual bool touchChildren() override;

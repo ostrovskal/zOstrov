@@ -432,6 +432,12 @@ zViewDropdown* zViewManager::getDropdown(zView* _owner, zStyle* _style, zBaseAda
     return dropdown;
 }
 
+void zViewManager::eraseAllEventsView(zView* view) {
+//    if(zView::touch && zView::touch->own == view)
+//        zView::touch->own = nullptr;
+    event.erase(view, 0);
+}
+
 void zViewManager::showSoftKeyboard(u32 idOwner, bool _show) {
     keyboard->show(idOwner, _show);
 }

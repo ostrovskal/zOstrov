@@ -28,6 +28,8 @@ constexpr int MSG_SCROLLING         = 6;
 constexpr int MSG_EDIT_CARET        = 7;
 constexpr int MSG_EDIT_MENU         = 8;
 constexpr int MSG_DROP_CLICK        = 9;
+// список устанавливает для себя выделенный элемент
+constexpr int MSG_ITEMS             = 10;
 
 constexpr int VIEW_MATCH		   = -1;
 constexpr int VIEW_WRAP			   = -2;

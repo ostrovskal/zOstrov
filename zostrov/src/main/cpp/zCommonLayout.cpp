@@ -256,6 +256,12 @@ void zScrollLayout::onMeasure(cszm& spec) {
     childSize = z_max(size[vert], rclient[vert + 2]);
 }
 
+pti zScrollLayout::applyGravity(crti& sizeParent, crti& sizeChild, u32 _gravity) {
+    auto ret(zView::applyGravity(sizeParent, sizeChild, _gravity));
+    if(sizeChild[vert + 2] > sizeParent[vert + 2]) ret[vert] = 0;
+    return ret;
+}
+
 void zScrollLayout::onLayout(crti &position, bool changed) {
     zView::onLayout(position, changed);
     auto child(atView(0));

@@ -386,11 +386,12 @@ void zViewEdit::onMeasure(cszm& spec) {
     wmax = rclient.w - distance - butW - ipad.extent(false);
 }
 
-void zViewEdit::setText(czs& _text, bool force) {
+zViewText* zViewEdit::setText(czs& _text, bool force) {
     clearSelected(false);
     zViewText::setText(_text, force);
     visibleIndex = 0; caretIndex = correct(_text.count());
     post(MSG_EDIT, 10, caretIndex);
+    return this;
 }
 
 void zViewEdit::onChangeFocus(bool set) {

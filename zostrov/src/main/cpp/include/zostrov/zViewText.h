@@ -56,11 +56,11 @@ public:
     // событие загрузки стилей
     virtual void onInit(bool theme) override;
     // установить текст из строки
-    virtual void setText(czs& _text, bool force = false);
+    virtual zViewText* setText(czs& _text, bool force = false);
     // вернуть имя типа
     virtual cstr typeName() const override { return "zViewText"; }
     // установить текст по идентификатору из ресурсов
-    void setText(u32 _text) { setText(theme->findString(_text), false); }
+    zViewText* setText(u32 _text) { setText(theme->findString(_text), false); return this; }
     // специальный - для клавиатурных кнопок
     void setTextSpecial(czs& _text, cszm& spec);
     // установка текста парсингом из html
@@ -70,14 +70,14 @@ public:
     // вернуть макс. линий
     int getLines() const { return maxLines; }
     // установка размера шрифта
-    void setTextSize(int _size) { if(defPaint->getSize() != _size) { defPaint->setSize(_size); requestLayout(); } }
+    zViewText* setTextSize(int _size) { if(defPaint->getSize() != _size) { defPaint->setSize(_size); requestLayout(); } return this; }
     // установка цветов
-    void setTextColorDefault(u32 _value) { colors[TEXT_COLOR_DEFAULT] = _value; }
-    void setTextColorForeground(u32 _value) { if(defPaint->fkColor != _value) { defPaint->fkColor = _value; invalidate(); } }
-    void setTextColorBackground(u32 _value) { if(defPaint->bkColor != _value) { defPaint->bkColor = _value; invalidate(); } }
-    void setTextColorHighlight(u32 _value) { colors[TEXT_COLOR_HIGHLIGHT] = _value; }
-    void setTextColorShadow(u32 _value) { if(colors[TEXT_COLOR_SHADOW] != _value) { colors[TEXT_COLOR_SHADOW] = _value; invalidate(); } }
-    void setTextColorIcon(u32 _value) { drw[DRW_ICON]->color = _value; invalidate(); }
+    zViewText* setTextColorDefault(u32 _value) { colors[TEXT_COLOR_DEFAULT] = _value; return this; }
+    zViewText* setTextColorForeground(u32 _value) { if(defPaint->fkColor != _value) { defPaint->fkColor = _value; invalidate(); } return this; }
+    zViewText* setTextColorBackground(u32 _value) { if(defPaint->bkColor != _value) { defPaint->bkColor = _value; invalidate(); } return this; }
+    zViewText* setTextColorHighlight(u32 _value) { colors[TEXT_COLOR_HIGHLIGHT] = _value; return this; }
+    zViewText* setTextColorShadow(u32 _value) { if(colors[TEXT_COLOR_SHADOW] != _value) { colors[TEXT_COLOR_SHADOW] = _value; invalidate(); } return this; }
+    zViewText* setTextColorIcon(u32 _value) { drw[DRW_ICON]->color = _value; invalidate(); return this; }
     // получение цветов
     u32 getTextColorDefault() const { return colors[TEXT_COLOR_DEFAULT]; }
     u32 getTextColorForeground() const { return defPaint->fkColor; }
@@ -88,7 +88,7 @@ public:
     // вернуть размер шрифта
     int getTextSize() { return defPaint->getSize(); }
     // установить стиль текста
-    void setTextStyle(u32 _style) { if(defPaint->getStyle() != _style) { defPaint->setStyle(_style); requestLayout(); } }
+    zViewText* setTextStyle(u32 _style) { if(defPaint->getStyle() != _style) { defPaint->setStyle(_style); requestLayout(); } return this; }
     // вернуть текст
     czs& getText() const { return realText; }
     // вернуть стиль текста
@@ -224,7 +224,7 @@ public:
     // событие загрузки стилей
     virtual void onInit(bool theme) override;
     // установить текст из строки
-    virtual void setText(czs& _text, bool force = true) override;
+    virtual zViewText* setText(czs& _text, bool force = true) override;
     // раскладка клавы по умолчанию
     virtual cstr getDefaultKeyboardLayer() const override { return filter ? filter->getKeboardLayer() : nullptr; }
     // вернуть имя типа

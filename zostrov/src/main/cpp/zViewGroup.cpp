@@ -76,6 +76,9 @@ void zViewGroup::_remove(zView* v, bool _del) {
             v->parent = nullptr;
             // удалить из массива дочерних
             children.erase(idx, 1, _del);
+            // удалить из касания
+            if(_del && zView::touch && zView::touch->own == v)
+                zView::touch->reset();//own = nullptr;
         }
     }
 }
@@ -339,7 +342,9 @@ void zViewGroup::awakenScroll() {
 }
 
 void zViewGroup::changeTheme() {
-    for(auto& child : children) child->changeTheme();
+    for(auto child : children) {
+        child->changeTheme();
+    }
     zView::changeTheme();
 }
 

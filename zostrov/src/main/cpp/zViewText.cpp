@@ -42,11 +42,12 @@ void zViewText::updateText() {
     invalidate();
 }
 
-void zViewText::setText(czs& _text, bool force) {
+zViewText* zViewText::setText(czs& _text, bool force) {
     if(force || realText != _text) {
         spans.clear(); if(realText.isEmpty()) requestLayout();
         realText = _text; updateText();
     }
+    return this;
 }
 
 void zViewText::clearCacheSpans(bool del_spans) {

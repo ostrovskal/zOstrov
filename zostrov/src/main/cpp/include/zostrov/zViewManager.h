@@ -142,7 +142,7 @@ public:
     zViewPopup* getPopup() const { return popup; }
     zViewDropdown* getDropdown(zView* _owner, zStyle* _style, zBaseAdapter* _adapter) const;
     // удалить все события связанные с определенным представлением
-    virtual void eraseAllEventsView(zView* view) { event.erase(view, 0); }
+    virtual void eraseAllEventsView(zView* view);
     // вернуть представление по ID
     template<typename T = zView> T* idView(u32 _id) const { return common->idView<T>(_id); }
     // вернуть представление по типу

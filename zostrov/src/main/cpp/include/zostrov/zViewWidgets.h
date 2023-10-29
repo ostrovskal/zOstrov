@@ -92,6 +92,8 @@ public:
     virtual void onInit(bool _theme) override;
     // вернуть имя типа
     virtual cstr typeName() const override { return "zViewSlider"; }
+    // блокировка
+    virtual void disable(bool set) override;
     // установка диапазона
     void setRange(cszi& r);
     // установка режима
@@ -159,7 +161,11 @@ public:
     virtual bool setProgress(int _pos) override;
     // вернуть имя типа
     virtual cstr typeName() const override { return "zViewProgress"; }
+    // вернуть процент из позиции
+    int getPercent() const { return percent; }
 protected:
+    // процент
+    int percent{0};
     // обновление макета
     virtual void updateLayout(bool changed) override;
     virtual void onDraw() override;

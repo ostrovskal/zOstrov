@@ -73,9 +73,9 @@ public:
 	virtual zView* getDropDownView(int position, zView* convert, zViewGroup* parent) {
 		return getView(position, convert, parent);
 	}
-protected:
 	// уведомление владельцев об изменении адаптера
-	void notify();
+	virtual void notify();
+protected:
 	// владельцы
 	zArray<zView*> owners{};
 };

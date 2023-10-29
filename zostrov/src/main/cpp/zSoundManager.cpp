@@ -36,7 +36,7 @@ bool zSoundPlayer::make(SLDataSource& src, SLDataSink& snk, bool play, int _bufS
             (*object)->GetInterface(object, ids[0], &queue);
             if(!queue) { shutdown(); return SL_RESULT_INTERNAL_ERROR; }
             (*queue)->RegisterCallback(queue, playerCallback, this);
-            (*player)->SetCallbackEventsMask(player, SL_PLAYEVENT_HEADMOVING);
+            //(*player)->SetCallbackEventsMask(player, SL_PLAYEVENT_HEADMOVING);
             bufSize = (_bufSize ? _bufSize : PLAYER_FRAMES);
         }
         (*player)->SetPlayState(player, play ? SL_PLAYSTATE_PLAYING : SL_PLAYSTATE_STOPPED);
@@ -132,17 +132,26 @@ bool zSoundPlayer::setStereoPos(SLpermille pos) const {
 }
 
 bool zSoundPlayer::play(bool set) {
-    auto ret(player && (*player)->SetPlayState(player, set ? SL_PLAYSTATE_PLAYING : SL_PLAYSTATE_PAUSED) == SL_RESULT_SUCCESS);
+    bool ret(false);
+    if(player) {
+        ret = (*player)->SetPlayState(player, set ? SL_PLAYSTATE_PLAYING : SL_PLAYSTATE_PAUSED) == SL_RESULT_SUCCESS;
+    }
     if(ret && set) millis = z_timeMillis();
     return ret;
 }
 
 bool zSoundPlayer::stop() const {
-    return (player && (*player)->SetPlayState(player, SL_PLAYSTATE_STOPPED) == SL_RESULT_SUCCESS);
+    if(player) {
+        return (*player)->SetPlayState(player, SL_PLAYSTATE_STOPPED) == SL_RESULT_SUCCESS;
+    }
+    return false;
 }
 
 bool zSoundPlayer::loop(bool set) const {
-    return (seek && (*seek)->SetLoop(seek, set, 0, SL_TIME_UNKNOWN) == SL_RESULT_SUCCESS);
+    if(seek) {
+        return (*seek)->SetLoop(seek, set, 0, SL_TIME_UNKNOWN) == SL_RESULT_SUCCESS;
+    }
+    return false;
 }
 
 void zSoundPlayer::shutdown() {
