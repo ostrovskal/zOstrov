@@ -47,8 +47,12 @@ void zViewManager::destroyResources() {
     SAFE_DELETE(popup);
     SAFE_DELETE(dropdown);
     cache->recycle(debugTexture);
+    for(auto& t : _touch) t.reset();
     focus       = nullptr;
     debugTexture= nullptr;
+    zView::touch= nullptr;
+    zView::fbo  = nullptr;
+    zView::m.identity();
     cache->info();
 }
 

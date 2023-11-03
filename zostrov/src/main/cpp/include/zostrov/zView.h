@@ -295,8 +295,6 @@ protected:
     bool initTouchHandler(AInputEvent* event) const;
     // установка габаритов по умолчанию
     void defaultOnMeasure(cszm& spec, szi size);
-    // установка размера
-    void setMinMaxSize(int val);
     // ориентация
     bool vert{false};
     // родитель

@@ -116,10 +116,10 @@ enum ViewStyles {
     Z_DECORATE                  = (13 | ZTT_INT | ZTT_THM), // декорации
     Z_SIZE_TOUCH				= (14 | ZTT_VEC), // чувствительность касания
     Z_MODE						= (15 | ZTT_INT | ZTT_THM), // режим для слайдера/прогресса/формы/чарта/сетки/редактора
-    Z_SIZE                      = (16 | ZTT_VEC), // минимальный/максимальный размер представления
+    Z_SIZE                      = (16 | ZTT_INT), // минимальный/максимальный размер представления
     // отступы
-    Z_MARGINS					= (17 | ZTT_VEC), // отступ от макета
-    Z_PADDING					= (18 | ZTT_VEC), // внутренний отступ от бэкграунда
+    Z_MARGINS					= (17 | ZTT_INT), // отступ от макета
+    Z_PADDING					= (18 | ZTT_INT), // внутренний отступ от бэкграунда
     // бэкграунд
     Z_BACKGROUND				= (19 | ZTT_INT | ZTT_THM),
     Z_BACKGROUND_COLOR			= (20 | ZTT_INT | ZTT_THM),
@@ -165,7 +165,7 @@ enum ViewStyles {
     Z_ICON_SCALE				= (55 | ZTT_FLT | ZTT_THM),
     // прокрутка
     Z_SCROLLBAR     			= (56 | ZTT_INT | ZTT_THM),
-    Z_IPADDING                  = (57 | ZTT_VEC),
+    Z_IPADDING                  = (57 | ZTT_INT),
     Z_FBO                       = (58 | ZTT_INT),
     Z_SCROLLBAR_TILES			= (59 | ZTT_INT | ZTT_THM),
     Z_SCROLLBAR_SHADER			= (60 | ZTT_DMN | ZTT_THM),

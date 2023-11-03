@@ -39,10 +39,12 @@ void zView::changeTheme() {
     }
 }
 
-void zView::setMinMaxSize(int val) {
+static void setDpRect(rti& r, int val, bool skipZero) {
     auto ptr((u8*)&val);
     for(int i = 0 ; i < 4; i++) {
-        if(ptr[i]) minMaxSize[i] = ptr[i];
+        auto v(ptr[i]);
+        if(v == 0 && skipZero) continue;
+        r[3 - i] = z_dp(v);
     }
 }
 
@@ -66,10 +68,10 @@ void zView::onInit(bool _theme) {
             case Z_VISIBLED:            updateStatus(ZS_VISIBLED, val); break;
             case Z_TAP:			        updateStatus(ZS_TAP_MASK, val, true); break;
             case Z_GRAVITY:			    setGravity(val); break;
-            case Z_SIZE:			    setMinMaxSize(val); break;
-            case Z_IPADDING:		    ipad.set(val); break;
-            case Z_PADDING:			    pad.set(val); break;
-            case Z_MARGINS:             margin.set(val); break;
+            case Z_SIZE:                setDpRect(minMaxSize, val, true); break;
+            case Z_IPADDING:		    setDpRect(ipad, val, false); break;
+            case Z_PADDING:			    setDpRect(pad, val, false); break;
+            case Z_MARGINS:             setDpRect(margin, val, false); break;
             case Z_DECORATE:            updateStatus(ZS_DECORATE_MASK, val, true); break;
             case Z_FOREGROUND_GRAVITY:  setForegroundGravity(val); fkGravity &= ~ZS_SCALE_MASK; fkGravity |= (val & ZS_SCALE_MASK); break;
             case Z_MASK_SHADER:         val = manager->getShader(v->s);
