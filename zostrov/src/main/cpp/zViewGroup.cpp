@@ -74,11 +74,13 @@ void zViewGroup::_remove(zView* v, bool _del) {
             v->onDetach();
             // убрать родителя
             v->parent = nullptr;
+            // удалить из касания
+            if(_del) {
+                if(zView::touch && zView::touch->own == v)
+                    zView::touch->reset();
+            }
             // удалить из массива дочерних
             children.erase(idx, 1, _del);
-            // удалить из касания
-            if(_del && zView::touch && zView::touch->own == v)
-                zView::touch->reset();//own = nullptr;
         }
     }
 }

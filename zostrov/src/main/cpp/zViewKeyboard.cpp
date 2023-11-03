@@ -16,27 +16,27 @@ zViewKeyboard::zViewKeyboard(cstr nameLayouts, zStyle* _styles_base, zStyle* _st
     auto root(xml.getRoot());
     if(root->getName() != "keyboards") { ILOG("Недопустимый XML формат клавиатуры!"); return; }
     // основные
-    minHeight= z_ston(root->getAttrVal("minHeight", "25"), RADIX_DEC);
+    minHeight= root->getAttrVal("minHeight", "25").toNum();
     const zXml::zNode* nodeLyt, *nodeBut;
     BUTTON but; idx = 0; auto tex(manager->cache->get(theme->findString(styles_base->_int(Z_ICON, z.R.drawable.zssh)), nullptr));
     while((nodeLyt = root->getTag(idx++))) {
         if(nodeLyt->getName() != "layout") continue;
         auto lyt(new LAYOUT());
         // размер
-        auto bs(z_dp(z_ston(nodeLyt->getAttrVal("baseSize", "20"), RADIX_DEC)));
-        lyt->size.w = z_ston(nodeLyt->getAttrVal("width", "1"), RADIX_DEC);
-        lyt->size.h = z_ston(nodeLyt->getAttrVal("height", "1"), RADIX_DEC);
+        auto bs(z_dp(nodeLyt->getAttrVal("baseSize", "20").toNum()));
+        lyt->size.w = nodeLyt->getAttrVal("width", "1").toNum();
+        lyt->size.h = nodeLyt->getAttrVal("height", "1").toNum();
         // переключатели
         for(int i = 0; i < 5; i++) lyt->names[i] = nodeLyt->getAttrVal(_switch[i], "");
         // кнопки
         int _idx(0);
         while((nodeBut = nodeLyt->getTag(_idx++))) {
             static cstr _coords[] = { "x", "y", "width", "height" };
-            for(int i = 0 ; i < 4; i++) but.rview[i] = z_ston(nodeBut->getAttrVal(_coords[i], "0"), RADIX_DEC);
+            for(int i = 0 ; i < 4; i++) but.rview[i] = nodeBut->getAttrVal(_coords[i], "0").toNum();
             but.icon = tex->getTile(nodeBut->getAttrVal("icon", ""));
             but.color= zColor(nodeBut->getAttrVal("color", "#fff")).toARGB();
             auto bsz(nodeBut->getAttrVal("size", ""));
-            but.size = z_is8(bsz) ? z_dp(z_ston(bsz, RADIX_DEC)) : bs;
+            but.size = z_is8(bsz) ? z_dp(bsz.toNum()) : bs;
             but.spec = nodeBut->getAttrVal("spec", "");
             but.name[0] = nodeBut->getAttrVal("com", "");
             but.name[1] = nodeBut->getAttrVal("alt", "");

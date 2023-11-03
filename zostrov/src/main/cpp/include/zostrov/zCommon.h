@@ -28,8 +28,6 @@ constexpr int MSG_SCROLLING         = 6;
 constexpr int MSG_EDIT_CARET        = 7;
 constexpr int MSG_EDIT_MENU         = 8;
 constexpr int MSG_DROP_CLICK        = 9;
-// список устанавливает для себя выделенный элемент
-constexpr int MSG_ITEMS             = 10;
 
 constexpr int VIEW_MATCH		   = -1;
 constexpr int VIEW_WRAP			   = -2;
@@ -105,7 +103,7 @@ enum { TOUCH_CONTINUE, TOUCH_FINISH, TOUCH_ACTION, TOUCH_STOP };
 #define ZS_DRAWING                  0x00002000U // признак возможности отрисовки
 #define ZS_DESTROY                  0x00001000U // признак удаления объекта
 #define ZS_DIRTY_LAYER              0x00000800U // признак перерисовки слоя
-//#define ZS_INNER                    0x00000400U // внутренний объект
+#define ZS_INNER                    0x00000400U // внутренний (для объекта)
 // тип тапа
 #define ZS_INVERTED   		        0x00000100U // помечать
 #define ZS_PRESSED   		        0x00000200U // нажимать

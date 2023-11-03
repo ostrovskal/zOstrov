@@ -396,11 +396,8 @@ zViewController::zViewController(zStyle *_styles, i32 _id, i32 _base, u32 _fileM
                 for(int i = 0 ; i < count; i++) {
                     auto k(keys->getTag(i));
                     if(k->getName() != "key") continue;
-                    decors += new DECORATE(
-                            z_ston(k->getAttrVal("x", "0"), RADIX_DEC),
-                            z_ston(k->getAttrVal("y", "0"), RADIX_DEC),
-                            z_ston(k->getAttrVal("w", "32"), RADIX_DEC),
-                            z_ston(k->getAttrVal("h", "32"), RADIX_DEC));
+                    decors += new DECORATE(k->getAttrVal("x", "0").toNum(), k->getAttrVal("y", "0").toNum(),
+                                           k->getAttrVal("w", "32").toNum(), k->getAttrVal("h", "32").toNum());
                 }
             }
             // карта контроллера

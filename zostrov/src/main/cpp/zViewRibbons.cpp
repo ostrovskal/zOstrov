@@ -30,9 +30,6 @@ void zViewBaseRibbon::notifyEvent(HANDLER_MESSAGE *msg) {
         } else post(MSG_ANIM, duration);
         showSelector(clickItem != -1);
         invalidate();
-    } else if(msg->what == MSG_ITEMS && countChildren()) {
-        // чтобы не вызывать до бесконечности(если нет элементов)
-        setItemSelected(msg->arg1);
     }
     zViewGroup::notifyEvent(msg);
 }
@@ -290,20 +287,15 @@ void zViewBaseRibbon::showSelector(bool show) {
 
 void zViewBaseRibbon::setItemSelected(int item) {
     flyng->stop();
-    auto _count(countChildren() - 1);
-    if(_count < 0) {
-        post(MSG_ITEMS, 20, item);
-    } else {
-        if(item >= countItem) item = countItem - 1;
-        if(item < 0) item = 0;
-        firstItem = item - _count / 2;
-        if(selectItem != item) {
-            selectItem = item;
-            // вызов события
-            post(MSG_SELECTED, duration, selectItem);
-        }
-        requestPosition();
+    status |= ZS_INNER;
+    if(item >= countItem) item = countItem - 1;
+    if(item < 0) item = 0;
+    if(selectItem != item) {
+        selectItem = item;
+        // вызов события
+        post(MSG_SELECTED, duration, selectItem);
     }
+    requestPosition();
 }
 
 void zViewBaseRibbon::onLayout(crti &position, bool changed) {
@@ -311,6 +303,8 @@ void zViewBaseRibbon::onLayout(crti &position, bool changed) {
     edge.set(rclient[vert], rclient.extent(vert));
     // скорректировать первый видимый
     auto pos(firstItem), _count(countChildren() - 1);
+    if(_count < 0 && countItem > 0) fill(0, true), _count = countChildren() - 1;
+    if(testFlags(ZS_INNER)) { status &= ~ZS_INNER; pos = selectItem - _count / 2; }
     if(_count < 0) _count = countItem;
     if(pos + _count >= countItem) pos = countItem - _count;
     if(pos < 0) pos = 0;

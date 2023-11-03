@@ -36,7 +36,6 @@ bool zSoundPlayer::make(SLDataSource& src, SLDataSink& snk, bool play, int _bufS
             (*object)->GetInterface(object, ids[0], &queue);
             if(!queue) { shutdown(); return SL_RESULT_INTERNAL_ERROR; }
             (*queue)->RegisterCallback(queue, playerCallback, this);
-            //(*player)->SetCallbackEventsMask(player, SL_PLAYEVENT_HEADMOVING);
             bufSize = (_bufSize ? _bufSize : PLAYER_FRAMES);
         }
         (*player)->SetPlayState(player, play ? SL_PLAYSTATE_PLAYING : SL_PLAYSTATE_STOPPED);
@@ -70,12 +69,12 @@ bool zSoundPlayerMem::create(const zPlayerParams& p, bool play) {
 }
 
 void zSoundPlayerMem::setData(u8* data, int size) {
-    if(data) {
+    if(data && size) {
         auto state(getStatus());
-        if(state != SL_PLAYSTATE_STOPPED) return;
+        if(state != SL_PLAYSTATE_STOPPED) (*queue)->Clear(queue);
         totalSize = size; nextBuffer = data;
-        nextCount = size / bufSize;
         nextSize = size >= bufSize ? bufSize : size;
+        nextCount = size / bufSize;
         if((*queue)->Enqueue(queue, nextBuffer, nextSize) == SL_RESULT_BUFFER_INSUFFICIENT) {
             (*queue)->Clear(queue);
             (*queue)->Enqueue(queue, nextBuffer, nextSize);
@@ -132,19 +131,22 @@ bool zSoundPlayer::setStereoPos(SLpermille pos) const {
 }
 
 bool zSoundPlayer::play(bool set) {
-    bool ret(false);
+    auto ret(SL_RESULT_UNKNOWN_ERROR);
     if(player) {
-        ret = (*player)->SetPlayState(player, set ? SL_PLAYSTATE_PLAYING : SL_PLAYSTATE_PAUSED) == SL_RESULT_SUCCESS;
+        ret = (*player)->SetPlayState(player, set ? SL_PLAYSTATE_PLAYING : SL_PLAYSTATE_PAUSED);
     }
-    if(ret && set) millis = z_timeMillis();
-    return ret;
+    if(ret == SL_RESULT_SUCCESS && set) millis = z_timeMillis();
+    if(ret != SL_RESULT_SUCCESS) ILOG("failed to play %x", ret);
+    return ret == SL_RESULT_SUCCESS;
 }
 
 bool zSoundPlayer::stop() const {
+    auto ret(SL_RESULT_UNKNOWN_ERROR);
     if(player) {
-        return (*player)->SetPlayState(player, SL_PLAYSTATE_STOPPED) == SL_RESULT_SUCCESS;
+        ret = (*player)->SetPlayState(player, SL_PLAYSTATE_STOPPED);
     }
-    return false;
+    if(ret != SL_RESULT_SUCCESS) ILOG("failed to stop %x", ret);
+    return ret == SL_RESULT_SUCCESS;
 }
 
 bool zSoundPlayer::loop(bool set) const {
@@ -156,6 +158,7 @@ bool zSoundPlayer::loop(bool set) const {
 
 void zSoundPlayer::shutdown() {
     if(object) {
+        stop();
         (*object)->Destroy(object);
         object = nullptr; player = nullptr;
         queue  = nullptr; seek   = nullptr;

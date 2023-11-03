@@ -254,17 +254,19 @@ void zViewManager::drawCaret(zView* _view) {
 
 void zViewManager::saveStateView(zViewGroup *view, int &index) {
     static zView::STATE state;
-    int count(view->countChildren());
-    for(int i = 0 ; i < count; i++) {
-        auto child(view->atView(i));
-        if(child->id) {
-            state.reset(child->id, child->crcType());
-            child->stateView(state, true, index);
-            if(state.data.isNotEmpty()) viewStates += state;
+    if(view) {
+        int count(view->countChildren());
+        for(int i = 0 ; i < count; i++) {
+            auto child(view->atView(i));
+            if(child->id) {
+                state.reset(child->id, child->crcType());
+                child->stateView(state, true, index);
+                if(state.data.isNotEmpty()) viewStates += state;
+            }
+            auto group(dynamic_cast<zViewGroup *>(child));
+            if(group && group->stateChildren())
+                saveStateView(group, index);
         }
-        auto group(dynamic_cast<zViewGroup *>(child));
-        if(group && group->stateChildren())
-            saveStateView(group, index);
     }
 }
 
@@ -433,8 +435,6 @@ zViewDropdown* zViewManager::getDropdown(zView* _owner, zStyle* _style, zBaseAda
 }
 
 void zViewManager::eraseAllEventsView(zView* view) {
-//    if(zView::touch && zView::touch->own == view)
-//        zView::touch->own = nullptr;
     event.erase(view, 0);
 }
 
@@ -537,8 +537,8 @@ void zImageCache::clear() {
 }
 
 void zImageCache::info() {
-    ILOG("Кэш текстур: используемые - %i, всего - %i, память - %i, макс - %i", use, tex.size(), curSize, maxSize);
     if(use) {
+        DLOG("Кэш текстур: текстур в памяти - %i, всего текстур - %i, память - %i, макс - %i", use, tex.size(), curSize, maxSize);
         for(auto& t : tex) { ILOG("%s", t.tex->info().str()); }
     }
 }
