@@ -106,6 +106,8 @@ public:
     virtual void layout(crti& position);
     // изменение темы
     virtual void changeTheme();
+    // изменение ориентации
+    virtual void changeOrientation(bool _vert) { if(vert != _vert) { vert = _vert; requestLayout(); } }
     // сохранение/загрузка
     virtual void stateView(STATE &state, bool save, int &index) { }
     // клавиатура по умолчанию

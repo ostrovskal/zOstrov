@@ -66,7 +66,7 @@ public:
     // буфер
     u8* nextBuffer{nullptr};
     // размер
-    i32 nextCount{0}, bufSize{0}, totalSize{0}, nextSize{0};
+    i32 bufSize{0}, totalSize{0}, nextSize{0};
     // идентификатор/типы
     int id{0}, type{TYPE_UNK};
     // время запуска
@@ -80,6 +80,7 @@ public:
     zSoundPlayerMem(zSoundManager* mgr, int id) : zSoundPlayer(mgr, id, TYPE_MEM) { }
     virtual bool create(const zPlayerParams& p, bool play) override;
     virtual void setData(u8* data, int size) override;
+    void dataMem();
 };
 
 class zSoundPlayerAsset : public zSoundPlayer {

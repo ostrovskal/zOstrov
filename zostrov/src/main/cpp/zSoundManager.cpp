@@ -8,12 +8,11 @@
 static SLresult result;
 
 static void playerCallback(SLAndroidSimpleBufferQueueItf, void* context) {
-    auto pl((zSoundPlayer*)context);
+    auto pl((zSoundPlayerMem*)context);
     pl->totalSize -= pl->nextSize;
-    if(--pl->nextCount > 0 && pl->totalSize) {
+    if(pl->totalSize > 0) {
         pl->nextBuffer += pl->nextSize;
-        pl->nextSize = pl->totalSize >= pl->bufSize ? pl->bufSize : pl->totalSize;
-        (*pl->queue)->Enqueue(pl->queue, pl->nextBuffer, pl->nextSize);
+        pl->dataMem();
     } else {
         pl->stop();
     }
@@ -68,17 +67,30 @@ bool zSoundPlayerMem::create(const zPlayerParams& p, bool play) {
     return make(src, snk, play, p.bufSize);
 }
 
+void zSoundPlayerMem::dataMem() {
+    if(!player) return;
+    u32 status(0);
+    result = (*player)->GetPlayState(player, &status);
+    if(status != SL_PLAYSTATE_STOPPED) {
+        if(result != SL_RESULT_SUCCESS) {
+            ILOG("result %i", result);
+        }
+        (*queue)->Clear(queue);
+    }
+    result = (*queue)->Enqueue(queue, nextBuffer, nextSize);
+    if(result == SL_RESULT_BUFFER_INSUFFICIENT) {
+        (*queue)->Clear(queue);
+        result = (*queue)->Enqueue(queue, nextBuffer, nextSize);
+    }
+    if(result != SL_RESULT_SUCCESS) {
+        ILOG("result %i", result);
+    }
+}
+
 void zSoundPlayerMem::setData(u8* data, int size) {
     if(data && size) {
-        auto state(getStatus());
-        if(state != SL_PLAYSTATE_STOPPED) (*queue)->Clear(queue);
-        totalSize = size; nextBuffer = data;
-        nextSize = size >= bufSize ? bufSize : size;
-        nextCount = size / bufSize;
-        if((*queue)->Enqueue(queue, nextBuffer, nextSize) == SL_RESULT_BUFFER_INSUFFICIENT) {
-            (*queue)->Clear(queue);
-            (*queue)->Enqueue(queue, nextBuffer, nextSize);
-        }
+        totalSize = nextSize = size; nextBuffer = data;
+        dataMem();
     }
 }
 
@@ -131,22 +143,20 @@ bool zSoundPlayer::setStereoPos(SLpermille pos) const {
 }
 
 bool zSoundPlayer::play(bool set) {
-    auto ret(SL_RESULT_UNKNOWN_ERROR);
+    bool ret(false);
     if(player) {
-        ret = (*player)->SetPlayState(player, set ? SL_PLAYSTATE_PLAYING : SL_PLAYSTATE_PAUSED);
+        ret = (*player)->SetPlayState(player, set ? SL_PLAYSTATE_PLAYING : SL_PLAYSTATE_PAUSED) == SL_RESULT_SUCCESS;
     }
-    if(ret == SL_RESULT_SUCCESS && set) millis = z_timeMillis();
-    if(ret != SL_RESULT_SUCCESS) ILOG("failed to play %x", ret);
-    return ret == SL_RESULT_SUCCESS;
+    if(ret && set) millis = z_timeMillis();
+    return ret;
 }
 
 bool zSoundPlayer::stop() const {
-    auto ret(SL_RESULT_UNKNOWN_ERROR);
+    auto ret(false);
     if(player) {
         ret = (*player)->SetPlayState(player, SL_PLAYSTATE_STOPPED);
     }
-    if(ret != SL_RESULT_SUCCESS) ILOG("failed to stop %x", ret);
-    return ret == SL_RESULT_SUCCESS;
+    return ret;
 }
 
 bool zSoundPlayer::loop(bool set) const {
@@ -165,7 +175,7 @@ void zSoundPlayer::shutdown() {
         volume = nullptr; recorder = nullptr;
     }
     nextBuffer = nullptr;
-    nextSize = totalSize = nextCount = 0;
+    nextSize = totalSize = 0;
 }
 
 zSoundManager::zSoundManager() {

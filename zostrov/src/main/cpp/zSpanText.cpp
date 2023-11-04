@@ -236,8 +236,6 @@ void zViewText::mergeSpans(int count) {
             cacheSpans += new SPAN(defSpan, minX1, minX2, new zTextPaint(defPaint));
             minX1 = minX2;
         }
-    //    DLOG("1. make range");
-      //  infoSpans();
         // 2. заполняем созданные диапазоны параметрами
         for(auto real : cacheSpans) {
             auto s(real->s), e(real->e);
@@ -249,8 +247,6 @@ void zViewText::mergeSpans(int count) {
                 real->span = (real->span->typeId() > sp->span->typeId() ? real->span : sp->span);
             }
         }
-//        DLOG("1. fill range");
-  //      infoSpans();
         // добавить спан по умолчанию в разрывы
         for(int i = 0 ; i < cacheSpans.size(); i++) {
             auto sp(cacheSpans[i]);
@@ -260,8 +256,6 @@ void zViewText::mergeSpans(int count) {
     }
     // последний спан
     if(count && pos < count) cacheSpans += new SPAN(defSpan, pos, count, new zTextPaint(defPaint));
-//    DLOG("3. add default span");
-//    infoSpans();
 }
 
 void zViewText::getSpan(int what, int arg, bool reverse, const std::function<void(int, SPAN*)>& act) {

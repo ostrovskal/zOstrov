@@ -208,9 +208,6 @@ void zCellLayout::onMeasure(cszm& spec) {
             child->measure(childSpec);
         }
     }
-//    DLOG("wc:%f hc:%f", wCell, hCell);
-//    DLOG("w:%i h:%i", width, height);
-//    DLOG("col:%i row:%i", cols, rows);
     setMeasuredDimension(width, height);
 }
 
