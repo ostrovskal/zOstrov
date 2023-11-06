@@ -14,7 +14,7 @@ public:
     zViewForm(zStyle* _styles, i32 _id, zStyle* _styles_caption, zStyle* _styles_footer, u32 _caption, bool _modal);
     virtual ~zViewForm() { delete shade; }
     // тип
-    virtual cstr typeName() const override { return "zViewForm"; }
+    virtual zString8 typeName() const override { return "zViewForm"; }
     // событие кнопки
     virtual i32 keyEvent(int key, bool sysKey) override;
     // сохранение/восстановление

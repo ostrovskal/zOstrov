@@ -36,10 +36,8 @@ void zViewBaseRibbon::notifyEvent(HANDLER_MESSAGE *msg) {
 
 zViewBaseRibbon::~zViewBaseRibbon() {
     cacheViews.clear();
-    if(adapter) {
-        if(adapter->unregistration(this))
-            SAFE_DELETE(adapter);
-    }
+    if(adapter && adapter->unregistration(this))
+        SAFE_DELETE(adapter);
 }
 
 bool zViewBaseRibbon::touchChildren() {
@@ -295,6 +293,7 @@ void zViewBaseRibbon::setItemSelected(int item) {
         // вызов события
         post(MSG_SELECTED, duration, selectItem);
     }
+    deltaItem = 0;
     requestPosition();
 }
 
@@ -302,10 +301,10 @@ void zViewBaseRibbon::onLayout(crti &position, bool changed) {
     zView::onLayout(position, changed);
     edge.set(rclient[vert], rclient.extent(vert));
     // скорректировать первый видимый
-    auto pos(firstItem), _count(countChildren() - 1);
-    if(_count < 0 && countItem > 0) fill(0, true), _count = countChildren() - 1;
-    if(testFlags(ZS_INNER)) { status &= ~ZS_INNER; pos = selectItem - _count / 2; }
-    if(_count < 0) _count = countItem;
+    auto _count(countChildren());
+    if(!_count && countItem) { fill(0, true); _count = countChildren(); }
+    auto pos(firstItem);
+    if(testFlags(ZS_INNER)) { status &= ~ZS_INNER; pos = selectItem - (_count - 1) / 2; }
     if(pos + _count >= countItem) pos = countItem - _count;
     if(pos < 0) pos = 0;
     if(firstItem != pos) deltaItem = 0, firstItem = pos;

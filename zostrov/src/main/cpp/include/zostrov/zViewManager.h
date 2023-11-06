@@ -67,7 +67,7 @@ public:
     };
     enum { Z_NONE, Z_ACTIVE, Z_QUIT, Z_SAVE, Z_LOAD, Z_RESUME, Z_ANIM = 16, Z_CHANGE_THEME = 32 };
     // тип переменных шейдера
-    enum { ZSH_APOS, ZSH_ATEX, ZSH_UTEX, ZSH_PMTX, ZSH_WMTX, ZSH_UFLT, ZSH_UCOL };
+    enum { ZSH_PMTX, ZSH_WMTX, ZSH_APOS, ZSH_ATEX, ZSH_UTEX, ZSH_UFLT, ZSH_UCOL };
     // тип цветовых фильтров
     enum { ZCF_NORMAL = 0, ZCF_FOCUSED = 4, ZCF_DISABLED = 5 };
     // базовые пути
@@ -124,6 +124,8 @@ public:
     bool isChangeTheme() const { return status & Z_CHANGE_THEME; }
     // вернуть индекс шейдера
     int getShader(czs& nm) const { return shaders.indexOf(nm); }
+    // добавить шейдер
+    int addShader(cstr name, czs& vertex, czs& fragment, cstr vars);
     // обработка входящих событий ввода
     virtual i32 processInputEvens(AInputEvent *event);
     // спрятать/отобразить клавиатуру
@@ -132,8 +134,6 @@ public:
     virtual void setTheme(zStyle* _styles, zResource** _user, zStyles* _user_styles);
     // преобразовать в dip
     i32 dp(i32 v) const { return (i32)round((float)v * scaleScreen); }
-    // прочитать файл из активов
-    u8* assetFile(cstr src, i32* plen = nullptr, u8* ptr = nullptr, i32 len = -1, i32 pos = -1) const;
     // загрузка текстуры
     zTexture* loadResourceTexture(u32 _id, zTexture *_t) const;
     // вернуть корневое/базовое представление
@@ -173,13 +173,15 @@ public:
     char languages[3]{0};
     // массив всех объектов касания
     zTouch _touch[10];
+    // текстура для сетки
+    zTexture* debugTexture{nullptr};
 protected:
     // пересоздание главного окна
     virtual void updateNativeWindow(AConfiguration* config, zStyle* _styles, zResource** _user, zStyles* _user_styles);
     // перерисовка главного окна
     virtual void redrawNativeWindow();
     // установка/потеря фокуса главного окна
-    virtual void focusNativeWindow(bool focus);
+    [[maybe_unused]] virtual void focusNativeWindow(bool focus);
     // обновление текстур
     virtual void invalidateTexture() { cache->update(); }
     // отрисовка представлений
@@ -230,13 +232,9 @@ protected:
     zFrameLayout* root{nullptr};
     // представление с фокусом
     zView* focus{nullptr};
-    // мьютекс
-    mutable std::mutex mMutex{};
 private:
     // базовый(скрытый) родительский макет
     zAbsoluteLayout* common{nullptr};
-    // текстура для сетки
-    zTexture* debugTexture{nullptr};
     // клавиатура
     zViewKeyboard* keyboard{nullptr};
     // блоки структур для сохранения

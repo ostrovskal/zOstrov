@@ -383,7 +383,7 @@ void zViewProgress::showTips() {
 
 zViewController::zViewController(zStyle *_styles, i32 _id, i32 _base, u32 _fileMap) : zFrameLayout(_styles, _id), base(_base) {
     minMaxSize.set(z_dp(z.R.dimen.controllerMinWidth), 0, z_dp(z.R.dimen.controllerMinHeight), 0);
-    int size(0); auto ptr(manager->assetFile(theme->findString(_fileMap), &size));
+    int size(0); auto ptr((u8*)zFileAsset(theme->findString(_fileMap), true).readn(&size));
     if(!ptr) return;
     zXml xml(ptr, size);
     if(xml.isValid()) {
@@ -425,13 +425,11 @@ zViewController::zViewController(zStyle *_styles, i32 _id, i32 _base, u32 _fileM
             setSize(szi(lps.w, lps.h));
         }
     }
-    for(auto& d : dr) d = new zDrawable(this, DRW_FK);
 }
 
 zViewController::~zViewController() {
     SAFE_DELETE(map);
-//    SAFE_DELETE(button);
-    for(auto& d : dr) SAFE_DELETE(d);
+    decors.clear();
 }
 
 i32 zViewController::onTouchEvent() {
@@ -450,48 +448,47 @@ i32 zViewController::onTouchEvent() {
     return TOUCH_CONTINUE;
 }
 
-void zViewController::setDecorateKey(int idx, cstr text, int icon) {
+void zViewController::setDecorateKey(int idx, cstr text, int icon, int tile) {
     if(idx >= 0 && idx < decors.size()) {
-        decors[idx]->icon = icon;
-        decors[idx]->text = text;
+        atView<zViewButton>(idx)->setIcon(icon);
+        atView<zViewButton>(idx)->setText(text);
+        decors[idx]->dr->tile = tile;
     }
-    invalidate();
 }
 
 void zViewController::onDraw() {
     // базовый тайл
-    auto but(buttons);
-    drw[DRW_FK]->draw(&rview);
+    auto but(buttons); drw[DRW_FK]->draw(&rview);
     // нарисовать надписи/иконки
     float xx((float)rview.w / 128.0f), yy((float)rview.h / 128.0f);
-    button->updateStatus(ZS_VISIBLED, true);
     for(int i = 0 ; i < decors.size(); i++) {
-        auto& d(decors[i]); auto pressed((but & 1) << 1);
+        auto d(decors[i]); auto pressed((but & 1) << 1);
+        auto button(atView<zViewButton>(i));
         auto color(pressed ? z.R.color.red : z.R.color.white);
-        if(pressed) dr[i]->draw(&rview);
         auto r(d->rect); r.offset(pressed, pressed);
+        if(pressed) d->dr->draw(&rview);
         r.x = rview.x + z_round((float)r.x * xx); r.w = z_round((float)r.w * xx);
         r.y = rview.y + z_round((float)r.y * yy); r.h = z_round((float)r.h * yy);
         szm spec(zMeasure(MEASURE_EXACT, r.w), zMeasure(MEASURE_EXACT, r.h));
-        button->setIcon(d->icon); button->setTextSpecial(d->text, spec);
-        button->setTextColorForeground(color);
-        button->setTextColorIcon(color);
-        button->setTextSize(z_round((float)20_dp * xx));
-        button->layout(r); button->draw(); but >>= 1;
+        button->updateStatus(ZS_VISIBLED, true);
+        button->setTextSize(z_min(r.w, r.h) / 2);
+        button->setTextColorForeground(color); button->setTextColorIcon(color);
+        button->setTextSpecial(button->getText(), spec); button->layout(r);
+        button->draw(); but >>= 1;
+        button->updateStatus(ZS_VISIBLED, false);
     }
-    button->updateStatus(ZS_VISIBLED, false);
 }
 
 void zViewController::onInit(bool _theme) {
     zViewGroup::onInit(_theme);
     removeAllViews(false);
     // основной текст
-    attach(button = new zViewButton(styles_z_butcontroller, 0, 0), 100, 100);
-}
-
-void zViewController::requestLayout() {
-    if(countChildren() && !atView(0)->isVisibled())
-        zViewGroup::requestLayout();
+    for(auto d : decors) {
+        SAFE_DELETE(d->dr);
+        attach(new zViewButton(styles_z_butcontroller, 0, 0), 100, 100);
+        d->dr = new zDrawable(this, DRW_FK);
+        d->dr->init(drw[DRW_FK], d->dr->tile);
+    }
 }
 
 void zViewController::onLayout(crti &position, bool changed) {
@@ -499,12 +496,8 @@ void zViewController::onLayout(crti &position, bool changed) {
     auto width(rview.w), height(rview.h); rclient = rview;
     sizeReverseMap.w = (float)cellDebug.w / (float)width;
     sizeReverseMap.h = (float)cellDebug.h / (float)height;
-    auto fk(drw[DRW_FK]); fk->tile = base;
-    fk->measure(width, height, 0, false);
-    for(int i = 0 ; i < 4; i++) {
-        auto d(dr[i]); d->init(fk, 0); d->tiles = fk->tiles;
-        d->setTileNum(i); d->measure(width, height, 0, false);
-    }
+    auto fk(drw[DRW_FK]); fk->tile = base; fk->measure(width, height, 0, false);
+    for(auto d : decors) d->dr->measure(width, height, 0, false);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -586,8 +579,7 @@ void zViewSurface::onLayout(crti& position, bool changed) {
 }
 
 void zViewSurface::onDraw() {
-    glBindTexture(GL_TEXTURE_2D, drw[DRW_FK]->texture->id);
-    updateTexture();
     drw[DRW_FK]->draw(&rclient);
+    updateTexture();
     zFrameLayout::onDraw();
 }

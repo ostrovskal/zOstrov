@@ -14,7 +14,7 @@ public:
         parent = _parent;
     }
     i32 onEvent() { return onTouchEvent(); }
-    [[nodiscard]] cstr typeName() const override { return "zViewEditClear"; }
+    [[nodiscard]] zString8 typeName() const override { return "zViewEditClear"; }
 };
 
 class zFilterMail : public zFilterEdit {

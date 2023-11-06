@@ -5,6 +5,9 @@
     <string name="themeLight">_light</string>
     <string name="acontrollerMap">acontrollerMap.xml</string>
     <string name="ccontrollerMap">ccontrollerMap.xml</string>
+    <string name="mainFrag">precision mediump float;\nuniform mat4 cflt;\nuniform vec4 tcolor;\nuniform sampler2D tex;\nvarying vec2 v_Texture;\nvoid main() {\nvec4 tmp = texture2D(tex, v_Texture);\ngl_FragColor = (tmp * tcolor) * cflt;\n}\n</string>
+    <string name="oesFrag">#extension GL_OES_EGL_image_external : require\nprecision mediump float;\nvarying vec2 v_Texture;\nuniform mat4 cflt;\nuniform vec4 tcolor;\nuniform samplerExternalOES tex;\nvoid main() {\nvec4 tmp = texture2D(tex, v_Texture);\ngl_FragColor = (tmp * tcolor) * cflt;\n}\n</string>
+    <string name="mainVert">attribute vec4 pos;\nattribute vec2 tex;\nvarying vec2 v_Texture;\nuniform mat4 wmtx;\nuniform mat4 pmtx;\nvoid main() {\nv_Texture = tex;\ngl_Position = (pmtx * wmtx) * pos;\n}\n</string>
     <string-array name="menuEditor">
         <item>Copy</item>
         <item>Paste</item>

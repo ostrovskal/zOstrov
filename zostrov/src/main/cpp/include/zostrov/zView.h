@@ -121,7 +121,7 @@ public:
     // уведомление об изменении параметров адаптера
     virtual void notifyAdapter(zBaseAdapter* _adapter) { }
     // вернуть имя типа
-    virtual cstr typeName() const { return "zView"; }
+    virtual zString8 typeName() const { return "zView"; }
     // установка альфы
     void setAlpha(float _alpha);
     // установка масштаба
@@ -211,6 +211,8 @@ public:
     zView* setIconGravity(u32 _gravity) { _setGravity(_gravity & ZS_GRAVITY_MASK, &icGravity); return this; }
     // установить гравитацию фореграунда
     zView* setForegroundGravity(u32 _gravity) { _setGravity(_gravity & ZS_GRAVITY_MASK, &fkGravity); return this; }
+    // показать представления, которые не удалились из памяти
+    static void showUnusedView();
     // отрисовка отладочной информации
     virtual void drawDebug();
     // альфа
@@ -329,7 +331,7 @@ public:
     // запуск
     void start(float delta, bool vert, bool flow);
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zViewGlow"; }
+    virtual zString8 typeName() const override { return "zViewGlow"; }
     // остановка
     void stop() { animator.clear(); updateVisible(false); }
 protected:
@@ -349,7 +351,7 @@ public:
     // разбудить
     virtual void awaken();
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zViewScrollBar"; }
+    virtual zString8 typeName() const override { return "zViewScrollBar"; }
     // вернуть размер
     int getSize() const { return size; }
 protected:
@@ -379,7 +381,7 @@ class zFlyng : public zView {
 public:
     zFlyng(zView* _group);
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zViewFlyng"; }
+    virtual zString8 typeName() const override { return "zViewFlyng"; }
     // запуск
     bool start(zTouch* touch, int delta);
     // завершение

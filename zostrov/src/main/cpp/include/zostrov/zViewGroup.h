@@ -24,7 +24,7 @@ public:
     // касание
     virtual i32 touchEvent(AInputEvent* event) override;
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zViewGroup"; }
+    virtual zString8 typeName() const override { return "zViewGroup"; }
     // проверка на режим блокировки
     virtual bool testLocked() const override;
     // управление прокруткой

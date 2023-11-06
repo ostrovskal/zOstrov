@@ -10,8 +10,7 @@ zViewKeyboard::zViewKeyboard(cstr nameLayouts, zStyle* _styles_base, zStyle* _st
     updateStatus(ZS_SYSTEM, _id == z.R.id.keyboard);
     updateStatus(ZS_VISIBLED, false);
     setDrawable(nullptr, DRW_FBO); duration = 20;
-    i32 idx(0);
-    auto ptr(manager->assetFile(nameLayouts, &idx));
+    i32 idx(0); auto ptr((u8*)zFileAsset(nameLayouts, true, false).readn(&idx));
     zXml xml(ptr, idx); if(!xml.isValid()) return;
     auto root(xml.getRoot());
     if(root->getName() != "keyboards") { ILOG("Недопустимый XML формат клавиатуры!"); return; }

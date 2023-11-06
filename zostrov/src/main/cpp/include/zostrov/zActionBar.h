@@ -114,7 +114,7 @@ public:
     // установка содержимого
     virtual void setContent(zView* _view);
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zActionBar"; }
+    virtual zString8 typeName() const override { return "zActionBar"; }
     // отобразить/скрыть
     void show(bool _show);
     // формирователь

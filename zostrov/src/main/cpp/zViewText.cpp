@@ -345,7 +345,7 @@ void zViewText::onInit(bool _theme) {
             case Z_ICON_PADDING:
             case Z_ICON_SCALE:              drParams[DR_ICON].set(Z_ICON, attr, (int)val);
                                             if(attr == Z_ICON_SCALE) drParams[DR_ICON].scale = v->f; break;
-            case Z_ASSET:                   setHtmlText((cstr)manager->assetFile(zTheme::value.s), [](cstr, bool, zHtml*) { return false; }); break;
+            case Z_ASSET:                   setHtmlText((cstr)zFileAsset(zTheme::value.s, true).readn(), [](cstr, bool, zHtml*) { return false; }); break;
         }
     });
     // шрифт

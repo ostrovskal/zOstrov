@@ -58,7 +58,7 @@ public:
     // установить текст из строки
     virtual zViewText* setText(czs& _text, bool force = false);
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zViewText"; }
+    virtual zString8 typeName() const override { return "zViewText " + realText; }
     // установить текст по идентификатору из ресурсов
     zViewText* setText(u32 _text) { setText(theme->findString(_text), false); return this; }
     // специальный - для клавиатурных кнопок
@@ -228,7 +228,7 @@ public:
     // раскладка клавы по умолчанию
     virtual cstr getDefaultKeyboardLayer() const override { return filter ? filter->getKeboardLayer() : nullptr; }
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zViewEdit"; }
+    virtual zString8 typeName() const override { return "zViewEdit " + realText; }
     // установка фильтра
     void setFilter(u32 inputMode, zFilterEdit* _filter = nullptr);
     // вернуть фильтр

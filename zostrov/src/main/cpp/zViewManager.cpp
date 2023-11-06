@@ -42,10 +42,10 @@ zViewManager::~zViewManager() {
 void zViewManager::destroyResources() {
     event.clear();
     if(popup) popup->dismiss();
-    SAFE_DELETE(caret);
     SAFE_DELETE(common);
-    SAFE_DELETE(popup);
     SAFE_DELETE(dropdown);
+    SAFE_DELETE(popup);
+    SAFE_DELETE(caret);
     cache->recycle(debugTexture);
     for(auto& t : _touch) t.reset();
     focus       = nullptr;
@@ -99,27 +99,22 @@ int zViewManager::keyEvent(int key) {
     return v && v->isEnabled()? v->keyEvent(key, true) : 0;
 }
 
+int zViewManager::addShader(cstr name, czs& vertex, czs& fragment, cstr vars) {
+    auto vsh(new zShader(vertex, GL_VERTEX_SHADER));
+    auto fsh(new zShader(fragment, GL_FRAGMENT_SHADER));
+    auto sh(new zShader(vsh, fsh));
+    shaders += new Z_SHADER(name, sh, sh->linkVariables(vars));
+    return shaders.size() - 1;
+}
+
 bool zViewManager::displayInit() {
-    if(!zGL::instance()->init(window))
-        return false;
+    if(!zGL::instance()->init(window)) return false;
     // шейдеры
-    int sz;
-    auto main(new zShader(new zShader(zString8((cstr)assetFile("shaders/main.vshader", &sz), sz), GL_VERTEX_SHADER),
-                          new zShader(zString8((cstr)assetFile("shaders/main.fshader", &sz),  sz), GL_FRAGMENT_SHADER)));
-    auto oes(new zShader(new zShader(zString8((cstr)assetFile("shaders/main.vshader", &sz), sz), GL_VERTEX_SHADER),
-                         new zShader(zString8((cstr)assetFile("shaders/oes.fshader", &sz), sz), GL_FRAGMENT_SHADER)));
-    auto text(new zShader(new zShader(zString8((cstr)assetFile("shaders/main.vshader", &sz), sz), GL_VERTEX_SHADER),
-                          new zShader(zString8((cstr)assetFile("shaders/text.fshader", &sz), sz), GL_FRAGMENT_SHADER)));
-    auto outl(new zShader(new zShader(zString8((cstr)assetFile("shaders/main.vshader", &sz), sz), GL_VERTEX_SHADER),
-                          new zShader(zString8((cstr)assetFile("shaders/outline.fshader", &sz), sz), GL_FRAGMENT_SHADER)));
-    shaders += new Z_SHADER("main", main, main->linkVariables("apos;atex;utex;upmtx;uwmtx;ucflt;utcolor"));
-    shaders += new Z_SHADER( "oes",  oes,  oes->linkVariables("apos;atex;utex;upmtx;uwmtx;ucflt;utcolor"));
-    shaders += new Z_SHADER("text", text, text->linkVariables("apos;atex;utex;upmtx;uwmtx;ucflt;utcolor"));
-    shaders += new Z_SHADER("outl", outl, outl->linkVariables("apos;atex;utex;upmtx;uwmtx;ucflt;utcolor"));
+    addShader("main", theme->findString(z.R.string.mainVert), theme->findString(z.R.string.mainFrag), "upmtx;uwmtx;apos;atex;utex;ucflt;utcolor");
+    addShader("oes",  theme->findString(z.R.string.mainVert), theme->findString(z.R.string.oesFrag),  "upmtx;uwmtx;apos;atex;utex;ucflt;utcolor");
     glEnableVertexAttribArray(shaders[0]->vars[ZSH_APOS]);
     glEnableVertexAttribArray(shaders[0]->vars[ZSH_ATEX]);
     glUniform4fv(shaders[0]->vars[ZSH_UCOL], 1, zColor::white);
-    glUniform1i(shaders[0]->vars[ZSH_UTEX], 0);
     glUniform1i(shaders[0]->vars[ZSH_UTEX], 0);
     // параметры по умолчанию
     glActiveTexture(GL_TEXTURE0);
@@ -168,6 +163,7 @@ void zViewManager::prepareRender(int ishader, zVertex2D* vertices, crti& scissor
         glVertexAttribPointer(sh->vars[ZSH_ATEX], 2, GL_FLOAT, GL_FALSE, sizeof(zVertex2D), &vertices->u);
         //glDisable(GL_SCISSOR_TEST);
         glScissor(scissor.x, zView::fbo ? scissor.y : (screen.h - scissor.extent(true)), scissor.w, scissor.h);
+        // установить мировую матрицу
         glUniformMatrix4fv(sh->vars[ZSH_WMTX], 1, false, wmtx);
     } else {
         ILOG("Unknown shader %i!", ishader);
@@ -332,17 +328,6 @@ void zViewManager::stateAllViews(u32 action, u8** _ptr, u32* _size) {
     }
 }
 
-u8* zViewManager::assetFile(cstr src, i32* plen, u8* ptr, int len, int pos) const {
-    u8* ret(nullptr);
-    mMutex.lock();
-    if(fileAsset->open(src, true)) {
-        ret = (ptr ? (u8*)fileAsset->read(plen, ptr, len, pos) : (u8*)fileAsset->readn(plen));
-        fileAsset->close();
-    }
-    mMutex.unlock();
-    return ret;
-}
-
 void zViewManager::updateNativeWindow(AConfiguration* config, zStyle* _styles, zResource** _user, zStyles* _user_styles) {
     DLOG("APP_CMD_WINDOW_RESIZED");
     if(window) {
@@ -359,7 +344,7 @@ void zViewManager::updateNativeWindow(AConfiguration* config, zStyle* _styles, z
             // каретка
             caret = new zViewCaret();
             // "пустая" текстура
-            debugTexture = cache->get("znull", nullptr);
+            debugTexture = cache->get("znull.ttl", nullptr);
             // корневой элемент(будет скрытым, чтобы избежать проверку на родителя)
             common = new zAbsoluteLayout(styles_default, z.R.id.common);
             common->rclient.set(0, 0, sz.w, sz.h);
@@ -447,14 +432,8 @@ void zViewManager::showSoftKeyboard(u32 idOwner, bool _show) {
 }
 
 u8* zImageCache::load(cstr _name, i32& size) {
-    u8* ptr; zString8 name(_name);
-    if(name.indexOf("/") == -1) {
-        // загрузить изображение из активов и скопировать ее в текстуру
-        ptr = manager->assetFile("textures/" + name + ".ttl", &size);
-    } else {
-        zFile f(name, true); size = f.length(); ptr = (u8*)f.readn();
-    }
-    return ptr;
+    // загрузить изображение из активов и скопировать ее в текстуру
+    return (u8*)zFileAsset("textures/" + zString8(_name), true).readn(&size);
 }
 
 zTexture* zImageCache::add(zTexture* tx, zTexture* t) {
@@ -502,7 +481,7 @@ zTexture* zImageCache::get(cstr _name, zTexture* t) {
         delete ptr;
     } else {
         ILOG("Ошибка при загрузке текстуры - %s", _name);
-        return get("znull", nullptr);
+        return get("znull.ttl", nullptr);
     }
     return add(tx, nullptr);
 }
@@ -541,10 +520,9 @@ void zImageCache::clear() {
 }
 
 void zImageCache::info() {
-    if(use) {
-        DLOG("Кэш текстур: текстур в памяти - %i, всего текстур - %i, память - %i, макс - %i", use, tex.size(), curSize, maxSize);
-        for(auto& t : tex) { ILOG("%s", t.tex->info().str()); }
-    }
+    zView::showUnusedView();
+    ILOG("Кэш текстур: текстур в памяти - %i, всего текстур - %i, память - %i, макс - %i", use, tex.size(), curSize, maxSize);
+    if(use) for(auto& t : tex) { ILOG("%s", t.tex->info().str()); }
 }
 
 void zImageCache::update() {

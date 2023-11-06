@@ -12,7 +12,7 @@
 void zViewDropdown::onDetach() {
     if(adapter) adapter->unregistration(this);
     styles = nullptr; adapter = nullptr; owner = nullptr;
-    detachAllViews(false);
+    removeAllViews(false); cacheViews.clear();
 }
 
 void zViewDropdown::notifyEvent(HANDLER_MESSAGE* msg) {
@@ -133,11 +133,15 @@ void zViewSelect::onMeasure(cszm& spec) {
     if(view) {
         // ширина/высота - неизвестно
         view->measure({zMeasure(MEASURE_UNDEF, 0), zMeasure(MEASURE_UNDEF, 0)});
+        // теперь считаем габариты списка
+        auto dropdown(manager->getDropdown(this, styles, adapter));
+        // сначала его собственные
+        dropMeasure.empty(); dropdown->measure(dropMeasure);
         // подсчитать габариты селекта
         auto heightSize(spec.h.size()), widthSize(spec.w.size());
         if(spec.w.isExact()) width = widthSize;
         else {
-            width = z_max(minMaxSize.x, view->rview.w + pad.extent(false));
+            width = z_max(minMaxSize.x, dropdown->rview.w + pad.extent(false));
             if(widthSize && spec.w.mode() == MEASURE_MOST) width = z_min(width, widthSize);
         }
         if(spec.h.isExact()) height = heightSize;
@@ -146,10 +150,7 @@ void zViewSelect::onMeasure(cszm& spec) {
             if(heightSize && spec.h.mode() == MEASURE_MOST) height = z_min(height, heightSize);
         }
         view->measure({zMeasure(MEASURE_EXACT, width), zMeasure(MEASURE_EXACT, height)});
-        // теперь считаем габариты списка
-        auto dropdown(manager->getDropdown(this, styles, adapter));
-        // сначала его собственные
-        dropMeasure.empty(); dropdown->measure(dropMeasure);
+        // потом в соответствии с селектом
         dropMeasure.set(zMeasure(MEASURE_EXACT, z_max(width, dropdown->rview.w)), zMeasure(MEASURE_UNDEF, 0));
     }
     setMeasuredDimension(width, height);
@@ -232,7 +233,6 @@ void zViewPopup::onLayout(crti &position, bool changed) {
     }
     zView::onLayout(rview, changed);
     content->layout(rview);
-//    RTI_LOG("popup", rview);
 }
 
 i32 zViewPopup::keyEvent(int key, bool sysKey) {

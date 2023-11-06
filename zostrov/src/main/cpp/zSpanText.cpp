@@ -143,7 +143,7 @@ void zTextSpanImage::updateState(zTextPaint *paint) {
     }
 }
 
-zTextSpanBullet::zTextSpanBullet(bool _ordered, int _index) : zTextSpanImage("zssh", "iconBullet", 0.5f, 0xffffffff), ordered(_ordered) {
+zTextSpanBullet::zTextSpanBullet(bool _ordered, int _index) : zTextSpanImage("zssh.ttl", "iconBullet", 0.5f, 0xffffffff), ordered(_ordered) {
     if(_ordered) {
         _idx = z_ntos(&_index, RADIX_DEC, true);
         _idx += ". "; dr.typeTri = GL_TRIANGLES;
@@ -345,7 +345,7 @@ bool zViewText::setHtmlText(czs& text, const std::function<bool(cstr tag, bool e
                 // img
                 case 0x9ae16064:
                     _html->text += "\t";
-                    span = new zTextSpanImage(_html->getStringAttr("src", "znull"), _html->getStringAttr("t", "rect"),
+                    span = new zTextSpanImage(_html->getStringAttr("src", "znull.ttl"), _html->getStringAttr("t", "rect"),
                                               _html->getFloatAttr("s", 1.0f), _html->getColorAttr("c", 0xffffffff));
                     flags = SPAN_FLAGS_SPECIFIC;
                     break;

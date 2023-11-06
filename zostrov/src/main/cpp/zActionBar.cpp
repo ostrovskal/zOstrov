@@ -160,7 +160,7 @@ void zActionBar::clickGroup(zView *view, zMenuGroup *grp) {
         grp = &currentGrp; if(adapter) adapter->setGroup(grp);
         if(onClickMenuGroup) onClickMenuGroup(view, grp);
         auto dropdown(manager->getDropdown(this, styles_group, adapter));
-        dropdown->measure(menuSpec);
+        menuSpec.empty(); dropdown->measure(menuSpec);
         manager->getPopup()->show(view->rview.x, rview.h, this, dropdown);
     } else {
         manager->getPopup()->dismiss();

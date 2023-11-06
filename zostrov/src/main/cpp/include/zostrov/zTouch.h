@@ -20,7 +20,7 @@ public:
     // Признак захвата касания
     bool isCaptured() const { return (flags & TOUCH_CAPTURE) != 0; }
     // Признак двойного клика
-    bool isDblClicked() const { return dblClick; } //(flags & TOUCH_DOUBLE_CLICKED) != 0; }
+    bool isDblClicked() const { return dblClick; }
     // проверка на пустой
     bool isEmpty() const { return own == nullptr; }
     // проверка на драг

@@ -421,7 +421,6 @@
         <item name="icColor">#fff</item>
         <item name="icScale">0.75</item>
         <item name="icGravity">center</item>
-        <item name="textSize">15sp</item>
         <item name="textStyle">bold</item>
         <item name="textColor">#fff</item>
         <item name="textLines">1</item>
@@ -429,22 +428,9 @@
         <item name="fkGravity">center</item>
         <item name="gravity">center</item>
     </style>
-    <style name="ccontroller">
+    <style name="controller">
         <item name="fbo">true</item>
         <item name="visibled">false</item>
-        <item name="fkTile1">@integer/ccontrolL</item>
-        <item name="fkTile2">@integer/ccontrolU</item>
-        <item name="fkTile3">@integer/ccontrolR</item>
-        <item name="fkTile4">@integer/ccontrolD</item>
-        <item name="fkColor">#A0ffffff</item>
-    </style>
-    <style name="acontroller">
-        <item name="fbo">true</item>
-        <item name="visibled">false</item>
-        <item name="fkTile1">@integer/acontrolY</item>
-        <item name="fkTile2">@integer/acontrolX</item>
-        <item name="fkTile3">@integer/acontrolA</item>
-        <item name="fkTile4">@integer/acontrolB</item>
         <item name="fkColor">#A0ffffff</item>
     </style>
     <style name="msgForm">

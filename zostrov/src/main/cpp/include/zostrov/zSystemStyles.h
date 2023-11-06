@@ -450,7 +450,6 @@ static zStyle styles_z_butcontroller[] = {
 	{ Z_ICON_COLOR, 0xFFFFFFFF },
 	{ Z_ICON_SCALE, 49151 },
 	{ Z_ICON_GRAVITY, ZS_GRAVITY_CENTER },
-	{ Z_TEXT_SIZE, 15 },
 	{ Z_TEXT_STYLE, ZS_TEXT_BOLD },
 	{ Z_TEXT_FOREGROUND_COLOR, 0xFFFFFFFF },
 	{ Z_TEXT_LINES, 1 },
@@ -459,23 +458,9 @@ static zStyle styles_z_butcontroller[] = {
 	{ Z_GRAVITY | ZT_END, ZS_GRAVITY_CENTER }
 };
 
-static zStyle styles_z_ccontroller[] = {
+static zStyle styles_z_controller[] = {
 	{ Z_FBO, true },
 	{ Z_VISIBLED, false },
-	{ Z_FOREGROUND_TILE1, z.R.integer.ccontrolL },
-	{ Z_FOREGROUND_TILE2, z.R.integer.ccontrolU },
-	{ Z_FOREGROUND_TILE3, z.R.integer.ccontrolR },
-	{ Z_FOREGROUND_TILE4, z.R.integer.ccontrolD },
-	{ Z_FOREGROUND_COLOR | ZT_END, 0xA0FFFFFF }
-};
-
-static zStyle styles_z_acontroller[] = {
-	{ Z_FBO, true },
-	{ Z_VISIBLED, false },
-	{ Z_FOREGROUND_TILE1, z.R.integer.acontrolY },
-	{ Z_FOREGROUND_TILE2, z.R.integer.acontrolX },
-	{ Z_FOREGROUND_TILE3, z.R.integer.acontrolA },
-	{ Z_FOREGROUND_TILE4, z.R.integer.acontrolB },
 	{ Z_FOREGROUND_COLOR | ZT_END, 0xA0FFFFFF }
 };
 

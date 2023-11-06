@@ -24,23 +24,28 @@ bool zTouch::event(AInputEvent* event, crti& r) {
     act = getEventAction(event, &idx, &_id);
     // врем¤
     ctm = AMotionEvent_getEventTime(event);
+    x = AMotionEvent_getX(event, idx);
+    y = AMotionEvent_getY(event, idx);
     switch(act) {
         case AMOTION_EVENT_ACTION_POINTER_DOWN:
         case AMOTION_EVENT_ACTION_DOWN:
-            x = AMotionEvent_getX(event, idx);
-            y = AMotionEvent_getY(event, idx);
             own = nullptr;
             if(r.contains((int)x, (int)y)) {
                 // убрать признак отпускания
                 flags &= ~TOUCH_RELEASE; coord = r;
                 // установить признак захвата
                 id = _id; flags |= TOUCH_CAPTURE;
-                bpt.x = x; bpt.y = y;
-                cpt.x = x; cpt.y = y;
                 dtm = btm = ctm; result = true;
                 tm = ((ctm - tm) / 1000000);
-                flags |= ((tm < 300) * TOUCH_DOUBLE_CLICKED);
+                if(tm < 300) {
+                    // и если старая позиция и новая близко друг к другу
+                    //ILOG("x0:%f x1:%f y0:%f y1:%f %f %f", bpt.x, x, bpt.y, y, fabs(bpt.x - x), fabs(bpt.y - y));
+                    if(fabs(bpt.x - x) <= 10.0f && fabs(bpt.y - y) <= 10.0f)
+                        flags |= TOUCH_DOUBLE_CLICKED;
+                }
                 dblClick = (flags & TOUCH_DOUBLE_CLICKED) != 0;
+                bpt.x = x; bpt.y = y;
+                cpt.x = x; cpt.y = y;
             }
             break;
         case AMOTION_EVENT_ACTION_POINTER_UP:
@@ -49,9 +54,10 @@ bool zTouch::event(AInputEvent* event, crti& r) {
             if(id == _id && (flags & TOUCH_CAPTURE)) {
                 // установить признак отпускания касания
                 flags |= TOUCH_RELEASE;
-                id = -1; result = true; tm = ctm;
+                id = -1; result = true;
+                cpt.x = x; cpt.y = y;
                 // убрать признак захвата
-                flags &= ~TOUCH_CAPTURE;
+                tm = ctm; flags &= ~TOUCH_CAPTURE;
             }
             break;
         case AMOTION_EVENT_ACTION_CANCEL:

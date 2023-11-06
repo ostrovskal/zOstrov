@@ -30,7 +30,7 @@ public:
     // отключить обновление размера
     virtual void requestLayout() override;
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zViewBaseRibbon"; }
+    virtual zString8 typeName() const override { return "zViewBaseRibbon"; }
     // установка адаптера
     zViewBaseRibbon* setAdapter(zBaseAdapter* _adapter);
     // вернуть адаптер
@@ -107,7 +107,7 @@ class zViewRibbon : public zViewBaseRibbon {
 public:
     zViewRibbon(zStyle* _styles, i32 _id, bool _vert) : zViewBaseRibbon(_styles, _id, _vert) { }
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zViewRibbon"; }
+    virtual zString8 typeName() const override { return "zViewRibbon"; }
 protected:
     // Заполнение списка
     virtual void fill(int edgePos, bool reverse) override;
@@ -127,7 +127,7 @@ public:
     // загрузка стилей
     virtual void onInit(bool _theme) override;
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zViewGrid"; }
+    virtual zString8 typeName() const override { return "zViewGrid"; }
     // установка параметра
     void setParameters(i32 param, i32 value);
     // возврат параметра
@@ -165,7 +165,7 @@ public:
     // нажатие клавиши
     virtual i32 keyEvent(int key, bool sysKey) override;
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zViewPopup"; }
+    virtual zString8 typeName() const override { return "zViewPopup"; }
 protected:
     // конструктор
     zViewPopup();
@@ -184,8 +184,10 @@ protected:
 class zViewDropdown : public zViewRibbon {
     friend class zViewManager;
 public:
+    // инициализация
+    virtual void onInit(bool _theme) override { minMaxSize.empty(); zViewRibbon::onInit(_theme); }
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zViewDropdown"; }
+    virtual zString8 typeName() const override { return "zViewDropdown"; }
 protected:
     // конструктор
     zViewDropdown() : zViewRibbon(styles_default, 0, true) {  }
@@ -216,7 +218,7 @@ public:
     // проверка на режим блокировки
     virtual bool testLocked() const override;
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zViewSelect"; }
+    virtual zString8 typeName() const override { return "zViewSelect"; }
     // уведомление адаптера
     virtual void notifyAdapter(zBaseAdapter* _adapter) override { reset(); }
     // установка адаптера

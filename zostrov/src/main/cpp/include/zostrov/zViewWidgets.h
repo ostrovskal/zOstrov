@@ -10,7 +10,7 @@ public:
     // событие загруки стилей
     virtual void onInit(bool theme) override;
     // вернуть им¤ типа
-    virtual cstr typeName() const override { return "zViewButton"; }
+    virtual zString8 typeName() const override { return z_fmt8("zViewButton %s(%i)", realText.str(), icon); }
     // номер иконки
     void setIcon(i32 _icon);
     // вернуть иконку
@@ -34,7 +34,7 @@ public:
     // событие загруки стилей
     virtual void onInit(bool theme) override;
     // вернуть им¤ типа
-    virtual cstr typeName() const override { return "zViewCheck"; }
+    virtual zString8 typeName() const override { return "zViewCheck " + realText; }
 protected:
     // событие касания
     virtual i32 onTouchEvent() override;
@@ -45,7 +45,7 @@ public:
     // конструктор
     zViewRadio(zStyle *_styles, i32 _id, u32 _text, u32 _group);
     // вернуть им¤ типа
-    virtual cstr typeName() const override { return "zViewRadio"; }
+    virtual zString8 typeName() const override { return "zViewRadio " + realText; }
     // пометить
     virtual void checked(bool set) override;
 protected:
@@ -63,7 +63,7 @@ public:
     // событие загрузки
     virtual void onInit(bool theme) override;
     // вернуть им¤ типа
-    virtual cstr typeName() const override { return "zViewSwitch"; }
+    virtual zString8 typeName() const override { return "zViewSwitch " + realText; }
     // пометить
     virtual void checked(bool set) override;
     // сохранение/восстановление
@@ -91,7 +91,7 @@ public:
     // событие загрузки
     virtual void onInit(bool _theme) override;
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zViewSlider"; }
+    virtual zString8 typeName() const override { return z_fmt8("zViewSlider %i:(%i-%i)", pos, range.w, range.h); }
     // блокировка
     virtual void disable(bool set) override;
     // установка диапазона
@@ -160,7 +160,7 @@ public:
     // установка прогресса
     virtual bool setProgress(int _pos) override;
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zViewProgress"; }
+    virtual zString8 typeName() const override { return z_fmt8("zViewProgress %i:(%i-%i)", pos, range.w, range.h); }
     // вернуть процент из позиции
     int getPercent() const { return percent; }
 protected:
@@ -181,26 +181,28 @@ public:
     zViewController(zStyle* _styles, i32 _id, i32 _base, u32 _fileMap);
     // деструктор
     virtual ~zViewController();
+    // инициализация
+    virtual void onInit(bool _theme) override;
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zViewController"; }
+    virtual zString8 typeName() const override { return "zViewController"; }
     // установка размера
     void setSize(cszi& _size) { lps.w = _size.w; lps.h = _size.h; requestLayout(); }
     // установить декорации для кнопки(текс/иконка)
-    void setDecorateKey(int idx, cstr text, int icon);
-    virtual void onInit(bool _theme) override;
+    void setDecorateKey(int idx, cstr text, int icon, int tile);
     // сброс
     void reset() { buttons = 0; }
     // вернуть нажатые кнопки
     u32 getButtons() const { return buttons; }
     // событие изменения статуса кнопок
     void setOnChangeButton(std::function<void(zView*, int)> _button) { onChangeButton = _button; }
-    virtual void requestLayout() override;
 protected:
     struct DECORATE {
         DECORATE(int x, int y, int w, int h) : rect(x, y, w, h) { }
+        ~DECORATE() { SAFE_DELETE(dr); }
+        // габариты
         rti rect{};
-        int icon{-1};
-        zString8 text{};
+        // отрисовщик
+        zDrawable* dr{nullptr};
     };
     // отрисовка
     virtual void onDraw() override;
@@ -219,14 +221,10 @@ protected:
     u8* map{nullptr};
     // базовый тайл
     i32 base{0};
-    // отрисовщики кнопок
-    zDrawable* dr[4]{};
     // событие
     std::function<void(zView*, int)> onChangeButton;
     // декорации для кнопок
     zArray<DECORATE*> decors{};
-    // для отрисовки текста
-    zViewButton* button{nullptr};
 };
 
 class zViewImage : public zViewText {
@@ -235,7 +233,7 @@ public:
     // загрузка стилей
     virtual void onInit(bool theme) override;
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zViewImage"; }
+    virtual zString8 typeName() const override { return "zViewImage"; }
     // установка изображения
     void setImage(i32 _image);
     // установка текстуры/номера тайла
@@ -321,7 +319,7 @@ public:
     // инициализация
     virtual void onInit(bool _theme) override;
     // тип представления
-    virtual cstr typeName() const override { return "zViewToast"; }
+    virtual zString8 typeName() const override { return "zViewToast"; }
 protected:
     // внутренние события
     virtual void notifyEvent(HANDLER_MESSAGE *msg) override;
@@ -335,7 +333,7 @@ public:
     // инициализация
     virtual void onInit(bool _theme) override;
     // тип представления
-    virtual cstr typeName() const override { return "zViewSurface"; }
+    virtual zString8 typeName() const override { return z_fmt8("zViewSurface %i-%i", rview.w, rview.h); }
 protected:
     virtual void onLayout(crti& position, bool changed) override;
     virtual void onDraw() override;

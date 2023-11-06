@@ -7,7 +7,7 @@
 class zFrameLayout : public zViewGroup {
 public:
     zFrameLayout(zStyle* _styles, i32 _id) : zViewGroup(_styles, _id) { }
-    virtual cstr typeName() const override { return "zFrameLayout"; }
+    virtual zString8 typeName() const override { return "zFrameLayout"; }
 protected:
     virtual void onMeasure(cszm& spec) override;
     virtual void onLayout(crti &position, bool changed) override;
@@ -16,7 +16,7 @@ protected:
 class zAbsoluteLayout : public zViewGroup {
 public:
     zAbsoluteLayout(zStyle* _styles, i32 _id) : zViewGroup(_styles, _id) { }
-    virtual cstr typeName() const override { return "zAbsoluteLayout"; }
+    virtual zString8 typeName() const override { return "zAbsoluteLayout"; }
 protected:
     virtual void onMeasure(cszm& spec) override;
     virtual void onLayout(crti &position, bool changed) override;
@@ -25,7 +25,7 @@ protected:
 class zLinearLayout : public zViewGroup {
 public:
     zLinearLayout(zStyle* _styles, i32 _id, bool _vert) : zViewGroup(_styles, _id) { vert = _vert; }
-    virtual cstr typeName() const override { return "zLinearLayout"; }
+    virtual zString8 typeName() const override { return "zLinearLayout"; }
 protected:
     virtual void onMeasure(cszm& spec) override;
     virtual void onLayout(crti &position, bool changed) override;
@@ -36,7 +36,7 @@ protected:
 class zCellLayout : public zViewGroup {
 public:
     zCellLayout(zStyle* _styles, i32 _id, cszi& _cell, i32 _space);
-    virtual cstr typeName() const override { return "zCellLayout"; }
+    virtual zString8 typeName() const override { return "zCellLayout"; }
 protected:
     virtual void onMeasure(cszm& spec) override;
     virtual void onLayout(crti &position, bool changed) override;
@@ -59,7 +59,7 @@ public:
     virtual int computeScrollOffset(bool _vert) const override { auto v(atView(0)); return v ? v->scroll[vert] : 0; }
     virtual int computeScrollRange(bool _vert) const override { return childSize; }
     virtual int computeScrollExtent(bool _vert) const override { return sizes(_vert) - pad.extent(_vert); }
-    virtual cstr typeName() const override { return "zScrollLayout"; }
+    virtual zString8 typeName() const override { return "zScrollLayout"; }
 protected:
     virtual pti applyGravity(crti& sizeParent, crti& sizeChild, u32 _gravity) override;
     virtual void onMeasure(cszm& spec) override;
@@ -80,7 +80,7 @@ public:
     // смена темы
     virtual void changeTheme() override;
     // имя типа
-    virtual cstr typeName() const override { return "zEditLayout"; }
+    virtual zString8 typeName() const override { return "zEditLayout"; }
 protected:
     // внутренние события
     virtual void notifyEvent(HANDLER_MESSAGE *msg) override;
@@ -119,7 +119,7 @@ public:
     // загрузка стилей
     virtual void onInit(bool theme) override;
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zTabLayout"; }
+    virtual zString8 typeName() const override { return "zTabLayout"; }
     // вернуть активную страницу
     int getActivePage() const { return activePage; }
     // вернуть содержимое активной страницы
@@ -157,7 +157,7 @@ public:
     // признак сохранения состояния дочерних
     virtual bool stateChildren() const override { return false; }
     // вернуть имя типа
-    virtual cstr typeName() const override { return "zViewChart"; }
+    virtual zString8 typeName() const override { return "zViewChart"; }
     // установка режима
     void setMode(u32 _mode) { if(mode != _mode) { mode = _mode; requestLayout(); } }
     // установка данных

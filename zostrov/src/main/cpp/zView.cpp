@@ -5,6 +5,7 @@
 #include "zostrov/zCommon.h"
 #include "zostrov/zViewGroup.h"
 
+static zArray<zView*> views;
 // фейковый отображатель
 zDrawableFake zView::fake;
 zView* zView::fbo(nullptr);
@@ -14,10 +15,30 @@ zTouch* zView::touch(nullptr);
 
 zView::zView(zStyle* _styles, i32 _id) : styles(_styles), id(_id) {
     for(auto& d : drw) d = &fake;
+#ifndef NDEBUG
+    views += this;
+#endif
 }
 
 zView::~zView() {
     for(auto& dr : drw) { if(dr->isValid()) SAFE_DELETE(dr); }
+#ifndef NDEBUG
+    auto idx(views.indexOf(this));
+    if(idx != -1) views.erase(idx, 1, false);
+    else {
+        ILOG("view not found %x", id);
+    }
+#endif
+}
+
+void zView::showUnusedView() {
+#ifndef NDEBUG
+    ILOG("Unused views: %i", views.size());
+    for(auto v : views) {
+        ILOG("%s(%x-%i)", v->typeName().str(), v->id, v->id);
+    }
+    views.clear();
+#endif
 }
 
 pti zView::applyGravity(crti& sizeParent, crti& sizeChild, u32 _gravity) {
@@ -115,12 +136,9 @@ void zView::drawDebug() {
     // сетка элемента
     if(manager->isDebug()) {
         // создать сетку, если ее нет
-        if(!drwDebug.vertices) {
-            drwDebug.texture = manager->cache->get("znull", drwDebug.texture);
-            drwDebug.makeDebug(cellDebug);
-        }
+        if(!drwDebug.vertices) drwDebug.makeDebug(cellDebug);
         // установить текстуру
-        glBindTexture(GL_TEXTURE_2D, drwDebug.texture->id);
+        glBindTexture(GL_TEXTURE_2D, manager->debugTexture->id);
         // параметры шейдера и обрезка
         manager->prepareRender(0, drwDebug.vertices, manager->screen, zMatrix::_identity);
         // фильтр

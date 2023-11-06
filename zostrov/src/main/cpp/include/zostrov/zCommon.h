@@ -14,6 +14,15 @@
 
 #include <curl2/curl.h>
 
+class zMutex {
+public:
+    zMutex() { mMutex.lock(); }
+    ~zMutex() { mMutex.unlock(); }
+protected:
+    // мьютекс
+    mutable std::mutex mMutex{};
+};
+
 static int gravity_shift[] = { 31, 31, 0, 1 };
 
 #define GL_TEXTURE_OES              0x8D65

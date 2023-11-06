@@ -55,12 +55,17 @@ zView* zViewGroup::attach(zView *v, int x, int y, int width, int height, int whe
 }
 
 void zViewGroup::removeAllViews(bool _update) {
-    while(countChildren()) remove(children[0]);
+    while(countChildren() != 0) {
+//        ILOG("count: %i", countChildren());
+        remove(children[0]);
+    }
     if(_update) requestLayout();
 }
 
 void zViewGroup::detachAllViews(bool _update) {
-    while(countChildren()) detach(children[0]);
+    while(countChildren() != 0) {
+        detach(children[0]);
+    }
     if(_update) requestLayout();
 }
 
@@ -68,15 +73,18 @@ void zViewGroup::_remove(zView* v, bool _del) {
     if(v) {
         auto idx(children.indexOf<zView*>(v));
         if(idx != -1) {
+            // удалить из касания
+            if(_del) {
+  //              ILOG("%s(%x-%i)", v->typeName(), v->id, v->id);
+                if(zView::touch && zView::touch->own == v)
+                    zView::touch->reset();
+            }
             // отсоединить
             v->cleanup();
             // вызвать событие отсоединения
             v->onDetach();
             // убрать родителя
             v->parent = nullptr;
-            // удалить из касания
-            if(_del && zView::touch && zView::touch->own == v)
-                zView::touch->reset();
             // удалить из массива дочерних
             children.erase(idx, 1, _del);
         }

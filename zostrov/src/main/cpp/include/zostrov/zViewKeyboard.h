@@ -16,7 +16,7 @@ public:
     // обработка системной кнопки
     virtual i32 keyEvent(int key, bool sysKey) override;
     // имя типа
-    virtual cstr typeName() const override { return "zViewKeyboard"; }
+    virtual zString8 typeName() const override { return "zViewKeyboard"; }
     // отобразить/скрыть
     virtual void show(u32 _id, bool set);
     // установка текущего макета

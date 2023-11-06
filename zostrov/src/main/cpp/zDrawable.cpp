@@ -5,7 +5,7 @@
 #include "zostrov/zCommon.h"
 
 static zParamDrawable drDef[DR_COUNT] = {
-    // tex                      col     pad     tl      sh      sz      tp      sc
+    // tex                  col     pad     tl      sh          sz      tp      scale
     {z.R.drawable.zssh,     0x0,    0,      -1,     0,          8,      0,      1.0f }, // DR_MSK
     {z.R.drawable.zssh,     0x0,    0,      -1,     0,          8,      0,      1.0f }, // DR_BK
     {z.R.drawable.zssh,     0x0,    0,      -1,     0,          8,      0,      1.0f }, // DR_FK
@@ -197,8 +197,8 @@ void zDrawable::drawCommon(crti& clip, const zMatrix& m, bool fbo) const {
     glBindTexture(texture->type, texture->id);
     // устанавливаем параметры шейдеров и обрезки
     manager->prepareRender(shader, vertices, _clip - manager->screen, m);
-    // устанавливаем цветовой фильтр
-    manager->setColorFilter(fbo ? view : nullptr, color);
+    // устанавливаем цветовой фильтр(только если стандартный шейдер)
+    if(!shader) manager->setColorFilter(fbo ? view : nullptr, color);
     // запускаем отрисовку
     glDrawArrays(typeTri, 0, count);
     // подсчет кол-во треугольников в кадре
@@ -214,14 +214,14 @@ void zDrawable::measure(int width, int height, int pivot, bool isSave) {
             if(!texture) texture = new zTexture();
             else {
                 auto sz(texture->getSize());
-                DLOG("resize makeFBO %s(%i) %i(%i)x%i(%i)", view->typeName(), view->id, sz.w, width, sz.h, height);
+                DLOG("resize makeFBO %s(%i) %i(%i)x%i(%i)", view->typeName().str(), view->id, sz.w, width, sz.h, height);
             }
             if(!texture->makeFBO(width, height)) {
-                ILOG("error makeFBO %s(%i) %ix%i", view->typeName(), view->id, width, height);
+                ILOG("error makeFBO %s(%i) %ix%i", view->typeName().str(), view->id, width, height);
                 release(); return;
             }
             manager->volumeVideoMemory(width * height * 4, true);
-            DLOG("ok makeFBO %s(%i) %ix%i", view->typeName(), view->id, width, height);
+            DLOG("ok makeFBO %s(%i) %ix%i", view->typeName().str(), view->id, width, height);
         }
     }
     if(texture && (_tile = texture->getTile(tile))) {
@@ -341,8 +341,8 @@ void zDrawable::init(const zDrawable* drw, int _tile) {
     texture     = manager->cache->get(drw->texture->name, texture);
     padding     = drw->padding;
     color       = drw->color;
-    tile        = _tile;
     shader      = drw->shader;
+    tile        = _tile;
 }
 
 void zDrawable::init(u32 _tx, u32 _cl, i32 _tl, u32 _pd, float _sc, int sh) {

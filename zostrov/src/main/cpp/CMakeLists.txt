@@ -30,6 +30,7 @@ add_library(zostrov STATIC
 		zSensorManager.cpp
 		zViewChart.cpp
 		zViewVideo.cpp
+		zFileAsset.cpp
 )
 
 find_package(zstandard REQUIRED CONFIG)

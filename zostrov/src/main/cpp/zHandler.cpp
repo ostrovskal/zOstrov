@@ -17,7 +17,7 @@ void zHandler::send(zView* view, int what, u64 millis, int a1, int a2, cstr s) {
 void zHandler::info() {
 	for(int i = 0 ; i < 10; i++) {
 		auto& msg(looper[i]);
-		if(msg.millis) DLOG("%i - view: %llx %s", i, msg.view, msg.view ? msg.view->typeName() : "null");
+		if(msg.millis) DLOG("%i - view: %llx %s", i, msg.view, msg.view ? msg.view->typeName().str() : "null");
 	}
 }
 
