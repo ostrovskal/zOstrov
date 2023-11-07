@@ -9,12 +9,15 @@ bool zFileAsset::open(czs& pth, bool read, bool zipped, bool append) {
     zMutex mt;
     if(pth.prefix("/")) return zFile::open(pth, read, zipped, append);
     close();
-    if(zipped && pth.right(4).compare(".zip")) {
-        // скопировать в папку кэша и открыть как архив
-        auto p(settings->makePath(pth, FOLDER_CACHE));
-        return copy(p, 0) && zFile::open(p, read, zipped, append);
+    if((fd = AAssetManager_open(manager->getAsset(), pth, AASSET_MODE_UNKNOWN))) {
+        if(zipped && pth.right(4).compare(".zip")) {
+            // скопировать в папку кэша и открыть как архив
+            auto p(settings->makePath(pth.substrAfterLast("/"), FOLDER_CACHE));
+            auto ret(copy(p, 0) && zFile::open(p, read, zipped, append));
+            fd = nullptr; return ret;
+        }
+        path = pth;
     }
-    if((fd = AAssetManager_open(manager->getAsset(), pth, AASSET_MODE_UNKNOWN))) path = pth;
     return fd != nullptr;
 }
 
@@ -93,10 +96,8 @@ zArray<zFile::zFileInfo> zFileAsset::find(czs& pth, czs& _msk) {
                     if(i > 0 && _m) { _s = _m + 1; continue; }
                     res = false; break;
                 }
-                if(res) {
-                    zFileAsset(ent, true, false).info(info);
+                if(res && zFileAsset(pth + ent, true, false).info(info))
                     fl += info;
-                }
             }
         }
         return fl;
@@ -115,7 +116,7 @@ bool zFileAsset::isFile(czs& pth) {
 
 bool zFileAsset::isDir(czs& pth) {
     zMutex mt;
-    if(!pth.prefix("/")) return AAssetManager_openDir(manager->getAsset(), pth.str()) != nullptr;
+    if(!pth.prefix("/")) return pth.indexOf(".") == -1 && AAssetManager_openDir(manager->getAsset(), pth.str()) != nullptr;
     return zFile::isDir(pth);
 }
 

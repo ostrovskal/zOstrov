@@ -37,9 +37,10 @@ public:
     virtual int tell() const override { return (fd ? AAsset_seek(fd, 0, SEEK_CUR) : zFile::tell()); }
     // найти
     static zArray<zFileInfo> find(czs& pth, czs& _msk);
-    // проверка на наличие файл/папку
+    // проверка на наличие файла/папки
     static bool isFile(czs& pth);
     static bool isDir(czs& pth);
+    static bool isExist(czs& pth) { return isFile(pth) | isDir(pth); }
     // создание папки
     static bool makeDir(czs& pth);
     // переименование/перемещение
