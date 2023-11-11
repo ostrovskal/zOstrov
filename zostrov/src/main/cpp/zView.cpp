@@ -51,6 +51,7 @@ pti zView::applyGravity(crti& sizeParent, crti& sizeChild, u32 _gravity) {
 }
 
 void zView::changeTheme() {
+    WORK_THREAD();
     drw[DRW_FBO]->release();
     status &= ~ZS_MEASURE; status |= ZS_DIRTY_LAYER;
     if(manager->isChangeTheme()) {
@@ -70,6 +71,7 @@ static void setDpRect(rti& r, int val, bool skipZero) {
 }
 
 void zView::onInit(bool _theme) {
+    WORK_THREAD();
     oldPos.set(INT_MAX, INT_MAX, 0, 0);
     zParamDrawable::setDefaults();
     styles->enumerate([this, _theme](u32 attr) {
@@ -155,6 +157,7 @@ void zView::drawDebug() {
 }
 
 void zView::draw() {
+    WORK_THREAD();
     if(isDestroy()) { getParent()->remove(this); return; }
     if(isVisibled()) {
         // рисуем
@@ -209,6 +212,7 @@ i32 zView::touchEvent(AInputEvent* event) {
 }
 
 void zView::setStyles(zStyle* _styles) {
+    WORK_THREAD();
     if(_styles && styles != _styles) {
         styles = _styles;
         onInit(false);
@@ -217,6 +221,7 @@ void zView::setStyles(zStyle* _styles) {
 }
 
 void zView::disable(bool _disable) {
+    WORK_THREAD();
     if(isEnabled() == _disable) {
         updateStatus(ZS_DISABLED, _disable);
         if(_disable) cleanup();
@@ -225,24 +230,28 @@ void zView::disable(bool _disable) {
 }
 
 void zView::checked(bool _check) {
+    WORK_THREAD();
     updateStatus(ZS_CHECKED, _check);
     drw[DRW_FK]->setTileNum(_check)->measure(0, 0, PIVOT_H | PIVOT_W, true);
     invalidate();
 }
 
 void zView::requestLayout() {
+    WORK_THREAD();
     status &= ~ZS_MEASURE;
     if(parent && parent->testFlags(ZS_MEASURE))
         parent->requestLayout();
 }
 
 void zView::requestPosition() {
+    WORK_THREAD();
     status &= ~ZS_LAYOUT;
     if(parent && parent->testFlags(ZS_LAYOUT))
         parent->requestPosition();
 }
 
 void zView::invalidate() {
+    WORK_THREAD();
     status |= ZS_DIRTY_LAYER;
     if(parent && parent->isInvalidate())
         if(parent != this) parent->invalidate();
@@ -276,6 +285,7 @@ void zView::layout(crti& position) {
 }
 
 void zView::defaultOnMeasure(cszm& spec, szi size) {
+    WORK_THREAD();
     auto ws(spec.w.size()), hs(spec.h.size());
     auto wm(spec.w.mode()), hm(spec.h.mode());
     if(ws && wm == MEASURE_EXACT) {
@@ -306,6 +316,7 @@ void zView::drawShape() {
 }
 
 void zView::onLayout(crti &position, bool changed) {
+    WORK_THREAD();
     rview.x = position.x + margin.x; rview.y = position.y + margin.y;
     rti _position(position); _position.w -= margin.extent(false); _position.h -= margin.extent(true);
     // учитывать внешний отступ при выравнивании
@@ -322,6 +333,7 @@ void zView::onLayout(crti &position, bool changed) {
 }
 
 void zView::setMeasuredDimension(int width, int height) {
+    WORK_THREAD();
     rview.w = width; rview.h = height;
     rclient.w = rview.w - pad.extent(false); rclient.h = rview.h - pad.extent(true);
     status |= ZS_MEASURE_SET;
@@ -336,6 +348,7 @@ void zView::post(int what, u64 millis, int arg1, int arg2, cstr s) {
 }
 
 void zView::notifyEvent(HANDLER_MESSAGE* msg) {
+    WORK_THREAD();
     switch(msg->what) {
         case MSG_ANIM:
             if(onAnimation) {
@@ -351,12 +364,14 @@ void zView::notifyEvent(HANDLER_MESSAGE* msg) {
 }
 
 void zView::requestFocus() {
+    WORK_THREAD();
     if(isFocusableInTouch()) {
         manager->changeFocus(this);
     }
 }
 
 void zView::setAlpha(float _alpha) {
+    WORK_THREAD();
     alpha = _alpha;
     invalidate();
 }
@@ -369,12 +384,14 @@ void zView::setScale(float _x, float _y) {
 }
 
 void zView::setRotation(float _x, float _y, float _z) {
+    WORK_THREAD();
     // установка угла
     rot.set(deg2rad(_x), deg2rad(_y), deg2rad(_z));
     setScale(scale.x, scale.y);
 }
 
 int zView::updateVisible(bool set) {
+    WORK_THREAD();
     if(isVisibled() != set) {
         updateStatus(ZS_VISIBLED, set);
         if(!set) cleanup();
@@ -384,11 +401,13 @@ int zView::updateVisible(bool set) {
 }
 
 void zView::setTranslation(float _x, float _y) {
+    WORK_THREAD();
     trans.set(_x, _y, 0);
     invalidate();
 }
 
 void zView::cleanup() {
+    WORK_THREAD();
     // убрать фокус
     if(isFocus()) manager->changeFocus(nullptr);
     // убрать тап
@@ -402,6 +421,7 @@ void zView::cleanup() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 zViewGlow::zViewGlow(zView* group) : zView(styles_z_glow, 0) {
+    WORK_THREAD();
     parent = group; zView::onInit(false);
     updateStatus(ZS_VISIBLED, false);
 }
@@ -425,6 +445,7 @@ void zViewGlow::notifyEvent(HANDLER_MESSAGE *msg) {
 }
 
 void zViewGlow::start(float _delta, bool _vert, bool _flow) {
+    WORK_THREAD();
     // параметры отображения
     if(isVisibled()) return;
     updateStatus(ZS_VISIBLED, true); vert = _vert; flow = _flow;
@@ -453,6 +474,7 @@ zFlyng::zFlyng(zView* group) : zView(styles_default, 0) {
 }
 
 bool zFlyng::start(zTouch* touch, int delta) {
+    WORK_THREAD();
     auto t((int)((touch->ctm - touch->btm) / 1350000));
     // если отпустили и время < 15(выбрано экспериментально)
     if(t < 15) {
@@ -487,6 +509,7 @@ void zFlyng::stop() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 zViewScrollBar::zViewScrollBar(zView* group, bool _vert) : zView(styles_z_scrollbar, 0) {
+    WORK_THREAD();
     auto tl(drParams[DR_SCL].tiles); parent = group; vert = _vert;
     fade = (drParams[DR_SCL].type == -1 ? styles->_int(Z_SCROLLBAR_FADE, 0) : drParams[DR_SCL].type);
     size = (int)(drParams[DR_SCL].size == -1 ? styles->_int(Z_SCROLLBAR_SIZE, 2_dp) : drParams[DR_SCL].size);
@@ -503,6 +526,7 @@ void zViewScrollBar::notifyEvent(HANDLER_MESSAGE *msg) {
 }
 
 void zViewScrollBar::awaken() {
+    WORK_THREAD();
     updateStatus(ZS_VISIBLED, true); alpha = 1.0f;
     drw[DRW_BK]->measure(rview.w, rview.h, 0, false);
     animator.init(3.0f, false);
@@ -531,6 +555,7 @@ void zViewCaret::notifyEvent(HANDLER_MESSAGE *msg) {
 }
 
 void zViewCaret::update(zView* own, int x, int y, int h) {
+    WORK_THREAD();
     parent = own; updateStatus(ZS_VISIBLED, own != nullptr);
     if(own) {
         int italic(0);

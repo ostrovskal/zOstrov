@@ -15,6 +15,16 @@ static float filterMtxs[6][16] = {
         {   0.213f, 0.715f, 0.072f, 0.0f, 0.213f, 0.715f, 0.072f, 0.0f, 0.213f, 0.715f, 0.072f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f }, // disabled
 };
 
+void zViewManager::is_work_thread(cstr file, cstr func, int line) const {
+    auto id(pthread_self());
+    if(thrID && id != thrID) {
+        // вызов из не рабочего треда
+        auto lfile(strrchr(file, '/'));
+        __android_log_print(ANDROID_LOG_ERROR, "ZX", "[%s (%s:%i)] - calling from not work thread(%x)!!!\n",
+                            func, (lfile ? lfile + 1 : file), line, (int)id);
+    }
+}
+
 zViewManager::zViewManager(ANativeActivity* _activity, cstr* options, int size_cache) {
     if(!theme) theme = new zTheme();
     if(!cache) cache = new zImageCache(size_cache);
@@ -25,6 +35,8 @@ zViewManager::zViewManager(ANativeActivity* _activity, cstr* options, int size_c
     basePaths[PATH_EXTERNAL] = _activity->externalDataPath; basePaths[PATH_EXTERNAL].slash();
     basePaths[PATH_INTERNAL] = _activity->internalDataPath; basePaths[PATH_INTERNAL].slash();
     basePaths[PATH_OBB]      = _activity->obbPath; basePaths[PATH_OBB].slash();
+    // идентификатор треда
+    thrID                    = pthread_self();
 }
 
 zViewManager::~zViewManager() {
@@ -141,8 +153,7 @@ void zViewManager::refreshConfig(AConfiguration* config) {
     scaleScreen = ((float)z_min(sz.w, sz.h)/*AConfiguration_getSmallestScreenWidthDp(config)*/ / 480.0f);
     leftLayout  = AConfiguration_getLayoutDirection(config) != 0;
     AConfiguration_getLanguage(config, languages);
-    ILOG("width:%i height:%i sw:%.3f land:%i lang:%s ldir:%i",
-         sz.w, sz.h, scaleScreen, landscape, languages, leftLayout);
+    ILOG("width:%i height:%i sw:%.3f land:%i lang:%s ldir:%i", sz.w, sz.h, scaleScreen, landscape, languages, leftLayout);
 }
 
 void zViewManager::focusNativeWindow(bool _focus) {
@@ -156,9 +167,11 @@ void zViewManager::redrawNativeWindow() {
 }
 
 void zViewManager::prepareRender(int ishader, zVertex2D* vertices, crti& scissor, const zMatrix& wmtx) {
+    WORK_THREAD();
     auto sh(shaders[ishader]);
     if(sh) {
         glUseProgram(sh->shader->getID());
+        glUniformMatrix4fv(sh->vars[ZSH_PMTX], 1, false, pmtx);
         glVertexAttribPointer(sh->vars[ZSH_APOS], 3, GL_FLOAT, GL_FALSE, sizeof(zVertex2D), &vertices->x);
         glVertexAttribPointer(sh->vars[ZSH_ATEX], 2, GL_FLOAT, GL_FALSE, sizeof(zVertex2D), &vertices->u);
         //glDisable(GL_SCISSOR_TEST);
@@ -171,13 +184,12 @@ void zViewManager::prepareRender(int ishader, zVertex2D* vertices, crti& scissor
 }
 
 void zViewManager::setMainMatrix(int ww, int hh, bool invert) {
-    static zMatrix mtx;
-    if(invert) mtx.ortho(0, ww, hh, 0); else mtx.ortho(0, ww, 0, hh);
-    glUniformMatrix4fv(shaders[0]->vars[ZSH_PMTX], 1, false, mtx);
+    if(invert) pmtx.ortho(0, ww, hh, 0); else pmtx.ortho(0, ww, 0, hh);
     glViewport(0, 0, ww, hh);
 }
 
 void zViewManager::appActivate(bool activate, ANativeWindow *_window) {
+    WORK_THREAD();
     DLOG("%s", activate ? "APP_CMD_INIT_WINDOW" : "APP_CMD_TERM_WINDOW");
     window = _window;
     if(activate) {
@@ -193,6 +205,7 @@ void zViewManager::appActivate(bool activate, ANativeWindow *_window) {
 }
 
 void zViewManager::drawViews() {
+    WORK_THREAD();
     static HANDLER_MESSAGE *msg(nullptr);
 #ifndef NDEBUG
     static bool showTri(true);
@@ -220,6 +233,7 @@ void zViewManager::drawViews() {
         while((msg = manager->event.obtain())) {
             // отправить на обработку в представление
             msg->view->notifyEvent(msg);
+            msg->millis = 0;
         }
     }
 #ifndef NDEBUG
@@ -247,9 +261,7 @@ void zViewManager::drawViews() {
 }
 
 void zViewManager::drawCaret(zView* _view) {
-    if(caret && caret->parent == _view) {
-        caret->draw();
-    }
+    if(caret && caret->parent == _view) caret->draw();
 }
 
 void zViewManager::saveStateView(zViewGroup *view, int &index) {
@@ -263,14 +275,14 @@ void zViewManager::saveStateView(zViewGroup *view, int &index) {
                 child->stateView(state, true, index);
                 if(state.data.isNotEmpty()) viewStates += state;
             }
-            auto group(dynamic_cast<zViewGroup *>(child));
-            if(group && group->stateChildren())
-                saveStateView(group, index);
+            auto group(dynamic_cast<zViewGroup*>(child));
+            if(group && group->stateChildren()) saveStateView(group, index);
         }
     }
 }
 
 void zViewManager::stateAllViews(u32 action, u8** _ptr, u32* _size) {
+    WORK_THREAD();
     int index(0);
     if(action == Z_RESUME) {
         SAFE_DELETE(bufViewStates); sizeViewStates = 0;
@@ -329,6 +341,7 @@ void zViewManager::stateAllViews(u32 action, u8** _ptr, u32* _size) {
 }
 
 void zViewManager::updateNativeWindow(AConfiguration* config, zStyle* _styles, zResource** _user, zStyles* _user_styles) {
+    WORK_THREAD();
     DLOG("APP_CMD_WINDOW_RESIZED");
     if(window) {
         auto sz(zGL::instance()->getSizeScreen());
@@ -385,6 +398,7 @@ void zViewManager::setTheme(zStyle* _styles, zResource** _user, zStyles* _user_s
 }
 
 void zViewManager::setColorFilter(zView* view, const zColor& _color) {
+    WORK_THREAD();
     u32 cf(ZCF_NORMAL);
     if(view) {
         auto sts(view->status);
@@ -401,6 +415,7 @@ zTexture *zViewManager::loadResourceTexture(u32 _id, zTexture *_t) const {
 }
 
 void zViewManager::changeFocus(zView* view) {
+    WORK_THREAD();
     if(focus == view) return;
     if(focus) {
         auto vw(focus); focus = nullptr;
@@ -417,18 +432,16 @@ void zViewManager::changeFocus(zView* view) {
 }
 
 zViewDropdown* zViewManager::getDropdown(zView* _owner, zStyle* _style, zBaseAdapter* _adapter) const {
+    WORK_THREAD();
     if(_style) dropdown->setStyles(_style);
     if(_adapter) dropdown->setAdapter(_adapter);
     dropdown->margin.empty(); dropdown->owner = _owner;
     return dropdown;
 }
 
-void zViewManager::eraseAllEventsView(zView* view) {
-    event.erase(view, 0);
-}
-
 void zViewManager::showSoftKeyboard(u32 idOwner, bool _show) {
-    keyboard->show(idOwner, _show);
+    WORK_THREAD();
+    if(keyboard) keyboard->show(idOwner, _show);
 }
 
 u8* zImageCache::load(cstr _name, i32& size) {
@@ -463,6 +476,7 @@ zTexture* zImageCache::add(zTexture* tx, zTexture* t) {
 }
 
 zTexture* zImageCache::get(cstr _name, zTexture* t) {
+    WORK_THREAD();
     recycle(t);
     // 1. проверить такая уже есть?
     auto idx(tex.indexOf(_name));
@@ -497,6 +511,7 @@ int zImageCache::findOlder() {
 }
 
 void zImageCache::recycle(zTexture* tx) {
+    WORK_THREAD();
     if(tx && tx->name.isNotEmpty()) {
         auto idx(tex.indexOf(tx->name));
         if(idx == -1) {
@@ -526,9 +541,8 @@ void zImageCache::info() {
 }
 
 void zImageCache::update() {
-    int flt;
     for(auto& t: tex) {
-        auto type(t.tex->type); glBindTexture(type, t.tex->id);
+        int flt; auto type(t.tex->type); glBindTexture(type, t.tex->id);
         glGetTexParameteriv(type, GL_TEXTURE_MIN_FILTER, &flt);
         if(t.tex->isCustom()) {
             auto sz(t.tex->getSize());

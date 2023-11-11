@@ -3,32 +3,32 @@
 #include "zostrov/zHandler.h"
 
 void zHandler::send(zView* view, int what, u64 millis, int a1, int a2, cstr s) {
+	zMutex mt;
 	if(view) erase(view, what);
 	for(auto& msg : looper) {
 		if(!msg.millis) {
-			msg.view = view; msg.what = what;
 			msg.millis = (i64)(z_timeMillis() + millis);
+			msg.view = view; msg.what = what; use++;
 			msg.arg1 = a1; msg.arg2 = a2; msg.sarg = s;
-			use++; break;
+			break;
 		}
 	}
 }
 
 void zHandler::info() {
-	for(int i = 0 ; i < 10; i++) {
-		auto& msg(looper[i]);
-		if(msg.millis) DLOG("%i - view: %llx %s", i, msg.view, msg.view ? msg.view->typeName().str() : "null");
+    ILOG("use:%i", use);
+	for(auto& msg : looper) {
+		ILOG("%s(%x) what:%i %i", msg.view ? msg.view->typeName().str() : "null", msg.view ? msg.view->id : 0, msg.what, msg.millis != 0);
 	}
 }
 
 HANDLER_MESSAGE* zHandler::obtain() {
+    zMutex mt;
 	if(use) {
 		auto ms(z_timeMillis());
 		for(auto& msg : looper) {
 			if(!msg.millis) continue;
-			if(ms < msg.millis) continue;
-			msg.millis = 0; use--;
-			return &msg;
+			if(ms >= msg.millis) { use--; return &msg; }
 		}
 	}
 	return nullptr;
@@ -41,23 +41,24 @@ void zHandler::erase(zView* view, int what) {
 			if(msg.view != view) continue;
 			// если what == 0 - тогда удаляем все
 			if(what && what != msg.what) continue;
-			msg.millis = 0; if(!--use) break;
+			msg.millis = 0; use--; if(!use) break;
 		}
 	}
 }
 
 HANDLER_MESSAGE* zHandler::get(zView* view, int what) {
+    zMutex mt;
 	if(use) {
 		for(auto& msg : looper) {
 			if(!msg.millis || msg.view != view) continue;
-			if(what != msg.what) continue;
-			return &msg;
+			if(what == msg.what) return &msg;
 		}
 	}
 	return nullptr;
 }
 
 void zHandler::clear() {
+    zMutex mt;
     for(auto& m : looper) m.millis = 0;
 	use = 0;
 }

@@ -14,6 +14,8 @@
 
 #include <curl2/curl.h>
 
+#define WORK_THREAD()       manager->is_work_thread(__FILE__, __FUNCTION__, __LINE__)
+
 class zMutex {
 public:
     zMutex() { mMutex.lock(); }

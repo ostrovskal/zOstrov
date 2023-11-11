@@ -447,11 +447,11 @@ static zStyle styles_z_tabhost[] = {
 
 static zStyle styles_z_butcontroller[] = {
 	{ Z_ICON | ZT_THEME, Z_THEME_ICONS },
-	{ Z_ICON_COLOR, 0xFFFFFFFF },
+	{ Z_ICON_COLOR, 0xA0FFFFFF },
 	{ Z_ICON_SCALE, 49151 },
 	{ Z_ICON_GRAVITY, ZS_GRAVITY_CENTER },
 	{ Z_TEXT_STYLE, ZS_TEXT_BOLD },
-	{ Z_TEXT_FOREGROUND_COLOR, 0xFFFFFFFF },
+	{ Z_TEXT_FOREGROUND_COLOR, 0xA0FFFFFF },
 	{ Z_TEXT_LINES, 1 },
 	{ Z_VISIBLED, false },
 	{ Z_FOREGROUND_GRAVITY, ZS_GRAVITY_CENTER },
@@ -461,7 +461,7 @@ static zStyle styles_z_butcontroller[] = {
 static zStyle styles_z_controller[] = {
 	{ Z_FBO, true },
 	{ Z_VISIBLED, false },
-	{ Z_FOREGROUND_COLOR | ZT_END, 0xA0FFFFFF }
+	{ Z_FOREGROUND_COLOR | ZT_END, 0x80FFFFFF }
 };
 
 static zStyle styles_z_msgform[] = {

@@ -224,6 +224,10 @@ void zViewSlider::showTips() {
 }
 
 void zViewSlider::onDraw() {
+    if(manager->event.get(this, MSG_ANIM) == nullptr) {
+        ILOG("slider not anim: 0x%x", id);
+        manager->event.info();
+    }
     // нарисовать трек
     static zMatrix r;
     auto clip(drawableClip());
@@ -464,7 +468,7 @@ void zViewController::onDraw() {
     for(int i = 0 ; i < decors.size(); i++) {
         auto d(decors[i]); auto pressed((but & 1) << 1);
         auto button(atView<zViewButton>(i));
-        auto color(pressed ? z.R.color.red : z.R.color.white);
+        auto color(pressed ? 0xa0ff0000 : 0xa0ffffff);
         auto r(d->rect); r.offset(pressed, pressed);
         if(pressed) d->dr->draw(&rview);
         r.x = rview.x + z_round((float)r.x * xx); r.w = z_round((float)r.w * xx);

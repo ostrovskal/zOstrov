@@ -19,6 +19,7 @@ static void playerCallback(SLAndroidSimpleBufferQueueItf, void* context) {
 }
 
 bool zSoundPlayer::make(SLDataSource& src, SLDataSink& snk, bool play, int _bufSize) {
+    zMutex mt;
     SLInterfaceID ids[2]  = { type == TYPE_MEM ? SL_IID_ANDROIDSIMPLEBUFFERQUEUE : SL_IID_SEEK, SL_IID_VOLUME };
     SLboolean req[2]      = { SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE };
     auto engine(mgr->getEngine());

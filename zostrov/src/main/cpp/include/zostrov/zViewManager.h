@@ -76,6 +76,8 @@ public:
     zViewManager(ANativeActivity* activity, cstr* options, int size_cache);
     // деструктор
     virtual ~zViewManager();
+    // определение треда
+    void is_work_thread(cstr file, cstr func, int line) const;
     // подсчет использования видео памяти
     void volumeVideoMemory(int size, bool _add) { videoMemory += size * (_add * 2 - 1); }
     // привязка формы
@@ -142,7 +144,7 @@ public:
     zViewPopup* getPopup() const { return popup; }
     zViewDropdown* getDropdown(zView* _owner, zStyle* _style, zBaseAdapter* _adapter) const;
     // удалить все события связанные с определенным представлением
-    virtual void eraseAllEventsView(zView* view);
+    virtual void eraseAllEventsView(zView* view) { event.erase(view, 0); }
     // вернуть представление по ID
     template<typename T = zView> T* idView(u32 _id) const { return common->idView<T>(_id); }
     // вернуть представление по типу
@@ -253,6 +255,10 @@ private:
     zViewPopup* popup{nullptr};
     // выпадающий список
     zViewDropdown* dropdown{nullptr};
+    // идентификатор треда
+    pthread_t thrID{0};
+    // матрица проекции
+    zMatrix pmtx{};
 };
 
 inline zViewManager* manager;

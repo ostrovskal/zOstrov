@@ -16,7 +16,7 @@
     <style name="keyboardBase">
         <item name="fkTiles">@integer/butKeyboardSmall</item>
         <item name="fkGravity">center</item>
-        <item name="textColor">#ffffffff</item>
+        <item name="textColor">#fff</item>
         <item name="textStyle">bold</item>
         <item name="textSize">20sp</item>
         <item name="textLines">1</item>
@@ -418,11 +418,11 @@
     </style>
     <style name="butController">
         <item name="icon">?attr/themeIcons</item>
-        <item name="icColor">#fff</item>
+        <item name="icColor">#a0ffffff</item>
         <item name="icScale">0.75</item>
         <item name="icGravity">center</item>
         <item name="textStyle">bold</item>
-        <item name="textColor">#fff</item>
+        <item name="textColor">#a0ffffff</item>
         <item name="textLines">1</item>
         <item name="visibled">false</item>
         <item name="fkGravity">center</item>
@@ -431,7 +431,7 @@
     <style name="controller">
         <item name="fbo">true</item>
         <item name="visibled">false</item>
-        <item name="fkColor">#A0ffffff</item>
+        <item name="fkColor">#80ffffff</item>
     </style>
     <style name="msgForm">
         <item name="fbo">true</item>

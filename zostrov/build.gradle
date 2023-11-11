@@ -5,7 +5,7 @@ plugins {
 android {
     namespace 'ru.ostrov.zostrov'
     compileSdk 33
-    ndkVersion '26.0.10792818'
+    ndkVersion '25.2.9519653'
     defaultConfig {
         minSdk 19
         targetSdk 33

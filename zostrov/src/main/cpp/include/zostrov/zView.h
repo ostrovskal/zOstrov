@@ -115,7 +115,7 @@ public:
     // событие инициализации
     virtual void onInit(bool theme);
     // отправка сообщения
-    virtual void post(int what, u64 millis, int arg1 = 0, int arg2 = 0, cstr s = nullptr);
+    virtual void post(int what, u64 millis = 0, int arg1 = 0, int arg2 = 0, cstr s = nullptr);
     // требование фокуса
     virtual void requestFocus();
     // уведомление об изменении параметров адаптера

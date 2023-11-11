@@ -27,6 +27,7 @@ void zViewGroup::offsetChildren(int delta) {
 }
 
 zView* zViewGroup::attachInLayout(zView *v, int width, int height, int where) {
+    WORK_THREAD();
     if(v) {
         v->parent = this;
         v->lps.w = width;
@@ -70,6 +71,7 @@ void zViewGroup::detachAllViews(bool _update) {
 }
 
 void zViewGroup::_remove(zView* v, bool _del) {
+    WORK_THREAD();
     if(v) {
         auto idx(children.indexOf<zView*>(v));
         if(idx != -1) {
@@ -113,6 +115,7 @@ void zViewGroup::disable(bool set) {
 }
 
 void zViewGroup::onDraw() {
+    WORK_THREAD();
     // селектор
     drw[DRW_SEL]->draw(nullptr);
     // дочерние
@@ -134,6 +137,7 @@ bool zViewGroup::intersectChildren(int x, int y) const {
 }
 
 zView* zViewGroup::sysView() const {
+    WORK_THREAD();
     auto count(countChildren());
     for(int i = count - 1; i >= 0; i--) {
         auto g(atView<zViewGroup>(i));
@@ -241,6 +245,7 @@ void zViewGroup::onInit(bool _theme) {
 }
 
 szi zViewGroup::measureChildren(cszm& spec) {
+    WORK_THREAD();
     int widthMax(0), heightMax(0);
     for(auto& child : children) {
         if(child->isVisibled()) {
@@ -322,6 +327,7 @@ zMeasure zViewGroup::makeChildMeasureSpec(const zMeasure& spec, int padding, zMe
 }
 
 void zViewGroup::awakenScroll() {
+    WORK_THREAD();
     if(scrollBar) {
         auto vert(scrollBar->isVertical());
         auto offs((float)computeScrollOffset(vert)), ran((float)computeScrollRange(vert)), ext((float)computeScrollExtent(vert));
@@ -357,6 +363,7 @@ void zViewGroup::changeTheme() {
 }
 
 bool zViewGroup::testLocked() const {
+    WORK_THREAD();
     return std::any_of(std::begin(children), std::end(children), [](const auto& c) {
         return c->isVisibled() && c->testLocked();
     });

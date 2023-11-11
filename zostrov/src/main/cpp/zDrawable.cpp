@@ -54,6 +54,7 @@ void zDrawable::release() {
 }
 
 void zDrawable::make(i32 _count) {
+    WORK_THREAD();
     if(_count > count) clear();
     if(!vertices) {
         if(_count) {

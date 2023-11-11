@@ -4,6 +4,10 @@
 class zView;
 
 struct HANDLER_MESSAGE {
+    void init(const HANDLER_MESSAGE& m) {
+        what = m.what; millis = m.millis; view = m.view;
+        arg1 = m.arg1; arg2 = m.arg2; sarg = m.sarg;
+    }
     // сообщение и аргументы
     int what{0};
     // задержка
@@ -18,7 +22,7 @@ struct HANDLER_MESSAGE {
 
 class zHandler {
 public:
-    zHandler() {}
+    zHandler() { }
     // удалить определенные сообщения
     void erase(zView *view, int what);
     // очистить все
@@ -34,4 +38,6 @@ public:
 protected:
     int use{0};
     HANDLER_MESSAGE looper[64];
+    // сообщение для отправки
+    HANDLER_MESSAGE message{};
 };

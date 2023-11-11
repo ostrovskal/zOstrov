@@ -100,6 +100,8 @@ public:
     zViewGroup* setOnChangeScrolling(std::function<void(zView*, int)> _scroll) { onChangeScroll = _scroll; return this; }
     // установка события выделения
     zViewGroup* setOnChangeSelected(std::function<void(zView*, int)> _selected) { onChangeSelected = _selected; return this; }
+    // вернуть разделитель
+    zDrawableDivider* getDivider() const { return (zDrawableDivider*)drw[DRW_DIV]; }
 protected:
     // диспетчер событий касания
     virtual i32 touchEventDispatch(AInputEvent *event) override;

@@ -74,7 +74,7 @@ void zAbsoluteLayout::onLayout(crti &position, bool changed) {
 void zLinearLayout::onMeasure(cszm& spec) {
     int sizeMatch(0), allWeight(0), marginsChild(0), countMatch(0); bool isWeights(false);
     szm cur(spec); szi _max, _wh;  szm childSpec;
-    auto divSize(div ? div->resolve(countChildren(), true) : 0);
+    auto divSize(div ? getDivider()->resolve(countChildren(), true) : 0);
     _max[vert] = divSize + padMargin(vert);
     // определяем габариты и веса дочерних
     auto _undef(spec[vert].mode() == MEASURE_UNDEF);
