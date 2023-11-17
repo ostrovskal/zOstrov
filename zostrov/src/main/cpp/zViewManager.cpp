@@ -233,7 +233,6 @@ void zViewManager::drawViews() {
         while((msg = manager->event.obtain())) {
             // отправить на обработку в представление
             msg->view->notifyEvent(msg);
-            msg->millis = 0;
         }
     }
 #ifndef NDEBUG

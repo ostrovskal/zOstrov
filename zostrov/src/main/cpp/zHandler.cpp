@@ -28,7 +28,10 @@ HANDLER_MESSAGE* zHandler::obtain() {
 		auto ms(z_timeMillis());
 		for(auto& msg : looper) {
 			if(!msg.millis) continue;
-			if(ms >= msg.millis) { use--; return &msg; }
+			if(ms >= msg.millis) {
+				msg.millis = 0; use--;
+				return &msg;
+			}
 		}
 	}
 	return nullptr;
