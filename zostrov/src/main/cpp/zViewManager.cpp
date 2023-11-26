@@ -167,7 +167,6 @@ void zViewManager::redrawNativeWindow() {
 }
 
 void zViewManager::prepareRender(int ishader, zVertex2D* vertices, crti& scissor, const zMatrix& wmtx) {
-    WORK_THREAD();
     auto sh(shaders[ishader]);
     if(sh) {
         glUseProgram(sh->shader->getID());
@@ -189,7 +188,6 @@ void zViewManager::setMainMatrix(int ww, int hh, bool invert) {
 }
 
 void zViewManager::appActivate(bool activate, ANativeWindow *_window) {
-    WORK_THREAD();
     DLOG("%s", activate ? "APP_CMD_INIT_WINDOW" : "APP_CMD_TERM_WINDOW");
     window = _window;
     if(activate) {
@@ -205,7 +203,7 @@ void zViewManager::appActivate(bool activate, ANativeWindow *_window) {
 }
 
 void zViewManager::drawViews() {
-    WORK_THREAD();
+//    WORK_THREAD();
     static HANDLER_MESSAGE *msg(nullptr);
 #ifndef NDEBUG
     static bool showTri(true);
@@ -340,7 +338,6 @@ void zViewManager::stateAllViews(u32 action, u8** _ptr, u32* _size) {
 }
 
 void zViewManager::updateNativeWindow(AConfiguration* config, zStyle* _styles, zResource** _user, zStyles* _user_styles) {
-    WORK_THREAD();
     DLOG("APP_CMD_WINDOW_RESIZED");
     if(window) {
         auto sz(zGL::instance()->getSizeScreen());
@@ -397,7 +394,6 @@ void zViewManager::setTheme(zStyle* _styles, zResource** _user, zStyles* _user_s
 }
 
 void zViewManager::setColorFilter(zView* view, const zColor& _color) {
-    WORK_THREAD();
     u32 cf(ZCF_NORMAL);
     if(view) {
         auto sts(view->status);
@@ -414,7 +410,6 @@ zTexture *zViewManager::loadResourceTexture(u32 _id, zTexture *_t) const {
 }
 
 void zViewManager::changeFocus(zView* view) {
-    WORK_THREAD();
     if(focus == view) return;
     if(focus) {
         auto vw(focus); focus = nullptr;
@@ -431,7 +426,6 @@ void zViewManager::changeFocus(zView* view) {
 }
 
 zViewDropdown* zViewManager::getDropdown(zView* _owner, zStyle* _style, zBaseAdapter* _adapter) const {
-    WORK_THREAD();
     if(_style) dropdown->setStyles(_style);
     if(_adapter) dropdown->setAdapter(_adapter);
     dropdown->margin.empty(); dropdown->owner = _owner;
@@ -439,7 +433,6 @@ zViewDropdown* zViewManager::getDropdown(zView* _owner, zStyle* _style, zBaseAda
 }
 
 void zViewManager::showSoftKeyboard(u32 idOwner, bool _show) {
-    WORK_THREAD();
     if(keyboard) keyboard->show(idOwner, _show);
 }
 
@@ -475,7 +468,6 @@ zTexture* zImageCache::add(zTexture* tx, zTexture* t) {
 }
 
 zTexture* zImageCache::get(cstr _name, zTexture* t) {
-    WORK_THREAD();
     recycle(t);
     // 1. проверить такая уже есть?
     auto idx(tex.indexOf(_name));
@@ -510,7 +502,6 @@ int zImageCache::findOlder() {
 }
 
 void zImageCache::recycle(zTexture* tx) {
-    WORK_THREAD();
     if(tx && tx->name.isNotEmpty()) {
         auto idx(tex.indexOf(tx->name));
         if(idx == -1) {

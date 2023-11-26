@@ -61,7 +61,6 @@ bool zBaseAdapter::unregistration(zView* view) {
 }
 
 void zBaseAdapter::notify() {
-    WORK_THREAD();
     for(auto v : owners) v->notifyAdapter(this);
 }
 
@@ -79,7 +78,6 @@ zView *zAdapterList::getDropDownView(int position, zView *convert, zViewGroup *p
 }
 
 zView *zAdapterList::createView(int position, zView *convert, zViewGroup *parent, zBaseFabric *_fabric, bool color) {
-    WORK_THREAD();
     auto nv(convert);
     if(!nv) nv = _fabric->make(parent);
     nv->id = position; nv->updateStatus(ZS_TAP, false);

@@ -19,7 +19,6 @@ bool zTouch::intersect(AInputEvent* event, crti& r) {
 }
 
 bool zTouch::event(AInputEvent* event, crti& r) {
-    WORK_THREAD();
     bool result(false); float x, y; int idx, _id;
     // событие
     act = getEventAction(event, &idx, &_id);

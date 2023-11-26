@@ -200,7 +200,6 @@ void zActionBar::onMeasure(cszm& spec) {
 }
 
 zActionBar* zActionBar::setAdapter(zAdapterList* _adapter) {
-    WORK_THREAD();
     if(adapter) {
         if(adapter->unregistration(this))
             SAFE_DELETE(adapter);

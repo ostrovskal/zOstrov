@@ -4,10 +4,6 @@
 class zView;
 
 struct HANDLER_MESSAGE {
-    void init(const HANDLER_MESSAGE& m) {
-        what = m.what; millis = m.millis; view = m.view;
-        arg1 = m.arg1; arg2 = m.arg2; sarg = m.sarg;
-    }
     // сообщение и аргументы
     int what{0};
     // задержка
@@ -22,7 +18,8 @@ struct HANDLER_MESSAGE {
 
 class zHandler {
 public:
-    zHandler() { }
+    zHandler() : zHandler(64) { }
+    zHandler(int count);
     // удалить определенные сообщения
     void erase(zView *view, int what);
     // очистить все
@@ -31,13 +28,12 @@ public:
     void info();
     // оправить сообщение
     void send(zView* view, int what, u64 millis = 0, int arg1 = 0, int arg2 = 0, cstr s = "");
-    // получить сообщение для модификации
-    HANDLER_MESSAGE *get(zView *view, int what);
+    // вернуть сообщение для отладочных целей
+    HANDLER_MESSAGE* get(zView* view, int what);
     // получить сообщение
     HANDLER_MESSAGE *obtain();
 protected:
-    int use{0};
-    HANDLER_MESSAGE looper[64];
-    // сообщение для отправки
-    HANDLER_MESSAGE message{};
+    zArray<HANDLER_MESSAGE*> looper{};
+    zArray<HANDLER_MESSAGE*> unuses{};
+    std::mutex mt{};
 };

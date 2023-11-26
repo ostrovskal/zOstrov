@@ -256,10 +256,14 @@ public:
     // объект касания
     static zTouch* touch;
 protected:
+    // внутренний запрос на полное обновление позиций представлений
+    void _requestPosition();
+    // внутренний запрос на полное обновление иерархии представлений
+    void _requestLayout();
+    // внутренний запрос на обновление отрисовки представлений
+    void _invalidate();
     // установка гравитации
     void _setGravity(u32 _g, u8* p) { if(_g != (*p & ZS_GRAVITY_MASK)) { *p &= ~ZS_GRAVITY_MASK; *p |= (u8)_g; requestLayout(); } }
-    // обновление OES текстуры
-    virtual void updateTexture(cszi& size) { }
     // уведомление о событии
     virtual void notifyEvent(HANDLER_MESSAGE* msg);
     // диспетчер событий касания

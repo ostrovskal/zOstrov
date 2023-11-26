@@ -1,6 +1,4 @@
-﻿//#pragma clang diagnostic push
-//#pragma ide diagnostic ignored "hicpp-multiway-paths-covered"
-
+﻿
 #include "zostrov/zCommon.h"
 #include "zostrov/zViewWidgets.h"
 

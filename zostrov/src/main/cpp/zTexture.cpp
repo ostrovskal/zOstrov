@@ -19,7 +19,6 @@ void zTexture::release() {
 }
 
 void zTexture::enableFilter(bool set, int clamp) const {
-    WORK_THREAD();
     glBindTexture(type, id);
     glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST + set);
     glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST + set);
@@ -42,7 +41,6 @@ bool zTexture::save(czs& path) const {
 }
 
 void zTexture::makeTexture(u8* ptr, u32 size) {
-    WORK_THREAD();
     static u8 png_sig[8] = { 137,80,78,71,13,10,26,10 };
     if(!ptr) { release(); return; }
     int fmt(GL_RGBA), ww(0), hh(0), comp(0);
@@ -119,7 +117,6 @@ void zTexture::makeTexture(u8* ptr, u32 size) {
 }
 
 void zTexture::makeEmpty(int internalFormat, int format, int width, int height, int _type) {
-    WORK_THREAD();
     glGenTextures(1, &id); type = _type;
     // сделаем текстуру активной
     enableFilter(true);
