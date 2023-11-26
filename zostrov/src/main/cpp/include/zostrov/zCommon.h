@@ -18,11 +18,11 @@
 
 class zMutex {
 public:
-    zMutex(std::mutex* m) : mMutex(m) { m->lock(); }
+    zMutex(std::mutex* m) : mMutex(m) { mMutex->lock(); }
     ~zMutex() { mMutex->unlock(); }
 protected:
     // мьютекс
-    std::mutex* mMutex{nullptr};
+    std::mutex* mMutex;
 };
 
 static int gravity_shift[] = { 31, 31, 0, 1 };

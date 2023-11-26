@@ -125,7 +125,7 @@ public:
     // вернуть содержимое активной страницы
     const zViewGroup* getContentPage(int page) const;
     // установка события смены вкладки
-    void setOnTabChange(std::function<void(zView*, int)> _change) { onTabChange = _change; }
+    zTabLayout* setOnTabChange(std::function<void(zView*, int)> _change) { onTabChange = _change; return this; }
 protected:
     // показать страницу
     virtual void showPage(int _page);

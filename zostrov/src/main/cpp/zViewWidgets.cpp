@@ -483,13 +483,13 @@ void zViewController::onDraw() {
 
 void zViewController::onInit(bool _theme) {
     zViewGroup::onInit(_theme);
-    removeAllViews(false);
-    // основной текст
-    for(auto d : decors) {
-        SAFE_DELETE(d->dr);
-        attach(new zViewButton(styles_z_butcontroller, 0, 0), 100, 100);
-        d->dr = new zDrawable(this, DRW_FK);
-        d->dr->init(drw[DRW_FK], d->dr->tile);
+    // только при начальной инициализации
+    if(!countChildren()) {
+        for(auto d: decors) {
+            attach(new zViewButton(styles_z_butcontroller, 0, 0), 100, 100);
+            d->dr = new zDrawable(this, DRW_FK);
+            d->dr->init(drw[DRW_FK], 0);
+        }
     }
 }
 

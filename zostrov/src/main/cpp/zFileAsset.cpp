@@ -5,24 +5,23 @@
 #include "zostrov/zCommon.h"
 #include "zostrov/zFileAsset.h"
 
+static std::mutex mt{};
+
 bool zFileAsset::open(czs& pth, bool read, bool zipped, bool append) {
-    zMutex mt;
+    close(); zMutex m(&mt); bool ret(false);
     if(pth.prefix("/")) return zFile::open(pth, read, zipped, append);
-    close();
     if((fd = AAssetManager_open(manager->getAsset(), pth, AASSET_MODE_UNKNOWN))) {
         if(zipped && pth.right(4).compare(".zip")) {
             // скопировать в папку кэша и открыть как архив
             auto p(settings->makePath(pth.substrAfterLast("/"), FOLDER_CACHE));
-            auto ret(copy(p, 0) && zFile::open(p, read, zipped, append));
-            fd = nullptr; return ret;
-        }
-        path = pth;
+            ret = copy(p, 0) && zFile::open(p, read, zipped, append);
+            fd = nullptr;
+        } else ret = true;
     }
-    return fd != nullptr;
+    return ret;
 }
 
 void zFileAsset::close() {
-    zMutex mt;
     if(fd) { AAsset_close(fd); fd = nullptr; }
     zFile::close();
 }
@@ -49,18 +48,16 @@ bool zFileAsset::copy(czs& pth, i32 index) {
 }
 
 void* zFileAsset::read(i32* psize, void* ptr, i32 size, i32 pos, i32 mode) const {
-    zMutex mt;
     if(fd) {
+        zMutex m(&mt);
         seek(pos, mode); if(!size) size = length();
         if((pos = AAsset_read(fd, ptr, size)) != size) ptr = nullptr;
-        if(psize) *psize = pos;
-        return ptr;
+        if(psize) *psize = pos; return ptr;
     }
     return zFile::read(psize, ptr, size, pos, mode);
 }
 
 void* zFileAsset::readn(i32* psize, i32 size, i32 pos, i32 mode) const {
-    zMutex mt;
     if(fd) {
         if(!size) size = length(); auto ptr(new u8[size + 1]); ptr[size] = 0;
         if(!read(psize, ptr, size, pos, mode)) SAFE_A_DELETE(ptr);
@@ -70,7 +67,6 @@ void* zFileAsset::readn(i32* psize, i32 size, i32 pos, i32 mode) const {
  }
 
 bool zFileAsset::info(zFileInfo& zfi, int zindex) const {
-    zMutex mt;
     if(fd) {
         zfi.csize = zfi.usize = length();
         zfi.attr = S_IFREG; zfi.index = -1; zfi.setPath(path);
@@ -81,43 +77,40 @@ bool zFileAsset::info(zFileInfo& zfi, int zindex) const {
 }
 
 zArray<zFile::zFileInfo> zFileAsset::find(czs& pth, czs& _msk) {
-    zMutex mt;
-    if(!pth.prefix("/")) {
-        static char fname[260];
-        zArray<zFileInfo> fl; zFileInfo info{}; auto am(_msk.split("*"));
-        if(auto dir = AAssetManager_openDir(manager->getAsset(), pth)) {
-            while(auto ent = AAssetDir_getNextFileName(dir)) {
-                // поиск по маске
-                bool res(true); auto _s(fname); strcpy(_s, ent);
-                for(auto i = 0; i < am.size(); i++) {
-                    auto m(am[i]); if(m.isEmpty()) continue;
-                    auto _m(_s ? strstr(_s, m.str()) : _s);
-                    if(i == 0 && _m == fname) { _s = _m + 1; continue; }
-                    if(i > 0 && _m) { _s = _m + 1; continue; }
-                    res = false; break;
-                }
-                if(res && zFileAsset(pth + ent, true, false).info(info))
-                    fl += info;
+    if(pth.prefix("/")) return zFile::find(pth, _msk);
+    static char fname[260];
+    zArray<zFileInfo> fl; zFileInfo info{}; auto am(_msk.split("*"));
+    if(auto dir = AAssetManager_openDir(manager->getAsset(), pth)) {
+        while(auto ent = AAssetDir_getNextFileName(dir)) {
+            // поиск по маске
+            bool res(true); auto _s(fname); strcpy(_s, ent);
+            for(auto i = 0; i < am.size(); i++) {
+                auto m(am[i]); if(m.isEmpty()) continue;
+                auto _m(_s ? strstr(_s, m.str()) : _s);
+                if(i == 0 && _m == fname) { _s = _m + 1; continue; }
+                if(i > 0 && _m) { _s = _m + 1; continue; }
+                res = false; break;
             }
+            if(res && zFileAsset(pth + ent, true, false).info(info))
+                fl += info;
         }
-        return fl;
+        AAssetDir_close(dir);
     }
-    return zFile::find(pth, _msk);
+    return fl;
 }
 
 bool zFileAsset::isFile(czs& pth) {
-    zMutex mt;
-    if(!pth.prefix("/")) {
-        auto fd(AAssetManager_open(manager->getAsset(), pth, AASSET_MODE_UNKNOWN));
-        if(fd) AAsset_close(fd); return fd != nullptr;
-    }
-    return zFile::isFile((pth));
+    if(pth.prefix("/")) return zFile::isFile((pth));
+    zMutex m(&mt);
+    auto fd(AAssetManager_open(manager->getAsset(), pth, AASSET_MODE_UNKNOWN));
+    if(fd) AAsset_close(fd);
+    return fd != nullptr;
 }
 
 bool zFileAsset::isDir(czs& pth) {
-    zMutex mt;
-    if(!pth.prefix("/")) return pth.indexOf(".") == -1 && AAssetManager_openDir(manager->getAsset(), pth.str()) != nullptr;
-    return zFile::isDir(pth);
+    if(pth.prefix("/")) return zFile::isDir(pth);
+    zMutex m(&mt);
+    return pth.indexOf(".") == -1 && AAssetManager_openDir(manager->getAsset(), pth.str()) != nullptr;
 }
 
 bool zFileAsset::makeDir(czs& pth) {

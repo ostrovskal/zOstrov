@@ -73,6 +73,8 @@ public:
     i64 millis{0};
     // менеджер
     zSoundManager* mgr{nullptr};
+protected:
+    std::mutex mt{};
 };
 
 class zSoundPlayerMem : public zSoundPlayer {
