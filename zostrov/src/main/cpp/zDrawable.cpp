@@ -143,7 +143,7 @@ static void calcPatch9(int idx, crti& p9, crti& p, crti& t) {
 }
 
 int zDrawable::makePatch9(crti& pos, crti& tex, rti p9) const {
-    if(pos.isEmpty()) return 0;
+    if(pos.w < 1 || pos.h < 1) return 0;
     int _count(0); rti p, t;
     static zVertex2D tmpVerts[36];
     static u8 vnum[] = {0, 1, 2, 3, 6, 7, 10, 11, 11, 12,15, 13, 19, 17, 17, 22, 21, 20, 25, 24, 24, 28, 31, 30, 35, 34};
@@ -246,10 +246,10 @@ void zDrawable::measure(int width, int height, int pivot, bool isSave) {
         tex.w += tex.x; tex.h += tex.y;
         if(isPatch9) {
             // формирование патча
-            makePatch9(bound, tex, (u8*)&_tile->patch9);
+            count = makePatch9(bound, tex, (u8*)&_tile->patch9);
         } else {
             // формирование квада
-            makeQuad(bound, tex, vertices);
+            count = makeQuad(bound, tex, vertices);
         }
     } else {
         clear();

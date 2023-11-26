@@ -8,15 +8,15 @@
 static std::mutex mt{};
 
 bool zFileAsset::open(czs& pth, bool read, bool zipped, bool append) {
-    close(); zMutex m(&mt); bool ret(false);
     if(pth.prefix("/")) return zFile::open(pth, read, zipped, append);
+    close(); bool ret(false);
     if((fd = AAssetManager_open(manager->getAsset(), pth, AASSET_MODE_UNKNOWN))) {
         if(zipped && pth.right(4).compare(".zip")) {
             // скопировать в папку кэша и открыть как архив
             auto p(settings->makePath(pth.substrAfterLast("/"), FOLDER_CACHE));
             ret = copy(p, 0) && zFile::open(p, read, zipped, append);
             fd = nullptr;
-        } else ret = true;
+        } else { ret = true; path = pth; }
     }
     return ret;
 }
@@ -32,7 +32,7 @@ bool zFileAsset::copy(czs& pth, i32 index) {
         // проверить на копирование во вклады
         if(pth.prefix("/")) {
             // читать/писать по кусочкам
-            zFileAsset f; int bsz(32 * 1024), sz(0);
+            zFile f; int bsz(32 * 1024), sz(0);
             auto tmp(std::unique_ptr<u8>(new u8[bsz]));
             if(f.open(pth, false, false)) {
                 while(true) {
@@ -80,7 +80,7 @@ zArray<zFile::zFileInfo> zFileAsset::find(czs& pth, czs& _msk) {
     if(pth.prefix("/")) return zFile::find(pth, _msk);
     static char fname[260];
     zArray<zFileInfo> fl; zFileInfo info{}; auto am(_msk.split("*"));
-    if(auto dir = AAssetManager_openDir(manager->getAsset(), pth)) {
+    if(auto dir = AAssetManager_openDir(manager->getAsset(), pth.substrBeforeLast("/", pth))) {
         while(auto ent = AAssetDir_getNextFileName(dir)) {
             // поиск по маске
             bool res(true); auto _s(fname); strcpy(_s, ent);

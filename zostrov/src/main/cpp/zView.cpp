@@ -5,7 +5,10 @@
 #include "zostrov/zCommon.h"
 #include "zostrov/zViewGroup.h"
 
-static zArray<zView*> views;
+#ifndef NDEBUG
+    static zArray<zView*> views;
+#endif
+
 // фейковый отображатель
 zDrawableFake zView::fake;
 zView* zView::fbo(nullptr);

@@ -222,10 +222,6 @@ void zViewSlider::showTips() {
 }
 
 void zViewSlider::onDraw() {
-    if(manager->event.get(this, MSG_ANIM) == nullptr) {
-        ILOG("slider not anim: 0x%x", id);
-        manager->event.info();
-    }
     // нарисовать трек
     static zMatrix r;
     auto clip(drawableClip());
